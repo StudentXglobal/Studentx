@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Loading Screen</title>
+    <title>StudentX - Exact Splash Screen</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&display=swap" rel="stylesheet">
+    
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #030310;
+            background-color: #060613; /* Ainihin kalar hoton */
             color: white;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Font mai kauri */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -18,37 +20,47 @@
             height: 100vh;
         }
 
-        /* Tsarin Logo */
+        /* Tsarin Logo Sak na Hoton */
         .logo-container {
             text-align: center;
-            margin-bottom: 70px;
+            margin-bottom: 120px;
         }
         
-        .logo-text {
-            font-size: 55px;
-            font-weight: 800;
-            letter-spacing: -2px;
+        .logo-text-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
         }
         
+        .logo-text {
+            font-size: 72px; /* Girma kamar na hoton */
+            font-weight: 700;
+            letter-spacing: -3px;
+        }
+        
         .logo-x {
-            font-size: 70px;
-            background: linear-gradient(135deg, #007bff, #8A2BE2, #FF00FF);
+            font-size: 90px;
+            font-weight: 800;
+            font-style: italic; /* Dan lankwasa kadan */
+            background: linear-gradient(135deg, #1877F2, #8A2BE2, #FF00FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-left: -5px;
+            margin-left: -12px; /* Yasa 'X' din ta dan shiga jikin 't' */
+            margin-bottom: -15px;
         }
         
         .tagline {
             margin-top: 15px;
-            font-size: 13px;
-            letter-spacing: 5px;
-            background: linear-gradient(90deg, #007bff, #8A2BE2, #FF00FF, #007bff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 14px;
+            letter-spacing: 6px;
+            font-weight: 600;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
+
+        /* Launukan Tagline daban-daban */
+        .tag-blue { color: #1877F2; }
+        .tag-purple { color: #8A2BE2; }
+        .tag-pink { color: #FF00FF; }
 
         /* Sashen Loading */
         .loading-section {
@@ -58,79 +70,48 @@
             width: 100%;
         }
 
-        /* 1. Abin Juyawa (Spinner) */
-        .spinner {
+        /* Ainihin Digo-Digo Guda 12 kamar na hoton */
+        .dots-spinner {
+            position: relative;
             width: 45px;
             height: 45px;
-            border: 6px dotted #2a2a4a;
-            border-top-color: #007bff; /* Launin da zai rika juyawa */
-            border-bottom-color: #FF00FF;
-            border-radius: 50%;
-            /* Wannan layin shine yake sa motion din juyawa 👇 */
-            animation: juyawa 1.5s linear infinite; 
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            /* Zai juya a hankali a cikin sakan 4 */
+            animation: spin 4s linear infinite; 
         }
+
+        .dot {
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            background-color: #1a1a2e; /* Kalar duhu */
+            border-radius: 50%;
+            top: 0;
+            left: 50%;
+            transform-origin: 50% 22.5px; /* Cibiyar juyawa */
+        }
+
+        /* Sanya digo-digon a cikin da'ira da sanya musu kalar haske */
+        .dot:nth-child(1) { transform: translateX(-50%) rotate(0deg); background-color: #1877F2; }
+        .dot:nth-child(2) { transform: translateX(-50%) rotate(30deg); background-color: #4a4dff; }
+        .dot:nth-child(3) { transform: translateX(-50%) rotate(60deg); background-color: #7b2cff; }
+        .dot:nth-child(4) { transform: translateX(-50%) rotate(90deg); }
+        .dot:nth-child(5) { transform: translateX(-50%) rotate(120deg); }
+        .dot:nth-child(6) { transform: translateX(-50%) rotate(150deg); }
+        .dot:nth-child(7) { transform: translateX(-50%) rotate(180deg); }
+        .dot:nth-child(8) { transform: translateX(-50%) rotate(210deg); }
+        .dot:nth-child(9) { transform: translateX(-50%) rotate(240deg); }
+        .dot:nth-child(10) { transform: translateX(-50%) rotate(270deg); }
+        .dot:nth-child(11) { transform: translateX(-50%) rotate(300deg); }
+        .dot:nth-child(12) { transform: translateX(-50%) rotate(330deg); }
 
         .loading-text {
             color: #a0a0bf;
-            font-size: 16px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 25px;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
         }
 
-        /* 2. Layin Cikawa (Progress Bar) */
+        /* Layin Cikawa (Progress Bar) */
         .progress-container {
-            width: 280px;
-            height: 10px;
-            background-color: #1a1a33;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #007bff, #FF00FF);
-            border-radius: 10px;
-            /* Wannan layin shine yake sa motion din cikawa 👇 */
-            animation: cikawa 2.5s ease-in-out infinite; 
-        }
-
-        /* DOKOKIN MOTION (KEYFRAMES) */
-        
-        /* Yadda juyawar zata kasance daga 0 degree zuwa 360 degree */
-        @keyframes juyawa {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Yadda layin zai cika daga 0% zuwa 100% */
-        @keyframes cikawa {
-            0% { width: 0%; }
-            50% { width: 60%; }
-            100% { width: 100%; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="logo-container">
-        <div class="logo-text">
-            Student<span class="logo-x">X</span>
-        </div>
-        <div class="tagline">CONNECT. LEARN. SHARE. GROW.</div>
-    </div>
-
-    <div class="loading-section">
-        <!-- Nan ne alamar juyawar take -->
-        <div class="spinner"></div>
-        
-        <div class="loading-text">Loading...</div>
-        
-        <!-- Nan ne layin da yake cikawa yake -->
-        <div class="progress-container">
-            <div class="progress-bar"></div>
-        </div>
-    </div>
-
-</body>
-</html>
+            width: 250
