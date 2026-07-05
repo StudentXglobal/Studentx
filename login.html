@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentX - Log In</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-dark: #02051A;
+            --bg-card: #0E122B;
+            --input-bg: #151A3B;
+            --grad-blue: #1877F2;
+            --grad-purple: #8A2BE2;
+            --grad-pink: #FF00FF;
+            --text-main: #FFFFFF;
+            --text-muted: #8892B0;
+            --border-color: #2A3158;
+            --primary-btn: linear-gradient(90deg, #2E38A3, #4552E6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Mobile Frame */
+        .mobile-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 100vh;
+            max-height: 844px;
+            background: linear-gradient(165deg, var(--bg-dark) 0%, #0D1442 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.1);
+        }
+
+        @media (min-height: 850px) {
+            .mobile-frame {
+                height: 844px;
+                border-radius: 40px;
+                border: 8px solid #1a1a2e;
+            }
+        }
+
+        /* Top Bar Logo */
+        .top-bar {
+            padding: 40px 24px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -1px;
+        }
+
+        .logo-x {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 36px;
+            font-weight: 800;
+            font-style: italic;
+            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: -4px;
+        }
+
+        /* Header Texts */
+        .header-content {
+            padding: 10px 24px 25px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+            padding: 0 10px;
+        }
+
+        /* Main Form Container */
+        .form-container {
+            padding: 0 24px 40px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Social Buttons */
+        .social-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .social-btn:active {
+            transform: scale(0.98);
+        }
+
+        .social-btn i {
+            position: absolute;
+            left: 20px;
+            font-size: 18px;
+        }
+
+        .fa-google { color: #EA4335; }
+        .fa-facebook { color: #1877F2; }
+        .fa-apple { color: #FFFFFF; font-size: 20px !important; }
+
+        /* Divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .divider::before { margin-right: 15px; }
+        .divider::after { margin-left: 15px; }
+
+        /* Form Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .input-group i.icon-left {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            font-size: 14px;
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-group input::placeholder {
+            color: #5C6784;
+        }
+        
+        .input-group input:focus {
+            border-color: #4552E6;
+            box-shadow: 0 0 0 4px rgba(69, 82, 230, 0.1);
+        }
+
+        /* Checkbox & Forgot Password */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0 30px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .remember-me input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            accent-color: #4552E6;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .forgot-pass {
+            color: var(--grad-blue);
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Primary Button */
+        .primary-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-btn);
+            color: var(--text-main);
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(69, 82, 230, 0.3);
+            transition: transform 0.2s ease;
+            margin-bottom: 25px;
+        }
+
+        .primary-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+
+        .footer a {
+            color: var(--grad-blue);
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame">
+        
+        <!-- Logo -->
+        <div class="top-bar">
+            <div class="logo-wrapper">
+                <span class="logo-text">Student</span>
+                <span class="logo-x">X</span>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header-content">
+            <h1 class="title">Welcome Back</h1>
+            <p class="subtitle">Sign in to continue learning and connecting.</p>
+        </div>
+
+        <!-- Form Elements -->
+        <div class="form-container">
+            
+            <!-- Social Logins -->
+            <button class="social-btn">
+                <i class="fa-brands fa-google"></i>
+                Continue with Google
+            </button>
+            <button class="social-btn">
+                <i class="fa-brands fa-facebook"></i>
+                Continue with Facebook
+            </button>
+            <button class="social-btn">
+                <i class="fa-brands fa-apple"></i>
+                Continue with Apple
+            </button>
+
+            <!-- Divider -->
+            <div class="divider">OR</div>
+
+            <!-- Email Input -->
+            <div class="input-group">
+                <i class="fa-regular fa-envelope icon-left"></i>
+                <input type="email" placeholder="Email Address">
+            </div>
+
+            <!-- Password Input -->
+            <div class="input-group">
+                <i class="fa-solid fa-lock icon-left"></i>
+                <input type="password" placeholder="Password">
+            </div>
+
+            <!-- Options -->
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox">
+                    Remember Me
+                </label>
+                <a href="#" class="forgot-pass">Forgot Password?</a>
+            </div>
+
+            <!-- Login Button -->
+            <button id="loginBtn" class="primary-btn">Log In</button>
+
+            <!-- Footer -->
+            <div class="footer">
+                Don't have an account? <a href="signup.html">Sign Up</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript don kai mutum shafin gida (home) -->
+    <script>
+        document.getElementById('loginBtn').onclick = function() {
+            window.location.href = 'home.html';
+        };
+    </script>
+</body>
+  </html>
