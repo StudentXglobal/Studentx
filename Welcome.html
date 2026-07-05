@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ha">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentX - Welcome & Login</title>
+    <!-- Nau'in rubutu (Fonts) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:ital,wght@0,700;0,800;1,800&display=swap" rel="stylesheet">
+    <!-- Alamomi (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f6fa;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        /* Tsarin jikin app din */
+        .app-container {
+            width: 100%;
+            max-width: 400px;
+            background: linear-gradient(180deg, #090924 0%, #171752 40%, #2b3bb0 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        /* Kayan ado na background (Circles) */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .bg-pattern::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            bottom: 20px;
+            left: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        /* Sashen Sama (Header & Hero) */
+        .top-section {
+            padding: 40px 20px 0;
+            text-align: center;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo-text-wrapper {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+
+        .logo-x {
+            font-size: 40px;
+            font-weight: 800;
+            font-style: italic;
+            background: linear-gradient(135deg, #1877F2, #8A2BE2, #FF00FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: -5px;
+            margin-bottom: -5px;
+        }
+
+        .sub-tagline {
+            font-size: 11px;
+            color: #d0d0eb;
+            margin-bottom: 25px;
+            letter-spacing: 1px;
+        }
+        .sub-tagline span {
+            color: #8A2BE2; /* Dot color */
+        }
+
+        .hero-title {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(90deg, #1877F2, #FF00FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            font-size: 13px;
+            color: #d0d0eb;
+            line-height: 1.5;
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Hoton Dalibai */
+        .hero-image {
+            width: 100%;
+            height: 180px;
+            background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'); /* Hoto daga Unsplash domin gwaji */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Farin Katin Kasa (Bottom Sheet) */
+        .bottom-sheet {
+            background-color: white;
+            border-top-left-radius: 25px;
+            border-top-right-radius: 25px;
+            padding: 25px 20px 30px;
+            position: relative;
+            z-index: 3;
+            margin-top: -30px; /* Don ya hau kan hoton kadan */
+        }
+
+        /* Tabs (Log In / Sign Up) */
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 25px;
+        }
+
+        .tab {
+            padding-bottom: 15px;
+            font-weight: 600;
+            font-size: 16px;
+            color: #888;
+            cursor: pointer;
+            width: 50%;
+            text-align: center;
+        }
+
+        .tab.active {
+            color: #4338ca; /* Kalar blue/purple */
+            border-bottom: 3px solid #4338ca;
+        }
+
+        /* Maballin Social Media */
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .social-btn i {
+            position: absolute;
+            left: 20px;
+            font-size: 18px;
+        }
+        
+        .fa-google { color: #EA4335; }
+        .fa-apple { color: #000000; font-size: 20px !important; }
+
+        /* Layin tsakiya (OR) */
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            color: #888;
+            font-size: 12px;
+        }
+        
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .divider:not(:empty)::before { margin-right: .5em; }
+        .divider:not(:empty)::after { margin-left: .5em; }
+
+        /* Form Inputs */
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            font-size: 16px;
+        }
+
+        .input-group i.fa-eye-slash {
+            left: auto;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px 45px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            color: #333;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-group input::placeholder {
+            color: #a0aec0;
+        }
+        
+        .input-group input:focus {
+            border-color: #4338ca;
+        }
+
+        /* Tunatarwa da Manta Password */
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .remember-me {
+            display: flex;
+            align-items: center;
+            color: #4a5568;
+        }
+
+        .remember-me input[type="checkbox"] {
+            margin-right: 8px;
+            width: 16px;
+            height: 16px;
+            accent-color: #4338ca;
+        }
+
+        .forgot-password {
+            color: #4338ca;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Babban Maballin Shiga */
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #5142f5, #3b5998); /* Gradient blue */
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        /* Kasan Shafin */
+        .footer-text {
+            text-align: center;
+            font-size: 13px;
+            color: #718096;
+        }
+
+        .footer-text a {
+            color: #4338ca;
+            text-decoration: none;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Kayan Ado -->
+        <div class="bg-pattern"></div>
+
+        <div class="top-section">
+            <div class="logo-text-wrapper">
+                <span>Student</span><span class="logo-x">X</span>
+            </div>
+            <div class="sub-tagline">
+                Connect <span>•</span> Learn <span>•</span> Share
+            </div>
+
+            <div class="hero-title">
+                The Future of<br>
+                <span class="gradient-text">Student Networking</span>
+            </div>
+            
+            <div class="hero-desc">
+                Connect with students, learn together<br>and build your future.
+            </div>
+        </div>
+
+        <div class="hero-image"></div>
+
+        <div class="bottom-sheet">
+            <div class="tabs">
+                <div class="tab active">Log In</div>
+                <div class="tab">Sign Up</div>
+            </div>
+
+            <!-- Na cire Continue with Facebook a nan -->
+            <button class="social-btn">
+                <i class="fa-brands fa-google"></i>
+                Continue with Google
+            </button>
+            <button class="social-btn">
+                <i class="fa-brands fa-apple"></i>
+                Continue with Apple
+            </button>
+
+            <div class="divider">OR</div>
+
+            <div class="input-group">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="text" placeholder="Email or Username">
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" placeholder="Password">
+                <i class="fa-regular fa-eye-slash"></i>
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" checked>
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+            </div>
+
+            <button class="submit-btn">Log In</button>
+
+            <div class="footer-text">
+                Don't have an account? <a href="#">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
