@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentX - Home Feed</title>
+    <!-- FontAwesome don Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Tsarin Gaba Daya */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 414px; /* Tsarin girman allon waya */
+            background-color: #ffffff;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 70px; /* Don Bottom Nav */
+            overflow-x: hidden;
+        }
+
+        /* Top Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 100;
+        }
+        .header h1 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .header-icons {
+            display: flex;
+            gap: 20px;
+            font-size: 20px;
+            color: #333;
+            position: relative;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #7c3aed;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid white;
+        }
+
+        /* Stories Section */
+        .stories {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px 20px;
+            gap: 15px;
+        }
+        .stories::-webkit-scrollbar {
+            display: none;
+        }
+        .story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            position: relative;
+        }
+        .story-img-container {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .story-img-container.add-story {
+            background: none;
+            border: 2px solid #ddd;
+        }
+        .story img {
+            width: 59px;
+            height: 59px;
+            border-radius: 50%;
+            border: 2px solid white;
+            object-fit: cover;
+        }
+        .story span {
+            font-size: 12px;
+            color: #333;
+        }
+        .add-icon {
+            position: absolute;
+            bottom: 20px;
+            right: 0;
+            background-color: #1877f2;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            border: 2px solid white;
+        }
+
+        /* Create Post Section */
+        .create-post {
+            margin: 10px 20px;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+        .create-input {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .create-input img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .create-input input {
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #555;
+            width: 100%;
+        }
+        .create-actions {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 13px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        /* Feed Posts */
+        .post {
+            margin: 15px 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .user-info {
+            display: flex;
+            gap: 10px;
+        }
+        .user-info img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
+        .user-details h3 {
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .verified {
+            color: #1877f2;
+            font-size: 12px;
+        }
+        .user-meta {
+            font-size: 12px;
+            color: #777;
+            margin-top: 2px;
+        }
+        .post-content {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+            color: #222;
+        }
+        
+        /* PDF Attachment Box */
+        .attachment-box {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .pdf-icon {
+            background-color: #e53935;
+            color: white;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .file-details h4 {
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+        .file-details p {
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* Post Actions */
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .liked-by {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: #555;
+        }
+        .liked-avatars {
+            display: flex;
+        }
+        .liked-avatars img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid white;
+            margin-left: -8px;
+        }
+        .liked-avatars img:first-child {
+            margin-left: 0;
+        }
+
+        /* CTA Banner */
+        .cta-banner {
+            margin: 20px;
+            background-color: #f4f0ff;
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .trophy-icon {
+            background-color: white;
+            color: #7c3aed;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .cta-content h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .cta-content p {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .cta-btn {
+            background-color: #5a32fa;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .close-cta {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 414px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: #888;
+            font-size: 10px;
+            position: relative;
+        }
+        .nav-item.active {
+            color: #5a32fa;
+        }
+        .nav-item i {
+            font-size: 20px;
+        }
+        .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            background-color: #5a32fa;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- Header -->
+    <div class="header">
+        <i class="fa-solid fa-bars" style="font-size: 20px;"></i>
+        <h1>Home</h1>
+        <div class="header-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <div>
+                <i class="fa-regular fa-bell"></i>
+                <span class="notification-badge">8</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stories -->
+    <div class="stories">
+        <div class="story">
+            <div class="story-img-container add-story">
+                <img src="https://i.pravatar.cc/150?img=11" alt="Your Story">
+            </div>
+            <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
+            <span>Your Story</span>
+        </div>
+        <div class="story">
+            <div class="story-img-container">
+                <img src="https://i.pravatar.cc/150?img=5" alt="Fatima">
+            </div>
+            <span>Fatima</span>
+        </div>
+        <div class="story">
+            <div class="story-img-container">
+                <img src="https://i.pravatar.cc/150?img=12" alt="John">
+            </div>
+            <span>John</span>
+        </div>
+        <div class="story">
+            <div class="story-img-container">
+                <img src="https://i.pravatar.cc/150?img=9" alt="Maryam">
+            </div>
+            <span>Maryam</span>
+        </div>
+        <div class="story">
+            <div class="story-img-container">
+                <img src="https://i.pravatar.cc/150?img=14" alt="David">
+            </div>
+            <span>David</span>
+        </div>
+    </div>
+
+    <!-- Create Post Box -->
+    <div class="create-post">
+        <div class="create-input">
+            <img src="https://i.pravatar.cc/150?img=11" alt="Profile">
+            <input type="text" placeholder="What's on your mind?">
+        </div>
+        <div class="create-actions">
+            <div class="action-btn" style="color: #4caf50;"><i class="fa-regular fa-image"></i> Photo</div>
+            <div class="action-btn" style="color: #9c27b0;"><i class="fa-solid fa-video"></i> Video</div>
+            <div class="action-btn" style="color: #2196f3;"><i class="fa-solid fa-chart-simple"></i> Poll</div>
+            <div class="action-btn" style="color: #ff9800;"><i class="fa-regular fa-face-smile"></i> Feeling</div>
+        </div>
+    </div>
+
+    <!-- Post 1 -->
+    <div class="post">
+        <div class="post-header">
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=5" alt="Fatima">
+                <div class="user-details">
+                    <h3>Fatima Muhammad <i class="fa-solid fa-circle-check verified"></i></h3>
+                    <div class="user-meta">Computer Science • ABU Zaria<br>2h ago</div>
+                </div>
+            </div>
+            <i class="fa-solid fa-ellipsis"></i>
+        </div>
+        
+        <div class="post-content">
+            Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀
+        </div>
+
+        <div class="attachment-box">
+            <div class="pdf-icon">PDF</div>
+            <div class="file-details">
+                <h4>Data Structures & Algorithms.pdf</h4>
+                <p>4.2 MB</p>
+            </div>
+        </div>
+
+        <div class="post-actions">
+            <div class="post-action" style="color: #e53935;"><i class="fa-solid fa-heart"></i> 245</div>
+            <div class="post-action"><i class="fa-regular fa-comment"></i> 32</div>
+            <div class="post-action"><i class="fa-solid fa-retweet"></i> 18</div>
+            <div class="post-action"><i class="fa-regular fa-bookmark"></i></div>
+        </div>
+
+        <div class="liked-by">
+            <div class="liked-avatars">
+                <img src="https://i.pravatar.cc/150?img=12" alt="Like 1">
+                <img src="https://i.pravatar.cc/150?img=9" alt="Like 2">
+                <img src="https://i.pravatar.cc/150?img=14" alt="Like 3">
+            </div>
+            <span>Liked by John, Maryam and 243 others</span>
+        </div>
+    </div>
+
+    <!-- Post 2 -->
+    <div class="post">
+        <div class="post-header">
+            <div class="user-info">
+                <img src="https://i.pravatar.cc/150?img=14" alt="David">
+                <div class="user-details">
+                    <h3>David Okafor</h3>
+                    <div class="user-meta">@david.engineering • UNN<br>3h ago</div>
+                </div>
+            </div>
+            <i class="fa-solid fa-ellipsis"></i>
+        </div>
+        
+        <div class="post-content">
+            Can anyone explain this thermodynamics question? I'm stuck on part (b).
+        </div>
+
+        <div class="post-actions">
+            <div class="post-action"><i class="fa-regular fa-heart"></i> 112</div>
+            <div class="post-action"><i class="fa-regular fa-comment"></i> 26</div>
+            <div class="post-action"><i class="fa-solid fa-retweet"></i> 9</div>
+            <div class="post-action"><i class="fa-regular fa-bookmark"></i></div>
+        </div>
+    </div>
+
+    <!-- Complete Profile CTA -->
+    <div class="cta-banner">
+        <i class="fa-solid fa-xmark close-cta"></i>
+        <div class="trophy-icon">
+            <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div class="cta-content">
+            <h3>Complete your profile</h3>
+            <p>Add more details to connect with more students.</p>
+            <button class="cta-btn">Complete Now</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-regular fa-compass"></i>
+            <span>Explore</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-regular fa-comment-dots"></i>
+            <span class="chat-badge">3</span>
+            <span>Chat</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-solid fa-book-open"></i>
+            <span>StudyHub</span>
+        </div>
+        <div class="nav-item">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
