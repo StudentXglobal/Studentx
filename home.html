@@ -2,621 +2,661 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Home Feed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX - Dark Mode Feed</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Icons (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --bg-dark: #02051A;
-            --bg-card: #0E122B;
-            --bg-glass: rgba(14, 18, 43, 0.85);
-            --grad-blue: #1877F2;
-            --grad-purple: #8A2BE2;
-            --grad-pink: #FF00FF;
-            --text-main: #FFFFFF;
-            --text-muted: #8892B0;
-            --border-color: rgba(42, 49, 88, 0.6);
-            --primary-btn: linear-gradient(90deg, #2E38A3, #4552E6);
-            --verified-blue: #1DA1F2;
+            /* Dark Mode Colors */
+            --bg-main: #0B1121;          /* Deep dark blue background */
+            --bg-card: #151C33;          /* Slightly lighter card background */
+            --bg-card-hover: #1E2746;
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --border-color: #263152;
+            --accent-purple: #6366F1;    /* Primary purple/blue */
+            --accent-purple-hover: #4F46E5;
+            --success-green: #10B981;
+            --warning-orange: #F59E0B;
+            --danger-red: #EF4444;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #000;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
             display: flex;
             justify-content: center;
-            align-items: center;
+        }
+
+        /* Main App Container (Responsive) */
+        .app-container {
+            width: 100%;
+            max-width: 900px;
             min-height: 100vh;
-        }
-
-        /* Mobile Container Layout */
-        .mobile-frame {
-            width: 100%;
-            max-width: 390px;
-            height: 100vh;
-            max-height: 844px;
-            background: linear-gradient(165deg, var(--bg-dark) 0%, #0D1442 100%);
             position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(138, 43, 226, 0.15);
+            padding-bottom: 100px; /* Space for bottom nav */
         }
 
-        @media (min-height: 850px) {
-            .mobile-frame {
-                height: 844px;
-                border-radius: 40px;
-                border: 8px solid #1a1a2e;
-            }
-        }
-
-        /* Main Content Scrolling Area */
-        .main-content {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-top: 75px; 
-            padding-bottom: 100px; /* Increased for the center chat icon */
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .main-content::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* Top Header (Glassmorphism) */
+        /* --- Header --- */
         .header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 70px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
-            z-index: 50;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            background-color: rgba(11, 17, 33, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 100;
         }
 
-        .logo-wrapper {
+        .header-left {
             display: flex;
-            align-items: baseline;
+            align-items: center;
+            gap: 15px;
         }
 
-        .logo-text {
-            font-family: 'Montserrat', sans-serif;
+        .menu-btn {
+            font-size: 20px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .logo {
             font-size: 22px;
-            font-weight: 700;
-            color: var(--text-main);
+            font-weight: 800;
             letter-spacing: -0.5px;
         }
-
-        .logo-x {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            font-style: italic;
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-left: -2px;
+        .logo span {
+            color: var(--accent-purple);
         }
 
-        .header-icons {
+        .header-right {
             display: flex;
-            gap: 20px;
             align-items: center;
+            gap: 20px;
         }
 
-        .header-icons i {
-            font-size: 22px;
-            color: var(--text-main);
+        .header-icon {
+            font-size: 20px;
+            color: var(--text-primary);
+            position: relative;
             cursor: pointer;
-            transition: all 0.2s;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--danger-red);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--bg-main);
+        }
+
+        .header-profile {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
         }
         
-        .header-icons i:hover, .header-icons i:active {
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            transform: scale(1.1);
+        .online-dot {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10px;
+            height: 10px;
+            background-color: var(--success-green);
+            border-radius: 50%;
+            border: 2px solid var(--bg-main);
         }
 
-        /* Stories Section */
-        .stories-container {
+        /* --- Greeting --- */
+        .greeting {
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .greeting img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .greeting-text h2 {
+            font-size: 18px;
+            font-weight: 700;
+        }
+        .greeting-text p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* --- Create Post Input --- */
+        .create-post {
+            background-color: var(--bg-card);
+            margin: 15px 20px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .create-icon {
+            color: var(--accent-purple);
+            font-size: 20px;
+            padding: 8px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 8px;
+        }
+        .create-post input {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+        .create-post input::placeholder {
+            color: var(--text-secondary);
+        }
+        .create-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .create-actions i {
+            color: var(--text-secondary);
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .post-btn {
+            background-color: var(--accent-purple);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* --- Stories --- */
+        .stories-wrapper {
             display: flex;
             gap: 15px;
-            padding: 15px 20px;
+            padding: 10px 20px;
             overflow-x: auto;
-            -ms-overflow-style: none;
             scrollbar-width: none;
-            border-bottom: 1px solid var(--border-color);
         }
-        .stories-container::-webkit-scrollbar {
-            display: none;
-        }
-
+        .stories-wrapper::-webkit-scrollbar { display: none; }
+        
         .story {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 8px;
-            cursor: pointer;
-            flex-shrink: 0;
+            min-width: 65px;
         }
-
         .story-ring {
-            width: 70px;
-            height: 70px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
+            border: 2px solid var(--accent-purple);
             padding: 3px;
-            background: linear-gradient(45deg, var(--grad-pink), var(--grad-purple), var(--grad-blue));
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            position: relative;
         }
-
         .story-ring img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 3px solid var(--bg-dark);
         }
-
-        .story-create {
+        .story.create .story-ring {
+            border: 2px dashed var(--text-secondary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: var(--bg-card);
-            border: 2px dashed #4552E6;
         }
-
-        .story-create i {
-            color: #4552E6;
+        .story.create .story-ring i {
             font-size: 24px;
+            color: var(--accent-purple);
         }
-
         .story-name {
             font-size: 12px;
-            color: var(--text-main);
             font-weight: 500;
+            color: var(--text-primary);
         }
 
-        /* Create Post Card */
-        .create-post {
-            background-color: var(--bg-card);
-            margin: 15px 20px 20px;
-            border-radius: 16px;
-            padding: 18px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .create-top {
+        /* --- Tabs --- */
+        .tabs {
             display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .create-top img {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-            border: 1px solid var(--border-color);
-        }
-
-        .create-top input {
-            flex-grow: 1;
-            background: #151A3B;
-            border: 1px solid var(--border-color);
-            border-radius: 25px;
-            padding: 14px 18px;
-            color: var(--text-main);
-            font-size: 14px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            outline: none;
-        }
-        
-        .create-top input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .create-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .action-btns {
-            display: flex;
+            padding: 10px 20px;
             gap: 20px;
-        }
-
-        .action-btns i {
-            background: linear-gradient(135deg, #1877F2, #FF00FF);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .post-btn {
-            background: var(--primary-btn);
-            color: var(--text-main);
-            border: none;
-            padding: 8px 24px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(69, 82, 230, 0.3);
-        }
-
-        /* Feed Posts */
-        .post-card {
-            background-color: var(--bg-card);
-            margin: 0 0 10px;
-            padding: 20px;
-            border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+        .tab.active {
+            color: var(--accent-purple);
+            border-bottom: 2px solid var(--accent-purple);
+        }
+        .filter-icon {
+            margin-left: auto;
+            color: var(--text-secondary);
+            cursor: pointer;
         }
 
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
+        /* --- Main Content Grid (Responsive Layout) --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        @media (min-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr 300px; /* Two columns on larger screens */
+            }
         }
 
-        .post-user {
+        /* --- Announcement Card --- */
+        .announcement {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 12px;
+            padding: 15px;
             display: flex;
-            gap: 12px;
             align-items: center;
+            gap: 15px;
+            position: relative;
+            margin-bottom: 20px;
         }
-
-        .post-user img {
+        .ann-icon {
             width: 50px;
             height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            cursor: pointer;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .name-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .user-name {
-            color: var(--text-main);
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        .verified-badge {
-            color: var(--verified-blue);
-            font-size: 15px;
-        }
-
-        .user-uni {
-            color: var(--text-muted);
-            font-size: 12px;
-            margin-top: 2px;
-        }
-
-        .post-time {
-            color: var(--text-muted);
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .post-text {
-            color: var(--text-main);
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
-        .post-image {
-            width: 100%;
-            max-height: 350px;
-            border-radius: 16px;
-            object-fit: cover;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Post Actions */
-        .post-stats {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid var(--border-color);
-            padding-top: 15px;
-        }
-
-        .stat-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .stat-item:hover {
-            color: var(--text-main);
-        }
-
-        .stat-item.liked {
-            color: #FF2E63;
-        }
-
-        .stat-item i {
-            font-size: 20px;
-        }
-
-        /* New Bottom Navigation (Chat in Center with Gradient Colors) */
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 85px;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px 20px;
-            z-index: 50;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            color: var(--text-muted);
-            cursor: pointer;
-            text-decoration: none;
-            width: 50px;
-            transition: all 0.3s;
-        }
-
-        .nav-item i {
-            font-size: 24px;
-            color: var(--text-muted);
-        }
-
-        .nav-item.active i {
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-pink));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-item.active .nav-text {
-            color: var(--text-main);
-        }
-
-        /* Center Chat Icon Styling (Floating Action Button) */
-        .nav-center {
-            position: relative;
-            top: -25px; 
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .chat-btn-floating {
-            width: 65px;
-            height: 65px;
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
+            background: var(--accent-purple);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 8px 25px rgba(255, 0, 255, 0.4);
-            border: 6px solid #0E122B;
-            transition: transform 0.2s;
+            color: white;
+            font-size: 24px;
+            flex-shrink: 0;
         }
-
-        .chat-btn-floating i {
-            font-size: 26px;
-            color: #ffffff;
+        .ann-text h3 {
+            font-size: 14px;
+            font-weight: 700;
         }
-
-        .chat-btn-floating:active {
-            transform: scale(0.9);
+        .ann-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
         }
-
-        .nav-center .nav-text {
-            position: absolute;
-            bottom: -22px;
-            color: var(--text-main);
-            font-size: 11px;
+        .join-btn {
+            background: transparent;
+            border: 1px solid var(--accent-purple);
+            color: var(--accent-purple);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 600;
+            margin-left: auto;
+        }
+        .close-ann {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
         }
 
-        /* Profile Image in Nav */
-        .nav-profile-img {
-            width: 26px;
-            height: 26px;
+        /* --- Post Cards --- */
+        .post {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border-color);
+        }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .post-user img {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid transparent;
+        }
+        .post-user-info h4 {
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .badge-contributor {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent-purple);
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .post-time {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 2px;
+        }
+        .post-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .post-text span {
+            color: var(--accent-purple);
+        }
+        
+        /* PDF Attachment */
+        .attachment-pdf {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border-color);
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .pdf-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-red);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 20px;
+        }
+        .pdf-info h5 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .pdf-info p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .download-icon {
+            margin-left: auto;
+            color: var(--text-secondary);
+            font-size: 18px;
         }
 
-        .nav-item.active .nav-profile-img {
-            border-color: #FF00FF;
-            padding: 1px;
+        /* Post Actions */
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .action-item i {
+            font-size: 18px;
         }
 
-        .nav-text {
+        /* --- Right Sidebar Widgets (Gamification) --- */
+        .widgets {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .widget-card {
+            background-color: var(--bg-card);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .widget-info h4 {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        .widget-info .value {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .widget-info p {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+        .streak-fire { color: #FF5722; font-size: 18px; }
+        .progress-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 4px solid var(--border-color);
+            border-top-color: var(--accent-purple);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+        }
+        .hexagon {
+            width: 45px;
+            height: 50px;
+            background-color: var(--success-green);
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        /* --- Floating Action Button (FAB) --- */
+        .fab {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent-purple);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            cursor: pointer;
+            z-index: 90;
+        }
+
+        /* --- Bottom Navigation --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: env(safe-area-inset-bottom, 10px);
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            position: relative;
+        }
+        .nav-item i {
+            font-size: 22px;
+        }
+        .nav-item span {
             font-size: 11px;
             font-weight: 600;
-            color: var(--text-muted);
+        }
+        .nav-item.active {
+            color: var(--accent-purple);
+        }
+        .chat-badge {
+            position: absolute;
+            top: -5px;
+            right: -10px;
+            background-color: var(--accent-purple);
+            color: white;
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="mobile-frame">
+    <div class="app-container">
         
-        <!-- Header (All icons returned) -->
+        <!-- Header -->
         <header class="header">
-            <div class="logo-wrapper">
-                <span class="logo-text">Student</span>
-                <span class="logo-x">X</span>
+            <div class="header-left">
+                <i class="fa-solid fa-bars menu-btn"></i>
+                <div class="logo">Student<span>X</span></div>
             </div>
-            <div class="header-icons">
-                <i class="fa-solid fa-magnifying-glass" title="Search"></i>
-                <i class="fa-regular fa-bell" onclick="window.location.href='notifications.html'" title="Notifications"></i>
-                <i class="fa-regular fa-paper-plane" onclick="window.location.href='chat.html'" title="Messages"></i>
+            <div class="header-right">
+                <i class="fa-solid fa-magnifying-glass header-icon"></i>
+                <div class="header-icon">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="badge">8</span>
+                </div>
+                <div style="position: relative;">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="Profile" class="header-profile">
+                    <div class="online-dot"></div>
+                </div>
             </div>
         </header>
 
-        <!-- Main Scrollable Feed -->
-        <main class="main-content">
-            
-            <!-- Stories Section -->
-            <section class="stories-container">
-                <div class="story">
-                    <div class="story-ring story-create">
-                        <i class="fa-solid fa-plus"></i>
-                    </div>
-                    <span class="story-name">Create</span>
-                </div>
-                <!-- User Story: Yusuf (Anonymous Mask Image) -->
-                <div class="story">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1509301045230-672583857500?auto=format&fit=crop&q=80&w=200" alt="Yusuf">
-                    </div>
-                    <span class="story-name">Yusuf</span>
-                </div>
-                <!-- Other Stories -->
-                <div class="story">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Avatar">
-                    </div>
-                    <span class="story-name">Sarah</span>
-                </div>
-                <div class="story">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="Avatar">
-                    </div>
-                    <span class="story-name">Michael</span>
-                </div>
-                <div class="story">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar">
-                    </div>
-                    <span class="story-name">Aisha</span>
-                </div>
-            </section>
+        <!-- Greeting -->
+        <div class="greeting">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" alt="User">
+            <div class="greeting-text">
+                <h2>Good morning, John! 👋</h2>
+                <p>What would you like to learn today?</p>
+            </div>
+        </div>
 
-            <!-- Create Post Card -->
-            <section class="create-post">
-                <div class="create-top">
-                    <!-- Profile Picture (Anonymous Mask Image) -->
-                    <img src="https://images.unsplash.com/photo-1509301045230-672583857500?auto=format&fit=crop&q=80&w=200" alt="My Profile" onclick="window.location.href='profile.html'">
-                    <input type="text" placeholder="What's on your mind?">
-                </div>
-                <div class="create-actions">
-                    <div class="action-btns">
-                        <i class="fa-solid fa-image" title="Upload Image"></i>
-                        <i class="fa-solid fa-file-lines" title="Upload Notes"></i>
-                        <i class="fa-solid fa-square-poll-horizontal" title="Create Poll"></i>
-                    </div>
-                    <button class="post-btn">Post</button>
-                </div>
-            </section>
+        <!-- Create Post -->
+        <div class="create-post">
+            <i class="fa-regular fa-pen-to-square create-icon"></i>
+            <input type="text" placeholder="Share a thought, question or resource...">
+            <div class="create-actions">
+                <i class="fa-regular fa-image"></i>
+                <i class="fa-solid fa-gift"></i> <!-- Used for GIF icon -->
+                <button class="post-btn">Post</button>
+            </div>
+        </div>
 
-            <!-- Feed Posts -->
-            <!-- Post 1: Yusuf Alhaji Garba (Verified) -->
-            <article class="post-card">
-                <div class="post-header">
-                    <div class="post-user">
-                        <!-- Profile Picture (Anonymous Mask Image) -->
-                        <img src="https://images.unsplash.com/photo-1509301045230-672583857500?auto=format&fit=crop&q=80&w=200" alt="Yusuf Profile" onclick="window.location.href='profile.html'">
-                        <div class="user-info">
-                            <div class="name-wrapper" onclick="window.location.href='profile.html'">
-                                <span class="user-name">Yusuf Alhaji Garba</span>
-                                <i class="fa-solid fa-circle-check verified-badge"></i>
-                            </div>
-                            <span class="user-uni">Software Engineering Student</span>
-                        </div>
-                    </div>
-                    <span class="post-time">Just now</span>
+        <!-- Stories -->
+        <div class="stories-wrapper">
+            <div class="story create">
+                <div class="story-ring">
+                    <i class="fa-solid fa-plus"></i>
                 </div>
-                <p class="post-text">Excited to announce that I'm currently working on building StudentX! The platform is coming together perfectly. This is going to change how students connect and learn worldwide.</p>
-                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" alt="Post Image" class="post-image">
-                
-                <div class="post-stats">
-                    <div class="stat-item liked">
-                        <i class="fa-solid fa-heart"></i>
-                        <span>2.5k</span>
-                    </div>
-                    <div class="stat-item" onclick="window.location.href='comments.html'">
-                        <i class="fa-regular fa-comment"></i>
-                        <span>456</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fa-solid fa-retweet"></i>
-                        <span>128</span>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fa-regular fa-bookmark"></i>
-                    </div>
-                    <div class="stat-item">
-                        <i class="fa-solid fa-share-nodes"></i>
-                    </div>
+                <span class="story-name">Create Story</span>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" alt="Maryam">
+                    <div class="online-dot" style="bottom: 5px; right: 2px;"></div>
                 </div>
-            </article>
-
-            <!-- Post 2 -->
-            <article class="post-card">
-                <div class="post-header">
-                    <div class="post-user">
-                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80" alt="User" onclick="window.location.href='profile.html'">
-                        <div class="user-info">
-                            <div class="name-wrapper" onclick="window.location.href='profile.html'">
-                                <span class="user-name">Alex Chen</span>
-                            </div>
-                            <span class="user-uni">MIT</span>
-                        </div>
-   
+                <span class="story-name">Maryam</span>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <i class="fa-solid fa-users" style="font-size: 24px; position:absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff;"></i>
+                    <div class="online-dot" style="bottom: 5px; right: 2px;"></div>
+                </div>
+                <span class="story-name">Study Group</span>
+            </div>
+            <div class="story">
+                <div class="story-ring">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&q=80" alt="David">
+                    <div class="online-dot" style="bottom: 5px; right: 2px;"></div>
+                </div>
+                <span class="story-name">David</span>
+            </div>
+            <div class="story">
+                <div class="story-ring" style="border-color: var(--text-secondary);">
+                    <i class="fa-solid fa-atom" style="font-size: 24px; position:absolute; top: 50%; left: 50%; tra
