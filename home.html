@@ -17,13 +17,13 @@
         :root {
             --bg-dark: #02051A;
             --bg-card: #0E122B;
-            --bg-glass: rgba(14, 18, 43, 0.75);
+            --bg-glass: rgba(14, 18, 43, 0.85);
             --grad-blue: #1877F2;
             --grad-purple: #8A2BE2;
             --grad-pink: #FF00FF;
             --text-main: #FFFFFF;
             --text-muted: #8892B0;
-            --border-color: rgba(42, 49, 88, 0.5);
+            --border-color: rgba(42, 49, 88, 0.6);
             --primary-btn: linear-gradient(90deg, #2E38A3, #4552E6);
             --verified-blue: #1DA1F2;
         }
@@ -55,7 +55,7 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 0 40px rgba(138, 43, 226, 0.1);
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.15);
         }
 
         @media (min-height: 850px) {
@@ -70,7 +70,7 @@
         .main-content {
             flex-grow: 1;
             overflow-y: auto;
-            padding-top: 75px; 
+            padding-top: 70px; 
             padding-bottom: 90px; 
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -87,8 +87,8 @@
             width: 100%;
             height: 70px;
             background: var(--bg-glass);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -123,11 +123,12 @@
 
         .header-icons {
             display: flex;
-            gap: 20px;
+            gap: 22px;
+            align-items: center;
         }
 
         .header-icons i {
-            font-size: 20px;
+            font-size: 22px;
             color: var(--text-main);
             cursor: pointer;
             transition: color 0.2s;
@@ -135,17 +136,18 @@
         
         .header-icons i:active {
             color: var(--grad-purple);
-            transform: scale(0.95);
         }
 
         /* Stories Section */
         .stories-container {
             display: flex;
             gap: 15px;
-            padding: 15px 20px;
+            padding: 20px;
             overflow-x: auto;
             -ms-overflow-style: none;
             scrollbar-width: none;
+            border-bottom: 1px solid var(--border-color);
+            background-color: transparent;
         }
         .stories-container::-webkit-scrollbar {
             display: none;
@@ -161,8 +163,8 @@
         }
 
         .story-ring {
-            width: 68px;
-            height: 68px;
+            width: 70px;
+            height: 70px;
             border-radius: 50%;
             padding: 3px;
             background: linear-gradient(45deg, var(--grad-pink), var(--grad-purple), var(--grad-blue));
@@ -181,12 +183,12 @@
 
         .story-create {
             background: var(--bg-card);
-            border: 1px dashed #4552E6;
+            border: 2px dashed #4552E6;
         }
 
         .story-create i {
             color: #4552E6;
-            font-size: 22px;
+            font-size: 24px;
         }
 
         .story-name {
@@ -198,33 +200,34 @@
         /* Create Post Card */
         .create-post {
             background-color: var(--bg-card);
-            margin: 5px 20px 20px;
-            border-radius: 20px;
+            margin: 15px 20px;
+            border-radius: 16px;
             padding: 18px;
             border: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
         .create-top {
             display: flex;
-            gap: 12px;
+            gap: 15px;
             align-items: center;
         }
 
         .create-top img {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
+            border: 1px solid var(--border-color);
         }
 
         .create-top input {
             flex-grow: 1;
-            background: rgba(21, 26, 59, 0.5);
+            background: #151A3B;
             border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 12px 16px;
+            border-radius: 25px;
+            padding: 14px 18px;
             color: var(--text-main);
             font-size: 14px;
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -246,18 +249,13 @@
 
         .action-btns {
             display: flex;
-            gap: 18px;
+            gap: 20px;
         }
 
         .action-btns i {
             color: var(--text-muted);
-            font-size: 18px;
+            font-size: 20px;
             cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .action-btns i:hover {
-            color: var(--grad-purple);
         }
 
         .post-btn {
@@ -269,13 +267,12 @@
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(69, 82, 230, 0.3);
         }
 
         /* Feed Posts */
         .post-card {
             background-color: var(--bg-card);
-            margin: 0 0 15px;
+            margin: 0 0 10px;
             padding: 20px;
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
@@ -295,8 +292,8 @@
         }
 
         .post-user img {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
             cursor: pointer;
@@ -307,11 +304,10 @@
             flex-direction: column;
         }
 
-        /* Name and Verified Badge alignment */
         .name-wrapper {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 6px;
         }
 
         .user-name {
@@ -323,7 +319,7 @@
 
         .verified-badge {
             color: var(--verified-blue);
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .user-uni {
@@ -340,14 +336,14 @@
 
         .post-text {
             color: var(--text-main);
-            font-size: 14px;
+            font-size: 15px;
             line-height: 1.6;
             margin-bottom: 15px;
         }
 
         .post-image {
             width: 100%;
-            max-height: 300px;
+            max-height: 350px;
             border-radius: 16px;
             object-fit: cover;
             margin-bottom: 15px;
@@ -370,6 +366,252 @@
             color: var(--text-muted);
             font-size: 13px;
             font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .stat-item.liked {
+            color: #FF2E63;
+        }
+
+        .stat-item i {
+            font-size: 20px;
+        }
+
+        /* Bottom Navigation (Glassmorphism) */
+        .bottom-nav {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 85px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 10px 20px;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: var(--text-main);
+            transform: translateY(-2px);
+        }
+
+        .nav-item i {
+            font-size: 24px;
+        }
+
+        .nav-item.active i {
+            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Ainihin hoton profile a bottom nav */
+        .nav-profile-img {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid transparent;
+        }
+
+        .nav-item.active .nav-profile-img {
+            border-color: var(--grad-purple);
+        }
+
+        .nav-text {
+            font-size: 11px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-frame">
+        
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-wrapper">
+                <span class="logo-text">Student</span>
+                <span class="logo-x">X</span>
+            </div>
+            <div class="header-icons">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-regular fa-bell" onclick="window.location.href='notifications.html'"></i>
+                <i class="fa-regular fa-paper-plane" onclick="window.location.href='chat.html'"></i>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Feed -->
+        <main class="main-content">
+            
+            <!-- Stories Section -->
+            <section class="stories-container">
+                <!-- Create Story -->
+                <div class="story">
+                    <div class="story-ring story-create">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <span class="story-name">Create</span>
+                </div>
+                <!-- User Story: Yusuf -->
+                <div class="story">
+                    <div class="story-ring">
+                        <!-- Wannan shi zai nuno hoton profile dinka a stories -->
+                        <img src="hotonka.jpg" alt="Yusuf">
+                    </div>
+                    <span class="story-name">Yusuf</span>
+                </div>
+                <!-- Other Stories -->
+                <div class="story">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Avatar">
+                    </div>
+                    <span class="story-name">Sarah</span>
+                </div>
+                <div class="story">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="Avatar">
+                    </div>
+                    <span class="story-name">Michael</span>
+                </div>
+                <div class="story">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar">
+                    </div>
+                    <span class="story-name">Aisha</span>
+                </div>
+            </section>
+
+            <!-- Create Post Card with Real Profile Picture Slot -->
+            <section class="create-post">
+                <div class="create-top">
+                    <!-- Wannan shine Profile Picture naka wajen Create Post -->
+                    <img src="hotonka.jpg" alt="My Profile" onclick="window.location.href='profile.html'">
+                    <input type="text" placeholder="What's on your mind?">
+                </div>
+                <div class="create-actions">
+                    <div class="action-btns">
+                        <i class="fa-solid fa-image" title="Upload Image"></i>
+                        <i class="fa-solid fa-file-lines" title="Upload Notes"></i>
+                        <i class="fa-solid fa-square-poll-horizontal" title="Create Poll"></i>
+                    </div>
+                    <button class="post-btn">Post</button>
+                </div>
+            </section>
+
+            <!-- Feed Posts -->
+            <!-- Post 1: Yusuf Alhaji Garba (Verified) -->
+            <article class="post-card">
+                <div class="post-header">
+                    <div class="post-user">
+                        <!-- Wannan shine hoton Profile dinka wajen Feed Post -->
+                        <img src="hotonka.jpg" alt="Yusuf Profile" onclick="window.location.href='profile.html'">
+                        <div class="user-info">
+                            <div class="name-wrapper" onclick="window.location.href='profile.html'">
+                                <span class="user-name">Yusuf Alhaji Garba</span>
+                                <i class="fa-solid fa-circle-check verified-badge"></i>
+                            </div>
+                            <span class="user-uni">Software Engineering Student</span>
+                        </div>
+                    </div>
+                    <span class="post-time">Just now</span>
+                </div>
+                <p class="post-text">Excited to announce that I'm currently working on building StudentX! The platform is coming together perfectly. This is going to change how students connect and learn worldwide.</p>
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" alt="Post Image" class="post-image">
+                
+                <div class="post-stats">
+                    <div class="stat-item liked">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>2.5k</span>
+                    </div>
+                    <div class="stat-item" onclick="window.location.href='comments.html'">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>456</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-retweet"></i>
+                        <span>128</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post 2 -->
+            <article class="post-card">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80" alt="User" onclick="window.location.href='profile.html'">
+                        <div class="user-info">
+                            <div class="name-wrapper" onclick="window.location.href='profile.html'">
+                                <span class="user-name">Alex Chen</span>
+                            </div>
+                            <span class="user-uni">MIT</span>
+                        </div>
+                    </div>
+                    <span class="post-time">5h ago</span>
+                </div>
+                <p class="post-text">Looking for a study partner for Advanced Data Structures. I have compiled comprehensive notes from week 1-5. Let me know if you want to collaborate via StudyHub!</p>
+                
+                <div class="post-stats">
+                    <div class="stat-item">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>890</span>
+                    </div>
+                    <div class="stat-item" onclick="window.location.href='comments.html'">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>128</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-retweet"></i>
+                        <span>12</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="explore.html" class="nav-item">
+                <i class="fa-solid fa-compass"></i>
+                <span class="nav-text">Explore</span>
+            </a>
+            <a href="studyhub.html" class="nav-item">
+                <i class="fa-solid fa-book-open"></i>
+                <span class="nav-text">StudyHub</span>
+            </a>
+            <a href="chat.html" class="nav-item">
+   t: 600;
             cursor: pointer;
             transition: color 0.2s;
         }
