@@ -1,154 +1,319 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>StudentX Welcome</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentX Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Asali da Tsari */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<style>
-  *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: Arial, sans-serif;
-  }
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-  body{
-    background: radial-gradient(circle at top, #0b1220, #05070d);
-    color:white;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-  }
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            background: linear-gradient(180deg, #090924 0%, #15154b 100%);
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
 
-  .app{
-    width:100%;
-    max-width:420px;
-    padding:20px;
-    text-align:center;
-  }<img src="students.png" class="hero-image">
+        /* Sashen Sama (Header) */
+        .header-section {
+            padding: 40px 20px 0;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
 
-  .logo{
-    width:60px;
-    height:60px;
-    margin:0 auto 15px;
-    background:#2563eb;
-    border-radius:15px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-weight:bold;
-    font-size:22px;
-  }
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
 
-  h1{
-    font-size:34px;
-    font-weight:800;
-    margin-bottom:5px;
-  }
+        .logo span {
+            background: linear-gradient(90deg, #9b51e0, #4a90e2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 32px;
+            font-style: italic;
+        }
 
-  h2{
-    font-size:20px;
-    color:#60a5fa;
-    margin-bottom:15px;
-  }
+        .tagline {
+            font-size: 12px;
+            color: #b0b0d0;
+            margin-bottom: 20px;
+        }
 
-  p{
-    color:#cbd5e1;
-    font-size:14px;
-    margin-bottom:20px;
-  }
+        .tagline span {
+            color: #9b51e0;
+        }
 
-  /* Students */
-  .students{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin:20px 0;
-  }
+        .main-title {
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
 
-  .students img{
-    width:100%;
-    height:140px;
-    object-fit:cover;
-    border-radius:15px;
-    border:2px solid #1f2937;
-  }
+        .gradient-text {
+            background: linear-gradient(90deg, #4a90e2, #b83af3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-  /* Buttons */
-  .btn{
-    width:100%;
-    padding:14px;
-    margin:10px 0;
-    border:none;
-    border-radius:12px;
-    font-size:16px;
-    cursor:pointer;
-    font-weight:bold;
-  }
+        .sub-title {
+            font-size: 13px;
+            color: #c0c0e0;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
 
-  .login{
-    background:#2563eb;
-    color:white;
-  }
+        .hero-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+            /* Lura: Nan zaka canza link din hoton idan kana da naka */
+            background: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover;
+        }
 
-  .signup{
-    background:transparent;
-    border:1px solid #2563eb;
-    color:#60a5fa;
-  }
+        /* Sashen Cika Form (Login Card) */
+        .login-card {
+            background-color: #ffffff;
+            border-radius: 20px 20px 0 0;
+            padding: 25px 20px;
+            margin-top: -20px;
+            position: relative;
+            z-index: 10;
+        }
 
-  .signup:hover{
-    background:rgba(37,99,235,0.1);
-  }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eaeaea;
+        }
 
-  .footer{
-    margin-top:15px;
-    font-size:12px;
-    color:#64748b;
-  }
-</style>
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            font-weight: 600;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            color: #5b21b6;
+            border-bottom: 3px solid #5b21b6;
+        }
+
+        /* Maɓallan Social Media */
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            background: transparent;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .fa-google { color: #DB4437; }
+        .fa-facebook { color: #1877F2; }
+        .fa-apple { color: #000000; font-size: 18px; }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #eaeaea;
+        }
+
+        .divider::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #eaeaea;
+        }
+
+        .divider span {
+            color: #888;
+            font-size: 12px;
+        }
+
+        /* Wuraren Shigar da Rubutu (Inputs) */
+        .input-group {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid #eaeaea;
+            border-radius: 10px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-group .fa-eye-slash {
+            left: auto;
+            right: 15px;
+            cursor: pointer;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+        }
+
+        .options input[type="checkbox"] {
+            accent-color: #5b21b6;
+        }
+
+        .options a {
+            color: #5b21b6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Babban Maɓalli (Primary Button) */
+        .primary-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #6c3ce9, #385de4);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .footer-text {
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+        }
+
+        .footer-text a {
+            color: #5b21b6;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="app">
+    <div class="mobile-container">
+        <!-- Sashen Sama (Header) -->
+        <div class="header-section">
+            <div class="logo">Student<span>X</span></div>
+            <div class="tagline">Connect <span>&bull;</span> Learn <span>&bull;</span> Share</div>
+            
+            <h1 class="main-title">The Future of <br> <span class="gradient-text">Student Networking</span></h1>
+            <p class="sub-title">Connect with students, learn together<br>and build your future.</p>
+            
+            <div class="hero-image"></div>
+        </div>
 
-  <div class="logo">SX</div>
+        <!-- Sashen Cika Form (Login Card) -->
+        <div class="login-card">
+            <div class="tabs">
+                <div class="tab active">Log In</div>
+                <div class="tab">Sign Up</div>
+            </div>
 
-  <!-- REQUIRED TEXT -->
-  <h1>Welcome</h1>
-  <h2>To StudentX</h2>
-  <p>Connect • Learn • Share</p>
+            <button class="social-btn">
+                <i class="fa-brands fa-google"></i> Continue with Google
+            </button>
+            <button class="social-btn">
+                <i class="fa-brands fa-facebook"></i> Continue with Facebook
+            </button>
+            <button class="social-btn">
+                <i class="fa-brands fa-apple"></i> Continue with Apple
+            </button>
 
-  <!-- STUDENTS IMAGES -->
-  <div class="students">
-    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" />
-    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c" />
-    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" />
-    <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39" />
-  </div>
+            <div class="divider"><span>OR</span></div>
 
-  <!-- BUTTONS -->
-  <button class="btn login" onclick="login()">Login</button>
-  <button class="btn signup" onclick="signup()">Sign Up</button>
+            <form action="#">
+                <div class="input-group">
+                    <i class="fa-regular fa-envelope"></i>
+                    <input type="text" placeholder="Email or Username">
+                </div>
+                
+                <div class="input-group">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" placeholder="Password">
+                    <i class="fa-regular fa-eye-slash"></i>
+                </div>
 
-  <div class="footer">Build your future with StudentX</div>
+                <div class="options">
+                    <label>
+                        <input type="checkbox" checked> Remember me
+                    </label>
+                    <a href="#">Forgot Password?</a>
+                </div>
 
-</div>
+                <button type="submit" class="primary-btn">Log In</button>
+            </form>
 
-<script>
-  function login(){
-    alert("Go to login page");
-    // window.location.href = "login.html";
-  }
-
-  function signup(){
-    alert("Go to signup page");
-    // window.location.href = "signup.html";
-  }
-</script>
+            <p class="footer-text">Don't have an account? <a href="#">Sign Up</a></p>
+        </div>
+    </div>
 
 </body>
 </html>
