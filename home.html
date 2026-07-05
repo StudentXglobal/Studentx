@@ -3,106 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX | Premium Home</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>StudentX | Premium Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-deep: #0B1121;
-            --bg-card: #151C33;
-            --bg-card-hover: #1E2746;
-            --text-main: #FFFFFF;
-            --text-sub: #94A3B8;
-            --accent-purple: #7C3AED;
-            --accent-gradient: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+            --bg-deep: #0B1121; --bg-card: #151C33; --text-main: #FFFFFF;
+            --text-sub: #94A3B8; --accent-purple: #7C3AED;
             --border-color: #263152;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background-color: var(--bg-deep); color: var(--text-main); padding-bottom: 100px; }
 
-        /* Header */
+        /* Header & Nav */
         .header { background: rgba(11, 17, 33, 0.9); backdrop-filter: blur(15px); padding: 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color); }
-        .logo { font-size: 24px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .header-icons i { font-size: 20px; margin-left: 20px; color: var(--text-main); }
-
-        /* Stories */
-        .stories-wrapper { display: flex; padding: 15px; gap: 15px; overflow-x: auto; scrollbar-width: none; }
-        .stories-wrapper::-webkit-scrollbar { display: none; }
-        .story-card { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .story-ring { width: 70px; height: 70px; border-radius: 50%; padding: 3px; background: var(--accent-gradient); }
-        .story-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--bg-deep); background: #333; }
-        .story-name { font-size: 12px; }
-
-        /* Posts */
-        .post { background: var(--bg-card); margin: 20px; padding: 20px; border-radius: 24px; border: 1px solid var(--border-color); }
-        .post-top { display: flex; justify-content: space-between; margin-bottom: 15px; }
-        .user-info { display: flex; align-items: center; gap: 12px; }
-        .user-avatar { width: 50px; height: 50px; border-radius: 50%; background: #4F46E5; }
-        .post-text { margin-bottom: 15px; font-size: 15px; line-height: 1.5; }
-        .post-footer { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border-color); color: var(--text-sub); }
-
-        /* Navigation Bar */
+        .logo { font-size: 24px; font-weight: 800; color: var(--accent-purple); }
         .nav-bar { position: fixed; bottom: 0; width: 100%; background: rgba(11, 17, 33, 0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; padding: 15px 25px; z-index: 1000; }
         .nav-link { text-align: center; color: var(--text-sub); text-decoration: none; font-size: 11px; }
         .nav-link.active { color: var(--accent-purple); }
         .nav-link i { font-size: 22px; display: block; margin-bottom: 4px; }
-        
-        /* Chat Center Special Style */
         .chat-center { background: var(--accent-purple); padding: 12px; border-radius: 50%; margin-top: -25px; color: white; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.4); }
-        .chat-center i { font-size: 24px; margin-bottom: 0 !important; }
+
+        /* Posts */
+        .post { background: var(--bg-card); margin: 20px; padding: 20px; border-radius: 24px; border: 1px solid var(--border-color); }
+        .user-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+        .post-media { width: 100%; height: 200px; background: #1e2746; border-radius: 16px; margin: 15px 0; display: flex; align-items: center; justify-content: center; font-size: 40px; color: var(--accent-purple); }
+        .post-footer { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border-color); color: var(--text-sub); }
     </style>
 </head>
 <body>
 
     <header class="header">
         <div class="logo">StudentX</div>
-        <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-solid fa-bell"></i>
-        </div>
+        <i class="fa-solid fa-bell" style="font-size:20px"></i>
     </header>
 
-    <section class="stories-wrapper">
-        <div class="story-card"><div class="story-ring"><div class="story-img"></div></div><span class="story-name">You</span></div>
-        <div class="story-card"><div class="story-ring"><div class="story-img"></div></div><span class="story-name">Fatima</span></div>
-        <div class="story-card"><div class="story-ring"><div class="story-img"></div></div><span class="story-name">John</span></div>
-    </section>
-
-    <!-- 10 Posts -->
     <div id="feed">
-        <!-- Zaka iya maimaita wannan block din -->
         <script>
-            for(let i=1; i<=10; i++) {
+            const users = [
+                {name: "Fatima Muhammad", icon: "fa-file-pdf"},
+                {name: "Ahmad Musa", icon: "fa-image"},
+                {name: "Zainab Yusuf", icon: "fa-video"},
+                {name: "Kabir Ibrahim", icon: "fa-file-pdf"},
+                {name: "Maryam Bello", icon: "fa-image"},
+                {name: "Usman Danfodio", icon: "fa-video"},
+                {name: "Aisha Sani", icon: "fa-file-pdf"},
+                {name: "Ibrahim Khalil", icon: "fa-image"},
+                {name: "Hafsat Abubakar", icon: "fa-video"},
+                {name: "Sadiq Aliyu", icon: "fa-file-pdf"}
+            ];
+
+            users.forEach((user, index) => {
                 document.write(`
                 <article class="post">
-                    <div class="post-top">
-                        <div class="user-info">
-                            <div class="user-avatar"></div>
-                            <div><h4>Student ${i}</h4><p style="font-size:12px; color:var(--text-sub)">Computer Science</p></div>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 15px;">
+                        <img src="https://i.pravatar.cc/100?u=${index}" class="user-avatar" alt="User">
+                        <div>
+                            <h4 style="font-size:16px">${user.name}</h4>
+                            <p style="font-size:12px; color:var(--text-sub)">Computer Science · ${index+1}h ago</p>
                         </div>
-                        <i class="fa-solid fa-ellipsis" style="color:var(--text-sub)"></i>
                     </div>
-                    <div class="post-text">Wannan shi ne post lamba ${i}. Muna gwada yadda scrolling zai kasance a cikin app dinmu na StudentX.</div>
+                    <p style="margin-bottom:10px">Yau na koyi wani sabon abu akan Programming, ga abin da na gano!</p>
+                    <div class="post-media"><i class="fa-solid ${user.icon}"></i></div>
                     <div class="post-footer">
-                        <span><i class="fa-regular fa-heart"></i> ${i*10}</span>
-                        <span><i class="fa-regular fa-comment"></i> ${i*2}</span>
+                        <span><i class="fa-regular fa-heart"></i> ${120 + index}</span>
+                        <span><i class="fa-regular fa-comment"></i> ${30 + index}</span>
                         <span><i class="fa-solid fa-share-nodes"></i></span>
                     </div>
                 </article>`);
-            }
+            });
         </script>
     </div>
 
-    <!-- Navigation -->
     <nav class="nav-bar">
         <a href="home.html" class="nav-link active"><i class="fa-solid fa-house"></i> Home</a>
         <a href="explore.html" class="nav-link"><i class="fa-solid fa-compass"></i> Explore</a>
-        
-        <!-- Chat a tsakiya -->
         <a href="chat.html" class="nav-link chat-center"><i class="fa-solid fa-message"></i></a>
-        
         <a href="studyhub.html" class="nav-link"><i class="fa-solid fa-book"></i> Study</a>
         <a href="profile.html" class="nav-link"><i class="fa-solid fa-user"></i> Profile</a>
     </nav>
