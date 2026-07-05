@@ -3,123 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Premium Feed</title>
-    <!-- Google Fonts for Premium look -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome -->
+    <title>StudentX | Premium Home</title>
+    <!-- Google Fonts: Plus Jakarta Sans for Premium feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome 6 for Professional Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        /* === CSS Variables for Easy Maintenance === */
         :root {
-            --primary-purple: #7C3AED;
-            --bg-color: #F8F9FA;
-            --text-main: #1F2937;
-            --text-sub: #6B7280;
-            --white: #FFFFFF;
+            --bg-deep: #0B1121;
+            --bg-card: #151C33;
+            --bg-card-hover: #1E2746;
+            --text-main: #FFFFFF;
+            --text-sub: #94A3B8;
+            --accent-purple: #7C3AED;
+            --accent-gradient: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%);
+            --border-color: #263152;
+            --success: #10B981;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-color); color: var(--text-main); padding-bottom: 90px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { background-color: var(--bg-deep); color: var(--text-main); padding-bottom: 100px; }
 
-        /* Header */
-        header { background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #E5E7EB; }
-        .logo { font-weight: 800; font-size: 22px; color: var(--primary-purple); }
-        .header-icons i { font-size: 20px; color: var(--text-main); margin-left: 20px; }
+        /* Header Style */
+        .header { 
+            background: rgba(11, 17, 33, 0.8); backdrop-filter: blur(15px);
+            padding: 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-color);
+        }
+        .logo { font-size: 24px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header-icons i { font-size: 22px; margin-left: 20px; color: var(--text-main); cursor: pointer; }
 
-        /* Stories */
-        .stories-container { display: flex; padding: 15px 20px; gap: 15px; overflow-x: auto; background: var(--white); }
-        .story-circle { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--primary-purple); padding: 3px; position: relative; }
-        .story-circle img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-        .story-name { font-size: 11px; margin-top: 5px; text-align: center; }
+        /* Stories Section */
+        .stories-wrapper { display: flex; padding: 15px; gap: 15px; overflow-x: auto; scrollbar-width: none; }
+        .stories-wrapper::-webkit-scrollbar { display: none; }
+        .story-card { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+        .story-ring { 
+            width: 70px; height: 70px; border-radius: 50%; padding: 3px; 
+            background: var(--accent-gradient); position: relative;
+        }
+        .story-img { width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--bg-deep); background: #333; }
+        .story-name { font-size: 12px; font-weight: 500; }
 
-        /* Post Creator */
-        .create-card { background: var(--white); margin: 20px; padding: 15px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        .user-avatar { width: 40px; height: 40px; background: #ddd; border-radius: 50%; }
-        .create-card input { width: 100%; border: none; padding: 10px; font-size: 14px; outline: none; }
-        .actions-row { display: flex; justify-content: space-around; border-top: 1px solid #F3F4F6; padding-top: 15px; color: var(--text-sub); }
+        /* Create Post Card */
+        .create-post { 
+            background: var(--bg-card); margin: 20px; padding: 20px; border-radius: 20px;
+            border: 1px solid var(--border-color); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+        }
+        .create-input { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+        .user-avatar { width: 50px; height: 50px; border-radius: 50%; background: #4F46E5; }
+        .create-input input { 
+            flex: 1; background: var(--bg-deep); border: 1px solid var(--border-color); 
+            padding: 15px; border-radius: 30px; color: white; outline: none;
+        }
+        .create-actions { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border-color); }
+        .action-btn { display: flex; align-items: center; gap: 8px; color: var(--text-sub); cursor: pointer; font-size: 14px; }
 
         /* Feed Posts */
-        .post { background: var(--white); margin: 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
-        .post-user-info h4 { font-size: 15px; }
-        .post-user-info p { font-size: 12px; color: var(--text-sub); }
-        .post-content { margin-bottom: 15px; line-height: 1.5; font-size: 14px; }
-        .post-media { width: 100%; height: 200px; background: #E5E7EB; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
-        .post-actions { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid #F3F4F6; color: var(--text-sub); }
+        .post { background: var(--bg-card); margin: 20px; padding: 20px; border-radius: 24px; border: 1px solid var(--border-color); transition: 0.3s; }
+        .post:hover { background: var(--bg-card-hover); }
+        .post-top { display: flex; justify-content: space-between; margin-bottom: 15px; }
+        .user-info { display: flex; align-items: center; gap: 12px; }
+        .post-text { line-height: 1.6; margin-bottom: 15px; font-size: 15px; }
+        .post-media { width: 100%; height: 250px; background: #263152; border-radius: 16px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; }
+        .post-footer { display: flex; justify-content: space-between; padding-top: 15px; border-top: 1px solid var(--border-color); }
+        .stat { display: flex; align-items: center; gap: 6px; color: var(--text-sub); font-size: 14px; cursor: pointer; }
 
-        /* Bottom Nav */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: var(--white); padding: 15px 20px; display: flex; justify-content: space-between; border-top: 1px solid #E5E7EB; z-index: 100; }
-        .nav-item { text-align: center; color: var(--text-sub); text-decoration: none; font-size: 20px; }
-        .nav-item.active { color: var(--primary-purple); }
+        /* Navigation Bar */
+        .nav-bar { 
+            position: fixed; bottom: 0; width: 100%; background: rgba(11, 17, 33, 0.95);
+            backdrop-filter: blur(20px); border-top: 1px solid var(--border-color);
+            display: flex; justify-content: space-around; padding: 15px; z-index: 1000;
+        }
+        .nav-link { text-align: center; color: var(--text-sub); text-decoration: none; font-size: 12px; transition: 0.3s; }
+        .nav-link.active { color: var(--accent-purple); }
+        .nav-link i { font-size: 24px; display: block; margin-bottom: 4px; }
     </style>
 </head>
 <body>
 
-    <header>
+    <!-- Header -->
+    <header class="header">
         <div class="logo">StudentX</div>
         <div class="header-icons">
             <i class="fa-solid fa-magnifying-glass"></i>
             <i class="fa-solid fa-bell"></i>
-            <i class="fa-solid fa-paper-plane"></i>
+            <i class="fa-solid fa-envelope"></i>
         </div>
     </header>
 
-    <div class="stories-container">
-        <div class="story-item">
-            <div class="story-circle"><img src="https://i.pravatar.cc/100?u=1" alt="Me"></div>
-            <div class="story-name">You</div>
+    <!-- Stories -->
+    <section class="stories-wrapper">
+        <div class="story-card">
+            <div class="story-ring"><div class="story-img"></div></div>
+            <span class="story-name">You</span>
         </div>
-        <div class="story-item">
-            <div class="story-circle"><img src="https://i.pravatar.cc/100?u=2" alt="Fatima"></div>
-            <div class="story-name">Fatima</div>
+        <div class="story-card">
+            <div class="story-ring"><div class="story-img"></div></div>
+            <span class="story-name">Fatima</span>
         </div>
-        <div class="story-item">
-            <div class="story-circle"><img src="https://i.pravatar.cc/100?u=3" alt="John"></div>
-            <div class="story-name">John</div>
+        <div class="story-card">
+            <div class="story-ring"><div class="story-img"></div></div>
+            <span class="story-name">John</span>
         </div>
-    </div>
+        <div class="story-card">
+            <div class="story-ring"><div class="story-img"></div></div>
+            <span class="story-name">Maryam</span>
+        </div>
+    </section>
 
-    <div class="create-card">
-        <div class="input-row">
+    <!-- Create Post -->
+    <section class="create-post">
+        <div class="create-input">
             <div class="user-avatar"></div>
             <input type="text" placeholder="What's on your mind?">
         </div>
-        <div class="actions-row">
-            <span><i class="fa-regular fa-image"></i> Photo</span>
-            <span><i class="fa-solid fa-poll"></i> Poll</span>
-            <span><i class="fa-solid fa-video"></i> Video</span>
+        <div class="create-actions">
+            <div class="action-btn"><i class="fa-solid fa-image" style="color:#7C3AED"></i> Photo</div>
+            <div class="action-btn"><i class="fa-solid fa-poll" style="color:#10B981"></i> Poll</div>
+            <div class="action-btn"><i class="fa-solid fa-file-pdf" style="color:#EF4444"></i> Notes</div>
         </div>
-    </div>
+    </section>
 
-    <!-- Feed Post -->
-    <div class="post">
-        <div class="post-header">
-            <div class="user-avatar" style="background:#8B5CF6"></div>
-            <div class="post-user-info">
-                <h4>Fatima Muhammad</h4>
-                <p>Computer Science • 2h ago</p>
+    <!-- Post Example -->
+    <article class="post">
+        <div class="post-top">
+            <div class="user-info">
+                <div class="user-avatar" style="background:#10B981"></div>
+                <div>
+                    <h4 style="font-size:16px">Fatima Muhammad</h4>
+                    <p style="font-size:12px">Computer Science • 2h ago</p>
+                </div>
             </div>
+            <i class="fa-solid fa-ellipsis" style="color:var(--text-sub)"></i>
         </div>
-        <div class="post-content">
-            Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think!
+        <div class="post-text">Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think!</div>
+        <div class="post-media"><i class="fa-solid fa-file-pdf" style="font-size:50px; opacity:0.3"></i></div>
+        <div class="post-footer">
+            <div class="stat"><i class="fa-regular fa-heart"></i> 245</div>
+            <div class="stat"><i class="fa-regular fa-comment"></i> 32</div>
+            <div class="stat"><i class="fa-solid fa-share-nodes"></i> 18</div>
+            <div class="stat"><i class="fa-regular fa-bookmark"></i></div>
         </div>
-        <div class="post-media">
-            <span>[PDF/Image Preview]</span>
-        </div>
-        <div class="post-actions">
-            <span><i class="fa-regular fa-heart"></i> 245</span>
-            <span><i class="fa-regular fa-comment"></i> 32</span>
-            <span><i class="fa-solid fa-retweet"></i> 18</span>
-            <span><i class="fa-regular fa-bookmark"></i></span>
-        </div>
-    </div>
+    </article>
 
-    <nav class="bottom-nav">
-        <a href="home.html" class="nav-item active"><i class="fa-solid fa-house"></i></a>
-        <a href="explore.html" class="nav-item"><i class="fa-solid fa-compass"></i></a>
-        <a href="studyhub.html" class="nav-item"><i class="fa-solid fa-book"></i></a>
-        <a href="chat.html" class="nav-item"><i class="fa-solid fa-message"></i></a>
-        <a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i></a>
+    <!-- Navigation Bar (Direct Links) -->
+    <nav class="nav-bar">
+        <a href="home.html" class="nav-link active">
+            <i class="fa-solid fa-house"></i> Home
+        </a>
+        <a href="explore.html" class="nav-link">
+            <i class="fa-solid fa-compass"></i> Explore
+        </a>
+        <a href="studyhub.html" class="nav-link">
+            <i class="fa-solid fa-book"></i> StudyHub
+        </a>
+        <a href="chat.html" class="nav-link">
+            <i class="fa-solid fa-message"></i> Chat
+        </a>
+        <a href="profile.html" class="nav-link">
+            <i class="fa-solid fa-user"></i> Profile
+        </a>
     </nav>
 
 </body>
