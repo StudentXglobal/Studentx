@@ -70,7 +70,7 @@
         .main-content {
             flex-grow: 1;
             overflow-y: auto;
-            padding-top: 70px; 
+            padding-top: 75px; 
             padding-bottom: 100px; /* Increased for the center chat icon */
             -ms-overflow-style: none;
             scrollbar-width: none;
@@ -123,33 +123,33 @@
 
         .header-icons {
             display: flex;
-            gap: 22px;
+            gap: 20px;
             align-items: center;
         }
 
         .header-icons i {
             font-size: 22px;
-            background: linear-gradient(135deg, #fff, var(--grad-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-main);
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.2s;
         }
         
-        .header-icons i:active {
-            transform: scale(0.9);
+        .header-icons i:hover, .header-icons i:active {
+            background: linear-gradient(135deg, var(--grad-blue), var(--grad-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: scale(1.1);
         }
 
         /* Stories Section */
         .stories-container {
             display: flex;
             gap: 15px;
-            padding: 20px;
+            padding: 15px 20px;
             overflow-x: auto;
             -ms-overflow-style: none;
             scrollbar-width: none;
             border-bottom: 1px solid var(--border-color);
-            background-color: transparent;
         }
         .stories-container::-webkit-scrollbar {
             display: none;
@@ -202,7 +202,7 @@
         /* Create Post Card */
         .create-post {
             background-color: var(--bg-card);
-            margin: 15px 20px;
+            margin: 15px 20px 20px;
             border-radius: 16px;
             padding: 18px;
             border: 1px solid var(--border-color);
@@ -255,7 +255,7 @@
         }
 
         .action-btns i {
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-pink));
+            background: linear-gradient(135deg, #1877F2, #FF00FF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-size: 20px;
@@ -369,11 +369,16 @@
             align-items: center;
             gap: 8px;
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
         }
         
+        .stat-item:hover {
+            color: var(--text-main);
+        }
+
         .stat-item.liked {
             color: #FF2E63;
         }
@@ -412,12 +417,9 @@
             transition: all 0.3s;
         }
 
-        /* Gradient for normal icons */
         .nav-item i {
             font-size: 24px;
-            background: linear-gradient(135deg, var(--text-muted), #5c678a);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--text-muted);
         }
 
         .nav-item.active i {
@@ -433,7 +435,7 @@
         /* Center Chat Icon Styling (Floating Action Button) */
         .nav-center {
             position: relative;
-            top: -25px; /* Pulls it up from the bottom nav */
+            top: -25px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -441,23 +443,21 @@
         }
 
         .chat-btn-floating {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             box-shadow: 0 8px 25px rgba(255, 0, 255, 0.4);
-            border: 5px solid var(--bg-dark);
+            border: 6px solid #0E122B;
             transition: transform 0.2s;
         }
 
         .chat-btn-floating i {
-            font-size: 24px;
-            color: #fff;
-            background: none;
-            -webkit-text-fill-color: #fff; /* Ensure it stays white inside the gradient bubble */
+            font-size: 26px;
+            color: #ffffff;
         }
 
         .chat-btn-floating:active {
@@ -466,7 +466,7 @@
 
         .nav-center .nav-text {
             position: absolute;
-            bottom: -20px;
+            bottom: -22px;
             color: var(--text-main);
             font-size: 11px;
             font-weight: 600;
@@ -478,11 +478,12 @@
             height: 26px;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid var(--text-muted);
+            border: 2px solid transparent;
         }
 
         .nav-item.active .nav-profile-img {
-            border-color: var(--grad-purple);
+            border-color: #FF00FF;
+            padding: 1px;
         }
 
         .nav-text {
@@ -496,15 +497,16 @@
 
     <div class="mobile-frame">
         
-        <!-- Header -->
+        <!-- Header (All icons returned) -->
         <header class="header">
             <div class="logo-wrapper">
                 <span class="logo-text">Student</span>
                 <span class="logo-x">X</span>
             </div>
             <div class="header-icons">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <i class="fa-regular fa-bell" onclick="window.location.href='notifications.html'"></i>
+                <i class="fa-solid fa-magnifying-glass" title="Search"></i>
+                <i class="fa-regular fa-bell" onclick="window.location.href='notifications.html'" title="Notifications"></i>
+                <i class="fa-regular fa-paper-plane" onclick="window.location.href='chat.html'" title="Messages"></i>
             </div>
         </header>
 
@@ -519,10 +521,10 @@
                     </div>
                     <span class="story-name">Create</span>
                 </div>
-                <!-- User Story: Yusuf -->
+                <!-- User Story: Yusuf (Anonymous Mask Image) -->
                 <div class="story">
                     <div class="story-ring">
-                        <img src="hotonka.jpg" alt="Yusuf">
+                        <img src="https://images.unsplash.com/photo-1509301045230-672583857500?auto=format&fit=crop&q=80&w=200" alt="Yusuf">
                     </div>
                     <span class="story-name">Yusuf</span>
                 </div>
@@ -550,8 +552,8 @@
             <!-- Create Post Card -->
             <section class="create-post">
                 <div class="create-top">
-                    <!-- Profile Picture naka wajen Create Post -->
-                    <img src="hotonka.jpg" alt="My Profile" onclick="window.location.href='profile.html'">
+                    <!-- Profile Picture (Anonymous Mask Image) -->
+                    <img src="https://images.unsplash.com/photo-1509301045230-672583857500?auto=format&fit=crop&q=80&w=200" alt="My Profile" onclick="window.location.href='profile.html'">
                     <input type="text" placeholder="What's on your mind?">
                 </div>
                 <div class="create-actions">
@@ -569,8 +571,8 @@
             <article class="post-card">
                 <div class="post-header">
                     <div class="post-user">
-                        <!-- Hoton Profile dinka wajen Feed Post -->
-                        <img src="hotonka.jpg" alt="Yusuf Profile" onclick="window.location.href='profile.html'">
+                        <!-- Profile Picture (Anonymous Mask Image) -->
+                        <img src="https://images.unsplash.com/photo-1509301045230-672583857500?auto=format&fit=crop&q=80&w=200" alt="Yusuf Profile" onclick="window.location.href='profile.html'">
                         <div class="user-info">
                             <div class="name-wrapper" onclick="window.location.href='profile.html'">
                                 <span class="user-name">Yusuf Alhaji Garba</span>
@@ -617,7 +619,4 @@
                             </div>
                             <span class="user-uni">MIT</span>
                         </div>
-                    </div>
-                    <span class="post-time">5h ago</span>
-                </div>
-                <p class="post-text">Looking for a study partner for Advanced Data Structures. I have compiled comprehensive notes
+   
