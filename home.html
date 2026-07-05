@@ -4,538 +4,610 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentX - Home Feed</title>
-    <!-- FontAwesome don Icons -->
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        /* Tsarin Gaba Daya */
+        :root {
+            --bg-dark: #02051A;
+            --bg-card: #0E122B;
+            --bg-glass: rgba(14, 18, 43, 0.75);
+            --grad-blue: #1877F2;
+            --grad-purple: #8A2BE2;
+            --grad-pink: #FF00FF;
+            --text-main: #FFFFFF;
+            --text-muted: #8892B0;
+            --border-color: rgba(42, 49, 88, 0.5);
+            --primary-btn: linear-gradient(90deg, #2E38A3, #4552E6);
+            --verified-blue: #1DA1F2;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        body {
-            background-color: #f0f2f5;
-            display: flex;
-            justify-content: center;
-        }
-        .app-container {
-            width: 100%;
-            max-width: 414px; /* Tsarin girman allon waya */
-            background-color: #ffffff;
-            min-height: 100vh;
-            position: relative;
-            padding-bottom: 70px; /* Don Bottom Nav */
-            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Top Header */
+        body {
+            background-color: #000;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Mobile Container Layout */
+        .mobile-frame {
+            width: 100%;
+            max-width: 390px;
+            height: 100vh;
+            max-height: 844px;
+            background: linear-gradient(165deg, var(--bg-dark) 0%, #0D1442 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.1);
+        }
+
+        @media (min-height: 850px) {
+            .mobile-frame {
+                height: 844px;
+                border-radius: 40px;
+                border: 8px solid #1a1a2e;
+            }
+        }
+
+        /* Main Content Scrolling Area */
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding-top: 75px; 
+            padding-bottom: 90px; 
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .main-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* Top Header (Glassmorphism) */
         .header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            position: sticky;
-            top: 0;
-            background-color: #ffffff;
-            z-index: 100;
+            padding: 0 20px;
+            z-index: 50;
         }
-        .header h1 {
-            font-size: 18px;
+
+        .logo-wrapper {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 22px;
             font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
         }
+
+        .logo-x {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            font-style: italic;
+            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-left: -2px;
+        }
+
         .header-icons {
             display: flex;
             gap: 20px;
-            font-size: 20px;
-            color: #333;
-            position: relative;
         }
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #7c3aed;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid white;
+
+        .header-icons i {
+            font-size: 20px;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .header-icons i:active {
+            color: var(--grad-purple);
+            transform: scale(0.95);
         }
 
         /* Stories Section */
-        .stories {
+        .stories-container {
             display: flex;
-            overflow-x: auto;
-            padding: 10px 20px;
             gap: 15px;
+            padding: 15px 20px;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        .stories::-webkit-scrollbar {
+        .stories-container::-webkit-scrollbar {
             display: none;
         }
+
         .story {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            position: relative;
-        }
-        .story-img-container {
-            width: 65px;
-            height: 65px;
-            border-radius: 50%;
-            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .story-img-container.add-story {
-            background: none;
-            border: 2px solid #ddd;
-        }
-        .story img {
-            width: 59px;
-            height: 59px;
-            border-radius: 50%;
-            border: 2px solid white;
-            object-fit: cover;
-        }
-        .story span {
-            font-size: 12px;
-            color: #333;
-        }
-        .add-icon {
-            position: absolute;
-            bottom: 20px;
-            right: 0;
-            background-color: #1877f2;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-            border: 2px solid white;
+            gap: 8px;
+            cursor: pointer;
+            flex-shrink: 0;
         }
 
-        /* Create Post Section */
-        .create-post {
-            margin: 10px 20px;
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid #eee;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-        .create-input {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        .create-input img {
-            width: 40px;
-            height: 40px;
+        .story-ring {
+            width: 68px;
+            height: 68px;
             border-radius: 50%;
-        }
-        .create-input input {
-            border: none;
-            outline: none;
-            font-size: 15px;
-            color: #555;
-            width: 100%;
-        }
-        .create-actions {
+            padding: 3px;
+            background: linear-gradient(45deg, var(--grad-pink), var(--grad-purple), var(--grad-blue));
             display: flex;
-            justify-content: space-between;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-        }
-        .action-btn {
-            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 5px;
-            font-size: 13px;
-            color: #555;
+        }
+
+        .story-ring img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--bg-dark);
+        }
+
+        .story-create {
+            background: var(--bg-card);
+            border: 1px dashed #4552E6;
+        }
+
+        .story-create i {
+            color: #4552E6;
+            font-size: 22px;
+        }
+
+        .story-name {
+            font-size: 12px;
+            color: var(--text-main);
             font-weight: 500;
         }
 
-        /* Feed Posts */
-        .post {
-            margin: 15px 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
+        /* Create Post Card */
+        .create-post {
+            background-color: var(--bg-card);
+            margin: 5px 20px 20px;
+            border-radius: 20px;
+            padding: 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
+
+        .create-top {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .create-top img {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
+        .create-top input {
+            flex-grow: 1;
+            background: rgba(21, 26, 59, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 12px 16px;
+            color: var(--text-main);
+            font-size: 14px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            outline: none;
+        }
+        
+        .create-top input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .create-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 18px;
+        }
+
+        .action-btns i {
+            color: var(--text-muted);
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .action-btns i:hover {
+            color: var(--grad-purple);
+        }
+
+        .post-btn {
+            background: var(--primary-btn);
+            color: var(--text-main);
+            border: none;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(69, 82, 230, 0.3);
+        }
+
+        /* Feed Posts */
+        .post-card {
+            background-color: var(--bg-card);
+            margin: 0 0 15px;
+            padding: 20px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
         .post-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
+
+        .post-user {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .post-user img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+        }
+
         .user-info {
             display: flex;
-            gap: 10px;
+            flex-direction: column;
         }
-        .user-info img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-        }
-        .user-details h3 {
-            font-size: 15px;
+
+        /* Name and Verified Badge alignment */
+        .name-wrapper {
             display: flex;
             align-items: center;
             gap: 5px;
         }
-        .verified {
-            color: #1877f2;
-            font-size: 12px;
+
+        .user-name {
+            color: var(--text-main);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
         }
-        .user-meta {
+
+        .verified-badge {
+            color: var(--verified-blue);
+            font-size: 14px;
+        }
+
+        .user-uni {
+            color: var(--text-muted);
             font-size: 12px;
-            color: #777;
             margin-top: 2px;
         }
-        .post-content {
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 15px;
-            color: #222;
-        }
-        
-        /* PDF Attachment Box */
-        .attachment-box {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            background-color: #f8f9fa;
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-        .pdf-icon {
-            background-color: #e53935;
-            color: white;
-            padding: 10px 12px;
-            border-radius: 8px;
-            font-size: 20px;
-            font-weight: bold;
-        }
-        .file-details h4 {
-            font-size: 14px;
-            margin-bottom: 3px;
-        }
-        .file-details p {
+
+        .post-time {
+            color: var(--text-muted);
             font-size: 12px;
-            color: #777;
+            font-weight: 500;
+        }
+
+        .post-text {
+            color: var(--text-main);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 300px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
         }
 
         /* Post Actions */
-        .post-actions {
+        .post-stats {
             display: flex;
             justify-content: space-between;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 12px;
+            align-items: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
         }
-        .post-action {
+
+        .stat-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-        .liked-by {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            gap: 8px;
+            color: var(--text-muted);
             font-size: 13px;
-            color: #555;
-        }
-        .liked-avatars {
-            display: flex;
-        }
-        .liked-avatars img {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid white;
-            margin-left: -8px;
-        }
-        .liked-avatars img:first-child {
-            margin-left: 0;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.2s;
         }
 
-        /* CTA Banner */
-        .cta-banner {
-            margin: 20px;
-            background-color: #f4f0ff;
-            border-radius: 15px;
-            padding: 20px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 15px;
+        .stat-item:hover, .stat-item:active {
+            color: var(--text-main);
         }
-        .trophy-icon {
-            background-color: white;
-            color: #7c3aed;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .cta-content h3 {
-            font-size: 14px;
-            margin-bottom: 5px;
-        }
-        .cta-content p {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 10px;
-        }
-        .cta-btn {
-            background-color: #5a32fa;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 12px;
-        }
-        .close-cta {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            color: #999;
-            font-size: 14px;
+        
+        .stat-item.liked {
+            color: #FF2E63;
         }
 
-        /* Bottom Navigation */
+        .stat-item i {
+            font-size: 18px;
+        }
+
+        /* Bottom Navigation (Glassmorphism) */
         .bottom-nav {
-            position: fixed;
+            position: absolute;
             bottom: 0;
+            left: 0;
             width: 100%;
-            max-width: 414px;
-            background-color: #ffffff;
+            height: 85px;
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             justify-content: space-around;
-            padding: 15px 0;
-            border-top: 1px solid #eee;
-            z-index: 100;
+            align-items: center;
+            padding: 0 10px 20px;
+            z-index: 50;
         }
+
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            color: #888;
-            font-size: 10px;
-            position: relative;
+            gap: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
         }
+
         .nav-item.active {
-            color: #5a32fa;
+            color: var(--text-main);
+            transform: translateY(-2px);
         }
+
         .nav-item i {
-            font-size: 20px;
+            font-size: 22px;
         }
-        .chat-badge {
-            position: absolute;
-            top: -5px;
-            right: 5px;
-            background-color: #5a32fa;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            height: 16px;
-            width: 16px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+
+        .nav-item.active i {
+            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-text {
+            font-size: 11px;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
 
-<div class="app-container">
-
-    <!-- Header -->
-    <div class="header">
-        <i class="fa-solid fa-bars" style="font-size: 20px;"></i>
-        <h1>Home</h1>
-        <div class="header-icons">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <div>
-                <i class="fa-regular fa-bell"></i>
-                <span class="notification-badge">8</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stories -->
-    <div class="stories">
-        <div class="story">
-            <div class="story-img-container add-story">
-                <img src="https://i.pravatar.cc/150?img=11" alt="Your Story">
-            </div>
-            <div class="add-icon"><i class="fa-solid fa-plus"></i></div>
-            <span>Your Story</span>
-        </div>
-        <div class="story">
-            <div class="story-img-container">
-                <img src="https://i.pravatar.cc/150?img=5" alt="Fatima">
-            </div>
-            <span>Fatima</span>
-        </div>
-        <div class="story">
-            <div class="story-img-container">
-                <img src="https://i.pravatar.cc/150?img=12" alt="John">
-            </div>
-            <span>John</span>
-        </div>
-        <div class="story">
-            <div class="story-img-container">
-                <img src="https://i.pravatar.cc/150?img=9" alt="Maryam">
-            </div>
-            <span>Maryam</span>
-        </div>
-        <div class="story">
-            <div class="story-img-container">
-                <img src="https://i.pravatar.cc/150?img=14" alt="David">
-            </div>
-            <span>David</span>
-        </div>
-    </div>
-
-    <!-- Create Post Box -->
-    <div class="create-post">
-        <div class="create-input">
-            <img src="https://i.pravatar.cc/150?img=11" alt="Profile">
-            <input type="text" placeholder="What's on your mind?">
-        </div>
-        <div class="create-actions">
-            <div class="action-btn" style="color: #4caf50;"><i class="fa-regular fa-image"></i> Photo</div>
-            <div class="action-btn" style="color: #9c27b0;"><i class="fa-solid fa-video"></i> Video</div>
-            <div class="action-btn" style="color: #2196f3;"><i class="fa-solid fa-chart-simple"></i> Poll</div>
-            <div class="action-btn" style="color: #ff9800;"><i class="fa-regular fa-face-smile"></i> Feeling</div>
-        </div>
-    </div>
-
-    <!-- Post 1 -->
-    <div class="post">
-        <div class="post-header">
-            <div class="user-info">
-                <img src="https://i.pravatar.cc/150?img=5" alt="Fatima">
-                <div class="user-details">
-                    <h3>Fatima Muhammad <i class="fa-solid fa-circle-check verified"></i></h3>
-                    <div class="user-meta">Computer Science • ABU Zaria<br>2h ago</div>
-                </div>
-            </div>
-            <i class="fa-solid fa-ellipsis"></i>
-        </div>
+    <div class="mobile-frame">
         
-        <div class="post-content">
-            Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀
-        </div>
-
-        <div class="attachment-box">
-            <div class="pdf-icon">PDF</div>
-            <div class="file-details">
-                <h4>Data Structures & Algorithms.pdf</h4>
-                <p>4.2 MB</p>
+        <!-- Header -->
+        <header class="header">
+            <div class="logo-wrapper">
+                <span class="logo-text">Student</span>
+                <span class="logo-x">X</span>
             </div>
-        </div>
-
-        <div class="post-actions">
-            <div class="post-action" style="color: #e53935;"><i class="fa-solid fa-heart"></i> 245</div>
-            <div class="post-action"><i class="fa-regular fa-comment"></i> 32</div>
-            <div class="post-action"><i class="fa-solid fa-retweet"></i> 18</div>
-            <div class="post-action"><i class="fa-regular fa-bookmark"></i></div>
-        </div>
-
-        <div class="liked-by">
-            <div class="liked-avatars">
-                <img src="https://i.pravatar.cc/150?img=12" alt="Like 1">
-                <img src="https://i.pravatar.cc/150?img=9" alt="Like 2">
-                <img src="https://i.pravatar.cc/150?img=14" alt="Like 3">
+            <div class="header-icons">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <i class="fa-regular fa-bell" onclick="window.location.href='notifications.html'"></i>
+                <i class="fa-regular fa-paper-plane" onclick="window.location.href='chat.html'"></i>
             </div>
-            <span>Liked by John, Maryam and 243 others</span>
-        </div>
-    </div>
+        </header>
 
-    <!-- Post 2 -->
-    <div class="post">
-        <div class="post-header">
-            <div class="user-info">
-                <img src="https://i.pravatar.cc/150?img=14" alt="David">
-                <div class="user-details">
-                    <h3>David Okafor</h3>
-                    <div class="user-meta">@david.engineering • UNN<br>3h ago</div>
+        <!-- Main Scrollable Feed -->
+        <main class="main-content">
+            
+            <!-- Stories Section -->
+            <section class="stories-container">
+                <!-- Create Story -->
+                <div class="story">
+                    <div class="story-ring story-create">
+                        <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <span class="story-name">Create</span>
                 </div>
-            </div>
-            <i class="fa-solid fa-ellipsis"></i>
-        </div>
-        
-        <div class="post-content">
-            Can anyone explain this thermodynamics question? I'm stuck on part (b).
-        </div>
+                <!-- User Stories -->
+                <div class="story">
+                    <div class="story-ring">
+                        <!-- Zaka iya canza wannan zuwa hotonka idan kana so ya fito a stories -->
+                        <img src="hotonka.jpg" alt="Yusuf">
+                    </div>
+                    <span class="story-name">Yusuf</span>
+                </div>
+                <div class="story">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Avatar">
+                    </div>
+                    <span class="story-name">Sarah</span>
+                </div>
+                <div class="story">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80" alt="Avatar">
+                    </div>
+                    <span class="story-name">Michael</span>
+                </div>
+                <div class="story">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&q=80" alt="Avatar">
+                    </div>
+                    <span class="story-name">Aisha</span>
+                </div>
+            </section>
 
-        <div class="post-actions">
-            <div class="post-action"><i class="fa-regular fa-heart"></i> 112</div>
-            <div class="post-action"><i class="fa-regular fa-comment"></i> 26</div>
-            <div class="post-action"><i class="fa-solid fa-retweet"></i> 9</div>
-            <div class="post-action"><i class="fa-regular fa-bookmark"></i></div>
-        </div>
-    </div>
+            <!-- Create Post Card -->
+            <section class="create-post">
+                <div class="create-top">
+                    <img src="hotonka.jpg" alt="My Profile" onclick="window.location.href='profile.html'">
+                    <input type="text" placeholder="What's on your mind?">
+                </div>
+                <div class="create-actions">
+                    <div class="action-btns">
+                        <i class="fa-solid fa-image" title="Upload Image"></i>
+                        <i class="fa-solid fa-file-lines" title="Upload Notes"></i>
+                        <i class="fa-solid fa-square-poll-horizontal" title="Create Poll"></i>
+                    </div>
+                    <button class="post-btn">Post</button>
+                </div>
+            </section>
 
-    <!-- Complete Profile CTA -->
-    <div class="cta-banner">
-        <i class="fa-solid fa-xmark close-cta"></i>
-        <div class="trophy-icon">
-            <i class="fa-solid fa-trophy"></i>
-        </div>
-        <div class="cta-content">
-            <h3>Complete your profile</h3>
-            <p>Add more details to connect with more students.</p>
-            <button class="cta-btn">Complete Now</button>
-        </div>
-    </div>
+            <!-- Feed Posts -->
+            <!-- Post 1: Yusuf Alhaji Garba (Verified) -->
+            <article class="post-card">
+                <div class="post-header">
+                    <div class="post-user">
+                        <!-- Wannan shine hoton da zaka saka: ka cire "hotonka.jpg" ka sa sunan hotonka -->
+                        <img src="hotonka.jpg" alt="Yusuf" onclick="window.location.href='profile.html'">
+                        <div class="user-info">
+                            <div class="name-wrapper" onclick="window.location.href='profile.html'">
+                                <span class="user-name">Yusuf Alhaji Garba</span>
+                                <i class="fa-solid fa-circle-check verified-badge"></i>
+                            </div>
+                            <span class="user-uni">Software Engineering Student</span>
+                        </div>
+                    </div>
+                    <span class="post-time">Just now</span>
+                </div>
+                <p class="post-text">Excited to announce that I'm currently working on building StudentX! The platform is coming together perfectly. This is going to change how students connect and learn worldwide.</p>
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=600&q=80" alt="Post Image" class="post-image">
+                
+                <div class="post-stats">
+                    <div class="stat-item liked">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>2.5k</span>
+                    </div>
+                    <div class="stat-item" onclick="window.location.href='comments.html'">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>456</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-retweet"></i>
+                        <span>128</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </div>
+                </div>
+            </article>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <div class="nav-item active">
-            <i class="fa-solid fa-house"></i>
-            <span>Home</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-regular fa-compass"></i>
-            <span>Explore</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-regular fa-comment-dots"></i>
-            <span class="chat-badge">3</span>
-            <span>Chat</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-solid fa-book-open"></i>
-            <span>StudyHub</span>
-        </div>
-        <div class="nav-item">
-            <i class="fa-regular fa-user"></i>
-            <span>Profile</span>
-        </div>
-    </div>
+            <!-- Post 2 -->
+            <article class="post-card">
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=200&q=80" alt="User" onclick="window.location.href='profile.html'">
+                        <div class="user-info">
+                            <div class="name-wrapper" onclick="window.location.href='profile.html'">
+                                <span class="user-name">Alex Chen</span>
+                            </div>
+                            <span class="user-uni">MIT</span>
+                        </div>
+                    </div>
+                    <span class="post-time">5h ago</span>
+                </div>
+                <p class="post-text">Looking for a study partner for Advanced Data Structures. I have compiled comprehensive notes from week 1-5. Let me know if you want to collaborate via StudyHub!</p>
+                
+                <div class="post-stats">
+                    <div class="stat-item">
+                        <i class="fa-regular fa-heart"></i>
+                        <span>890</span>
+                    </div>
+                    <div class="stat-item" onclick="window.location.href='comments.html'">
+                        <i class="fa-regular fa-comment"></i>
+                        <span>128</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-retweet"></i>
+                        <span>12</span>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fa-solid fa-share-nodes"></i>
+                    </div>
+                </div>
+            </article>
 
-</div>
+        </main>
 
-</body>
-</html>
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item active">
+                <i class="fa-solid fa-house"></i>
+                <span class="nav-text">Home</span>
+            </a>
+            <a href="explore.html" class="nav-item">
+                <i class="fa-solid fa-compass"></i>
+                <span class="nav-text">Explore</span>
+            </a>
+            <a href="studyhub.html" class="nav-item">
+                <i class="fa-solid fa-book-open"></i>
+                <span class="nav-text">StudyHub</span>
+            </a>
+            <a href="chat.html" class="nav-item">
+                <i class="fa-solid fa-message"></i>
+                <span class="nav-text">Chat</span>
+            </a>
+            <a href="profile.html" class="nav-item">
+                <i class="fa-regular
