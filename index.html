@@ -1,101 +1,161 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Exact Splash Screen</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&display=swap" rel="stylesheet">
+    <title>StudentX - Loading</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&family=Plus+Jakarta+Sans:wght@500;600&display=swap" rel="stylesheet">
     
     <style>
-        body {
+        :root {
+            --bg-color: #02051A;
+            --grad-blue: #1877F2;
+            --grad-purple: #8A2BE2;
+            --grad-pink: #FF00FF;
+            --text-muted: #8892B0;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #060613; /* Ainihin kalar hoton */
-            color: white;
-            font-family: 'Montserrat', sans-serif; /* Font mai kauri */
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #FFFFFF;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Tsarin Logo Sak na Hoton */
-        .logo-container {
-            text-align: center;
-            margin-bottom: 120px;
+        /* Minimal Noise Texture Overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 10;
         }
-        
-        .logo-text-wrapper {
+
+        /* Soft Glowing Background Effect */
+        .glow-effect {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.15) 0%, rgba(2, 5, 26, 0) 70%);
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Main Content Container */
+        .container {
+            position: relative;
+            z-index: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
+            justify-content: space-between;
+            height: 65vh;
+            max-height: 600px;
+        }
+
+        /* Logo Section */
+        .brand-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10vh;
+        }
+
+        .logo {
+            display: flex;
+            align-items: baseline;
             justify-content: center;
         }
-        
+
         .logo-text {
-            font-size: 72px; /* Girma kamar na hoton */
+            font-family: 'Montserrat', sans-serif;
+            font-size: 64px;
             font-weight: 700;
-            letter-spacing: -3px;
+            letter-spacing: -2px;
+            color: #FFFFFF;
         }
-        
+
         .logo-x {
-            font-size: 90px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 80px;
             font-weight: 800;
-            font-style: italic; /* Dan lankwasa kadan */
-            background: linear-gradient(135deg, #1877F2, #8A2BE2, #FF00FF);
+            font-style: italic;
+            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-left: -12px; /* Yasa 'X' din ta dan shiga jikin 't' */
-            margin-bottom: -15px;
+            margin-left: -8px;
+            transform: translateY(4px);
         }
-        
+
+        /* Tagline */
         .tagline {
-            margin-top: 15px;
-            font-size: 14px;
-            letter-spacing: 6px;
+            margin-top: 18px;
+            font-size: 11px;
             font-weight: 600;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            letter-spacing: 5px;
+            text-transform: uppercase;
         }
 
-        /* Launukan Tagline daban-daban */
-        .tag-blue { color: #1877F2; }
-        .tag-purple { color: #8A2BE2; }
-        .tag-pink { color: #FF00FF; }
+        .tag-blue { color: var(--grad-blue); }
+        .tag-purple { color: var(--grad-purple); }
+        .tag-pink { color: var(--grad-pink); }
+        .tag-dot { color: #3A405A; margin: 0 2px; }
 
-        /* Sashen Loading */
+        /* Loading Section */
         .loading-section {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            margin-bottom: 5vh;
         }
 
-        /* Ainihin Digo-Digo Guda 12 kamar na hoton */
-        .dots-spinner {
+        /* Circular Loader */
+        .loader-ring {
             position: relative;
-            width: 45px;
-            height: 45px;
-            margin-bottom: 15px;
-            /* Zai juya a hankali a cikin sakan 4 */
-            animation: spin 4s linear infinite; 
+            width: 40px;
+            height: 40px;
+            margin-bottom: 24px;
+            animation: spin 3s linear infinite;
         }
 
         .dot {
             position: absolute;
-            width: 7px;
-            height: 7px;
-            background-color: #1a1a2e; /* Kalar duhu */
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
+            background-color: #1A1F3D;
             top: 0;
             left: 50%;
-            transform-origin: 50% 22.5px; /* Cibiyar juyawa */
+            transform-origin: 50% 20px;
         }
 
-        /* Sanya digo-digon a cikin da'ira da sanya musu kalar haske */
-        .dot:nth-child(1) { transform: translateX(-50%) rotate(0deg); background-color: #1877F2; }
-        .dot:nth-child(2) { transform: translateX(-50%) rotate(30deg); background-color: #4a4dff; }
-        .dot:nth-child(3) { transform: translateX(-50%) rotate(60deg); background-color: #7b2cff; }
-        .dot:nth-child(4) { transform: translateX(-50%) rotate(90deg); }
+        /* Coloring the dots to match the image */
+        .dot:nth-child(1) { transform: translateX(-50%) rotate(0deg); background-color: var(--grad-blue); }
+        .dot:nth-child(2) { transform: translateX(-50%) rotate(30deg); background-color: #4A55E8; }
+        .dot:nth-child(3) { transform: translateX(-50%) rotate(60deg); background-color: var(--grad-purple); }
+        .dot:nth-child(4) { transform: translateX(-50%) rotate(90deg); background-color: #C214E8; }
         .dot:nth-child(5) { transform: translateX(-50%) rotate(120deg); }
         .dot:nth-child(6) { transform: translateX(-50%) rotate(150deg); }
         .dot:nth-child(7) { transform: translateX(-50%) rotate(180deg); }
@@ -105,13 +165,108 @@
         .dot:nth-child(11) { transform: translateX(-50%) rotate(300deg); }
         .dot:nth-child(12) { transform: translateX(-50%) rotate(330deg); }
 
+        /* Loading Text */
         .loading-text {
-            color: #a0a0bf;
-            font-size: 15px;
-            margin-bottom: 25px;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
         }
 
-        /* Layin Cikawa (Progress Bar) */
-        .progress-container {
-            width: 250
+        /* Horizontal Progress Bar */
+        .progress-track {
+            width: 220px;
+            height: 6px;
+            background-color: #0E122B;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.4);
+            animation: progress 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes progress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* Responsive scaling for smaller devices */
+        @media (max-width: 400px) {
+            .logo-text { font-size: 52px; }
+            .logo-x { font-size: 64px; }
+            .tagline { font-size: 9px; letter-spacing: 4px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glow-effect"></div>
+
+    <div class="container">
+        
+        <!-- Logo Section -->
+        <div class="brand-section">
+            <div class="logo">
+                <span class="logo-text">Student</span>
+                <span class="logo-x">X</span>
+            </div>
+            
+            <div class="tagline">
+                <span class="tag-blue">CONNECT</span><span class="tag-dot">.</span>
+                <span class="tag-purple">LEARN</span><span class="tag-dot">.</span>
+                <span class="tag-pink">SHARE</span><span class="tag-dot">.</span>
+                <span class="tag-blue">GROW</span><span class="tag-dot">.</span>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div class="loading-section">
+            
+            <div class="loader-ring">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+
+            <div class="loading-text">Loading...</div>
+
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Redirection Logic -->
+    <script>
+        // Redirect to welcome.html exactly after 3 seconds
+        setTimeout(function() {
+            window.location.href = 'welcome.html';
+        }, 3000);
+    </script>
+</body>
+</html>
