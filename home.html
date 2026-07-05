@@ -3,66 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX Dark Mode</title>
-    <!-- Muna amfani da FontAwesome don Icons su fito fes -->
+    <title>StudentX - Home</title>
+    <!-- FontAwesome don dukkan Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --bg-deep: #0B1121;
+            --bg-card: #151C33;
+            --text-main: #FFFFFF;
+            --text-sub: #94A3B8;
+            --accent: #7C3AED;
+            --border: #263152;
+        }
+
         body {
-            background-color: #0B1121; /* Blue mai duhu */
-            color: #FFFFFF; /* Fari */
-            font-family: sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
-            padding: 0;
+            padding-bottom: 90px;
         }
 
-        /* Gyara Icons su zama fari ko launin da zasu fito */
-        .icon {
-            color: #FFFFFF;
-            font-size: 24px;
-        }
-
-        /* Tsarin Post */
-        .post-container {
-            background-color: #151C33; /* Kalar card mai duhu */
-            padding: 20px;
-            margin: 15px;
-            border-radius: 15px;
-            border: 1px solid #263152;
-        }
-
-        .post-text {
-            color: #E2E8F0;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        /* Gyaran Icons na kasa (Like, Comment, Share) */
-        .actions {
+        /* Header */
+        header {
             display: flex;
             justify-content: space-between;
-            color: #94A3B8; /* Launin toka mai haske */
-            padding-top: 10px;
-            border-top: 1px solid #263152;
+            padding: 20px;
+            align-items: center;
         }
 
-        .action-btn {
+        /* Stories */
+        .stories-section {
+            display: flex;
+            gap: 15px;
+            padding: 10px 20px;
+            overflow-x: auto;
+        }
+        .story-item { text-align: center; font-size: 12px; }
+        .story-ring {
+            width: 65px; height: 65px;
+            border-radius: 50%;
+            border: 3px solid var(--accent);
+            padding: 3px;
+        }
+
+        /* Create Post */
+        .create-post {
+            background: var(--bg-card);
+            margin: 20px;
+            padding: 15px;
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Feed Post */
+        .post {
+            background: var(--bg-card);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+        }
+        .post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; }
+        .post-img { width: 50px; height: 50px; border-radius: 50%; background: #444; }
+
+        /* Actions */
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            color: var(--text-sub);
             cursor: pointer;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background: var(--bg-card);
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
         }
     </style>
 </head>
 <body>
 
-    <!-- Misalin yadda post din zai fito -->
-    <div class="post-container">
-        <h3>Maryam Hassan</h3>
-        <p class="post-text">Just finished my notes on Linked Lists! Hope this helps someone. 💜</p>
-        
-        <div class="actions">
-            <span class="action-btn"><i class="fa-regular fa-thumbs-up"></i> 142</span>
-            <span class="action-btn"><i class="fa-regular fa-comment"></i> 26</span>
-            <span class="action-btn"><i class="fa-solid fa-share"></i> 18</span>
+    <header>
+        <h2 style="margin:0">StudentX</h2>
+        <div>
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-solid fa-bell" style="margin-left: 20px"></i>
+            <i class="fa-solid fa-paper-plane" style="margin-left: 20px"></i>
+        </div>
+    </header>
+
+    <div class="stories-section">
+        <div class="story-item">
+            <div class="story-ring"></div>
+            <p>Your Story</p>
+        </div>
+        <div class="story-item">
+            <div class="story-ring"></div>
+            <p>Fatima</p>
         </div>
     </div>
+
+    <div class="create-post">
+        <div class="post-img"></div>
+        <input type="text" placeholder="What's on your mind?" style="background:transparent; border:none; color:white; width:100%; font-size:16px">
+    </div>
+
+    <div class="post">
+        <div class="post-header">
+            <div class="post-img"></div>
+            <div>
+                <strong>Fatima Muhammad</strong><br>
+                <small style="color:var(--text-sub)">Computer Science · 2h ago</small>
+            </div>
+        </div>
+        <p>Shared my new notes on Data Structures and Algorithms. Check it out!</p>
+        <div class="post-actions">
+            <span><i class="fa-regular fa-heart"></i> 245</span>
+            <span><i class="fa-regular fa-comment"></i> 32</span>
+            <span><i class="fa-solid fa-retweet"></i> 18</span>
+            <span><i class="fa-regular fa-bookmark"></i></span>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <a href="home.html" style="color:var(--accent)"><i class="fa-solid fa-house fa-lg"></i></a>
+        <a href="explore.html" style="color:var(--text-sub)"><i class="fa-solid fa-compass fa-lg"></i></a>
+        <a href="studyhub.html" style="color:var(--text-sub)"><i class="fa-solid fa-book fa-lg"></i></a>
+        <a href="chat.html" style="color:var(--text-sub)"><i class="fa-solid fa-message fa-lg"></i></a>
+        <a href="profile.html" style="color:var(--text-sub)"><i class="fa-solid fa-user fa-lg"></i></a>
+    </nav>
 
 </body>
 </html>
