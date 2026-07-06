@@ -83,6 +83,30 @@
             color: #94a3b8;
         }
 
+        .header-icon-link {
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .header-icon-link:hover {
+            color: #ffffff;
+        }
+
+        .header-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: #ef4444;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
         /* --- MAIN SCROLLABLE CONTENT --- */
         .scroll-content {
             padding-top: 75px;  
@@ -352,6 +376,11 @@
             font-size: 12px;
             color: #94a3b8;
             cursor: pointer;
+            text-decoration: none;
+        }
+
+        .interaction-node:hover {
+            color: #ffffff;
         }
 
         /* --- FIXED BOTTOM NAVIGATION BAR BARRIER --- */
@@ -423,7 +452,13 @@
             </div>
             <div class="header-logo">StudentX</div>
             <div class="header-actions">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <a href="#" class="header-icon-link">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </a>
+                <a href="notifications.html" class="header-icon-link">
+                    <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="header-badge"></span>
+                </a>
             </div>
         </header>
 
@@ -495,7 +530,7 @@
                 </div>
                 <div class="post-action-bar">
                     <span class="interaction-node">❤️ 245</span>
-                    <span class="interaction-node">💬 32</span>
+                    <a href="comments.html" class="interaction-node">💬 32</a>
                     <span class="interaction-node">🔄 18</span>
                 </div>
             </div>
@@ -516,7 +551,7 @@
                 </div>
                 <div class="post-action-bar">
                     <span class="interaction-node">❤️ 89</span>
-                    <span class="interaction-node">💬 45</span>
+                    <a href="comments.html" class="interaction-node">💬 45</a>
                     <span class="interaction-node">🔄 4</span>
                 </div>
             </div>
@@ -538,7 +573,7 @@
                 <img class="post-inline-image" src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500" alt="Study space">
                 <div class="post-action-bar">
                     <span class="interaction-node">❤️ 512</span>
-                    <span class="interaction-node">💬 94</span>
+                    <a href="comments.html" class="interaction-node">💬 94</a>
                     <span class="interaction-node">🔄 41</span>
                 </div>
             </div>
@@ -552,25 +587,4 @@
                             <div class="author-subtitle">Economics • Unilag</div>
                         </div>
                     </div>
-                    <span class="post-time-stamp">8h ago</span>
-                </div>
-                <div class="post-text-body">
-                    Muna shirin fara group discussion na Microeconomics na gaba. Wane lokaci ya fi muku daidai?
-                </div>
-                <div class="poll-stack">
-                    <div class="poll-node-option" onclick="alert('Voted for Afternoon!')">Da rana (2:00 PM)</div>
-                    <div class="poll-node-option" onclick="alert('Voted for Evening!')">Da yamma (5:00 PM)</div>
-                    <div class="poll-node-option" onclick="alert('Voted for Night!')">Daddare (8:00 PM)</div>
-                </div>
-                <div class="post-action-bar">
-                    <span class="interaction-node">❤️ 120</span>
-                    <span class="interaction-node">💬 78</span>
-                    <span class="interaction-node">🔄 22</span>
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-meta-header">
-                    <div class="post-author-details">
-                        <img class="author-pfp" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120" alt="Zainab">
-               
+   
