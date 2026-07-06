@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX — Premium Communications Engine</title>
+    <!-- Premium Typography & Iconography -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-base: #040814;
+            --surface-glass: rgba(255, 255, 255, 0.04);
+            --surface-glass-bright: rgba(255, 255, 255, 0.09);
+            --surface-glass-card: rgba(13, 20, 38, 0.6);
+            --border-glass: 1px solid rgba(255, 255, 255, 0.07);
+            --border-glass-bright: 1px solid rgba(255, 255, 255, 0.15);
+            
+            --brand-primary: #8B5CF6;
+            --brand-secondary: #3B82F6;
+            --brand-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            --ai-gradient: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
+            
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --text-muted: #64748B;
+            
+            --status-online: #10B981;
+            --status-missed: #EF4444;
+            --status-muted: #64748B;
+            
+            --radius-main: 24px;
+            --radius-inner: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient Premium Lighting Overlays */
+        .glow-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(140px);
+            z-index: -1;
+            pointer-events: none;
+            opacity: 0.25;
+        }
+        .glow-1 { width: 400px; height: 400px; background: var(--brand-primary); top: -10%, left: -20%; }
+        .glow-2 { width: 500px; height: 500px; background: var(--brand-secondary); bottom: -10%; right: -20%; }
+
+        /* Scannable Framework Containers */
+        .app-shell {
+            width: 100%;
+            max-width: 480px; /* Perfect high-end simulator centering */
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: rgba(4, 8, 20, 0.5);
+            box-shadow: 0 0 80px rgba(0,0,0,0.8);
+        }
+
+        /* Base Header Configuration */
+        .main-header {
+            padding: 24px 20px 16px 20px;
+            background: rgba(4, 8, 20, 0.75);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            border-bottom: var(--border-glass);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-trigger {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-inner);
+            border: var(--border-glass-bright);
+            background: linear-gradient(45deg, #1e1b4b, #311042);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            text-decoration: none;
+        }
+        .profile-trigger i {
+            color: #d8b4fe;
+            font-size: 18px;
+        }
+
+        .screen-title {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .icon-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: var(--radius-inner);
+            background: var(--surface-glass);
+            border: var(--border-glass);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .icon-btn:hover, .icon-btn:active {
+            background: var(--surface-glass-bright);
+            transform: scale(1.05);
+        }
+
+        /* Search Engine Layout Components */
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+        .search-wrapper i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: var(--border-glass);
+            padding: 14px 16px 14px 44px;
+            border-radius: var(--radius-inner);
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Segmented Navigation Controls */
+        .tab-segment-container {
+            padding: 4px;
+            background: rgba(255, 255, 255, 0.02);
+            border: var(--border-glass);
+            border-radius: var(--radius-inner);
+            display: flex;
+            margin: 12px 20px 20px 20px;
+        }
+        .segment-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: calc(var(--radius-inner) - 4px);
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .segment-btn.active {
+            background: var(--brand-gradient);
+            color: var(--text-primary);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        /* Dynamic Listing Views Frame */
+        .directory-view-scroll {
+            flex: 1;
+            padding: 0 20px 100px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Complex List Card System */
+        .convo-card {
+            background: var(--surface-glass-card);
+            border: var(--border-glass);
+            border-radius: var(--radius-main);
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            position: relative;
+        }
+        .convo-card:hover, .convo-card:active {
+            background: var(--surface-glass-bright);
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        /* Dynamic Special Identity Markers */
+        .convo-card.ai-assistant-card {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
+            border: 1px solid rgba(236, 72, 153, 0.2);
+        }
+        .convo-card.ai-assistant-card:hover {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 52px;
+            height: 52px;
+            flex-shrink: 0;
+        }
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: calc(var(--radius-inner) + 2px);
+            object-fit: cover;
+            border: var(--border-glass-bright);
+        }
+        .ai-avatar-glow {
+            background: var(--ai-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .ai-avatar-glow i {
+            font-size: 20px;
+            color: var(--text-primary);
+        }
+
+        /* Status & Icon Tags Overlay */
+        .online-dot {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 13px;
+            height: 13px;
+            background-color: var(--status-online);
+            border: 3px solid var(--bg-base);
+            border-radius: 50%;
+        }
+
+        .card-content-block {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+        .card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .verified-badge {
+            color: #3B82F6;
+            font-size: 13px;
+        }
+        .meta-timestamp {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .card-bottom-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .msg-preview-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-right: 8px;
+        }
+        .text-typing-active {
+            color: var(--brand-primary);
+            font-weight: 600;
+        }
+        .voice-indicator-text {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--brand-secondary);
+        }
+
+        /* Multi-Indicator Status Indicators */
+        .status-indicators-tray {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pin-icon { color: var(--text-muted); font-size: 11px; }
+        .mute-icon { color: var(--text-muted); font-size: 12px; }
+        .counter-badge {
+            background: var(--brand-gradient);
+            color: var(--text-primary);
+            font-size: 10px;
+            font-weight: 800;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
+        /* Calls Item Elements Blueprint */
+        .call-type-indicator {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        .call-incoming { color: var(--status-online); }
+        .call-missed { color: var(--status-missed); font-weight: 600; }
+
+        /* DEEP MASTER INTERACTIVE CHAT SCREEN PANEL Overlay Layout */
+        .active-conversation-panel {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(150%);
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background: var(--bg-base);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: var(--border-glass);
+            border-right: var(--border-glass);
+        }
+        .active-conversation-panel.panel-active-state {
+            transform: translateX(-50%);
+        }
+
+        /* Inner Conversational Headers map */
+        .convo-panel-header {
+            padding: 16px 20px;
+            background: rgba(4, 8, 20, 0.85);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+            border-bottom: var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .header-left-convo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+        }
+        .convo-meta-info {
+            min-width: 0;
+        }
+        .convo-header-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .convo-header-status {
+            font-size: 11px;
+            color: var(--status-online);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Interactive AI Toolkit Extension Bar Shelf */
+        .ai-features-tray {
+            background: linear-gradient(90deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .ai-features-tray::-webkit-scrollbar { display: none; }
+        .ai-action-chip {
+            padding: 8px 14px;
+            background: rgba(4, 8, 20, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 50px;
+            color: var(--text-primary);
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .ai-action-chip i {
+            background: var(--ai-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .ai-action-chip:active {
+            transform: scale(0.95);
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        /* Fixed Tracking Sticky Resource Panel Area */
+        .pinned-resource-bar {
+            background: rgba(255,255,255,0.02);
+            border-bottom: var(--border-glass);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+        .pinned-resource-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .pinned-resource-content i { color: var(--brand-primary); }
+
+        /* Streaming Conversational Track Message Matrix */
+        .message-stream-track {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            background-image: radial-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+
+        .msg-row-wrapper {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+        .msg-row-wrapper.received-state { align-items: flex-start; }
+        .msg-row-wrapper.sent-state { align-items: flex-end; }
+
+        .bubble-frame {
+            max-width: 80%;
+            padding: 14px 16px;
+            border-radius: var(--radius-inner);
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        }
+        .received-state .bubble-frame {
+            background: rgba(255, 255, 255, 0.04);
+            border: var(--border-glass);
+            border-top-left-radius: 4px;
+            color: var(--text-primary);
+        }
+        .sent-state .bubble-frame {
+            background: var(--brand-gradient);
+            border-top-right-radius: 4px;
+            color: var(--text-primary);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
+        }
+
+        /* Sub-component Cards for Assets (PDF, Audio, Video, Reminders) */
+        .attachment-delivery-card {
+            background: rgba(0, 0, 0, 0.25);
+            border: var(--border-glass);
+            border-radius: var(--radius-inner);
+            padding: 12px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+        }
+        .attachment-delivery-card:active {
+            background: rgba(255,255,255,0.05);
+        }
+        .attachment-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .pdf-theme i { color: #EF4444; }
+        .book-theme i { color: #F59E0B; }
+        .note-theme i { color: #10B981; }
+        .video-theme i { color: #3B82F6; }
+        
+        .attachment-meta-block {
+            min-width: 0;
+        }
+        .attachment-filename {
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: var(--text-primary);
+        }
+        .attachment-filesize {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        /* Image Embed Component */
+        .image-payload-wrapper {
+            margin-top: 6px;
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            border: var(--border-glass);
+            max-width: 100%;
+        }
+        .image-payload-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Audio Waveform Layout Mapping */
+        .audio-playback-node {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 6px;
+            width: 220px;
+        }
+        .wave-skeleton-animation {
+            flex: 1;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .wave-bar {
+            flex: 1;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        .sent-state .wave-bar { background: rgba(255,255,255,0.4); }
+        .wave-bar:nth-child(odd) { height: 60%; }
+        .wave-bar:nth-child(even) { height: 90%; }
+        .wave-bar:nth-child(3pt) { height: 40%; }
+
+        /* Study Reminders Component */
+        .reminder-payload-widget {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: var(--radius-inner);
+            padding: 12px;
+            margin-top: 6px;
+    
