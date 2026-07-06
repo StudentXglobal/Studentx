@@ -1,129 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ha">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Home Feed</title>
-    <!-- Premium Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>StudentX - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --primary: #4f46e5;
+            --accent-purple: #a855f7;
+            --border-color: #e2e8f0;
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-family: 'Inter', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #F8FAFC;
-            color: #0F172A;
+            background-color: var(--bg-color);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
+            align-items: flex-start;
             min-height: 100vh;
         }
 
-        /* Mobile Framework Container */
-        .phone-container {
+        /* Babban container na waya domin tabbatar da ya dace da Chrome mobile */
+        .app-container {
             width: 100%;
             max-width: 480px;
-            background-color: #F8FAFC;
+            background-color: var(--bg-color);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            box-shadow: 0 0 30px rgba(0,0,0,0.03);
+            padding-top: 60px;
+            padding-bottom: 75px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
 
-        /* --- TOP HEADER NAVIGATION --- */
-        .app-header {
-            background-color: #FFFFFF;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
+        /* --- HEADER SECTION --- */
+        header {
+            position: fixed;
             top: 0;
-            z-index: 100;
-            border-bottom: 1px solid #F1F5F9;
-        }
-
-        .menu-triple-line {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: 60px;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
             display: flex;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            padding: 4px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            z-index: 1000;
         }
 
-        .menu-triple-line span {
-            display: block;
-            width: 22px;
-            height: 2.5px;
-            background-color: #0F172A;
-            border-radius: 2px;
-        }
-
-        .header-title {
+        header .left-menu, header .right-icons i {
             font-size: 22px;
-            font-weight: 800;
-            color: #0F172A;
-            letter-spacing: -0.5px;
+            color: var(--text-main);
+            cursor: pointer;
         }
 
-        .header-actions {
+        header .app-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        header .right-icons {
             display: flex;
             align-items: center;
             gap: 16px;
         }
 
-        .action-icon-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
+        header .notification-box {
             position: relative;
-            color: #0F172A;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
         }
 
-        .notification-badge {
+        header .noti-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #6366F1;
-            color: #FFFFFF;
+            top: -4px;
+            right: -6px;
+            background-color: var(--primary);
+            color: white;
             font-size: 10px;
-            font-weight: 700;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #FFFFFF;
+            font-weight: bold;
+            padding: 2px 5px;
+            border-radius: 10px;
         }
 
-        /* --- SCROLLABLE CONTAINER --- */
-        .scrollable-content {
-            width: 100%;
-            padding-bottom: 100px; /* Safe space for fixed bottom navigation */
-        }
-
-        /* --- HORIZONTAL STORIES LINKS --- */
+        /* --- STORIES SECTION --- */
         .stories-container {
-            background-color: #FFFFFF;
-            padding: 16px 0;
             display: flex;
             gap: 14px;
+            padding: 16px;
+            background-color: var(--card-bg);
             overflow-x: auto;
-            padding-left: 20px;
-            padding-right: 20px;
-            scrollbar-width: none;
-            border-bottom: 1px solid #F1F5F9;
+            white-space: nowrap;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .stories-container::-webkit-scrollbar {
@@ -134,463 +120,490 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            text-align: center;
-            min-width: 68px;
-            text-decoration: none;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-main);
+            width: 68px;
             cursor: pointer;
         }
 
         .story-avatar-wrapper {
-            position: relative;
-            width: 64px;
-            height: 64px;
+            width: 62px;
+            height: 62px;
             border-radius: 50%;
             padding: 2.5px;
-            background: linear-gradient(135deg, #3B82F6, #8B5CF6, #EC4899);
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
             margin-bottom: 6px;
+            position: relative;
         }
 
-        .story-item.your-profile .story-avatar-wrapper {
+        .story-item.current-user .story-avatar-wrapper {
             background: none;
-            border: 2px dashed #CBD5E1;
-            padding: 0;
+            border: 2px dashed #cbd5e1;
         }
 
-        .story-img {
+        .story-avatar-wrapper img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #FFFFFF;
+            background-color: #cbd5e1;
+            border: 2px solid var(--card-bg);
         }
 
-        .plus-badge {
+        .story-avatar-wrapper .add-btn {
             position: absolute;
             bottom: 0;
             right: 0;
-            background-color: #3B82F6;
-            color: #FFFFFF;
+            background-color: var(--primary);
+            color: white;
             width: 18px;
             height: 18px;
             border-radius: 50%;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             font-size: 12px;
-            font-weight: 800;
-            border: 2px solid #FFFFFF;
+            border: 2px solid var(--card-bg);
         }
 
-        .story-name {
-            font-size: 11px;
-            font-weight: 500;
-            color: #64748B;
+        .story-item span {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* --- COMPOSER BOX --- */
-        .composer-card {
-            background-color: #FFFFFF;
-            margin: 12px 16px;
-            border-radius: 16px;
+        /* --- WHAT'S ON YOUR MIND SECTION --- */
+        .create-post-card {
+            background-color: var(--card-bg);
             padding: 16px;
-            border: 1px solid #E2E8F0;
+            margin-top: 10px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .composer-top {
+        .input-row {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 14px;
         }
 
-        .composer-avatar {
+        .input-row img {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .composer-placeholder {
-            font-size: 14px;
-            color: #64748B;
-            font-weight: 400;
+        .input-row .placeholder-text {
+            color: var(--text-muted);
+            font-size: 15px;
+            cursor: text;
         }
 
-        .composer-divider {
-            height: 1px;
-            background-color: #F1F5F9;
-            margin-bottom: 12px;
-        }
-
-        .composer-actions {
+        .options-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
         }
 
-        .composer-btn {
-            background: none;
-            border: none;
+        .opt-item {
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748B;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
             cursor: pointer;
         }
 
-        /* --- POST COMPONENT --- */
+        .opt-item.photo i { color: #10b981; }
+        .opt-item.video i { color: #ec4899; }
+        .opt-item.poll i { color: #3b82f6; }
+        .opt-item.feeling i { color: #f59e0b; }
+
+        /* --- FEED POST CARDS --- */
+        .feed-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         .post-card {
-            background-color: #FFFFFF;
-            margin: 0 16px 12px 16px;
-            border-radius: 16px;
+            background-color: var(--card-bg);
             padding: 16px;
-            border: 1px solid #E2E8F0;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .post-header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
             margin-bottom: 12px;
         }
 
-        .post-user-info {
+        .user-info-block {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .post-avatar {
-            width: 44px;
-            height: 44px;
+        .user-info-block img {
+            width: 42px;
+            height: 42px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .user-meta-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #0F172A;
+        .name-meta-box .name-row {
             display: flex;
             align-items: center;
             gap: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-main);
         }
 
-        .verified-badge {
-            color: #3B82F6;
-            display: inline-flex;
+        .name-meta-box .name-row .verified-badge {
+            color: #3b82f6;
+            font-size: 14px;
         }
 
-        .user-meta-sub {
+        .name-meta-box .meta-row {
             font-size: 12px;
-            color: #64748B;
+            color: var(--text-muted);
             margin-top: 1px;
         }
 
-        .post-time {
-            font-size: 11px;
-            color: #94A3B8;
-            margin-top: 2px;
-        }
-
-        .post-more-btn {
-            color: #64748B;
+        .post-header .more-btn {
+            color: var(--text-muted);
+            font-size: 18px;
             cursor: pointer;
-            font-weight: bold;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 2px 6px;
         }
 
-        .post-body-text {
-            font-size: 14px;
-            color: #1E293B;
+        .post-content {
+            font-size: 14.5px;
             line-height: 1.5;
+            color: var(--text-main);
             margin-bottom: 12px;
         }
 
-        /* Post Types Display Stylings */
-        .post-media-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #F1F5F9;
-        }
-
-        .pdf-attachment-box {
-            background-color: #F8FAFC;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 12px;
+        /* PDF Attachment Box Style */
+        .pdf-attachment {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
+            gap: 14px;
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 10px;
+            cursor: pointer;
         }
 
-        .pdf-icon-square {
-            width: 40px;
-            height: 40px;
-            background-color: #EF4444;
-            color: #FFFFFF;
-            font-size: 11px;
-            font-weight: 800;
+        .pdf-icon-box {
+            background-color: #fee2e2;
+            color: #ef4444;
+            font-weight: 700;
+            font-size: 12px;
+            padding: 8px 10px;
             border-radius: 8px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
         .pdf-details {
-            flex: 1;
-        }
-
-        .pdf-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #1E293B;
-        }
-
-        .pdf-size {
-            font-size: 11px;
-            color: #64748B;
-            margin-top: 2px;
-        }
-
-        /* Simple Live Poll Styling */
-        .poll-container {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            margin-bottom: 14px;
+            gap: 2px;
+        }
+
+        .pdf-details .pdf-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .pdf-details .pdf-size {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Image Attachment Style */
+        .image-attachment {
+            width: 100%;
+            border-radius: 12px;
+            margin-top: 8px;
+            object-fit: cover;
+            max-height: 280px;
+        }
+
+        /* Poll Design */
+        .poll-box {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 12px;
         }
 
         .poll-option {
-            background-color: #F1F5F9;
-            padding: 12px;
+            background-color: #f1f5f9;
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
             border-radius: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #334155;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
             cursor: pointer;
-            border: 1px solid #E2E8F0;
-            transition: all 0.2s;
+            transition: background 0.2s;
         }
 
         .poll-option:hover {
-            background-color: #E2E8F0;
+            background-color: #e2e8f0;
         }
 
-        /* Action Buttons Row */
-        .post-interactions {
+        /* Post Footer / Actions Bar */
+        .post-footer {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 10px;
-            border-top: 1px solid #F1F5F9;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            margin-top: 14px;
         }
 
-        .interact-btn {
-            background: none;
-            border: none;
+        .action-item {
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
-            color: #64748B;
+            color: var(--text-muted);
             cursor: pointer;
-            padding: 6px 8px;
-            text-decoration: none;
         }
 
-        .interact-btn.liked {
-            color: #EF4444;
+        .action-item i {
+            font-size: 16px;
         }
 
-        .interact-btn.bookmarked {
-            color: #F59E0B;
+        .action-item.liked i {
+            color: #ef4444;
         }
 
-        /* --- BULLETPROOF FIXED BOTTOM NAVIGATION BAR --- */
-        .bottom-nav-bar {
+        /* --- BOTTOM NAVIGATION BAR --- */
+        .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
             max-width: 480px;
-            background-color: #FFFFFF;
-            border-top: 1px solid #E2E8F0;
+            height: 65px;
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: space-around;
-            padding: 12px 0 16px 0;
-            z-index: 9999;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+            align-items: center;
+            z-index: 1000;
         }
 
-        .nav-tab-item {
+        .nav-link {
             display: flex;
             flex-direction: column;
             align-items: center;
+            color: var(--text-muted);
             text-decoration: none;
-            color: #94A3B8;
-            font-size: 10px;
-            font-weight: 600;
-            gap: 5px;
+            font-size: 11px;
+            font-weight: 500;
             position: relative;
-            width: 64px;
+            flex: 1;
+            padding: 6px 0;
         }
 
-        .nav-tab-item.active {
-            color: #4F46E5;
+        .nav-link i {
+            font-size: 20px;
+            margin-bottom: 2px;
         }
 
-        .nav-badge {
+        .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link .nav-badge {
             position: absolute;
-            top: -4px;
-            right: 14px;
-            background-color: #4F46E5;
-            color: #FFFFFF;
+            top: 2px;
+            right: 22px;
+            background-color: var(--primary);
+            color: white;
             font-size: 9px;
-            font-weight: 700;
+            font-weight: bold;
             width: 14px;
             height: 14px;
             border-radius: 50%;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="phone-container">
+    <div class="app-container">
         
-        <!-- App Header Bar Setup -->
-        <header class="app-header">
-            <a href="menuicon.html" class="menu-triple-line">
-                <span></span>
-                <span></span>
-                <span></span>
-            </a>
-            <h1 class="header-title">Home</h1>
-            <div class="header-actions">
-                <button class="action-icon-btn">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                </button>
-                <a href="notification.html" class="action-icon-btn">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    <span class="notification-badge">8</span>
-                </a>
+        <header>
+            <div class="left-menu"><i class="bi bi-list"></i></div>
+            <div class="app-title">Home</div>
+            <div class="right-icons">
+                <i class="bi bi-search"></i>
+                <div class="notification-box">
+                    <i class="bi bi-bell"></i>
+                    <span class="noti-badge">8</span>
+                </div>
             </div>
         </header>
 
-        <!-- Main Content (Scrolling Feed) -->
-        <div class="scrollable-content">
+        <div class="stories-container">
+            <div class="story-item current-user">
+                <div class="story-avatar-wrapper">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Your Story">
+                    <div class="add-btn"><i class="bi bi-plus-lg"></i></div>
+                </div>
+                <span>Your Story</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar-wrapper">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Fatima">
+                </div>
+                <span>Fatima</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar-wrapper">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="John">
+                </div>
+                <span>John</span>
+            </div>
+            <div class="story-item">
+                <div class="story-avatar-wrapper">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150" alt="Maryam">
+                </div>
+                <span>Maryam</span>
+            </div>
+        </div>
+
+        <div class="create-post-card">
+            <div class="input-row">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="User">
+                <div class="placeholder-text">What's on your mind?</div>
+            </div>
+            <div class="options-row">
+                <div class="opt-item photo"><i class="bi bi-image"></i> Photo</div>
+                <div class="opt-item video"><i class="bi bi-camera-video"></i> Video</div>
+                <div class="opt-item poll"><i class="bi bi-bar-chart"></i> Poll</div>
+                <div class="opt-item feeling"><i class="bi bi-emoji-smile"></i> Feeling</div>
+            </div>
+        </div>
+
+        <div class="feed-container">
             
-            <!-- Horizontal Active Stories Linked -->
-            <div class="stories-container">
-                <a href="story.html" class="story-item your-profile">
-                    <div class="story-avatar-wrapper">
-                        <img class="story-img" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=200" alt="You">
-                        <span class="plus-badge">+</span>
-                    </div>
-                    <span class="story-name">Your Story</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="story-avatar-wrapper">
-                        <img class="story-img" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200" alt="Fatima">
-                    </div>
-                    <span class="story-name">Fatima</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="story-avatar-wrapper">
-                        <img class="story-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200" alt="John">
-                    </div>
-                    <span class="story-name">John</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="story-avatar-wrapper">
-                        <img class="story-img" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200" alt="Maryam">
-                    </div>
-                    <span class="story-name">Maryam</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="story-avatar-wrapper">
-                        <img class="story-img" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200" alt="David">
-                    </div>
-                    <span class="story-name">David</span>
-                </a>
-            </div>
-
-            <!-- Composer Card -->
-            <div class="composer-card">
-                <div class="composer-top">
-                    <img class="composer-avatar" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=200" alt="Me">
-                    <span class="composer-placeholder">What's on your mind?</span>
-                </div>
-                <div class="composer-divider"></div>
-                <div class="composer-actions">
-                    <button class="composer-btn"><span style="color:#22C55E;">🖼️</span> Photo</button>
-                    <button class="composer-btn"><span style="color:#A855F7;">🎥</span> Video</button>
-                    <button class="composer-btn"><span style="color:#3B82F6;">📊</span> Poll</button>
-                    <button class="composer-btn"><span style="color:#F97316;">😊</span> Feeling</button>
-                </div>
-            </div>
-
-            <!-- ================= FEED POSTS SECTION (10 DIFFERENT POSTS) ================= -->
-
-            <!-- Post 1: Fatima Muhammad (Type: PDF Document) -->
             <div class="post-card">
                 <div class="post-header">
-                    <div class="post-user-info">
-                        <img class="post-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200" alt="Fatima">
-                        <div>
-                            <div class="user-meta-name">Fatima Muhammad <span class="verified-badge">✓</span></div>
-                            <div class="user-meta-sub">Computer Science • ABU Zaria</div>
-                            <div class="post-time">2h ago</div>
+                    <div class="user-info-block">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150" alt="Fatima">
+                        <div class="name-meta-box">
+                            <div class="name-row">
+                                Fatima Muhammad
+                                <i class="bi bi-patch-check-fill verified-badge"></i>
+                            </div>
+                            <div class="meta-row">Computer Science • ABU Zaria • 2h ago</div>
                         </div>
                     </div>
-                    <a href="postoptions.html" class="post-more-btn">•••</a>
+                    <div class="more-btn"><i class="bi bi-three-dots"></i></div>
                 </div>
-                <div class="post-body-text">
+                <div class="post-content">
                     An tura cikakken bayani akan 'Data Structures and Algorithms' na wannan semester din. Zaku iya dubawa anan. 🚀
-                </div>
-                <div class="pdf-attachment-box">
-                    <div class="pdf-icon-square">PDF</div>
-                    <div class="pdf-details">
-                        <div class="pdf-title">Data_Structures_Summary.pdf</div>
-                        <div class="pdf-size">4.2 MB</div>
+                    
+                    <div class="pdf-attachment">
+                        <div class="pdf-icon-box">
+                            <i class="bi bi-file-earmark-pdf-fill" style="font-size: 18px;"></i>
+                            <span>PDF</span>
+                        </div>
+                        <div class="pdf-details">
+                            <div class="pdf-title">Data_Structures_Summary.pdf</div>
+                            <div class="pdf-size">4.2 MB</div>
+                        </div>
                     </div>
                 </div>
-                <div class="post-interactions">
-                    <button class="interact-btn" onclick="runLike(this)"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg><span>245</span></button>
-                    <a href="comment.html" class="interact-btn"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg><span>32</span></a>
-                    <button class="interact-btn" onclick="runRepost(this)"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 19H19M4 20v-5h.581m0 0a8.003 8.003 0 0115.357-2F5.581 15 4.582 15 4 15z"></path></svg><span>18</span></button>
-                    <button class="interact-btn" onclick="runBookmark(this)"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path></svg></button>
+                <div class="post-footer">
+                    <div class="action-item liked"><i class="bi bi-heart-fill"></i> 246</div>
+                    <div class="action-item"><i class="bi bi-chat"></i> 32</div>
+                    <div class="action-item"><i class="bi bi-arrow-repeat"></i> 18</div>
+                    <div class="action-item"><i class="bi bi-bookmark"></i></div>
                 </div>
             </div>
 
-            <!-- Post 2: David Okafor (Type: Text Only Question) -->
             <div class="post-card">
                 <div class="post-header">
-                    <div class="post-user-info">
-                        <img class="post-avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200" alt="David">
-                        <div>
-                            <div class="user-meta-name">David Okafor</div>
-                            <div class="user-meta-sub">Mechanical Engineering • UNN</div>
-                            <div class="post-time">4h ago</div>
+                    <div class="user-info-block">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="David">
+                        <div class="name-meta-box">
+                            <div class="name-row">David Okafor</div>
+                            <div class="meta-row">Mechanical Engineering • UNN • 4h ago</div>
                         </div>
                     </div>
-                    <a href="postoptions.html" class="post-more-btn">•••</a>
+                    <div class="more-btn"><i class="bi bi-three-dots"></i></div>
                 </div>
-                <div class="post-body-text">
+                <div class="post-content">
                     Who really understands Thermodynamics part (b) of yesterday's assignment? I seriously need help before submission time tomorrow morning! 😭
                 </div>
-                <div class="post-interactions">
-                    <
+                <div class="post-footer">
+                    <div class="action-item"><i class="bi bi-heart"></i> 89</div>
+                    <div class="action-item"><i class="bi bi-chat"></i> 45</div>
+                    <div class="action-item"><i class="bi bi-arrow-repeat"></i> 4</div>
+                    <div class="action-item"><i class="bi bi-bookmark"></i></div>
+                </div>
+            </div>
+
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-info-block">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" alt="Amina">
+                        <div class="name-meta-box">
+                            <div class="name-row">Amina Bello</div>
+                            <div class="meta-row">Medicine & Surgery • BUK • 6h ago</div>
+                        </div>
+                    </div>
+                    <div class="more-btn"><i class="bi bi-three-dots"></i></div>
+                </div>
+                <div class="post-content">
+                    My current standard setup for late-night revisions. Anatomy is not friendly this week! 📚☕
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500" class="image-attachment" alt="Setup">
+                </div>
+                <div class="post-footer">
+                    <div class="action-item"><i class="bi bi-heart"></i> 512</div>
+                    <div class="action-item"><i class="bi bi-chat"></i> 94</div>
+                    <div class="action-item"><i class="bi bi-arrow-repeat"></i> 41</div>
+                    <div class="action-item"><i class="bi bi-bookmark"></i></div>
+                </div>
+            </div>
+
+            <div class="post-card">
+                <div class="post-header">
+                    <div class="user-info-block">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150" alt="Musa">
+                        <div class="name-meta-box">
+                            <div class="name-row">Musa Ibrahim</div>
+                            <div class="meta-row">Economics • Unilag • 8h ago</div>
+                        </div>
+                    </div>
+                    <div class="more-btn"><i class="bi bi-three-dots"></i></div>
+                </div>
+                <div class="post-content">
+                    Muna shirin fara group discussion na Microeconomics na gaba. Wane lokaci ya fi muku daidai?
+                    
+                    <div class="poll-box">
+                        <div class="poll-option" onclick="handleVote('Da rana (2:00 PM)')">Da rana (2:00 PM)</div>
+                        <div class="poll-option" onclick="handleVote('Da yamma (5:00 PM)')">Da yamma (5:00 PM)</div>
+                        
