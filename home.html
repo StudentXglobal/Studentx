@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StudentX — Premium Home Feed</title>
-    <!-- Premium Font -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -121,6 +120,10 @@
             padding: 2px;
             background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
             margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
 
         .story-node.mine .story-ring {
@@ -129,12 +132,20 @@
             padding: 0;
         }
 
-        .story-ring img {
+        .story-ring img, .story-ring .anonymous-avatar-box {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #0b111e;
+        }
+
+        .anonymous-avatar-box {
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
         }
 
         .story-label {
@@ -159,11 +170,16 @@
             margin-bottom: 14px;
         }
 
-        .composer-profile-row img {
+        .composer-pfp-box {
             width: 38px;
             height: 38px;
             border-radius: 50%;
-            object-fit: cover;
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
         }
 
         .composer-fake-input {
@@ -208,12 +224,20 @@
             gap: 12px;
         }
 
-        .author-pfp {
+        .author-pfp, .author-pfp-anonymous {
             width: 44px;
             height: 44px;
             border-radius: 50%;
             object-fit: cover;
             border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .author-pfp-anonymous {
+            background: #1e293b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
         }
 
         .author-names-group .author-name {
@@ -391,7 +415,6 @@
 
     <div class="app-framework">
         
-        <!-- App Header -->
         <header class="app-header">
             <div class="menu-hamburger">
                 <span></span>
@@ -404,14 +427,14 @@
             </div>
         </header>
 
-        <!-- Main Scrollable Timeline Content -->
         <div class="scroll-content">
             
-            <!-- Stories Link Row -->
             <div class="stories-wrapper">
                 <a href="story.html" class="story-node mine">
                     <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?w=120" alt="Me">
+                        <div class="anonymous-avatar-box">
+                            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5zM4 22a8 8 0 0 1 16 0H4z"/><circle cx="10" cy="8" r="1" fill="currentColor"/><circle cx="14" cy="8" r="1" fill="currentColor"/><path d="M10 14s1 1.5 2 1.5 2-1.5 2-1.5" stroke-linecap="round"/></svg>
+                        </div>
                     </div>
                     <span class="story-label">Your Story</span>
                 </a>
@@ -435,10 +458,11 @@
                 </a>
             </div>
 
-            <!-- Composer Box -->
             <div class="composer-box">
                 <div class="composer-profile-row">
-                    <img src="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?w=120" alt="Me">
+                    <div class="composer-pfp-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5zM4 22a8 8 0 0 1 16 0H4z"/><circle cx="10" cy="8" r="1" fill="currentColor"/><circle cx="14" cy="8" r="1" fill="currentColor"/><path d="M10 14s1 1.5 2 1.5 2-1.5 2-1.5" stroke-linecap="round"/></svg>
+                    </div>
                     <span class="composer-fake-input">What's on your mind?</span>
                 </div>
                 <div class="composer-tools">
@@ -448,9 +472,6 @@
                 </div>
             </div>
 
-            <!-- ================= TIMELINE FEED: 10 DISTINCT POSTS ================= -->
-
-            <!-- Post 1 -->
             <div class="post-card">
                 <div class="post-meta-header">
                     <div class="post-author-details">
@@ -479,7 +500,6 @@
                 </div>
             </div>
 
-            <!-- Post 2 -->
             <div class="post-card">
                 <div class="post-meta-header">
                     <div class="post-author-details">
@@ -501,7 +521,6 @@
                 </div>
             </div>
 
-            <!-- Post 3 -->
             <div class="post-card">
                 <div class="post-meta-header">
                     <div class="post-author-details">
@@ -524,7 +543,6 @@
                 </div>
             </div>
 
-            <!-- Post 4 -->
             <div class="post-card">
                 <div class="post-meta-header">
                     <div class="post-author-details">
@@ -551,29 +569,8 @@
                 </div>
             </div>
 
-            <!-- Post 5 -->
             <div class="post-card">
                 <div class="post-meta-header">
                     <div class="post-author-details">
                         <img class="author-pfp" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120" alt="Zainab">
-                        <div class="author-names-group">
-                            <div class="author-name">Zainab Lawal <span class="v-badge">✓</span></div>
-                            <div class="author-subtitle">Faculty of Law • UniAbuja</div>
-                        </div>
-                    </div>
-                    <span class="post-time-stamp">10h ago</span>
-                </div>
-                <div class="post-text-body">
-                    Nasarar da aka samu a Kotun Koli jiya akan sha'anin 'Constitutional Law' yana da muhimmanci sosai ga jarrabawar mu ta gaba. Kar ku manta ku karanta case studies din. ⚖️
-                </div>
-                <div class="post-action-bar">
-                    <span class="interaction-node">❤️ 302</span>
-                    <span class="interaction-node">💬 19</span>
-                    <span class="interaction-node">🔄 35</span>
-                </div>
-            </div>
-
-            <!-- Post 6 -->
-            <div class="post-card">
-                <div class="post-meta-header">
-                    <div class="post-author
+               
