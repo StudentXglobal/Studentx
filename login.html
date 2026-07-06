@@ -2,366 +2,385 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Log In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX — Log In</title>
+    <!-- Premium Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Icons (FontAwesome) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        :root {
-            --bg-dark: #02051A;
-            --bg-card: #0E122B;
-            --input-bg: #151A3B;
-            --grad-blue: #1877F2;
-            --grad-purple: #8A2BE2;
-            --grad-pink: #FF00FF;
-            --text-main: #FFFFFF;
-            --text-muted: #8892B0;
-            --border-color: #2A3158;
-            --primary-btn: linear-gradient(90deg, #2E38A3, #4552E6);
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: #000;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #03050c;
+            color: #ffffff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
 
-        /* Mobile Frame */
-        .mobile-frame {
+        /* Container mimicking the exact mobile view layout */
+        .phone-container {
             width: 100%;
-            max-width: 390px;
+            max-width: 480px;
             height: 100vh;
-            max-height: 844px;
-            background: linear-gradient(165deg, var(--bg-dark) 0%, #0D1442 100%);
+            background: linear-gradient(180deg, #0b112c 0%, #050716 40%);
             position: relative;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-shadow: 0 0 40px rgba(138, 43, 226, 0.1);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
         }
 
-        @media (min-height: 850px) {
-            .mobile-frame {
-                height: 844px;
-                border-radius: 40px;
-                border: 8px solid #1a1a2e;
-            }
+        /* Top Header & Branding Status Area */
+        .top-header {
+            padding: 40px 24px 10px 24px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Top Bar Logo */
-        .top-bar {
-            padding: 40px 24px 20px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .logo-wrapper {
-            display: flex;
-            align-items: baseline;
-        }
-
-        .logo-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-main);
+        .logo-area {
+            font-size: 32px;
+            font-weight: 800;
             letter-spacing: -1px;
+            margin-bottom: 4px;
         }
 
         .logo-x {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 36px;
-            font-weight: 800;
-            font-style: italic;
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-left: -4px;
+            font-style: italic;
         }
 
-        /* Header Texts */
-        .header-content {
-            padding: 10px 24px 25px;
-            text-align: center;
+        .sub-slogan {
+            font-size: 12px;
+            color: #94A3B8;
+            font-weight: 500;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
         }
 
-        .title {
+        .main-title {
             font-size: 28px;
-            font-weight: 700;
-            color: var(--text-main);
-            margin-bottom: 8px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
         }
 
-        .subtitle {
-            font-size: 14px;
-            color: var(--text-muted);
+        .gradient-title {
+            background: linear-gradient(90deg, #3B82F6 0%, #A855F7 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .description-text {
+            font-size: 13px;
+            color: #94A3B8;
             line-height: 1.5;
-            padding: 0 10px;
+            padding: 0 20px;
         }
 
-        /* Main Form Container */
-        .form-container {
-            padding: 0 24px 40px;
-            flex-grow: 1;
+        /* Dynamic Student Image Section matching the mockup placement */
+        .students-hero-box {
+            width: 100%;
+            height: 200px;
+            background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80');
+            background-size: cover;
+            background-position: center;
+            margin-top: 15px;
+            margin-bottom: -30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Bottom White Form Card Overlay */
+        .form-card {
+            background-color: #FFFFFF;
+            border-top-left-radius: 32px;
+            border-top-right-radius: 32px;
+            padding: 30px 24px;
+            width: 100%;
+            margin-top: auto;
+            position: relative;
+            z-index: 3;
+            color: #1E293B;
+            box-shadow: 0 -10px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Tab Switchers */
+        .tab-header {
             display: flex;
-            flex-direction: column;
+            border-bottom: 1px solid #E2E8F0;
+            margin-bottom: 24px;
         }
 
-        /* Social Buttons */
+        .tab-btn {
+            flex: 1;
+            text-align: center;
+            padding-bottom: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #94A3B8;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .tab-btn.active {
+            color: #4F46E5;
+            border-bottom: 3px solid #4F46E5;
+        }
+
+        /* Social Authentication Buttons */
         .social-btn {
             width: 100%;
-            padding: 14px;
-            background-color: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            color: var(--text-main);
-            font-size: 14px;
-            font-weight: 600;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 48px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1E293B;
             margin-bottom: 12px;
             cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
+            gap: 10px;
+            transition: background 0.2s;
         }
 
-        .social-btn:active {
-            transform: scale(0.98);
+        .social-btn:hover {
+            background-color: #F8FAFC;
         }
 
-        .social-btn i {
-            position: absolute;
-            left: 20px;
-            font-size: 18px;
+        .social-icon {
+            width: 20px;
+            height: 20px;
         }
 
-        .fa-google { color: #EA4335; }
-        .fa-facebook { color: #1877F2; }
-        .fa-apple { color: #FFFFFF; font-size: 20px !important; }
-
-        /* Divider */
-        .divider {
+        /* Divider Design */
+        .divider-box {
             display: flex;
             align-items: center;
             text-align: center;
-            margin: 25px 0;
-            color: var(--text-muted);
+            margin: 20px 0;
+            color: #94A3B8;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: 700;
         }
-        
-        .divider::before, .divider::after {
+
+        .divider-box::before, .divider-box::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #E2E8F0;
         }
-        
-        .divider::before { margin-right: 15px; }
-        .divider::after { margin-left: 15px; }
 
-        /* Form Inputs */
+        .divider-box:not(:empty)::before { margin-right: .75em; }
+        .divider-box:not(:empty)::after { margin-left: .75em; }
+
+        /* Input Form Elements */
         .input-group {
             position: relative;
             margin-bottom: 16px;
         }
 
-        .input-group i.icon-left {
+        .input-icon {
             position: absolute;
-            left: 18px;
+            left: 16px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 16px;
+            color: #94A3B8;
+            display: flex;
+            align-items: center;
         }
 
-        .input-group input {
+        .input-field {
             width: 100%;
-            padding: 16px 16px 16px 48px;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
+            height: 52px;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 0 45px;
             font-size: 14px;
-            color: var(--text-main);
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #1E293B;
             outline: none;
-            transition: border-color 0.3s ease;
+            background-color: #FFFFFF;
         }
 
-        .input-group input::placeholder {
-            color: #5C6784;
-        }
-        
-        .input-group input:focus {
-            border-color: #4552E6;
-            box-shadow: 0 0 0 4px rgba(69, 82, 230, 0.1);
+        .input-field:focus {
+            border-color: #4F46E5;
         }
 
-        /* Checkbox & Forgot Password */
-        .form-options {
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+            cursor: pointer;
+        }
+
+        /* Options Row (Remember Me & Forgot Pass) */
+        .options-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin: 10px 0 30px;
+            font-size: 13px;
+            margin-bottom: 24px;
         }
 
-        .remember-me {
+        .checkbox-container {
             display: flex;
             align-items: center;
-            color: var(--text-muted);
-            font-size: 13px;
+            gap: 8px;
+            color: #64748B;
+            font-weight: 500;
             cursor: pointer;
         }
 
-        .remember-me input[type="checkbox"] {
-            margin-right: 8px;
+        .checkbox-container input {
+            accent-color: #4F46E5;
             width: 16px;
             height: 16px;
-            accent-color: #4552E6;
-            background-color: var(--input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            cursor: pointer;
         }
 
-        .forgot-pass {
-            color: var(--grad-blue);
-            font-size: 13px;
-            font-weight: 600;
+        .forgot-link {
+            color: #4F46E5;
             text-decoration: none;
+            font-weight: 600;
         }
 
-        /* Primary Button */
-        .primary-btn {
+        /* Core Action Login Button */
+        .primary-login-btn {
             width: 100%;
-            padding: 18px;
-            background: var(--primary-btn);
-            color: var(--text-main);
+            height: 52px;
+            background: linear-gradient(90deg, #4F46E5 0%, #3B82F6 100%);
             border: none;
-            border-radius: 16px;
+            border-radius: 14px;
+            color: #FFFFFF;
             font-size: 16px;
-            font-weight: 600;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(69, 82, 230, 0.3);
-            transition: transform 0.2s ease;
-            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
+            transition: opacity 0.2s;
         }
 
-        .primary-btn:active {
-            transform: scale(0.98);
+        .primary-login-btn:hover {
+            opacity: 0.95;
         }
 
-        /* Footer */
-        .footer {
+        /* Bottom Footer Link */
+        .footer-signup-text {
             text-align: center;
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-top: auto;
+            font-size: 13px;
+            color: #64748B;
+            margin-top: 20px;
+            font-weight: 500;
         }
 
-        .footer a {
-            color: var(--grad-blue);
-            font-weight: 600;
+        .footer-signup-text a {
+            color: #4F46E5;
             text-decoration: none;
-            margin-left: 5px;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
 
-    <div class="mobile-frame">
+    <div class="phone-container">
         
-        <!-- Logo -->
-        <div class="top-bar">
-            <div class="logo-wrapper">
-                <span class="logo-text">Student</span>
-                <span class="logo-x">X</span>
-            </div>
+        <!-- Header Section -->
+        <div class="top-header">
+            <div class="logo-area">Student<span class="logo-x">X</span></div>
+            <div class="sub-slogan">Connect • Learn • Share</div>
+            <h1 class="main-title">The Future of <br><span class="gradient-title">Student Networking</span></h1>
+            <p class="description-text">Connect with students, learn together and build your future.</p>
         </div>
 
-        <!-- Header -->
-        <div class="header-content">
-            <h1 class="title">Welcome Back</h1>
-            <p class="subtitle">Sign in to continue learning and connecting.</p>
-        </div>
+        <!-- Student Group Banner View -->
+        <div class="students-hero-box"></div>
 
-        <!-- Form Elements -->
-        <div class="form-container">
+        <!-- White Interactive Card Sheet -->
+        <div class="form-card">
             
-            <!-- Social Logins -->
+            <!-- Tabs Area -->
+            <div class="tab-header">
+                <div class="tab-btn active" id="loginTab">Log In</div>
+                <a href="signup.html" class="tab-btn" id="signupTab">Sign Up</a>
+            </div>
+
+            <!-- Social Providers -->
             <button class="social-btn">
-                <i class="fa-brands fa-google"></i>
+                <img class="social-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/copy_of_v6_24dp.png" alt="Google">
                 Continue with Google
             </button>
             <button class="social-btn">
-                <i class="fa-brands fa-facebook"></i>
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook">
                 Continue with Facebook
             </button>
             <button class="social-btn">
-                <i class="fa-brands fa-apple"></i>
+                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
                 Continue with Apple
             </button>
 
-            <!-- Divider -->
-            <div class="divider">OR</div>
+            <div class="divider-box">OR</div>
 
-            <!-- Email Input -->
-            <div class="input-group">
-                <i class="fa-regular fa-envelope icon-left"></i>
-                <input type="email" placeholder="Email Address">
-            </div>
+            <!-- Standard Input Fields Form -->
+            <form id="authForm" onsubmit="handleFormSubmit(event)">
+                <div class="input-group">
+                    <span class="input-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </span>
+                    <input type="text" class="input-field" id="usernameField" placeholder="Email or Username" required>
+                </div>
 
-            <!-- Password Input -->
-            <div class="input-group">
-                <i class="fa-solid fa-lock icon-left"></i>
-                <input type="password" placeholder="Password">
-            </div>
+                <div class="input-group">
+                    <span class="input-icon">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </span>
+                    <input type="password" class="input-field" placeholder="Password" required>
+                    <span class="password-toggle">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
+                    </span>
+                </div>
 
-            <!-- Options -->
-            <div class="form-options">
-                <label class="remember-me">
-                    <input type="checkbox">
-                    Remember Me
-                </label>
-                <a href="#" class="forgot-pass">Forgot Password?</a>
-            </div>
+                <!-- Remember & Forgot Password Links -->
+                <div class="options-row">
+                    <label class="checkbox-container">
+                        <input type="checkbox" checked>
+                        Remember me
+                    </label>
+                    <a href="#" class="forgot-link">Forgot Password?</a>
+                </div>
 
-            <!-- Login Button -->
-            <button id="loginBtn" class="primary-btn">Log In</button>
+                <!-- Submit Action Elements -->
+                <button type="submit" class="primary-login-btn">Log In</button>
+            </form>
 
-            <!-- Footer -->
-            <div class="footer">
+            <div class="footer-signup-text">
                 Don't have an account? <a href="signup.html">Sign Up</a>
             </div>
-        </div>
 
+        </div>
     </div>
 
-    <!-- JavaScript don kai mutum shafin gida (home) -->
     <script>
-        document.getElementById('loginBtn').onclick = function() {
-            window.location.href = 'home.html';
-        };
+        // Idan mutum ya danna Log In tab, zai mayar da hankali kai tsaye zuwa gurin saka Email
+        document.getElementById('loginTab').addEventListener('click', function() {
+            document.getElementById('usernameField').focus();
+        });
+
+        // Idan mutum ya danna madannin Log In bayan ya cika komai, zai kai shi home.html
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            window.location.href = "home.html";
+        }
     </script>
 </body>
-  </html>
+</html>
