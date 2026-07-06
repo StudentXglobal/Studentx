@@ -25,52 +25,77 @@
             min-height: 100vh;
         }
 
-        /* Mobile Container to match exact app look */
+        /* Phone frame mimicking the exact mobile app view */
         .phone-container {
             width: 100%;
             max-width: 480px;
             height: 100vh;
-            background-color: #F8FAFC;
+            background-color: #FFFFFF;
             display: flex;
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0,0,0,0.05);
+            box-shadow: 0 0 40px rgba(15, 23, 42, 0.08);
         }
 
-        /* --- TOP HEADER NAVIGATION --- */
+        /* --- TOP IOS-STYLE STATUS BAR --- */
+        .status-bar {
+            padding: 14px 24px 6px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            z-index: 15;
+        }
+
+        .status-icons {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-icon {
+            width: 18px;
+            height: 11px;
+            fill: currentColor;
+        }
+
+        /* --- APP HEADER --- */
         .app-header {
             background-color: #FFFFFF;
-            padding: 16px 20px;
+            padding: 12px 20px 16px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 1px solid #F1F5F9;
         }
 
+        /* Three lines menu layout */
         .menu-triple-line {
             cursor: pointer;
             display: flex;
             flex-direction: column;
             gap: 5px;
-            padding: 5px;
+            padding: 6px;
         }
 
         .menu-triple-line span {
             display: block;
             width: 22px;
             height: 2.5px;
-            background-color: #0F172A;
+            background-color: #000000;
             border-radius: 2px;
         }
 
         .header-title {
             font-size: 20px;
             font-weight: 800;
-            color: #0F172A;
+            color: #000000;
             letter-spacing: -0.5px;
         }
 
@@ -93,26 +118,27 @@
 
         .notification-badge {
             position: absolute;
-            top: -6px;
-            right: -6px;
+            top: -4px;
+            right: -4px;
             background-color: #6366F1; /* Exact Purple Badge */
             color: #FFFFFF;
-            font-size: 10px;
-            font-weight: 700;
-            width: 16px;
-            height: 16px;
+            font-size: 9px;
+            font-weight: 800;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid #FFFFFF;
+            border: 1.5px solid #FFFFFF;
         }
 
         /* --- SCROLLABLE CONTAINER --- */
         .scrollable-content {
             flex: 1;
             overflow-y: auto;
-            padding-bottom: 90px; /* Safe space for nav bar */
+            padding-bottom: 100px; /* Space for Nav Bar and Home Indicator */
+            background-color: #F8FAFC;
         }
 
         /* --- STORIES SECTION --- */
@@ -124,7 +150,7 @@
             overflow-x: auto;
             padding-left: 20px;
             padding-right: 20px;
-            scrollbar-width: none; /* Hide scrollbar for clean UI */
+            scrollbar-width: none;
             border-bottom: 1px solid #F1F5F9;
         }
 
@@ -143,11 +169,11 @@
 
         .story-avatar-wrapper {
             position: relative;
-            width: 64px;
-            height: 64px;
+            width: 68px;
+            height: 68px;
             border-radius: 50%;
-            padding: 2.5px;
-            background: linear-gradient(135deg, #3B82F6, #8B5CF6, #EC4899); /* Premium Gradient Ring */
+            padding: 3px;
+            background: linear-gradient(135deg, #3B82F6, #8B5CF6, #EC4899); /* Premium Ring Color */
             margin-bottom: 6px;
         }
 
@@ -162,30 +188,34 @@
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #FFFFFF;
+            border: 2.5px solid #FFFFFF;
+        }
+
+        .story-item.your-profile .story-img {
+            border: none;
         }
 
         .plus-badge {
             position: absolute;
-            bottom: 0;
-            right: 0;
+            bottom: 1px;
+            right: 1px;
             background-color: #3B82F6;
             color: #FFFFFF;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 800;
-            border: 2px solid #FFFFFF;
+            border: 2.5px solid #FFFFFF;
         }
 
         .story-name {
             font-size: 11px;
             font-weight: 500;
-            color: #64748B;
+            color: #0F172A;
             max-width: 68px;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -195,7 +225,7 @@
         /* --- COMPOSER BOX ("What's on your mind?") --- */
         .composer-card {
             background-color: #FFFFFF;
-            margin: 12px 16px;
+            margin: 14px 16px;
             border-radius: 16px;
             padding: 16px;
             border: 1px solid #E2E8F0;
@@ -216,7 +246,7 @@
         }
 
         .composer-placeholder {
-            font-size: 14px;
+            font-size: 15px;
             color: #64748B;
             font-weight: 400;
         }
@@ -245,12 +275,18 @@
             cursor: pointer;
         }
 
+        .action-divider {
+            width: 1px;
+            height: 16px;
+            background-color: #E2E8F0;
+        }
+
         /* --- FEED POSTS --- */
         .post-card {
             background-color: #FFFFFF;
-            margin: 0 16px 12px 16px;
+            margin: 0 16px 14px 16px;
             border-radius: 16px;
-            padding: 16px;
+            padding: 18px;
             border: 1px solid #E2E8F0;
         }
 
@@ -258,7 +294,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .post-user-info {
@@ -306,31 +342,33 @@
             color: #64748B;
             cursor: pointer;
             padding: 4px;
+            font-size: 14px;
+            font-weight: 700;
         }
 
         .post-body-text {
             font-size: 14px;
-            color: #1E293B;
+            color: #0F172A;
             line-height: 1.5;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
-        /* PDF Document Attachment Card Style */
+        /* PDF Attachment Box */
         .pdf-attachment-box {
             background-color: #F8FAFC;
             border: 1px solid #E2E8F0;
             border-radius: 12px;
-            padding: 12px;
+            padding: 14px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             margin-bottom: 14px;
             cursor: pointer;
         }
 
         .pdf-icon-square {
-            width: 40px;
-            height: 40px;
+            width: 42px;
+            height: 42px;
             background-color: #EF4444;
             color: #FFFFFF;
             font-size: 11px;
@@ -348,7 +386,7 @@
         .pdf-title {
             font-size: 13px;
             font-weight: 600;
-            color: #1E293B;
+            color: #0F172A;
         }
 
         .pdf-size {
@@ -357,14 +395,13 @@
             margin-top: 2px;
         }
 
-        /* Post Action Row Layout */
+        /* Post Actions Bar */
         .post-interactions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 10px;
+            padding-top: 12px;
             border-top: 1px solid #F1F5F9;
-            margin-bottom: 10px;
         }
 
         .interact-btn {
@@ -377,25 +414,19 @@
             font-weight: 500;
             color: #64748B;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 6px 8px;
             border-radius: 6px;
-            transition: background 0.2s;
-        }
-
-        .interact-btn:hover {
-            background-color: #F1F5F9;
         }
 
         .interact-btn.liked {
             color: #EF4444;
         }
 
-        /* Avatar Social Stack Box */
         .avatar-social-stack {
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-top: 8px;
+            margin-top: 14px;
         }
 
         .stack-images {
@@ -403,11 +434,11 @@
         }
 
         .stack-img {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1.5px solid #FFFFFF;
+            border: 2px solid #FFFFFF;
             margin-left: -6px;
         }
 
@@ -418,11 +449,12 @@
         .stack-text {
             font-size: 12px;
             color: #64748B;
+            font-weight: 500;
         }
 
-        /* --- TASK COMPLETION CARD --- */
+        /* --- PROFILE COMPLETION BANNER --- */
         .completion-banner {
-            background-color: #EEF2F6;
+            background-color: #F5F3FF; /* Very Soft Lavender */
             margin: 4px 16px 16px 16px;
             border-radius: 16px;
             padding: 16px;
@@ -430,6 +462,7 @@
             align-items: center;
             justify-content: space-between;
             position: relative;
+            border: 1px solid #DDD6FE;
         }
 
         .completion-left {
@@ -447,30 +480,33 @@
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.05);
         }
 
         .completion-text-title {
             font-size: 14px;
             font-weight: 700;
-            color: #0F172A;
+            color: #1E1B4B;
         }
 
         .completion-text-sub {
-            font-size: 12px;
-            color: #64748B;
+            font-size: 11px;
+            color: #6D28D9;
             margin-top: 2px;
             max-width: 180px;
+            line-height: 1.4;
         }
 
         .completion-action-btn {
             background-color: #4F46E5;
             color: #FFFFFF;
             border: none;
-            padding: 8px 14px;
+            padding: 10px 16px;
             font-size: 12px;
             font-weight: 700;
             border-radius: 10px;
             cursor: pointer;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
         }
 
         .completion-close {
@@ -481,6 +517,7 @@
             border: none;
             color: #94A3B8;
             cursor: pointer;
+            font-size: 12px;
         }
 
         /* --- FIXED BOTTOM NAVIGATION BAR --- */
@@ -493,8 +530,8 @@
             border-top: 1px solid #F1F5F9;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0 14px 0;
-            z-index: 10;
+            padding: 10px 0 8px 0;
+            z-index: 20;
         }
 
         .nav-tab-item {
@@ -502,33 +539,61 @@
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #94A3B8; /* Gray inactive state */
+            color: #94A3B8; /* Clean Slate Gray */
             font-size: 10px;
             font-weight: 600;
-            gap: 4px;
+            gap: 5px;
             position: relative;
             cursor: pointer;
-            width: 60px;
+            width: 64px;
         }
 
         .nav-tab-item.active {
-            color: #4F46E5; /* Premium Active Color */
+            color: #4F46E5; /* Premium Indigo Brand */
+        }
+
+        .nav-tab-item svg {
+            width: 22px;
+            height: 22px;
         }
 
         .nav-badge {
             position: absolute;
             top: -4px;
-            right: 12px;
+            right: 14px;
             background-color: #4F46E5;
             color: #FFFFFF;
             font-size: 9px;
-            font-weight: 700;
-            width: 14px;
-            height: 14px;
+            font-weight: 800;
+            width: 15px;
+            height: 15px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 1.5px solid #FFFFFF;
+        }
+
+        /* --- IPHONE BOTOM HOME INDICATOR BAR --- */
+        .iphone-home-indicator-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background-color: #FFFFFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 25;
+            padding-bottom: 8px;
+        }
+
+        .home-indicator-line {
+            width: 134px;
+            height: 4.5px;
+            background-color: #000000;
+            border-radius: 10px;
         }
     </style>
 </head>
@@ -536,7 +601,20 @@
 
     <div class="phone-container">
         
-        <!-- Header View -->
+        <!-- Premium Status Bar View -->
+        <div class="status-bar">
+            <span>9:41</span>
+            <div class="status-icons">
+                <!-- Cell Signal Arc SVG -->
+                <svg class="status-icon" viewBox="0 0 17 11"><path d="M2 10h1v1H2v-1zm3-3h1v4H5V7zm3-3h1v7H8V4zm3-3h1v10h-1V1z" fill="currentColor"/></svg>
+                <!-- Wifi Arc SVG -->
+                <svg class="status-icon" viewBox="0 0 16 11" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 3.5a11.5 11.5 0 0114 0M3.5 6a7.5 7.5 0 019 0M6 8.5a3.5 3.5 0 014 0" stroke-linecap="round"/></svg>
+                <!-- Battery Indicator SVG -->
+                <svg class="status-icon" viewBox="0 0 22 11"><rect x="1" y="1" width="18" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="3" width="14" height="5" rx="1" fill="currentColor"/><path d="M20 4v3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            </div>
+        </div>
+
+        <!-- Custom Header View -->
         <header class="app-header">
             <div class="menu-triple-line" id="menuBtn">
                 <span></span>
@@ -555,14 +633,14 @@
             </div>
         </header>
 
-        <!-- Main Dynamic Feed Section (Scrollable) -->
+        <!-- Scrollable content matching exact placement -->
         <div class="scrollable-content">
             
-            <!-- Horizontal Stories Component -->
+            <!-- Stories Lineup Component -->
             <div class="stories-container">
                 <div class="story-item your-profile">
                     <div class="story-avatar-wrapper">
-                        <img class="story-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200" alt="You">
+                        <img class="story-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200" alt="Me">
                         <span class="plus-badge">+</span>
                     </div>
                     <span class="story-name">Your Story</span>
@@ -593,7 +671,7 @@
                 </div>
             </div>
 
-            <!-- Composer Input Section -->
+            <!-- Composer Field Container -->
             <div class="composer-card">
                 <div class="composer-top">
                     <img class="composer-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200" alt="Me">
@@ -601,42 +679,4 @@
                 </div>
                 <div class="composer-divider"></div>
                 <div class="composer-actions">
-                    <button class="composer-btn"><span style="color:#22C55E;">🖼️</span> Photo</button>
-                    <button class="composer-btn"><span style="color:#A855F7;">🎥</span> Video</button>
-                    <button class="composer-btn"><span style="color:#3B82F6;">📊</span> Poll</button>
-                    <button class="composer-btn"><span style="color:#F97316;">😊</span> Feeling</button>
-                </div>
-            </div>
-
-            <!-- Post Block: Fatima Muhammad -->
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="post-user-info">
-                        <img class="post-avatar" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200" alt="Fatima">
-                        <div>
-                            <div class="user-meta-name">
-                                Fatima Muhammad
-                                <span class="verified-badge">
-                                    <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a.75.75 0 00-.708.523.75.75 0 01-.566.516.75.75 0 00-.523.708.75.75 0 01-.516.566.75.75 0 00-.708.523.75.75 0 01-.516.566.75.75 0 00-.523.708 1.5 1.5 0 00-1.06 1.06.75.75 0 00.708.523.75.75 0 01.516.566.75.75 0 00.523.708.75.75 0 01.516.566.75.75 0 00.708.523 1.5 1.5 0 001.06 1.06.75.75 0 00.523-.708.75.75 0 01.566-.516.75.75 0 00.708-.523.75.75 0 01.566-.516.75.75 0 00.523-.708 1.5 1.5 0 001.06-1.06.75.75 0 00-.708-.523.75.75 0 01-.516-.566.75.75 0 00-.523-.708.75.75 0 01-.516-.566.75.75 0 00-.708-.523 1.5 1.5 0 00-1.06-1.06zm7.093 4.303a.75.75 0 00-1.06-1.06l-3.5 3.5-1.5-1.5a.75.75 0 10-1.06 1.06l2 2a.75.75 0 001.06 0l4-4z" clip-rule="evenodd"></path></svg>
-                                </span>
-                            </div>
-                            <div class="user-meta-sub">Computer Science • ABU Zaria</div>
-                            <div class="post-time">2h ago</div>
-                        </div>
-                    </div>
-                    <button class="post-more-btn">•••</button>
-                </div>
-                <div class="post-body-text">
-                    Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀
-                </div>
-                
-                <!-- Attachment Piece -->
-                <div class="pdf-attachment-box">
-                    <div class="pdf-icon-square">PDF</div>
-                    <div class="pdf-details">
-                        <div class="pdf-title">Data Structures & Algorithms.pdf</div>
-                        <div class="pdf-size">4.2 MB</div>
-                    </div>
-                </div>
-
-                <!-- Intera
+                    <button class="composer-btn"><span style="font-size:14px; co
