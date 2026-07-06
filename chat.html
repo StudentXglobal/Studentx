@@ -2,629 +2,311 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Premium Communications Engine</title>
-    <!-- Premium Typography & Iconography -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentX | Premium Chat</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-base: #040814;
-            --surface-glass: rgba(255, 255, 255, 0.04);
-            --surface-glass-bright: rgba(255, 255, 255, 0.09);
-            --surface-glass-card: rgba(13, 20, 38, 0.6);
-            --border-glass: 1px solid rgba(255, 255, 255, 0.07);
-            --border-glass-bright: 1px solid rgba(255, 255, 255, 0.15);
-            
-            --brand-primary: #8B5CF6;
-            --brand-secondary: #3B82F6;
-            --brand-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-            --ai-gradient: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
-            
-            --text-primary: #FFFFFF;
-            --text-secondary: #94A3B8;
-            --text-muted: #64748B;
-            
+            --bg-deep: #060B18;
+            --bg-glass: rgba(21, 28, 51, 0.55);
+            --bg-glass-bright: rgba(30, 41, 79, 0.75);
+            --text-main: #FFFFFF;
+            --text-sub: #94A3B8;
+            --purple: #7C3AED;
+            --blue: #2563EB;
+            --grad-premium: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
+            --border-glass: 1px solid rgba(255, 255, 255, 0.08);
             --status-online: #10B981;
-            --status-missed: #EF4444;
-            --status-muted: #64748B;
-            
-            --radius-main: 24px;
-            --radius-inner: 16px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg-deep); color: var(--text-main); overflow-x: hidden; min-height: 100vh; }
 
-        body {
-            background-color: var(--bg-base);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+        /* Ambient Glows */
+        .ambient-glow { position: fixed; border-radius: 50%; filter: blur(130px); z-index: -1; pointer-events: none; opacity: 0.2; }
+        .glow-top { width: 300px; height: 300px; background: var(--purple); top: -20px; left: -50px; }
+        .glow-bottom { width: 350px; height: 350px; background: var(--blue); bottom: 10%; right: -50px; }
 
-        /* Ambient Premium Lighting Overlays */
-        .glow-blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(140px);
-            z-index: -1;
-            pointer-events: none;
-            opacity: 0.25;
-        }
-        .glow-1 { width: 400px; height: 400px; background: var(--brand-primary); top: -10%, left: -20%; }
-        .glow-2 { width: 500px; height: 500px; background: var(--brand-secondary); bottom: -10%; right: -20%; }
+        /* Main App Container */
+        .app-view { width: 100%; min-height: 100vh; display: flex; flex-direction: column; }
 
-        /* Scannable Framework Containers */
-        .app-shell {
-            width: 100%;
-            max-width: 480px; /* Perfect high-end simulator centering */
-            margin: 0 auto;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background: rgba(4, 8, 20, 0.5);
-            box-shadow: 0 0 80px rgba(0,0,0,0.8);
-        }
-
-        /* Base Header Configuration */
-        .main-header {
-            padding: 24px 20px 16px 20px;
-            background: rgba(4, 8, 20, 0.75);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            position: sticky;
-            top: 0;
-            z-index: 90;
-            border-bottom: var(--border-glass);
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .profile-trigger {
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-inner);
-            border: var(--border-glass-bright);
-            background: linear-gradient(45deg, #1e1b4b, #311042);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            text-decoration: none;
-        }
-        .profile-trigger i {
-            color: #d8b4fe;
-            font-size: 18px;
-        }
-
-        .screen-title {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 12px;
-        }
-
-        .icon-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: var(--radius-inner);
-            background: var(--surface-glass);
-            border: var(--border-glass);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .icon-btn:hover, .icon-btn:active {
-            background: var(--surface-glass-bright);
-            transform: scale(1.05);
-        }
-
-        /* Search Engine Layout Components */
-        .search-wrapper {
-            position: relative;
-            width: 100%;
-            margin-bottom: 8px;
-        }
-        .search-wrapper i {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-            font-size: 14px;
-        }
-        .search-input {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.03);
-            border: var(--border-glass);
-            padding: 14px 16px 14px 44px;
-            border-radius: var(--radius-inner);
-            color: var(--text-primary);
-            font-size: 14px;
-            font-weight: 500;
-            outline: none;
-            transition: all 0.3s;
-        }
-        .search-input:focus {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--brand-primary);
-            box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
-        }
-
-        /* Segmented Navigation Controls */
-        .tab-segment-container {
-            padding: 4px;
-            background: rgba(255, 255, 255, 0.02);
-            border: var(--border-glass);
-            border-radius: var(--radius-inner);
-            display: flex;
-            margin: 12px 20px 20px 20px;
-        }
-        .segment-btn {
-            flex: 1;
-            padding: 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            border-radius: calc(var(--radius-inner) - 4px);
-            transition: all 0.25s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .segment-btn.active {
-            background: var(--brand-gradient);
-            color: var(--text-primary);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-        }
-
-        /* Dynamic Listing Views Frame */
-        .directory-view-scroll {
-            flex: 1;
-            padding: 0 20px 100px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        /* Complex List Card System */
-        .convo-card {
-            background: var(--surface-glass-card);
-            border: var(--border-glass);
-            border-radius: var(--radius-main);
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            position: relative;
-        }
-        .convo-card:hover, .convo-card:active {
-            background: var(--surface-glass-bright);
-            transform: translateY(-2px);
-            border-color: rgba(255,255,255,0.15);
-        }
-
-        /* Dynamic Special Identity Markers */
-        .convo-card.ai-assistant-card {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.08) 0%, rgba(139, 92, 246, 0.08) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.2);
-        }
-        .convo-card.ai-assistant-card:hover {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
-        }
-
-        .avatar-container {
-            position: relative;
-            width: 52px;
-            height: 52px;
-            flex-shrink: 0;
-        }
-        .avatar-img {
-            width: 100%;
-            height: 100%;
-            border-radius: calc(var(--radius-inner) + 2px);
-            object-fit: cover;
-            border: var(--border-glass-bright);
-        }
-        .ai-avatar-glow {
-            background: var(--ai-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .ai-avatar-glow i {
-            font-size: 20px;
-            color: var(--text-primary);
-        }
-
-        /* Status & Icon Tags Overlay */
-        .online-dot {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            width: 13px;
-            height: 13px;
-            background-color: var(--status-online);
-            border: 3px solid var(--bg-base);
-            border-radius: 50%;
-        }
-
-        .card-content-block {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .card-top-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 4px;
-        }
-        .card-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .verified-badge {
-            color: #3B82F6;
-            font-size: 13px;
-        }
-        .meta-timestamp {
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .card-bottom-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .msg-preview-text {
-            font-size: 13px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding-right: 8px;
-        }
-        .text-typing-active {
-            color: var(--brand-primary);
-            font-weight: 600;
-        }
-        .voice-indicator-text {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            color: var(--brand-secondary);
-        }
-
-        /* Multi-Indicator Status Indicators */
-        .status-indicators-tray {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .pin-icon { color: var(--text-muted); font-size: 11px; }
-        .mute-icon { color: var(--text-muted); font-size: 12px; }
-        .counter-badge {
-            background: var(--brand-gradient);
-            color: var(--text-primary);
-            font-size: 10px;
-            font-weight: 800;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
-        }
-
-        /* Calls Item Elements Blueprint */
-        .call-type-indicator {
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 4px;
-        }
-        .call-incoming { color: var(--status-online); }
-        .call-missed { color: var(--status-missed); font-weight: 600; }
-
-        /* DEEP MASTER INTERACTIVE CHAT SCREEN PANEL Overlay Layout */
-        .active-conversation-panel {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(150%);
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            background: var(--bg-base);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border-left: var(--border-glass);
-            border-right: var(--border-glass);
-        }
-        .active-conversation-panel.panel-active-state {
-            transform: translateX(-50%);
-        }
-
-        /* Inner Conversational Headers map */
-        .convo-panel-header {
-            padding: 16px 20px;
-            background: rgba(4, 8, 20, 0.85);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-            border-bottom: var(--border-glass);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .header-left-convo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-        }
-        .convo-meta-info {
-            min-width: 0;
-        }
-        .convo-header-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: var(--text-primary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .convo-header-status {
-            font-size: 11px;
-            color: var(--status-online);
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        /* Interactive AI Toolkit Extension Bar Shelf */
-        .ai-features-tray {
-            background: linear-gradient(90deg, rgba(236, 72, 153, 0.12) 0%, rgba(139, 92, 246, 0.12) 100%);
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
-            padding: 10px 16px;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .ai-features-tray::-webkit-scrollbar { display: none; }
-        .ai-action-chip {
-            padding: 8px 14px;
-            background: rgba(4, 8, 20, 0.6);
-            border: 1px solid rgba(139, 92, 246, 0.3);
-            border-radius: 50px;
-            color: var(--text-primary);
-            font-size: 11px;
-            font-weight: 700;
-            white-space: nowrap;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: all 0.2s;
-        }
-        .ai-action-chip i {
-            background: var(--ai-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .ai-action-chip:active {
-            transform: scale(0.95);
-            background: rgba(139, 92, 246, 0.2);
-        }
-
-        /* Fixed Tracking Sticky Resource Panel Area */
-        .pinned-resource-bar {
-            background: rgba(255,255,255,0.02);
-            border-bottom: var(--border-glass);
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 12px;
-        }
-        .pinned-resource-content {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .pinned-resource-content i { color: var(--brand-primary); }
-
-        /* Streaming Conversational Track Message Matrix */
-        .message-stream-track {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-            background-image: radial-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 0);
-            background-size: 24px 24px;
-        }
-
-        .msg-row-wrapper {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
-        .msg-row-wrapper.received-state { align-items: flex-start; }
-        .msg-row-wrapper.sent-state { align-items: flex-end; }
-
-        .bubble-frame {
-            max-width: 80%;
-            padding: 14px 16px;
-            border-radius: var(--radius-inner);
-            font-size: 14px;
-            line-height: 1.5;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-        .received-state .bubble-frame {
-            background: rgba(255, 255, 255, 0.04);
-            border: var(--border-glass);
-            border-top-left-radius: 4px;
-            color: var(--text-primary);
-        }
-        .sent-state .bubble-frame {
-            background: var(--brand-gradient);
-            border-top-right-radius: 4px;
-            color: var(--text-primary);
-            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.25);
-        }
-
-        /* Sub-component Cards for Assets (PDF, Audio, Video, Reminders) */
-        .attachment-delivery-card {
-            background: rgba(0, 0, 0, 0.25);
-            border: var(--border-glass);
-            border-radius: var(--radius-inner);
-            padding: 12px;
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none;
-            color: inherit;
-            transition: all 0.2s;
-        }
-        .attachment-delivery-card:active {
-            background: rgba(255,255,255,0.05);
-        }
-        .attachment-icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            flex-shrink: 0;
-        }
-        .pdf-theme i { color: #EF4444; }
-        .book-theme i { color: #F59E0B; }
-        .note-theme i { color: #10B981; }
-        .video-theme i { color: #3B82F6; }
+        /* Header Style */
+        .header { background: rgba(6, 11, 24, 0.8); backdrop-filter: blur(25px); padding: 20px; position: sticky; top: 0; z-index: 100; border-bottom: var(--border-glass); }
+        .brand-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .logo { font-size: 22px; font-weight: 800; background: var(--grad-premium); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+        .logo span { font-weight: 400; color: var(--text-main); font-size: 14px; margin-left: 6px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 8px; }
         
-        .attachment-meta-block {
-            min-width: 0;
-        }
-        .attachment-filename {
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            color: var(--text-primary);
-        }
-        .attachment-filesize {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 2px;
+        .search-container { display: flex; align-items: center; background: rgba(255, 255, 255, 0.04); padding: 12px 16px; border-radius: 16px; border: var(--border-glass); gap: 12px; }
+        .search-container input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; }
+        .search-container input::placeholder { color: var(--text-sub); }
+        .search-container i { color: var(--text-sub); }
+
+        /* Channels/Pills Scroller */
+        .filter-row { display: flex; gap: 10px; padding: 15px 20px; overflow-x: auto; scrollbar-width: none; }
+        .filter-row::-webkit-scrollbar { display: none; }
+        .pill { padding: 8px 18px; background: var(--bg-glass); border-radius: 50px; border: var(--border-glass); white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--text-sub); cursor: pointer; transition: 0.3s; }
+        .pill.active { background: var(--grad-premium); color: white; border-color: transparent; }
+
+        /* Active/Online Row */
+        .section-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-sub); padding: 10px 20px; }
+        .active-users-tray { display: flex; gap: 14px; padding: 0 20px 15px 20px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid rgba(255,255,255,0.04); }
+        .active-users-tray::-webkit-scrollbar { display: none; }
+        .active-avatar-wrapper { position: relative; width: 52px; height: 52px; flex-shrink: 0; cursor: pointer; }
+        .active-avatar-wrapper img { width: 100%; height: 100%; border-radius: 16px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+        .status-dot { position: absolute; bottom: -2px; right: -2px; width: 12px; height: 12px; background: var(--status-online); border: 2.5px solid var(--bg-deep); border-radius: 50%; }
+
+        /* Chat Threads List */
+        .chat-list { display: flex; flex-direction: column; padding: 10px 20px 120px 20px; gap: 12px; }
+        .chat-thread-card { background: var(--bg-glass); backdrop-filter: blur(15px); border: var(--border-glass); padding: 16px; border-radius: 20px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: 0.3s; }
+        .chat-thread-card:hover { background: var(--bg-glass-bright); transform: translateY(-1px); }
+        .thread-avatar { width: 48px; height: 48px; border-radius: 14px; object-fit: cover; background: rgba(255,255,255,0.05); }
+        .thread-info { flex: 1; min-width: 0; }
+        .thread-meta-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .thread-name { font-size: 15px; font-weight: 700; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .thread-time { font-size: 11px; color: var(--text-sub); }
+        .thread-body-row { display: flex; justify-content: space-between; align-items: center; }
+        .thread-snippet { font-size: 13px; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 10px; }
+        .badge-unread { background: var(--purple); color: white; font-size: 10px; font-weight: 700; min-width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 0 4px; box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4); }
+
+        /* Active Conversation Screen Overlay (Dual View) */
+        .conversation-panel { position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: var(--bg-deep); z-index: 200; display: none; flex-direction: column; }
+        .convo-header { background: rgba(6, 11, 24, 0.8); backdrop-filter: blur(25px); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: var(--border-glass); }
+        .convo-header-left { display: flex; align-items: center; gap: 12px; }
+        .back-btn { background: transparent; border: none; color: white; font-size: 18px; cursor: pointer; padding: 4px; }
+        .convo-avatar { width: 40px; height: 40px; border-radius: 12px; object-fit: cover; }
+        .convo-title-box { display: flex; flex-direction: column; }
+        .convo-name { font-size: 15px; font-weight: 700; }
+        .convo-status { font-size: 11px; color: var(--status-online); display: flex; align-items: center; gap: 4px; }
+
+        /* Message Bubble Container Area */
+        .message-history-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .msg-row { display: flex; width: 100%; }
+        .msg-row.incoming { justify-content: flex-start; }
+        .msg-row.outgoing { justify-content: flex-start; flex-direction: row-reverse; }
+        
+        .msg-bubble { max-width: 75%; padding: 14px 16px; border-radius: 20px; font-size: 14px; line-height: 1.5; position: relative; }
+        .incoming .msg-bubble { background: var(--bg-glass); border: var(--border-glass); border-top-left-radius: 4px; color: white; }
+        .outgoing .msg-bubble { background: var(--grad-premium); border-top-right-radius: 4px; color: white; box-shadow: 0 8px 20px rgba(124, 58, 237, 0.2); }
+        .msg-timestamp { font-size: 10px; color: var(--text-sub); margin-top: 4px; display: block; text-align: right; }
+        .outgoing .msg-timestamp { color: rgba(255,255,255,0.7); }
+
+        /* Chat Control Input Tray */
+        .chat-input-tray { background: rgba(6, 11, 24, 0.9); backdrop-filter: blur(25px); border-top: var(--border-glass); padding: 16px 20px; display: flex; align-items: center; gap: 12px; }
+        .input-wrapper { flex: 1; background: rgba(255,255,255,0.04); border: var(--border-glass); border-radius: 16px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; }
+        .input-wrapper input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; }
+        .input-wrapper input::placeholder { color: var(--text-sub); }
+        .action-icon-btn { background: transparent; border: none; color: var(--text-sub); font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .action-icon-btn:hover { color: white; }
+        .send-btn { background: var(--grad-premium); color: white; width: 44px; height: 44px; border-radius: 14px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
+        .send-btn:hover { transform: scale(1.03); }
+
+        /* Bottom Fixed Navigation Bar */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(6, 11, 24, 0.85); backdrop-filter: blur(30px); border-top: var(--border-glass); display: flex; justify-content: space-around; padding: 12px 10px; z-index: 100; }
+        .nav-item { text-align: center; color: var(--text-sub); text-decoration: none; font-size: 10px; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 16%; }
+        .nav-item i { font-size: 20px; }
+        .nav-item.active { color: var(--purple); }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
+
+    <!-- MAIN CHAT LIST MODULE VIEW -->
+    <div class="app-view" id="listViewContainer">
+        <!-- Sticky Header Context -->
+        <header class="header">
+            <div class="brand-header">
+                <div class="logo">StudentX<span>Chat</span></div>
+                <button class="action-icon-btn" style="font-size:18px;"><i class="fa-solid fa-pen-to-square"></i></button>
+            </div>
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="chatSearchInput" placeholder="Search conversations, direct names, group spaces..." oninput="filterChatThreads(this.value)">
+            </div>
+        </header>
+
+        <!-- Categories Scroller Filter -->
+        <div class="filter-row">
+            <div class="pill active">All Messages</div>
+            <div class="pill">Direct</div>
+            <div class="pill">Study Groups</div>
+            <div class="pill">Teachers</div>
+            <div class="pill">Unread</div>
+        </div>
+
+        <!-- Active Context Row Tray -->
+        <div class="section-label">Active Now</div>
+        <div class="active-users-tray">
+            <div class="active-avatar-wrapper" onclick="openDirectChat('Ahmad Musa', 'Student')"><img src="https://i.pravatar.cc/100?u=a1" alt="Ahmad"><div class="status-dot"></div></div>
+            <div class="active-avatar-wrapper" onclick="openDirectChat('Fatima Muhammad', 'Friend')"><img src="https://i.pravatar.cc/100?u=a2" alt="Fatima"><div class="status-dot"></div></div>
+            <div class="active-avatar-wrapper" onclick="openDirectChat('Dr. Bello Idris', 'Teacher')"><img src="https://i.pravatar.cc/100?u=a3" alt="Bello"><div class="status-dot"></div></div>
+            <div class="active-avatar-wrapper" onclick="openDirectChat('Python Core Research Crew', 'Group')"><img src="https://i.pravatar.cc/100?u=a4" alt="Python"><div class="status-dot"></div></div>
+            <div class="active-avatar-wrapper" onclick="openDirectChat('Zainab Aliyu', 'Student')"><img src="https://i.pravatar.cc/100?u=a5" alt="Zainab"><div class="status-dot"></div></div>
+        </div>
+
+        <!-- Conversation Threads List Container Deck -->
+        <div class="section-label">Recent Conversations</div>
+        <div class="chat-list" id="threadsContainer">
+            <!-- Dynamic Injection JavaScript Target -->
+        </div>
+
+        <!-- System Core Navigation Map Footer Bar -->
+        <nav class="bottom-nav">
+            <a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i>Home</a>
+            <a href="explore.html" class="nav-item"><i class="fa-solid fa-compass"></i>Explore</a>
+            <a href="studyhub.html" class="nav-item"><i class="fa-solid fa-book"></i>StudyHub</a>
+            <a href="chat.html" class="nav-item active"><i class="fa-solid fa-message"></i>Chat</a>
+            <a href="notifications.html" class="nav-item"><i class="fa-solid fa-bell"></i>Alerts</a>
+            <a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i>Profile</a>
+        </nav>
+    </div>
+
+
+    <!-- ACTIVE INNER CONVERSATION VIEW WINDOW INTERACTIVE PANEL -->
+    <div class="conversation-panel" id="conversationPanel">
+        <!-- Interactive Header Map Panel -->
+        <header class="convo-header">
+            <div class="convo-header-left">
+                <button class="back-btn" onclick="closeActivePanel()"><i class="fa-solid fa-arrow-left"></i></button>
+                <img src="" id="panelTargetAvatar" class="convo-avatar" alt="User">
+                <div class="convo-title-box">
+                    <div class="convo-name" id="panelTargetName">User</div>
+                    <div class="convo-status"><i class="fa-solid fa-circle" style="font-size:7px;"></i> Active now</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 18px; font-size: 16px;">
+                <i class="fa-solid fa-phone action-icon-btn"></i>
+                <i class="fa-solid fa-video action-icon-btn"></i>
+            </div>
+        </header>
+
+        <!-- Conversational Message Scroll Track -->
+        <div class="message-history-area" id="messageScrollTrack">
+            <!-- Simulated Exchange Frame -->
+            <div class="msg-row incoming">
+                <div class="msg-bubble">
+                    Assalamu Alaikum, I just uploaded the verified Discrete Mathematics study notes to the StudyHub space.
+                    <span class="msg-timestamp">02:14 PM</span>
+                </div>
+            </div>
+            <div class="msg-row outgoing">
+                <div class="msg-bubble">
+                    Wa Alaikumus Salam! Thanks, let me check the files out right now.
+                    <span class="msg-timestamp">02:15 PM</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Control Message Typing Input Box Shelf -->
+        <footer class="chat-input-tray">
+            <button class="action-icon-btn"><i class="fa-solid fa-plus"></i></button>
+            <div class="input-wrapper">
+                <input type="text" id="activeMessageField" placeholder="Type premium message securely..." onkeypress="handleInputKeyPress(event)">
+                <button class="action-icon-btn"><i class="fa-solid fa-paperclip"></i></button>
+            </div>
+            <button class="send-btn" onclick="transmitSimulatedMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+        </footer>
+    </div>
+
+
+    <!-- DATABASE ENGINE AND MOCK LAYER INTERACTION ROUTING -->
+    <script>
+        const chatDatabase = [
+            { id: 1, name: "Ahmad Musa", snippet: "Check the architecture file I dropped inside your profile inbox.", time: "02:14 PM", unread: 2, avatarId: "20" },
+            { id: 2, name: "Python Core Research Crew", snippet: "Group notification: Workspace session starts by 09:00 PM tonight.", time: "01:05 PM", unread: 5, avatarId: "25" },
+            { id: 3, name: "Fatima Muhammad", snippet: "I saved the Macroeconomics notes layout you designed yesterday.", time: "Yesterday", unread: 0, avatarId: "30" },
+            { id: 4, name: "Dr. Bello Idris", snippet: "The assignment module verification has been successfully approved.", time: "Yesterday", unread: 0, avatarId: "35" },
+            { id: 5, name: "Zainab Aliyu", snippet: "Are you attending the live Artificial Intelligence scholarship meet?", time: "3 days ago", unread: 0, avatarId: "40" }
+        ];
+
+        const threadsContainer = document.getElementById('threadsContainer');
+        const conversationPanel = document.getElementById('conversationPanel');
+        const messageScrollTrack = document.getElementById('messageScrollTrack');
+        const activeMessageField = document.getElementById('activeMessageField');
+
+        // Render Threads Core Engine function
+        function renderThreads(data) {
+            threadsContainer.innerHTML = "";
+            data.forEach(thread => {
+                threadsContainer.innerHTML += `
+                    <div class="chat-thread-card" onclick="openDirectChat('${thread.name}', '${thread.avatarId}')">
+                        <img src="https://i.pravatar.cc/100?u=${thread.avatarId}" class="thread-avatar" alt="Avatar">
+                        <div class="thread-info">
+                            <div class="thread-meta-row">
+                                <div class="thread-name">${thread.name}</div>
+                                <div class="thread-time">${thread.time}</div>
+                            </div>
+                            <div class="thread-body-row">
+                                <div class="thread-snippet">${thread.snippet}</div>
+                                ${thread.unread > 0 ? `<div class="badge-unread">${thread.unread}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
         }
 
-        /* Image Embed Component */
-        .image-payload-wrapper {
-            margin-top: 6px;
-            border-radius: var(--radius-inner);
-            overflow: hidden;
-            border: var(--border-glass);
-            max-width: 100%;
-        }
-        .image-payload-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
+        // Live input textual string query database parsing filter
+        function filterChatThreads(query) {
+            const cleanQuery = query.toLowerCase().trim();
+            const filtered = chatDatabase.filter(item => item.name.toLowerCase().includes(cleanQuery) || item.snippet.toLowerCase().includes(cleanQuery));
+            renderThreads(filtered);
         }
 
-        /* Audio Waveform Layout Mapping */
-        .audio-playback-node {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 6px;
-            width: 220px;
+        // Sub-routing open full frame panel view dynamic mapping logic
+        function openDirectChat(targetName, avatarSeedId) {
+            document.getElementById('panelTargetName').innerText = targetName;
+            document.getElementById('panelTargetAvatar').src = `https://i.pravatar.cc/100?u=${avatarSeedId}`;
+            conversationPanel.style.display = "flex";
         }
-        .wave-skeleton-animation {
-            flex: 1;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
-        .wave-bar {
-            flex: 1;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-        }
-        .sent-state .wave-bar { background: rgba(255,255,255,0.4); }
-        .wave-bar:nth-child(odd) { height: 60%; }
-        .wave-bar:nth-child(even) { height: 90%; }
-        .wave-bar:nth-child(3pt) { height: 40%; }
 
-        /* Study Reminders Component */
-        .reminder-payload-widget {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            border-radius: var(--radius-inner);
-            padding: 12px;
-            margin-top: 6px;
-    
+        function closeActivePanel() {
+            conversationPanel.style.display = "none";
+        }
+
+        // Processing typing interaction submission injection script
+        function transmitSimulatedMessage() {
+            const msgText = activeMessageField.value.trim();
+            if (!msgText) return;
+
+            // Appending outgoing template block node structure
+            messageScrollTrack.innerHTML += `
+                <div class="msg-row outgoing">
+                    <div class="msg-bubble">
+                        ${msgText}
+                        <span class="msg-timestamp">Just Now</span>
+                    </div>
+                </div>
+            `;
+            
+            activeMessageField.value = "";
+            messageScrollTrack.scrollTop = messageScrollTrack.scrollHeight;
+
+            // Delayed simulation triggers interactive automated server answer response
+            setTimeout(() => {
+                messageScrollTrack.innerHTML += `
+                    <div class="msg-row incoming">
+                        <div class="msg-bubble">
+                            System acknowledgement payload verification received successfully.
+                            <span class="msg-timestamp">Just Now</span>
+                        </div>
+                    </div>
+                `;
+                messageScrollTrack.scrollTop = messageScrollTrack.scrollHeight;
+            }, 1200);
+        }
+
+        function handleInputKeyPress(e) {
+            if (e.key === 'Enter') {
+                transmitSimulatedMessage();
+            }
+        }
+
+        // Lifecycle initial compilation call
+        renderThreads(chatDatabase);
+    </script>
+</body>
+</html>
