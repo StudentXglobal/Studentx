@@ -2,293 +2,207 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Welcome</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,700;0,800;1,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX — Welcome</title>
+    <!-- Premium Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-dark: #07091B;
-            --bg-blue: #0D1442;
-            --grad-blue: #1877F2;
-            --grad-purple: #8A2BE2;
-            --grad-pink: #FF00FF;
-            --text-light: #E2E8F0;
-            --white: #FFFFFF;
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background-color: #000;
-            font-family: 'Plus Jakarta Sans', sans-serif;
+            /* Daidai da bakin bango mai duhun gaske irin na hoton */
+            background: radial-gradient(circle at center, #070c1e 0%, #03050c 100%);
+            color: #ffffff;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            overflow: hidden;
         }
 
-        /* Mobile Container (390x844 responsive) */
-        .mobile-frame {
+        .phone-shell {
             width: 100%;
-            max-width: 390px;
+            max-width: 480px;
             height: 100vh;
-            max-height: 844px;
-            background: linear-gradient(160deg, var(--bg-dark) 0%, var(--bg-blue) 50%, #1A236C 100%);
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 40px rgba(24, 119, 242, 0.1);
-        }
-
-        @media (min-height: 850px) {
-            .mobile-frame {
-                height: 844px;
-                border-radius: 40px;
-                border: 8px solid #1a1a2e;
-            }
-        }
-
-        /* Abstract Background Glows & Shapes */
-        .bg-glow-1 {
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, rgba(24, 119, 242, 0.4) 0%, rgba(0,0,0,0) 70%);
-            z-index: 0;
-        }
-
-        .bg-glow-2 {
-            position: absolute;
-            top: 20%;
-            right: -100px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, rgba(0,0,0,0) 70%);
-            z-index: 0;
-        }
-
-        .abstract-pattern {
-            position: absolute;
-            top: 15%;
-            right: -20px;
-            width: 150px;
-            height: 150px;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-            background-size: 15px 15px;
-            border-radius: 50%;
-            z-index: 0;
-            mask-image: radial-gradient(circle, black 40%, transparent 70%);
-            -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%);
-        }
-
-        /* Content Top Section */
-        .top-content {
-            position: relative;
-            z-index: 2;
-            padding: 50px 24px 0;
-            text-align: center;
-        }
-
-        /* Logo */
-        .logo-wrapper {
-            display: flex;
-            align-items: baseline;
             justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
         }
 
-        .logo-text {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 38px;
-            font-weight: 700;
-            color: var(--white);
-            letter-spacing: -1.5px;
+        /* Logo Branding Area */
+        .logo-wrapper {
+            text-align: center;
+            margin-bottom: 40px;
         }
 
-        .logo-x {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 48px;
+        .logo-main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
             font-weight: 800;
-            font-style: italic;
-            background: linear-gradient(135deg, var(--grad-blue), var(--grad-purple), var(--grad-pink));
+            letter-spacing: -2px;
+        }
+
+        .text-student {
+            color: #FFFFFF;
+        }
+
+        /* Stylized Gradient X matching the premium look */
+        .text-x {
+            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-left: -4px;
+            font-style: italic;
+            margin-left: 2px;
+            padding-right: 4px;
         }
 
-        .tagline {
-            margin-top: 8px;
-            font-size: 10px;
-            font-weight: 600;
-            color: var(--text-light);
-            letter-spacing: 3px;
-        }
-
-        .tagline span {
-            color: var(--grad-purple);
-            margin: 0 2px;
-        }
-
-        /* Typography */
-        .hero-title {
-            margin-top: 35px;
-            font-size: 32px;
+        /* Slogan Bar matching EXACT colors from screenshot */
+        .slogan-bar {
+            font-size: 11px;
             font-weight: 700;
-            color: var(--white);
-            line-height: 1.2;
-            letter-spacing: -0.5px;
-        }
-
-        .subtitle {
-            margin-top: 12px;
-            font-size: 14px;
-            font-weight: 400;
-            color: var(--text-light);
-            line-height: 1.5;
-            padding: 0 10px;
-        }
-
-        /* Students Image Section */
-        .students-img-container {
-            position: relative;
-            flex-grow: 1;
-            width: 100%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            z-index: 1;
+            letter-spacing: 3px;
             margin-top: 10px;
+            text-transform: uppercase;
+            opacity: 0.9;
         }
 
-        .students-img {
-            width: 110%;
-            height: 280px;
-            background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
-            background-size: cover;
-            background-position: center bottom;
-            background-repeat: no-repeat;
-            /* Gradient fade out at the bottom to blend with the white sheet */
-            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        .slogan-blue {
+            color: #1E40AF; /* Deep Premium Blue */
+        }
+        .slogan-light-blue {
+            color: #3B82F6; /* Tech Blue */
+        }
+        .slogan-pink {
+            color: #EC4899; /* Magenta Pink */
         }
 
-        /* White Bottom Sheet */
-        .bottom-sheet {
-            background-color: var(--white);
-            border-radius: 35px 35px 0 0;
-            padding: 35px 24px 40px;
-            position: relative;
-            z-index: 3;
-            box-shadow: 0 -15px 30px rgba(0, 0, 0, 0.15);
+        /* Loading Component Area */
+        .loading-box {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            align-items: center;
+            margin-top: 40px;
+            gap: 15px;
         }
 
-        /* Buttons Style */
-        .btn {
-            width: 100%;
-            padding: 18px;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            transition: transform 0.2s ease;
+        /* Dotted Spinner Animation */
+        .spinner-dots {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            animation: rotateSpinner 1.8s linear infinite;
         }
 
-        .btn:active {
-            transform: scale(0.98);
+        .dot {
+            width: 5px;
+            height: 5px;
+            background-color: #3B82F6;
+            border-radius: 50%;
+            position: absolute;
         }
 
-        /* Primary Button */
-        .btn-primary {
-            background: linear-gradient(90deg, #2E38A3, #4552E6);
-            color: var(--white);
-            box-shadow: 0 10px 25px rgba(69, 82, 230, 0.35);
+        /* Positioning the dots in a clean circle */
+        .dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; background-color: #3B82F6;}
+        .dot:nth-child(2) { top: 14%; right: 14%; opacity: 0.85; background-color: #6366F1;}
+        .dot:nth-child(3) { top: 50%; right: 0; transform: translateY(-50%); opacity: 0.7; background-color: #8B5CF6;}
+        .dot:nth-child(4) { bottom: 14%; right: 14%; opacity: 0.55; background-color: #A855F7;}
+        .dot:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.4; background-color: #D946EF;}
+        .dot:nth-child(6) { bottom: 14%; left: 14%; opacity: 0.3; background-color: #EC4899;}
+        .dot:nth-child(7) { top: 50%; left: 0; transform: translateY(-50%); opacity: 0.2; }
+        .dot:nth-child(8) { top: 14%; left: 14%; opacity: 0.1; }
+
+        @keyframes rotateSpinner {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        /* Secondary Button */
-        .btn-secondary {
-            background-color: #F4F6F9;
-            color: #1A1A2E;
-            border: 1.5px solid #E2E8F0;
-        }
-
-        /* Third Button (Guest Mode) */
-        .btn-guest {
-            background-color: transparent;
-            color: #64748B;
+        .loading-text {
+            font-size: 14px;
+            color: #94A3B8;
             font-weight: 500;
-            padding: 10px;
+            letter-spacing: 0.5px;
         }
 
+        /* Bottom Linear Gradient Progress Bar */
+        .bottom-progress-container {
+            position: absolute;
+            bottom: 60px;
+            width: 200px;
+            height: 6px;
+            background-color: #13192B;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #3B82F6 0%, #EC4899 100%);
+            border-radius: 10px;
+            animation: fillProgress 4s linear forwards;
+        }
+
+        @keyframes fillProgress {
+            0% { width: 0%; }
+            100% { width: 45%; } /* Yana tsayawa a inda yake a hoton kafin ya wuce */
+        }
     </style>
 </head>
 <body>
 
-    <div class="mobile-frame">
+    <div class="phone-shell">
         
-        <!-- Background Effects -->
-        <div class="bg-glow-1"></div>
-        <div class="bg-glow-2"></div>
-        <div class="abstract-pattern"></div>
-
-        <!-- Top Content -->
-        <div class="top-content">
-            <div class="logo-wrapper">
-                <span class="logo-text">Student</span>
-                <span class="logo-x">X</span>
+        <!-- Logo Setup from Screenshot -->
+        <div class="logo-wrapper">
+            <div class="logo-main">
+                <span class="text-student">Student</span><span class="text-x">X</span>
             </div>
-            
-            <div class="tagline">
-                CONNECT <span>•</span> LEARN <span>•</span> SHARE <span>•</span> GROW
-            </div>
-
-            <div class="hero-title">
-                Welcome to<br>StudentX
-            </div>
-
-            <div class="subtitle">
-                Connect with students, learn together and build your future.
+            <div class="slogan-bar">
+                <span class="slogan-light-blue">CONNECT.</span> 
+                <span class="slogan-light-blue">LEARN.</span> 
+                <span class="slogan-pink">SHARE.</span> 
+                <span class="slogan-blue">GROW.</span>
             </div>
         </div>
 
-        <!-- Students Image -->
-        <div class="students-img-container">
-            <div class="students-img"></div>
+        <!-- Animated Loading Dots and Text -->
+        <div class="loading-box">
+            <div class="spinner-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+            <p class="loading-text">Loading...</p>
         </div>
 
-        <!-- Action Bottom Sheet -->
-        <div class="bottom-sheet">
-            <!-- Navigation strictly as requested using JavaScript -->
-            <button class="btn btn-primary" onclick="window.location.href='login.html'">
-                Log In
-            </button>
-            
-            <button class="btn btn-secondary" onclick="window.location.href='signup.html'">
-                Sign Up
-            </button>
-            
-            <button class="btn btn-guest" onclick="window.location.href='home.html'">
-                Continue in Guest Mode
-            </button>
+        <!-- Bottom Linear Progress Track -->
+        <div class="bottom-progress-container">
+            <div class="progress-bar-fill"></div>
         </div>
 
     </div>
 
+    <script>
+        // Bayan tsawon dakika 4, zai canza shafi zuwa login.html kai tsaye
+        setTimeout(function() {
+            window.location.href = "login/signup.html";
+        }, 4000);
+    </script>
 </body>
 </html>
