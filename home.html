@@ -1,95 +1,594 @@
-<style>
-    .bottom-nav-bar {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: #ffffff; /* Fari tas kamar a video */
-        border-top: 1px solid #e2e8f0;
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        padding: 12px 0 16px 0; 
-        z-index: 1000;
-    }
+<!DOCTYPE html>
+<html lang="ha">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX — Premium Home Feed</title>
+    <!-- Premium Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-decoration: none;
-        color: #64748b; /* Kalar rubutun da baya active (Grey) */
-        font-size: 11px;
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        gap: 4px;
-        position: relative;
-        -webkit-tap-highlight-color: transparent;
-    }
+        body {
+            background-color: #f1f5f9; /* Fari mai haske */
+            color: #0f172a;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
 
-    .nav-item.active {
-        color: #5b21b6; /* Kalar Purple idan an danna (Active) */
-    }
+        /* Mobile App Container Framework */
+        .app-framework {
+            width: 100%;
+            max-width: 480px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
 
-    .nav-item svg {
-        width: 24px;
-        height: 24px;
-    }
+        /* --- STICKY TOP HEADER --- */
+        .app-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            max-width: 480px;
+            z-index: 9999;
+            border-bottom: 1px solid #f1f5f9;
+        }
 
-    .nav-badge {
-        position: absolute;
-        top: -5px;
-        right: 8px;
-        background-color: #5b21b6;
-        color: white;
-        font-size: 10px;
-        font-weight: bold;
-        border-radius: 50%;
-        width: 16px;
-        height: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 2px solid #ffffff;
-    }
-</style>
+        .menu-hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
 
-<nav class="bottom-nav-bar">
-    <a href="home.html" class="nav-item active">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-        </svg>
-        <span>Home</span>
-    </a>
+        .menu-hamburger span {
+            display: block;
+            width: 22px;
+            height: 2.5px;
+            background-color: #334155;
+            border-radius: 2px;
+        }
 
-    <a href="explore.html" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-        </svg>
-        <span>Explore</span>
-    </a>
+        .header-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
 
-    <a href="chat.html" class="nav-item">
-        <div class="nav-badge">3</div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-        <span>Chat</span>
-    </a>
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            color: #475569;
+        }
 
-    <a href="studyhub.html" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-        </svg>
-        <span>StudyHub</span>
-    </a>
+        .header-icon-link {
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: color 0.2s;
+            position: relative;
+        }
 
-    <a href="profile.html" class="nav-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-        </svg>
-        <span>Profile</span>
-    </a>
-</nav>
+        .header-badge {
+            position: absolute;
+            top: -2px;
+            right: 0px;
+            background-color: #ef4444;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            border: 1.5px solid #ffffff;
+        }
+
+        /* --- MAIN SCROLLABLE CONTENT --- */
+        .scroll-content {
+            padding-top: 70px;  
+            padding-bottom: 90px; 
+            width: 100%;
+            background-color: #f8fafc;
+        }
+
+        /* --- STORIES LINK ROW --- */
+        .stories-wrapper {
+            display: flex;
+            gap: 14px;
+            padding: 16px 20px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .stories-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .story-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 65px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .story-ring {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            padding: 2px;
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .story-node.mine .story-ring {
+            background: none;
+            border: 2px dashed #cbd5e1;
+            padding: 0;
+        }
+
+        .story-ring img, .story-ring .anonymous-avatar-box {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+        }
+
+        .anonymous-avatar-box {
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        .story-label {
+            font-size: 11px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* --- COMPOSER CARD --- */
+        .composer-box {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            margin: 14px 16px;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .composer-profile-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .composer-pfp-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e2e8f0;
+            color: #64748b;
+        }
+
+        .composer-fake-input {
+            color: #94a3b8;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .composer-tools {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+        }
+
+        .tool-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        /* --- TIMELINE POST CARD DESIGN --- */
+        .post-card {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 18px 16px;
+            margin-bottom: 6px;
+        }
+
+        .post-meta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .post-author-details {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-pfp, .author-pfp-anonymous {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+        }
+
+        .author-pfp-anonymous {
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        .author-names-group .author-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .v-badge {
+            color: #3b82f6;
+            display: inline-flex;
+        }
+
+        .author-subtitle {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .post-time-stamp {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .post-text-body {
+            font-size: 15px;
+            color: #334155;
+            line-height: 1.55;
+            margin-bottom: 12px;
+        }
+
+        .post-inline-image {
+            width: 100%;
+            max-height: 260px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .document-attachment {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .doc-icon-frame {
+            width: 40px;
+            height: 40px;
+            background-color: #fee2e2;
+            color: #ef4444;
+            font-size: 11px;
+            font-weight: 800;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .doc-meta .doc-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .doc-meta .doc-size {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .poll-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .poll-node-option {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #334155;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .post-action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .interaction-node {
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748b;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* --- FIXED BOTTOM NAVIGATION BAR --- */
+        .bottom-nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 14px 0; 
+            z-index: 10000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 600;
+            gap: 4px;
+            position: relative;
+            width: 60px;
+        }
+
+        .nav-item.active {
+            color: #5b21b6;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-badge {
+            position: absolute;
+            top: -4px;
+            right: 12px;
+            background-color: #5b21b6;
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-framework">
+        
+        <!-- App Header (With Search and Notification links) -->
+        <header class="app-header">
+            <div class="menu-hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <div class="header-logo">StudentX</div>
+            <div class="header-actions">
+                <!-- Search Icon -->
+                <a href="#" class="header-icon-link">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </a>
+                <!-- Notification Bell Icon (REDIRECT TO NOTIFICATIONS.HTML) -->
+                <a href="notifications.html" class="header-icon-link">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="header-badge"></span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Scrollable Timeline Content -->
+        <div class="scroll-content">
+            
+            <!-- Stories Link Row -->
+            <div class="stories-wrapper">
+                <a href="story.html" class="story-node mine">
+                    <div class="story-ring">
+                        <!-- Anonymous/Joker Face SVG Profile -->
+                        <div class="anonymous-avatar-box">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5zM4 22a8 8 0 0 1 16 0H4z"/><circle cx="10" cy="8" r="1" fill="currentColor"/><circle cx="14" cy="8" r="1" fill="currentColor"/><path d="M10 14s1 1.5 2 1.5 2-1.5 2-1.5" stroke-linecap="round"/></svg>
+                        </div>
+                    </div>
+                    <span class="story-label">Your Story</span>
+                </a>
+                <a href="story.html" class="story-node">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120" alt="Fatima">
+                    </div>
+                    <span class="story-label">Fatima</span>
+                </a>
+                <a href="story.html" class="story-node">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120" alt="John">
+                    </div>
+                    <span class="story-label">John</span>
+                </a>
+                <a href="story.html" class="story-node">
+                    <div class="story-ring">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120" alt="Maryam">
+                    </div>
+                    <span class="story-label">Maryam</span>
+                </a>
+            </div>
+
+            <!-- Composer Box -->
+            <div class="composer-box">
+                <div class="composer-profile-row">
+                    <div class="composer-pfp-box">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5zM4 22a8 8 0 0 1 16 0H4z"/><circle cx="10" cy="8" r="1" fill="currentColor"/><circle cx="14" cy="8" r="1" fill="currentColor"/><path d="M10 14s1 1.5 2 1.5 2-1.5 2-1.5" stroke-linecap="round"/></svg>
+                    </div>
+                    <span class="composer-fake-input">What's on your mind?</span>
+                </div>
+                <div class="composer-tools">
+                    <span class="tool-btn"><span style="color:#10b981;">🖼️</span> Photo</span>
+                    <span class="tool-btn"><span style="color:#ec4899;">🎥</span> Video</span>
+                    <span class="tool-btn"><span style="color:#f59e0b;">📊</span> Poll</span>
+                </div>
+            </div>
+
+            <!-- ================= TIMELINE FEED ================= -->
+
+            <!-- Post 1 -->
+            <div class="post-card">
+                <div class="post-meta-header">
+                    <div class="post-author-details">
+                        <img class="author-pfp" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120" alt="Fatima">
+                        <div class="author-names-group">
+                            <div class="author-name">Fatima Muhammad <span class="v-badge">✓</span></div>
+                            <div class="author-subtitle">Computer Science • ABU Zaria</div>
+                        </div>
+                    </div>
+                    <span class="post-time-stamp">2h ago</span>
+                </div>
+                <div class="post-text-body">
+                    An tura cikakken bayani akan 'Data Structures and Algorithms' na wannan semester din. Zaku iya dubawa anan. 🚀
+                </div>
+                <div class="document-attachment">
+                    <div class="doc-icon-frame">PDF</div>
+                    <div class="doc-meta">
+                        <div class="doc-title">Data_Structures_Summary.pdf</div>
+                        <div class="doc-size">4.2 MB</div>
+                    </div>
+                </div>
+                <div class="post-action-bar">
+                    <span class="interaction-node">❤️ 245</span>
+                    <!-- REDIRECT TO COMMENTS.HTML -->
+                    <a href="comments.html" class="interaction-node">💬 32</a>
+                    <span class="interaction-node">🔄 18</span>
+                </div>
+            </div>
+
+            <!-- Post 2 -->
+            <div class="post-card">
+                <div class="post-meta-header">
+                    <div class="post-author-details">
+                        <img class="author-pfp" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120" alt="David">
+                        <div class="author-names-group">
+                            <div class="author-name">David Okafor</div>
+                            <div class="author-subtitle">Mechanical Engineering • UNN</div>
+                        </div>
+                    </div>
+                    <span class="post-time-stamp">4h ago</span>
+                </div>
+                <div class="post-text-body">
+                    Who really understands Thermodynamics part (b) of yesterday's assignment? I seriously need help before submission time tomorrow morning! 😭
+                </div>
+                <div class="post-action-bar">
+                    <span class="interaction-node">❤️ 89</span>
+                    <!-- REDIRECT TO COMMENTS.HTML -->
+                    <a href="comments.html" class="interaction-node">💬 45</a>
+                    <span class="interaction-node">🔄 4</span>
+                </div>
+            </div>
+
+            <!-- Post 3 (Poll Example) -->
+            <div class="post-card">
+                <div class="post-meta-header">
+                    <div class="post-author-details">
+                        <img class="author-pfp" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120" alt="Musa">
+                        <div class="author-names-group">
+                            <div class="author-name">Musa Ibrahim</div>
+                            <div class="author-subtitle">Economics • Unilag</div>
+                        </div>
+                    </div>
+                    <span class="post-time-stamp">8h ago</span>
+                </div>
+                <div class="post-text-body">
+                    Muna shirin fara group discussion na Microeconomics na gaba. Wane lokaci ya fi muku daidai?
+                </div>
+                <div class="poll-stack">
+                    <div class="poll-node-option" onclick="alert('Voted for Afternoon!')">Da rana (2:00 PM)</div>
+                    <div class="poll-node-option" onclick="alert('Voted for Evening!')">Da yamma (5:00 PM)</div>
+                    <div class="poll-node-option" onclick="alert('Voted for Night!')">Daddare (8:00 PM)</div>
+                </div>
+                <div class="post-action-bar">
+                    <span class="interaction-node">❤️ 120</span>
+                    <!-- REDIRECT TO COMMENTS.HTML -->
+                    <a href="comments.html" class="interaction-node">💬 78</a>
+               
