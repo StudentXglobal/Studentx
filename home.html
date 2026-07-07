@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Premium Home Feed</title>
-    <!-- Premium Font -->
+    <title>StudentX — Home Feed</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
@@ -17,420 +16,504 @@
         }
 
         body {
-            background-color: #f1f5f9; /* Fari mai haske */
+            background-color: #f8fafc; /* Hasken bango mai sanyi */
             color: #0f172a;
             display: flex;
             justify-content: center;
             min-height: 100vh;
         }
 
-        /* Mobile App Container Framework */
-        .app-framework {
+        /* Mobile Container to look like GitHub Page mockup */
+        .app-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 430px;
             background-color: #ffffff;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            min-height: 100vh;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.03);
         }
 
-        /* --- STICKY TOP HEADER --- */
+        /* --- STICKY HEADER --- */
         .app-header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             position: fixed;
             top: 0;
             width: 100%;
-            max-width: 480px;
-            z-index: 9999;
+            max-width: 430px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            z-index: 1000;
             border-bottom: 1px solid #f1f5f9;
         }
 
-        .menu-hamburger {
+        .header-left .hamburger {
             display: flex;
             flex-direction: column;
             gap: 5px;
             cursor: pointer;
         }
 
-        .menu-hamburger span {
+        .hamburger span {
             display: block;
             width: 22px;
             height: 2.5px;
-            background-color: #334155;
+            background-color: #0f172a;
             border-radius: 2px;
         }
 
-        .header-logo {
+        .header-center h1 {
             font-size: 20px;
-            font-weight: 800;
+            font-weight: 700;
             color: #0f172a;
             letter-spacing: -0.5px;
         }
 
-        .header-actions {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 18px;
-            color: #475569;
+            gap: 16px;
         }
 
-        .header-icon-link {
-            color: #475569;
+        .header-btn {
+            background: none;
+            border: none;
+            color: #0f172a;
+            cursor: pointer;
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            transition: color 0.2s;
-            position: relative;
         }
 
-        .header-badge {
+        .notif-badge {
             position: absolute;
-            top: -2px;
-            right: 0px;
-            background-color: #ef4444;
-            width: 8px;
-            height: 8px;
+            top: -6px;
+            right: -6px;
+            background-color: #6366f1; /* Purple baje na sanarwa */
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            border: 1.5px solid #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
         }
 
-        /* --- MAIN SCROLLABLE CONTENT --- */
-        .scroll-content {
-            padding-top: 70px;  
-            padding-bottom: 90px; 
-            width: 100%;
+        /* --- MAIN SCROLL CONTENT --- */
+        .main-content {
+            padding-top: 65px;
+            padding-bottom: 90px;
             background-color: #f8fafc;
+            overflow-y: auto;
         }
 
-        /* --- STORIES LINK ROW --- */
-        .stories-wrapper {
+        /* --- STORIES SECTION --- */
+        .stories-container {
             display: flex;
             gap: 14px;
             padding: 16px 20px;
+            background-color: #ffffff;
             overflow-x: auto;
             scrollbar-width: none;
-            background-color: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        .stories-wrapper::-webkit-scrollbar {
+        .stories-container::-webkit-scrollbar {
             display: none;
         }
 
-        .story-node {
+        .story-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 65px;
-            cursor: pointer;
+            min-width: 68px;
             text-decoration: none;
+            cursor: pointer;
         }
 
-        .story-ring {
-            width: 60px;
-            height: 60px;
+        .avatar-ring {
+            width: 66px;
+            height: 66px;
             border-radius: 50%;
-            padding: 2px;
-            background: linear-gradient(135deg, #6366f1, #a855f7);
-            margin-bottom: 6px;
+            padding: 2.5px;
+            background: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6);
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            position: relative;
+            margin-bottom: 6px;
         }
 
-        .story-node.mine .story-ring {
-            background: none;
-            border: 2px dashed #cbd5e1;
-            padding: 0;
+        .story-item.user-node .avatar-ring {
+            background: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6);
         }
 
-        .story-ring img, .story-ring .anonymous-avatar-box {
+        .avatar-ring img {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #ffffff;
+            border: 2.5px solid #ffffff;
         }
 
-        .anonymous-avatar-box {
-            background: #f1f5f9;
+        .plus-icon {
+            position: absolute;
+            bottom: 1px;
+            right: 1px;
+            background-color: #3b82f6;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #64748b;
+            font-size: 12px;
+            font-weight: 800;
+            border: 2px solid #ffffff;
         }
 
-        .story-label {
+        .story-name {
             font-size: 11px;
             color: #475569;
-            font-weight: 600;
+            font-weight: 500;
+            text-align: center;
         }
 
-        /* --- COMPOSER CARD --- */
-        .composer-box {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            margin: 14px 16px;
+        /* --- COMPOSER BOX --- */
+        .composer-card {
+            background-color: #ffffff;
+            margin: 12px 16px;
             border-radius: 16px;
-            padding: 16px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+            border: 1px solid #e2e8f0;
+            padding: 16px 16px 8px 16px;
         }
 
-        .composer-profile-row {
+        .composer-top {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 14px;
         }
 
-        .composer-pfp-box {
-            width: 38px;
-            height: 38px;
+        .composer-top img {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            background: #f1f5f9;
+            object-fit: cover;
+        }
+
+        .composer-input-placeholder {
+            color: #94a3b8;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .composer-actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-top: 1px solid #f1f5f9;
+            padding-top: 10px;
+        }
+
+        .composer-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid #e2e8f0;
-            color: #64748b;
-        }
-
-        .composer-fake-input {
-            color: #94a3b8;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .composer-tools {
-            display: flex;
-            justify-content: space-between;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 12px;
-        }
-
-        .tool-btn {
-            display: flex;
-            align-items: center;
             gap: 6px;
             font-size: 13px;
             color: #475569;
             font-weight: 600;
+            cursor: pointer;
+            padding: 6px 0;
         }
 
-        /* --- TIMELINE POST CARD DESIGN --- */
+        .composer-btn:not(:last-child) {
+            border-right: 1px solid #f1f5f9;
+        }
+
+        /* --- TIMELINE POSTS --- */
         .post-card {
-            background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 18px 16px;
-            margin-bottom: 6px;
+            background-color: #ffffff;
+            margin: 0 16px 12px 16px;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            padding: 16px;
         }
 
-        .post-meta-header {
+        .post-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 12px;
         }
 
-        .post-author-details {
+        .post-author {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .author-pfp, .author-pfp-anonymous {
+        .post-author img {
             width: 44px;
             height: 44px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1px solid #e2e8f0;
         }
 
-        .author-pfp-anonymous {
-            background: #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #64748b;
-        }
-
-        .author-names-group .author-name {
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
+        .author-info .name-row {
             display: flex;
             align-items: center;
             gap: 4px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #0f172a;
         }
 
-        .v-badge {
+        .verified-badge {
             color: #3b82f6;
             display: inline-flex;
         }
 
-        .author-subtitle {
+        .author-info .subtitle {
             font-size: 12px;
             color: #64748b;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
-        .post-time-stamp {
-            font-size: 12px;
+        .author-info .time-text {
+            font-size: 11px;
             color: #94a3b8;
+            margin-top: 1px;
         }
 
-        .post-text-body {
-            font-size: 15px;
+        .more-options {
+            color: #64748b;
+            cursor: pointer;
+        }
+
+        .post-body {
+            font-size: 14.5px;
             color: #334155;
-            line-height: 1.55;
-            margin-bottom: 12px;
+            line-height: 1.5;
+            margin-bottom: 14px;
         }
 
-        .post-inline-image {
-            width: 100%;
-            max-height: 260px;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .document-attachment {
-            background: #f8fafc;
+        /* Attachment File Style */
+        .file-attachment {
+            background-color: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 12px;
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            cursor: pointer;
         }
 
-        .doc-icon-frame {
-            width: 40px;
-            height: 40px;
-            background-color: #fee2e2;
-            color: #ef4444;
-            font-size: 11px;
+        .file-icon {
+            background-color: #ef4444;
+            color: white;
+            font-size: 10px;
             font-weight: 800;
+            padding: 10px 8px;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
+            line-height: 1;
         }
 
-        .doc-meta .doc-title {
+        .file-details .file-name {
             font-size: 14px;
             font-weight: 600;
             color: #0f172a;
         }
 
-        .doc-meta .doc-size {
-            font-size: 12px;
+        .file-details .file-size {
+            font-size: 11px;
             color: #64748b;
             margin-top: 2px;
         }
 
-        .poll-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-
-        .poll-node-option {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #334155;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .post-action-bar {
+        /* Action Buttons Area */
+        .post-footer-actions {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding-top: 12px;
             border-top: 1px solid #f1f5f9;
+            padding-top: 12px;
+            margin-bottom: 12px;
         }
 
-        .interaction-node {
-            background: none;
-            border: none;
+        .action-node {
             display: flex;
             align-items: center;
             gap: 6px;
             font-size: 13px;
             color: #64748b;
+            font-weight: 500;
+            background: none;
+            border: none;
             cursor: pointer;
             text-decoration: none;
-            font-weight: 500;
         }
 
-        /* --- FIXED BOTTOM NAVIGATION BAR --- */
-        .bottom-nav-bar {
+        .social-proof {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-top: 4px;
+        }
+
+        .proof-avatars {
+            display: flex;
+        }
+
+        .proof-avatars img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ffffff;
+        }
+
+        .proof-avatars img:not(:first-child) {
+            margin-left: -6px;
+        }
+
+        .proof-text {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* --- INTERACTIVE PROFILE PROMPT BANNER --- */
+        .profile-prompt-banner {
+            background-color: #f5f3ff; /* Zallon kalar Lavender */
+            margin: 4px 16px 16px 16px;
+            border-radius: 16px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .prompt-left-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .trophy-circle {
+            width: 40px;
+            height: 40px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
+        }
+
+        .prompt-text-stack .prompt-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .prompt-text-stack .prompt-desc {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .prompt-actions-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .close-banner-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+
+        .complete-now-btn {
+            background-color: #4f46e5; /* Deep Indigo Purple Button */
+            color: #ffffff;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        /* --- STICKY BOTTOM NAVIGATION BAR --- */
+        .bottom-navigation {
             position: fixed;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
             width: 100%;
-            max-width: 480px;
+            max-width: 430px;
             background-color: #ffffff;
             border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 10px 0 14px 0; 
-            z-index: 10000;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
+            padding: 10px 0 14px 0;
+            z-index: 1000;
         }
 
-        .nav-item {
+        .nav-link {
             display: flex;
             flex-direction: column;
             align-items: center;
             text-decoration: none;
-            color: #64748b;
+            color: #64748b; /* Grey regular icons */
             font-size: 10px;
             font-weight: 600;
             gap: 4px;
             position: relative;
-            width: 60px;
+            width: 65px;
         }
 
-        .nav-item.active {
-            color: #5b21b6;
+        .nav-link.active {
+            color: #4f46e5; /* Active Indigo color */
         }
 
-        .nav-item svg {
+        .nav-link svg {
             width: 24px;
             height: 24px;
         }
 
-        .nav-badge {
+        .nav-notif-count {
             position: absolute;
             top: -4px;
-            right: 12px;
-            background-color: #5b21b6;
+            right: 14px;
+            background-color: #4f46e5;
             color: white;
             font-size: 9px;
             font-weight: 700;
-            border-radius: 50%;
             width: 15px;
             height: 15px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -440,155 +523,208 @@
 </head>
 <body>
 
-    <div class="app-framework">
+    <div class="app-container">
         
-        <!-- App Header (With Search and Notification links) -->
         <header class="app-header">
-            <div class="menu-hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+            <div class="header-left">
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
-            <div class="header-logo">StudentX</div>
-            <div class="header-actions">
-                <!-- Search Icon -->
-                <a href="#" class="header-icon-link">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </a>
-                <!-- Notification Bell Icon (REDIRECT TO NOTIFICATIONS.HTML) -->
-                <a href="notifications.html" class="header-icon-link">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="header-badge"></span>
+            <div class="header-center">
+                <h1>Home</h1>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                </button>
+                <a href="notifications.html" class="header-btn">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    <span class="notif-badge">8</span>
                 </a>
             </div>
         </header>
 
-        <!-- Main Scrollable Timeline Content -->
-        <div class="scroll-content">
+        <main class="main-content">
             
-            <!-- Stories Link Row -->
-            <div class="stories-wrapper">
-                <a href="story.html" class="story-node mine">
-                    <div class="story-ring">
-                        <!-- Anonymous/Joker Face SVG Profile -->
-                        <div class="anonymous-avatar-box">
-                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5zM4 22a8 8 0 0 1 16 0H4z"/><circle cx="10" cy="8" r="1" fill="currentColor"/><circle cx="14" cy="8" r="1" fill="currentColor"/><path d="M10 14s1 1.5 2 1.5 2-1.5 2-1.5" stroke-linecap="round"/></svg>
-                        </div>
+            <div class="stories-container">
+                <a href="story.html" class="story-item user-node">
+                    <div class="avatar-ring">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="Your Story">
+                        <div class="plus-icon">+</div>
                     </div>
-                    <span class="story-label">Your Story</span>
+                    <span class="story-name">Your Story</span>
                 </a>
-                <a href="story.html" class="story-node">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120" alt="Fatima">
+                <a href="story.html" class="story-item">
+                    <div class="avatar-ring">
+                        <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150" alt="Fatima">
                     </div>
-                    <span class="story-label">Fatima</span>
+                    <span class="story-name">Fatima</span>
                 </a>
-                <a href="story.html" class="story-node">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120" alt="John">
+                <a href="story.html" class="story-item">
+                    <div class="avatar-ring">
+                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=150" alt="John">
                     </div>
-                    <span class="story-label">John</span>
+                    <span class="story-name">John</span>
                 </a>
-                <a href="story.html" class="story-node">
-                    <div class="story-ring">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120" alt="Maryam">
+                <a href="story.html" class="story-item">
+                    <div class="avatar-ring">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" alt="Maryam">
                     </div>
-                    <span class="story-label">Maryam</span>
+                    <span class="story-name">Maryam</span>
+                </a>
+                <a href="story.html" class="story-item">
+                    <div class="avatar-ring">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="David">
+                    </div>
+                    <span class="story-name">David</span>
                 </a>
             </div>
 
-            <!-- Composer Box -->
-            <div class="composer-box">
-                <div class="composer-profile-row">
-                    <div class="composer-pfp-box">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5zM4 22a8 8 0 0 1 16 0H4z"/><circle cx="10" cy="8" r="1" fill="currentColor"/><circle cx="14" cy="8" r="1" fill="currentColor"/><path d="M10 14s1 1.5 2 1.5 2-1.5 2-1.5" stroke-linecap="round"/></svg>
-                    </div>
-                    <span class="composer-fake-input">What's on your mind?</span>
+            <div class="composer-card">
+                <div class="composer-top">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="Profile">
+                    <span class="composer-input-placeholder">What's on your mind?</span>
                 </div>
-                <div class="composer-tools">
-                    <span class="tool-btn"><span style="color:#10b981;">🖼️</span> Photo</span>
-                    <span class="tool-btn"><span style="color:#ec4899;">🎥</span> Video</span>
-                    <span class="tool-btn"><span style="color:#f59e0b;">📊</span> Poll</span>
+                <div class="composer-actions">
+                    <div class="composer-btn"><span style="color:#22c55e;">🖼️</span> Photo</div>
+                    <div class="composer-btn"><span style="color:#a855f7;">📹</span> Video</div>
+                    <div class="composer-btn"><span style="color:#3b82f6;">📊</span> Poll</div>
+                    <div class="composer-btn"><span style="color:#eab308;">😊</span> Feeling</div>
                 </div>
             </div>
 
-            <!-- ================= TIMELINE FEED ================= -->
-
-            <!-- Post 1 -->
             <div class="post-card">
-                <div class="post-meta-header">
-                    <div class="post-author-details">
-                        <img class="author-pfp" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120" alt="Fatima">
-                        <div class="author-names-group">
-                            <div class="author-name">Fatima Muhammad <span class="v-badge">✓</span></div>
-                            <div class="author-subtitle">Computer Science • ABU Zaria</div>
+                <div class="post-header">
+                    <div class="post-author">
+                        <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150" alt="Fatima">
+                        <div class="author-info">
+                            <div class="name-row">
+                                Fatima Muhammad
+                                <span class="verified-badge">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                </span>
+                            </div>
+                            <div class="subtitle">Computer Science • ABU Zaria</div>
+                            <div class="time-text">2h ago</div>
                         </div>
                     </div>
-                    <span class="post-time-stamp">2h ago</span>
+                    <div class="more-options">•••</div>
                 </div>
-                <div class="post-text-body">
-                    An tura cikakken bayani akan 'Data Structures and Algorithms' na wannan semester din. Zaku iya dubawa anan. 🚀
+                <div class="post-body">
+                    Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀
                 </div>
-                <div class="document-attachment">
-                    <div class="doc-icon-frame">PDF</div>
-                    <div class="doc-meta">
-                        <div class="doc-title">Data_Structures_Summary.pdf</div>
-                        <div class="doc-size">4.2 MB</div>
+                <div class="file-attachment">
+                    <div class="file-icon">PDF</div>
+                    <div class="file-details">
+                        <div class="file-name">Data Structures & Algorithms.pdf</div>
+                        <div class="file-size">4.2 MB</div>
                     </div>
                 </div>
-                <div class="post-action-bar">
-                    <span class="interaction-node">❤️ 245</span>
-                    <!-- REDIRECT TO COMMENTS.HTML -->
-                    <a href="comments.html" class="interaction-node">💬 32</a>
-                    <span class="interaction-node">🔄 18</span>
+                <div class="post-footer-actions">
+                    <button class="action-node">❤️ 245</button>
+                    <a href="comments.html" class="action-node">💬 32</a>
+                    <button class="action-node">🔄 18</button>
+                    <button class="action-node">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    </button>
+                </div>
+                <div class="social-proof">
+                    <div class="proof-avatars">
+                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=50" alt="User">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50" alt="User">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=50" alt="User">
+                    </div>
+                    <span class="proof-text">Liked by John, Maryam and 243 others</span>
                 </div>
             </div>
 
-            <!-- Post 2 -->
             <div class="post-card">
-                <div class="post-meta-header">
-                    <div class="post-author-details">
-                        <img class="author-pfp" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120" alt="David">
-                        <div class="author-names-group">
-                            <div class="author-name">David Okafor</div>
-                            <div class="author-subtitle">Mechanical Engineering • UNN</div>
+                <div class="post-header">
+                    <div class="post-author">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="David">
+                        <div class="author-info">
+                            <div class="name-row">David Okafor</div>
+                            <div class="subtitle">@david.engineering • UNN</div>
+                            <div class="time-text">3h ago</div>
                         </div>
                     </div>
-                    <span class="post-time-stamp">4h ago</span>
+                    <div class="more-options">•••</div>
                 </div>
-                <div class="post-text-body">
-                    Who really understands Thermodynamics part (b) of yesterday's assignment? I seriously need help before submission time tomorrow morning! 😭
+                <div class="post-body">
+                    Can anyone explain this thermodynamics question? I'm stuck on part (b).
                 </div>
-                <div class="post-action-bar">
-                    <span class="interaction-node">❤️ 89</span>
-                    <!-- REDIRECT TO COMMENTS.HTML -->
-                    <a href="comments.html" class="interaction-node">💬 45</a>
-                    <span class="interaction-node">🔄 4</span>
+                <div class="post-footer-actions">
+                    <button class="action-node">❤️ 112</button>
+                    <a href="comments.html" class="action-node">💬 26</button>
+                    <button class="action-node">🔄 9</button>
+                    <button class="action-node">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                    </button>
                 </div>
             </div>
 
-            <!-- Post 3 (Poll Example) -->
-            <div class="post-card">
-                <div class="post-meta-header">
-                    <div class="post-author-details">
-                        <img class="author-pfp" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120" alt="Musa">
-                        <div class="author-names-group">
-                            <div class="author-name">Musa Ibrahim</div>
-                            <div class="author-subtitle">Economics • Unilag</div>
-                        </div>
+            <div class="profile-prompt-banner">
+                <button class="close-banner-btn">✕</button>
+                <div class="prompt-left-content">
+                    <div class="trophy-circle">
+                        <span style="font-size: 20px;">🏆</span>
                     </div>
-                    <span class="post-time-stamp">8h ago</span>
+                    <div class="prompt-text-stack">
+                        <div class="prompt-title">Complete your profile</div>
+                        <div class="prompt-desc">Add more details to connect with more students.</div>
+                    </div>
                 </div>
-                <div class="post-text-body">
-                    Muna shirin fara group discussion na Microeconomics na gaba. Wane lokaci ya fi muku daidai?
-                </div>
-                <div class="poll-stack">
-                    <div class="poll-node-option" onclick="alert('Voted for Afternoon!')">Da rana (2:00 PM)</div>
-                    <div class="poll-node-option" onclick="alert('Voted for Evening!')">Da yamma (5:00 PM)</div>
-                    <div class="poll-node-option" onclick="alert('Voted for Night!')">Daddare (8:00 PM)</div>
-                </div>
-                <div class="post-action-bar">
-                    <span class="interaction-node">❤️ 120</span>
-                    <!-- REDIRECT TO COMMENTS.HTML -->
-                    <a href="comments.html" class="interaction-node">💬 78</a>
+                <button class="complete-now-btn">Complete Now</button>
+            </div>
+
+        </main>
+
+        <nav class="bottom-navigation">
+            <a href="home.html" class="nav-link active">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                <span>Home</span>
+            </a>
+
+            <a href="explore.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg>
+                <span>Explore</span>
+            </a>
+
+            <a href="chat.html" class="nav-link">
+                <div class="nav-notif-count">3</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Chat</span>
+            </a>
+
+            <a href="studyhub.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>StudyHub</span>
+            </a>
+
+            <a href="profile.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Profile</span>
+            </a>
+        </nav>
+
+    </div>
+
+</body>
+</html>
                
