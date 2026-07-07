@@ -904,6 +904,81 @@
             bubble.innerHTML = `<div style="color:rgba(255,255,255,0.6); font-style:italic; display:flex; align-items:center; gap:6px;">👁️ Opened</div>`;
             bubble.style.pointerEvents = "none";
         }
+        // ==========================================
+// TSARIN BUƊE FILE MANAGER DA TURA MEDIA KAI TSUYE
+// ==========================================
+
+// 1. Kirkirar Hidden File Input ta hanyar JavaScript (Don kar ka sake taba HTML dinka)
+if (!document.getElementById('mediaFileInput')) {
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'file';
+    hiddenInput.id = 'mediaFileInput';
+    // Wannan zai sa wayarka ta gane hoto, bidiyo, da sauti kadai kake bukata
+    hiddenInput.accept = 'image/*,video/*,audio/*'; 
+    hiddenInput.style.display = 'none';
+    document.body.appendChild(hiddenInput);
+    
+    // Kunna aiki da zaran an zabi fayil din
+    hiddenInput.addEventListener('change', function() {
+        handleFileSelect(this);
+    });
+}
+
+// 2. Canza aikin tsohon openMediaMenu() ya koma na bude file manager din waya kai tsaye
+function openMediaMenu() {
+    document.getElementById('mediaFileInput').click();
+}
+
+// 3. Tsarin sarrafa fayil din da aka zaba da kuma tura shi zuwa Chat Feed nan take
+function handleFileSelect(input) {
+    if (!input.files || !input.files[0]) return;
+    
+    const file = input.files[0];
+    const fileUrl = URL.createObjectURL(file); // Fassara fayil din ya dawo link na gani da ido
+    const area = document.getElementById('msgArea');
+    const wrapper = document.createElement('div');
+    wrapper.className = "msg-wrapper outgoing"; // Tunda kai ne ka tura, zai tafi hagu (outgoing)
+    
+    let mediaHtml = "";
+
+    // Duba wani irin fayil ne aka zaba domin tsara yadda zai fito a bubble din
+    if (file.type.startsWith('image/')) {
+        // Idan Hoto ne
+        mediaHtml = `<img src="${fileUrl}" style="width: 100%; max-width: 200px; border-radius: 12px; display: block; object-fit: cover;">`;
+    } else if (file.type.startsWith('video/')) {
+        // Idan Bidiyo ne
+        mediaHtml = `<video src="${fileUrl}" controls style="width: 100%; max-width: 200px; border-radius: 12px; display: block;"></video>`;
+    } else if (file.type.startsWith('audio/')) {
+        // Idan Sauti (Audio/Voice) ne
+        mediaHtml = `
+            <div class="voice-player">
+                <button class="play-btn" onclick="playVoiceSimulation(this)">▶</button>
+                <div class="voice-wave"><div class="voice-progress"></div></div>
+                <span style="font-size:11px; font-weight:600;">🎵 Audio</span>
+            </div>
+        `;
+    } else {
+        // Idan wani file din ne daban
+        mediaHtml = `<div style="font-weight:600;">📁 ${file.name}</div>`;
+    }
+
+    // Saka sakon a cikin Bubble tare da sanya alamun Delivery Read (✓✓) da kuma long press menu
+    wrapper.innerHTML = `
+        <div class="msg-bubble" style="padding: 8px;" oncontextmenu="handleLongPress(event, this)">
+            ${mediaHtml}
+        </div>
+        <div class="msg-meta">Just now <span style="color:#4f46e5;">✓✓</span></div>
+    `;
+    
+    // Tura sakon cikin fuskar hira
+    area.appendChild(wrapper);
+    
+    // Janyo shafin zuwa kasa ta atomatik domin ganin sabon sakon
+    area.scrollTop = area.scrollHeight;
+    
+    // Share bakin input din don a iya sake tura wani abu na daban an jima
+    input.value = "";
+                }
     </script>
 </body>
 </html>
