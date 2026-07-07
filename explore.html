@@ -384,7 +384,7 @@
         .verified-badge {
             color: #4f46e5;
             display: inline-flex;
-        }
+                }
 
         .user-meta .u-details {
             font-size: 11.5px;
@@ -626,4 +626,233 @@
                         <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
                     </div>
                     <div class="community-card">
-                        <div cla
+                        <div class="comm-icon" style="background-color:#f5f3ff; color:#7c3aed;">⚙️</div>
+                        <div class="comm-title">Engineering Students</div>
+                        <div class="comm-members">8.4K members</div>
+                        <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
+                    </div>
+                    <div class="community-card hidden-item comm-hidden">
+                        <div class="comm-icon" style="background-color:#f0fdf4; color:#16a34a;">📈</div>
+                        <div class="comm-title">Business & Finance</div>
+                        <div class="comm-members">6.2K members</div>
+                        <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2>Suggested for You</h2>
+                    <span class="see-all" onclick="toggleSeeAll('suggested')">See all</span>
+                </div>
+                <div class="suggested-list" id="suggestedList">
+                    <div class="user-row">
+                        <div class="user-info">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" class="user-avatar" alt="Fatima">
+                            <div class="user-meta">
+                                <div class="u-name">Fatima Muhammad <span class="verified-badge">✓</span></div>
+                                <div class="u-details">Computer Science • ABU Zaria</div>
+                                <div class="u-mutual">24 mutual friends</div>
+                            </div>
+                        </div>
+                        <button class="btn-premium-follow" onclick="toggleFollow(this)">Follow</button>
+                    </div>
+                    
+                    <div class="user-row">
+                        <div class="user-info">
+                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" class="user-avatar" alt="David">
+                            <div class="user-meta">
+                                <div class="u-name">David Okafor <span class="verified-badge">✓</span></div>
+                                <div class="u-details">Mechanical Engineering • UNN</div>
+                                <div class="u-mutual">18 mutual friends</div>
+                            </div>
+                        </div>
+                        <button class="btn-premium-follow" onclick="toggleFollow(this)">Follow</button>
+                    </div>
+
+                    <div class="user-row hidden-item suggested-hidden">
+                        <div class="user-info">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="Maryam">
+                            <div class="user-meta">
+                                <div class="u-name">Maryam Hassan <span class="verified-badge">✓</span></div>
+                                <div class="u-details">Pharmacy • UMYU</div>
+                                <div class="u-mutual">15 mutual friends</div>
+                            </div>
+                        </div>
+                        <button class="btn-premium-follow" onclick="toggleFollow(this)">Follow</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="search-results-panel" id="searchResultsPanel">
+                
+                <div class="search-category-block">
+                    <div class="search-category-title">Groups & Communities</div>
+                    <div class="result-item" onclick="window.location.href='studyhub.html'">
+                        <div class="result-item-icon">💻</div>
+                        <div class="result-item-text">
+                            <div class="r-main">Computer Science Hub</div>
+                            <div class="r-sub">Community • 12,600 Students</div>
+                        </div>
+                    </div>
+                    <div class="result-item" onclick="window.location.href='studyhub.html'">
+                        <div class="result-item-icon">🚀</div>
+                        <div class="result-item-text">
+                            <div class="r-main">AI & Coding Hub</div>
+                            <div class="r-sub">Group • 1,420 Active Members</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-category-block">
+                    <div class="search-category-title">People / Students</div>
+                    <div class="result-item" onclick="window.location.href='profile.html'">
+                        <div class="result-item-icon">👤</div>
+                        <div class="result-item-text">
+                            <div class="r-main">Fatima Muhammad</div>
+                            <div class="r-sub">Computer Science • ABU Zaria</div>
+                        </div>
+                    </div>
+                    <div class="result-item" onclick="window.location.href='profile.html'">
+                        <div class="result-item-icon">👤</div>
+                        <div class="result-item-text">
+                            <div class="r-main">David Okafor</div>
+                            <div class="r-sub">Mechanical Eng. • UNN</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-category-block">
+                    <div class="search-category-title">Books & Courses</div>
+                    <div class="result-item">
+                        <div class="result-item-icon">📕</div>
+                        <div class="result-item-text">
+                            <div class="r-main">Data_Structures_Summary.pdf</div>
+                            <div class="r-sub">Course Material • 4.2 MB</div>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="result-item-icon">📘</div>
+                        <div class="result-item-text">
+                            <div class="r-main">Organic Chemistry Lab Report</div>
+                            <div class="r-sub">Book / Template • 1.8 MB</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-category-block">
+                    <div class="search-category-title">Posts & Academics</div>
+                    <div class="result-item" onclick="window.location.href='home.html'">
+                        <div class="result-item-icon">📄</div>
+                        <div class="result-item-text">
+                            <div class="r-main">An tura cikakken bayani akan 'Data Structures'</div>
+                            <div class="r-sub">Post by Fatima Muhammad • 2h ago</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+        <nav class="bottom-navigation">
+            <a href="home.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Home</span>
+            </a>
+
+            <a href="explore.html" class="nav-link active">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="#ffffff" stroke="currentColor" stroke-width="2"></polygon>
+                </svg>
+                <span>Explore</span>
+            </a>
+
+            <a href="chat.html" class="nav-link">
+                <div class="nav-notif-count">3</div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg>
+                <span>Chat</span>
+            </a>
+
+            <a href="studyhub.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+                <span>StudyHub</span>
+            </a>
+
+            <a href="profile.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <span>Profile</span>
+            </a>
+        </nav>
+
+    </div>
+
+    <script>
+        // 1. Canza Join -> Joined
+        function toggleJoin(btn) {
+            if (btn.innerText === "Join") {
+                btn.innerText = "Joined";
+                btn.classList.add("joined");
+            } else {
+                btn.innerText = "Join";
+                btn.classList.remove("joined");
+            }
+        }
+
+        // 2. Canza Follow -> Following
+        function toggleFollow(btn) {
+            if (btn.innerText === "Follow") {
+                btn.innerText = "Following";
+                btn.classList.add("following");
+            } else {
+                btn.innerText = "Follow";
+                btn.classList.remove("following");
+            }
+        }
+
+        // 3. See All Functionality (Nuna duka)
+        function toggleSeeAll(type) {
+            let hiddenItems;
+            if (type === 'trending') {
+                hiddenItems = document.querySelectorAll('.trending-hidden');
+            } else if (type === 'communities') {
+                hiddenItems = document.querySelectorAll('.comm-hidden');
+            } else if (type === 'suggested') {
+                hiddenItems = document.querySelectorAll('.suggested-hidden');
+            }
+
+            hiddenItems.forEach(item => {
+                if (item.style.display === "flex" || item.style.display === "block") {
+                    item.style.setProperty("display", "none", "important");
+                } else {
+                    item.style.setProperty("display", "flex", "important");
+                }
+            });
+        }
+
+        // 4. Dynamic Live Search
+        function handleSearch(query) {
+            const mainContent = document.getElementById('exploreMainContent');
+            const resultsPanel = document.getElementById('searchResultsPanel');
+
+            if (query.trim().length > 0) {
+                mainContent.style.display = "none";
+                resultsPanel.style.display = "block";
+            } else {
+                mainContent.style.display = "block";
+                resultsPanel.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
