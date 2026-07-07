@@ -1,282 +1,629 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ha">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX | Explore Premium</title>
-    <!-- Premium Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX — Explore Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-deep: #060B18;
-            --bg-glass: rgba(21, 28, 51, 0.45);
-            --bg-glass-bright: rgba(30, 41, 79, 0.6);
-            --text-main: #FFFFFF;
-            --text-sub: #94A3B8;
-            --purple: #7C3AED;
-            --blue: #2563EB;
-            --grad-premium: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
-            --border-glass: 1px solid rgba(255, 255, 255, 0.08);
-            --glow: rgba(124, 58, 237, 0.35);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        
-        body { 
-            background-color: var(--bg-deep); 
-            color: var(--text-main); 
-            padding-bottom: 120px; 
-            overflow-x: hidden;
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 430px;
+            background-color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.03);
+        }
+
+        /* --- STICKY TOP HEADER --- */
+        .app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            max-width: 430px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            z-index: 1000;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .header-left .hamburger {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2.5px;
+            background-color: #0f172a;
+            border-radius: 2px;
+        }
+
+        .header-center h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+
+        .header-right {
             position: relative;
         }
 
-        /* Ambient Luxury Background Glows */
-        .ambient-glow-1 {
-            position: fixed; width: 300px; height: 300px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, transparent 70%);
-            top: -50px; right: -50px; z-index: -1; pointer-events: none;
-        }
-        .ambient-glow-2 {
-            position: fixed; width: 400px; height: 400px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
-            bottom: 100px; left: -100px; z-index: -1; pointer-events: none;
+        .notif-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: #4f46e5;
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #ffffff;
         }
 
-        /* Header Style */
-        .header { 
-            background: rgba(6, 11, 24, 0.7); backdrop-filter: blur(25px);
-            padding: 20px; position: sticky; top: 0; z-index: 1000;
-            border-bottom: var(--border-glass);
+        /* --- MAIN AREA --- */
+        .main-content {
+            padding-top: 65px;
+            padding-bottom: 90px;
+            overflow-y: auto;
+            background-color: #ffffff;
         }
+
+        /* SEARCH BAR */
+        .search-container {
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
         .search-wrapper {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(10px);
-            padding: 14px 20px; border-radius: 20px;
-            display: flex; align-items: center; gap: 12px;
-            border: var(--border-glass);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.05);
+            position: relative;
+            flex: 1;
+            display: flex;
+            align-items: center;
         }
-        .search-wrapper input { 
-            background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 15px; 
-        }
-        .search-wrapper i { color: var(--text-sub); font-size: 18px; }
-        .filter-icon { background: var(--grad-premium); padding: 8px; border-radius: 12px; color: white; cursor: pointer; }
 
-        /* Featured Banner Card */
-        .featured-card {
-            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(37, 99, 235, 0.15) 100%);
-            backdrop-filter: blur(15px); border: var(--border-glass);
-            margin: 20px; padding: 25px; border-radius: 28px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        .search-wrapper svg {
+            position: absolute;
+            left: 14px;
+            color: #94a3b8;
         }
-        .featured-card::before {
-            content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px;
-            background: var(--grad-premium); opacity: 0.3; filter: blur(40px); border-radius: 50%;
-        }
-        .featured-badge { background: rgba(255,255,255,0.1); border: var(--border-glass); padding: 6px 14px; border-radius: 50px; font-size: 11px; display: inline-block; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .featured-title { font-size: 22px; font-weight: 800; line-height: 1.3; margin-bottom: 8px; }
-        .featured-desc { font-size: 13px; color: var(--text-sub); margin-bottom: 15px; }
 
-        /* Premium Categories */
-        .section-title { font-size: 18px; font-weight: 700; padding: 10px 20px 5px 20px; display: flex; justify-content: space-between; align-items: center; }
-        .section-title span { font-size: 13px; color: var(--purple); font-weight: 500; }
-        
-        .categories-container { display: flex; gap: 12px; padding: 15px 20px; overflow-x: auto; scrollbar-width: none; }
-        .categories-container::-webkit-scrollbar { display: none; }
-        .cat-pill { padding: 12px 24px; background: var(--bg-glass); border-radius: 50px; border: var(--border-glass); white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--text-sub); transition: 0.3s; }
-        .cat-pill.active { background: var(--grad-premium); color: white; border-color: transparent; box-shadow: 0 5px 15px rgba(124, 58, 237, 0.3); }
+        .search-input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            background-color: #f1f5f9;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #0f172a;
+            outline: none;
+            font-weight: 500;
+        }
 
-        /* Explore Grid Layout */
-        .explore-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; padding: 10px 20px; }
-        .grid-card {
-            background: var(--bg-glass); backdrop-filter: blur(15px);
-            border-radius: 24px; border: var(--border-glass);
-            padding: 16px; min-height: 190px; display: flex; flex-direction: column; justify-content: space-between;
-            position: relative; overflow: hidden; transition: 0.3s ease;
+        .filter-btn {
+            background: none;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .grid-card:hover { background: var(--bg-glass-bright); transform: translateY(-3px); }
-        .card-icon-box { width: 45px; height: 45px; border-radius: 16px; background: rgba(255,255,255,0.03); border: var(--border-glass); display: flex; align-items: center; justify-content: center; font-size: 20px; color: #FFF; background-image: var(--grad-premium); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
-        .card-meta { font-size: 11px; color: var(--text-sub); font-weight: 500; }
-        .card-name { font-size: 15px; font-weight: 700; margin-top: 10px; line-height: 1.4; }
-        
-        /* Interactive Student Avatars Stack inside grid */
-        .avatar-stack { display: flex; align-items: center; margin-top: 10px; }
-        .avatar-stack img { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #0B1121; margin-left: -6px; }
-        .avatar-stack img:first-child { margin-left: 0; }
-        .avatar-count { font-size: 11px; color: var(--text-sub); margin-left: 6px; }
 
-        /* Navigation Bar (Luxury Fixed Glassmorphism) */
-        .nav-bar { 
-            position: fixed; bottom: 0; width: 100%; 
-            background: rgba(6, 11, 24, 0.75); backdrop-filter: blur(30px);
-            border-top: var(--border-glass); display: flex; justify-content: space-between;
-            padding: 16px 30px; z-index: 1000;
+        /* HORIZONTAL CATEGORIES */
+        .categories-scroll {
+            display: flex;
+            gap: 16px;
+            padding: 8px 16px 20px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
-        .nav-link { text-align: center; color: var(--text-sub); text-decoration: none; font-size: 11px; font-weight: 500; transition: 0.3s; }
-        .nav-link.active { color: var(--purple); }
-        .nav-link i { font-size: 24px; display: block; margin-bottom: 4px; }
-        
-        /* Floating Centered Chat Button */
-        .chat-center { 
-            background: var(--grad-premium); padding: 16px; border-radius: 50%;
-            margin-top: -35px; color: white; 
-            box-shadow: 0 8px 25px var(--glow);
-            transition: 0.3s ease;
+        .categories-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            min-width: 65px;
         }
-        .chat-center:hover { transform: scale(1.05); }
-        .chat-center i { font-size: 24px; margin-bottom: 0 !important; }
+
+        .cat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .cat-item span {
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .cat-item.active span {
+            color: #4f46e5;
+        }
+
+        /* SECTION HEADING */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 16px 12px 16px;
+        }
+
+        .section-header h2 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .section-header .see-all {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4f46e5;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        /* --- TRENDING TOPICS LIST --- */
+        .trending-list {
+            display: flex;
+            flex-direction: column;
+            padding: 0 16px;
+        }
+
+        .trending-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            cursor: pointer;
+        }
+
+        .trend-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .trend-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .trend-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .trend-posts {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .hidden-item {
+            display: none !important;
+        }
+
+        /* --- POPULAR COMMUNITIES (HORIZONTAL CARDS) --- */
+        .communities-scroll {
+            display: flex;
+            gap: 12px;
+            padding: 4px 16px 16px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .communities-scroll::-webkit-scrollbar { display: none; }
+
+        .community-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .comm-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-bottom: 12px;
+        }
+
+        .comm-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1.3;
+            height: 36px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .comm-members {
+            font-size: 11px;
+            color: #64748b;
+            margin: 4px 0 12px 0;
+        }
+
+        /* PREMIUM DYNAMIC BUTTONS */
+        .btn-premium {
+            width: 100%;
+            padding: 8px 0;
+            border: 1.5px solid #4f46e5;
+            background: transparent;
+            color: #4f46e5;
+            font-size: 12.5px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-premium.joined {
+            background-color: #10b981 !important;
+            border-color: #10b981 !important;
+            color: #ffffff !important;
+        }
+
+        .btn-premium-follow {
+            padding: 6px 16px;
+            border: 1.5px solid #4f46e5;
+            background: transparent;
+            color: #4f46e5;
+            font-size: 12.5px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            min-width: 90px;
+        }
+
+        .btn-premium-follow.following {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #64748b !important;
+        }
+
+        /* --- SUGGESTED FOR YOU (PEOPLE) --- */
+        .suggested-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 16px;
+        }
+
+        .user-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-meta .u-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .verified-badge {
+            color: #4f46e5;
+            display: inline-flex;
+        }
+
+        .user-meta .u-details {
+            font-size: 11.5px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .user-meta .u-mutual {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        /* --- DYNAMIC SEARCH LIVE RESULTS PANEL --- */
+        .search-results-panel {
+            display: none;
+            padding: 0 16px;
+        }
+
+        .search-category-block {
+            margin-bottom: 20px;
+        }
+
+        .search-category-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #4f46e5;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 4px;
+        }
+
+        .result-item {
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .result-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .result-item-text .r-main {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .result-item-text .r-sub {
+            font-size: 11.5px;
+            color: #64748b;
+        }
+
+
+        /* --- STICKY BOTTOM NAVIGATION BAR --- */
+        .bottom-navigation {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 430px;
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 10px 0 14px 0;
+            z-index: 1000;
+        }
+
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 600;
+            gap: 4px;
+            position: relative;
+            width: 65px;
+        }
+
+        .nav-link.active {
+            color: #4f46e5;
+        }
+
+        .nav-link svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .nav-notif-count {
+            position: absolute;
+            top: -4px;
+            right: 14px;
+            background-color: #4f46e5;
+            color: white;
+            font-size: 9px;
+            font-weight: 700;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1.5px solid #ffffff;
+        }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow-1"></div>
-    <div class="ambient-glow-2"></div>
-
-    <!-- Header & Glass Search Container -->
-    <header class="header">
-        <div class="search-wrapper">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search premium courses, research notes...">
-            <div class="filter-icon"><i class="fa-solid fa-sliders"></i></div>
-        </div>
-    </header>
-
-    <!-- Luxury Featured Banner -->
-    <div class="featured-card">
-        <span class="featured-badge">Trending Hub</span>
-        <h2 class="featured-title">AI & Advanced Neural Networks</h2>
-        <p class="featured-desc">Join 2.4k Computer Science architecture students collaborating live tonight.</p>
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
-            <div class="avatar-stack">
-                <img src="https://i.pravatar.cc/100?u=a" alt="User">
-                <img src="https://i.pravatar.cc/100?u=b" alt="User">
-                <img src="https://i.pravatar.cc/100?u=c" alt="User">
-                <span class="avatar-count">+42 Live</span>
-            </div>
-            <i class="fa-solid fa-arrow-up-right-from-square" style="color: white; font-size: 16px;"></i>
-        </div>
-    </div>
-
-    <!-- Premium Category Scroll -->
-    <h3 class="section-title">Browse Spaces <span>See all</span></h3>
-    <div class="categories-container">
-        <div class="cat-pill active">All Topics</div>
-        <div class="cat-pill">Computer Science</div>
-        <div class="cat-pill">Engineering</div>
-        <div class="cat-pill">Mathematics</div>
-        <div class="cat-pill">Medical Research</div>
-    </div>
-
-    <!-- Behance-Inspired Discovery Grid -->
-    <div class="explore-grid">
-        <!-- Card 1 -->
-        <div class="grid-card">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div class="card-icon-box"><i class="fa-solid fa-code"></i></div>
-                <span class="card-meta">1.2k Notes</span>
-            </div>
-            <div>
-                <h4 class="card-name">Data Structures & Logic</h4>
-                <div class="avatar-stack">
-                    <img src="https://i.pravatar.cc/100?u=1" alt="User">
-                    <img src="https://i.pravatar.cc/100?u=2" alt="User">
-                    <span class="avatar-count">Active</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="grid-card">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div class="card-icon-box"><i class="fa-solid fa-atom"></i></div>
-                <span class="card-meta">840 Files</span>
-            </div>
-            <div>
-                <h4 class="card-name">Quantum Mechanics II</h4>
-                <div class="avatar-stack">
-                    <img src="https://i.pravatar.cc/100?u=3" alt="User">
-                    <span class="avatar-count">Updated</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="grid-card">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div class="card-icon-box"><i class="fa-solid fa-bezier-curve"></i></div>
-                <span class="card-meta">3.1k Saved</span>
-            </div>
-            <div>
-                <h4 class="card-name">UI/UX Design Frameworks</h4>
-                <div class="avatar-stack">
-                    <img src="https://i.pravatar.cc/100?u=4" alt="User">
-                    <img src="https://i.pravatar.cc/100?u=5" alt="User">
-                    <span class="avatar-count">+110 Today</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Card 4 -->
-        <div class="grid-card">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div class="card-icon-box"><i class="fa-solid fa-chart-line"></i></div>
-                <span class="card-meta">450 Studied</span>
-            </div>
-            <div>
-                <h4 class="card-name">Macroeconomics Architecture</h4>
-                <div class="avatar-stack">
-                    <img src="https://i.pravatar.cc/100?u=6" alt="User">
-                    <span class="avatar-count">Popular</span>
-                </div>
-            </div>
-        </div>
+    <div class="app-container">
         
-        <!-- Card 5 -->
-        <div class="grid-card">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div class="card-icon-box"><i class="fa-solid fa-dna"></i></div>
-                <span class="card-meta">2.1k Files</span>
-            </div>
-            <div>
-                <h4 class="card-name">Genetics & Bio-Engineering</h4>
-                <div class="avatar-stack">
-                    <img src="https://i.pravatar.cc/100?u=7" alt="User">
-                    <span class="avatar-count">Active</span>
+        <header class="app-header">
+            <div class="header-left">
+                <div class="hamburger" onclick="window.location.href='menu.html'">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="grid-card">
-            <div style="display: flex; justify-content: space-between; align-items: start;">
-                <div class="card-icon-box"><i class="fa-solid fa-brain"></i></div>
-                <span class="card-meta">910 Docs</span>
+            <div class="header-center">
+                <h1>Explore</h1>
             </div>
-            <div>
-                <h4 class="card-name">Cognitive Neuroscience</h4>
-                <div class="avatar-stack">
-                    <img src="https://i.pravatar.cc/100?u=8" alt="User">
-                    <span class="avatar-count">New</span>
+            <div class="header-right" onclick="window.location.href='notifications.html'" style="cursor:pointer;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <span class="notif-badge">8</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <input type="text" class="search-input" id="mainSearch" placeholder="Search students, posts, communities..." oninput="handleSearch(this.value)">
                 </div>
+                <button class="filter-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                </button>
             </div>
-        </div>
-    </div>
 
-    <!-- Luxury Glassmorphism Navigation Bar -->
-    <nav class="nav-bar">
-        <a href="home.html" class="nav-link"><i class="fa-solid fa-house"></i> Home</a>
-        <a href="explore.html" class="nav-link active"><i class="fa-solid fa-compass"></i> Explore</a>
-        
-        <!-- Premium Centralized Chat Navigation -->
-        <a href="chat.html" class="nav-link chat-center"><i class="fa-solid fa-message"></i></a>
-        
-        <a href="studyhub.html" class="nav-link"><i class="fa-solid fa-book"></i> Study</a>
-        <a href="profile.html" class="nav-link"><i class="fa-solid fa-user"></i> Profile</a>
-    </nav>
+            <div id="exploreMainContent">
+                
+                <div class="categories-scroll">
+                    <div class="cat-item active" onclick="window.location.href='explore.html'">
+                        <div class="cat-icon" style="background-color: #f5f3ff; color: #4f46e5;">🎯</div>
+                        <span>All</span>
+                    </div>
+                    <div class="cat-item" onclick="window.location.href='academic.html'">
+                        <div class="cat-icon" style="background-color: #ecfdf5; color: #10b981;">🎓</div>
+                        <span>Academic</span>
+                    </div>
+                    <div class="cat-item" onclick="window.location.href='scholarships.html'">
+                        <div class="cat-icon" style="background-color: #fffbeb; color: #f59e0b;">🏆</div>
+                        <span>Scholarships</span>
+                    </div>
+                    <div class="cat-item" onclick="window.location.href='careers.html'">
+                        <div class="cat-icon" style="background-color: #eff6ff; color: #3b82f6;">💼</div>
+                        <span>Careers</span>
+                    </div>
+                    <div class="cat-item" onclick="window.location.href='projects.html'">
+                        <div class="cat-icon" style="background-color: #fdf2f8; color: #ec4899;">&lt;/&gt;</div>
+                        <span>Projects</span>
+                    </div>
+                    <div class="cat-item" onclick="window.location.href='lifestyle.html'">
+                        <div class="cat-icon" style="background-color: #fff5f5; color: #ef4444;">❤️</div>
+                        <span>Lifestyle</span>
+                    </div>
+                </div>
 
-</body>
-    </html>
+                <div class="section-header">
+                    <h2>Trending Topics 🔥</h2>
+                    <span class="see-all" onclick="toggleSeeAll('trending')">See all</span>
+                </div>
+                <div class="trending-list" id="trendingList">
+                    <div class="trending-item">
+                        <div class="trend-left">
+                            <div class="trend-icon" style="background-color: #e0f2fe; color: #0369a1;">🤖</div>
+                            <div>
+                                <div class="trend-title">#AI in Education</div>
+                                <div class="trend-posts">12.5K posts</div>
+                            </div>
+                        </div>
+                        <span style="color:#10b981; font-weight:bold;">📈</span>
+                    </div>
+                    <div class="trending-item">
+                        <div class="trend-left">
+                            <div class="trend-icon" style="background-color: #fef3c7; color: #b45309;">📝</div>
+                            <div>
+                                <div class="trend-title">#Exam Tips</div>
+                                <div class="trend-posts">9.8K posts</div>
+                            </div>
+                        </div>
+                        <span style="color:#f59e0b; font-weight:bold;">📈</span>
+                    </div>
+                    <div class="trending-item hidden-item trending-hidden">
+                        <div class="trend-left">
+                            <div class="trend-icon" style="background-color: #dcfce7; color: #15803d;">💰</div>
+                            <div>
+                                <div class="trend-title">#Scholarships 2024</div>
+                                <div class="trend-posts">8.1K posts</div>
+                            </div>
+                        </div>
+                        <span style="color:#10b981;">📈</span>
+                    </div>
+                    <div class="trending-item hidden-item trending-hidden">
+                        <div class="trend-left">
+                            <div class="trend-icon" style="background-color: #fce7f3; color: #b91c1c;">💻</div>
+                            <div>
+                                <div class="trend-title">#Final Year Projects</div>
+                                <div class="trend-posts">7.6K posts</div>
+                            </div>
+                        </div>
+                        <span style="color:#64748b;">📊</span>
+                    </div>
+                </div>
+
+                <div class="section-header">
+                    <h2>Popular Communities</h2>
+                    <span class="see-all" onclick="toggleSeeAll('communities')">See all</span>
+                </div>
+                <div class="communities-scroll" id="communitiesScroll">
+                    <div class="community-card">
+                        <div class="comm-icon" style="background-color:#eff6ff; color:#2563eb;">💻</div>
+                        <div class="comm-title">Computer Science Hub</div>
+                        <div class="comm-members">12.6K members</div>
+                        <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
+                    </div>
+                    <div class="community-card">
+                        <div cla
