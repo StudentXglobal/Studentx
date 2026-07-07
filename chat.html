@@ -1,36 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ha">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Premium Chat Engine</title>
-    <!-- Premium Fonts & Icons -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>StudentX — Premium Chat UI</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        :root {
-            --bg-base: #050918;
-            --surface-glass: rgba(255, 255, 255, 0.03);
-            --surface-glass-bright: rgba(255, 255, 255, 0.08);
-            --surface-glass-card: rgba(11, 18, 38, 0.7);
-            --border-glass: 1px solid rgba(255, 255, 255, 0.06);
-            --border-glass-bright: 1px solid rgba(255, 255, 255, 0.12);
-            
-            --brand-primary: #8B5CF6;
-            --brand-secondary: #3B82F6;
-            --brand-gradient: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
-            --ai-gradient: linear-gradient(135deg, #EC4899 0%, #8B5CF6 100%);
-            
-            --text-primary: #FFFFFF;
-            --text-secondary: #94A3B8;
-            --text-muted: #64748B;
-            
-            --status-online: #10B981;
-            --radius-main: 24px;
-            --radius-inner: 16px;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -40,472 +17,892 @@
         }
 
         body {
-            background-color: var(--bg-base);
-            color: var(--text-primary);
+            background-color: #f8fafc;
+            color: #0f172a;
+            display: flex;
+            justify-content: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        .app-shell {
+        .app-container {
             width: 100%;
-            max-width: 480px;
-            margin: 0 auto;
+            max-width: 430px;
+            background-color: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
-            background: rgba(5, 9, 24, 0.6);
-            box-shadow: 0 0 100px rgba(0,0,0,0.9);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
         }
 
-        /* Premium Header Setup matching Screenshot_20260706-194532.png */
-        .main-header {
-            padding: 20px;
-            background: rgba(5, 9, 24, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 90;
-            border-bottom: var(--border-glass);
+        /* HEADER */
+        .chat-header {
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .profile-trigger-mask {
-            width: 46px;
-            height: 46px;
-            border-radius: var(--radius-inner);
-            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
-            border: 1px solid rgba(139, 92, 246, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .profile-trigger-mask i {
-            color: #C084FC;
-            font-size: 20px;
-        }
-
-        .screen-title {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .icon-btn {
-            width: 42px;
-            height: 42px;
-            border-radius: var(--radius-inner);
-            background: var(--surface-glass);
-            border: var(--border-glass);
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
-        /* Segmented Navigation Switch */
-        .tab-segment-container {
-            padding: 4px;
-            background: rgba(255, 255, 255, 0.02);
-            border: var(--border-glass);
-            border-radius: var(--radius-inner);
-            display: flex;
-            margin: 10px 20px 20px 20px;
-        }
-        .segment-btn {
-            flex: 1;
-            padding: 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 13px;
+        .chat-header h1 {
+            font-size: 22px;
             font-weight: 700;
-            cursor: pointer;
-            border-radius: calc(var(--radius-inner) - 4px);
+            color: #0f172a;
+        }
+
+        /* SEARCH BAR */
+        .search-box {
+            padding: 8px 16px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background: #f1f5f9;
+            border: none;
+            border-radius: 14px;
+            font-size: 15px;
+            outline: none;
+            color: #0f172a;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        /* TABS FILTER */
+        .filter-tabs {
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 8px;
+            padding: 12px 16px;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
-        .segment-btn.active {
-            background: var(--brand-gradient);
-            color: var(--text-primary);
-            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        .filter-tabs::-webkit-scrollbar { display: none; }
+
+        .tab {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            background: #f1f5f9;
+            color: #0f172a;
+            cursor: pointer;
+            white-space: nowrap;
         }
 
-        /* Feed Display */
-        .directory-view-scroll {
+        .tab.active {
+            background: #4f46e5;
+            color: #ffffff;
+        }
+
+        /* CONVERSATION LIST */
+        .chat-list {
             flex: 1;
-            padding: 0 20px 120px 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
+            overflow-y: auto;
+            padding: 4px 0;
         }
 
-        /* Conversation Cards */
-        .convo-card {
-            background: var(--surface-glass-card);
-            border: var(--border-glass);
-            border-radius: var(--radius-main);
-            padding: 18px;
+        .chat-item {
             display: flex;
             align-items: center;
+            padding: 14px 16px;
             gap: 14px;
             cursor: pointer;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .convo-card.ai-assistant-card {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.07) 0%, rgba(139, 92, 246, 0.07) 100%);
-            border: 1px solid rgba(236, 72, 153, 0.25);
+            border-bottom: 1px solid #f8fafc;
         }
 
         .avatar-container {
             position: relative;
-            width: 54px;
-            height: 54px;
+            width: 52px;
+            height: 52px;
             flex-shrink: 0;
         }
-        .avatar-img {
+
+        .avatar-container img, .avatar-placeholder {
             width: 100%;
             height: 100%;
-            border-radius: calc(var(--radius-inner) + 2px);
+            border-radius: 50%;
             object-fit: cover;
-            border: var(--border-glass-bright);
         }
-        .ai-avatar-glow {
-            background: var(--ai-gradient);
+
+        .avatar-placeholder {
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-        .ai-avatar-glow i {
             font-size: 22px;
-            color: var(--text-primary);
         }
 
-        .online-dot {
+        .status-dot {
             position: absolute;
-            bottom: -1px;
-            right: -1px;
+            bottom: 2px;
+            right: 2px;
             width: 12px;
             height: 12px;
-            background-color: var(--status-online);
-            border: 2px solid #0b1226;
+            background: #10b981;
+            border: 2px solid #ffffff;
             border-radius: 50%;
+            display: none;
         }
 
-        .card-content-block {
+        .status-dot.online { display: block; }
+
+        .chat-info {
             flex: 1;
-            min-width: 0;
         }
 
-        .card-top-row {
+        .chat-meta {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
-        .card-title {
-            font-size: 15px;
+
+        .chat-name {
+            font-size: 15.5px;
             font-weight: 700;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            color: #0f172a;
         }
-        .verified-badge { color: #3B82F6; font-size: 13px; }
-        .meta-timestamp { font-size: 11px; color: var(--text-muted); font-weight: 500; }
 
-        .card-bottom-row {
+        .chat-time {
+            font-size: 12px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .chat-preview-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .msg-preview-text {
-            font-size: 13px;
-            color: var(--text-secondary);
+
+        .chat-preview {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            max-width: 240px;
         }
-        .voice-indicator-text { color: #3B82F6; display: inline-flex; align-items: center; gap: 4px; }
 
-        .counter-badge {
-            background: var(--brand-gradient);
-            color: var(--text-primary);
-            font-size: 10px;
-            font-weight: 800;
+        .badge {
+            background: #4f46e5;
+            color: #ffffff;
+            font-size: 11px;
+            font-weight: 700;
             min-width: 18px;
             height: 18px;
-            border-radius: 50%;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0 5px;
         }
 
-        /* UNIFIED CLEAN MINIMALIST BOTTOM NAV BAR (WITH ALERT AT BOTTOM) */
-        .bottom-nav-bar {
+        /* --- INSIDE CHET OVERLAY SCREEN --- */
+        .inside-chat-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(0.1, 0.76, 0.55, 0.94);
+        }
+
+        .inside-chat-view.active { transform: translateX(0); }
+
+        .inside-header {
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #f1f5f9;
+            background: #ffffff;
+        }
+
+        .back-btn { cursor: pointer; display: flex; align-items: center; }
+
+        .messages-area {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* MESSAGE BUBBLES */
+        .msg-wrapper {
+            display: flex;
+            flex-direction: column;
+            max-width: 75%;
+            position: relative;
+        }
+
+        .msg-wrapper.incoming { align-self: flex-start; }
+        .msg-wrapper.outgoing { align-self: flex-end; }
+
+        .msg-bubble {
+            padding: 12px 14px;
+            border-radius: 18px;
+            font-size: 14.5px;
+            line-height: 1.4;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .incoming .msg-bubble {
+            background: #ffffff;
+            color: #0f172a;
+            border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .outgoing .msg-bubble {
+            background: #4f46e5;
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-meta {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 4px;
+            font-size: 10.5px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+        .outgoing .msg-meta { color: #cbd5e1; }
+
+        /* SPECIAL STATES */
+        .msg-deleted {
+            font-style: italic;
+            color: #94a3b8 !important;
+        }
+
+        .view-once-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .outgoing .view-once-box { background: rgba(255,255,255,0.15); }
+
+        /* VOICE PLAYER UI */
+        .voice-player {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+        }
+        .play-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #4f46e5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: none;
+        }
+        .incoming .play-btn { background: #f1f5f9; color: #4f46e5; }
+        
+        .voice-wave {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            position: relative;
+        }
+        .incoming .voice-wave { background: #e2e8f0; }
+        .voice-progress {
+            position: absolute;
+            left: 0; top: 0; height: 100%;
+            width: 0%; background: #ffffff;
+            border-radius: 2px;
+        }
+        .incoming .voice-progress { background: #4f46e5; }
+
+        /* INPUT AREA */
+        .chat-input-bar {
+            padding: 12px 16px;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            background: #f1f5f9;
+            border-radius: 20px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .input-wrapper input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 6px 0;
+            font-size: 15px;
+        }
+
+        .action-icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #4f46e5;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* CONTEXT MENU MODAL */
+        .context-menu {
+            position: fixed;
+            z-index: 3000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            width: 180px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none;
+            flex-direction: column;
+            padding: 6px;
+        }
+
+        .context-option {
+            padding: 10px 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            cursor: pointer;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .context-option:hover { background: #f1f5f9; }
+        .context-option.delete { color: #ef4444; }
+
+        /* VIEW ONCE TYPE SELECTOR MODAL */
+        .media-modal {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            height: 100%; background: rgba(0,0,0,0.4);
+            z-index: 2500; display: none;
+            justify-content: center; align-items: flex-end;
+        }
+        .media-content {
+            background: white; width: 100%; max-width: 430px;
+            border-top-left-radius: 24px; border-top-right-radius: 24px;
+            padding: 20px; display: flex; flex-direction: column; gap: 14px;
+        }
+        .media-title { font-weight: 700; font-size: 16px; text-align: center; color:#0f172a;}
+        .media-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 10px 0;}
+        .media-opt { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer;}
+        .media-opt-icon { width: 50px; height: 50px; border-radius: 50%; background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:20px;}
+
+        /* BOTTOM NAV BAR */
+        .bottom-navigation {
             position: fixed;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
             width: 100%;
-            max-width: 480px;
-            background: rgba(5, 9, 24, 0.9);
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            border-top: var(--border-glass);
+            max-width: 430px;
+            background-color: #ffffff;
+            border-top: 1px solid #e2e8f0;
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 12px 10px 28px 10px;
-            z-index: 100;
-        }
-        .nav-link-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            width: 52px;
-            height: 52px;
-            border-radius: var(--radius-inner);
-            transition: all 0.25s ease;
-        }
-        .nav-link-item i { font-size: 22px; }
-        
-        /* Highlighting active chat button cleanly */
-        .nav-link-item.active-nav-route {
-            color: #8B5CF6;
-            background: rgba(139, 92, 246, 0.12);
-            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 10px 0 14px 0;
+            z-index: 1000;
         }
 
-        /* Sliding Chat Sheet Frame */
-        .active-conversation-panel {
-            position: fixed;
-            top: 0;
-            left: 50%;
-            transform: translateX(150%);
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            background: var(--bg-base);
-            z-index: 200;
+        .nav-link {
             display: flex;
             flex-direction: column;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            border-left: var(--border-glass);
-            border-right: var(--border-glass);
-        }
-        .active-conversation-panel.panel-active-state { transform: translateX(-50%); }
-
-        .convo-panel-header {
-            padding: 16px 20px;
-            background: rgba(5, 9, 24, 0.9);
-            backdrop-filter: blur(30px);
-            border-bottom: var(--border-glass);
-            display: flex;
             align-items: center;
+            text-decoration: none;
+            color: #64748b;
+            font-size: 10px;
+            font-weight: 600;
+            gap: 4px;
+            position: relative;
+            width: 65px;
         }
-        .header-left-convo { display: flex; align-items: center; gap: 14px; }
-        .convo-meta-info { display: flex; flex-direction: column; }
-        .convo-header-title { font-size: 16px; font-weight: 700; }
-        .convo-header-status { font-size: 11px; color: var(--status-online); font-weight: 600; }
 
-        .message-stream-track { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-        .msg-row-wrapper { display: flex; width: 100%; }
-        .msg-row-wrapper.received-state { justify-content: flex-start; }
-        .msg-row-wrapper.sent-state { justify-content: flex-end; }
-        .bubble-frame { max-width: 75%; padding: 14px 16px; border-radius: var(--radius-inner); font-size: 14px; line-height: 1.5; }
-        .received-state .bubble-frame { background: rgba(255, 255, 255, 0.04); border: var(--border-glass); border-top-left-radius: 4px; }
-        
-        .convo-input-dock-footer { padding: 16px 20px; background: rgba(5, 9, 24, 0.95); border-top: var(--border-glass); }
-        .input-glass-container { flex: 1; background: rgba(255,255,255,0.02); border: var(--border-glass); border-radius: var(--radius-inner); padding: 4px 6px 4px 14px; display: flex; align-items: center; }
-        .text-typing-field { flex: 1; background: transparent; border: none; outline: none; color: var(--text-primary); font-size: 14px; padding: 12px 0; }
-        .send-action-trigger { width: 42px; height: 42px; border-radius: 12px; background: var(--brand-gradient); border: none; color: var(--text-primary); display: flex; align-items: center; justify-content: center; margin-left: 8px; }
+        .nav-link.active { color: #4f46e5; }
+        .nav-link svg { width: 24px; height: 24px; }
+        .nav-notif-count {
+            position: absolute; top: -4px; right: 14px;
+            background-color: #4f46e5; color: white;
+            font-size: 9px; font-weight: 700; width: 15px; height: 15px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            border: 1.5px solid #ffffff;
+        }
     </style>
 </head>
 <body>
 
-    <div class="app-shell">
+    <div class="app-container">
         
-        <!-- Premium Synchronized Header -->
-        <header class="main-header">
-            <div class="header-left">
-                <div class="profile-trigger-mask">
-                    <i class="fa-solid fa-mask"></i>
-                </div>
-                <h1 class="screen-title">StudentX</h1>
-            </div>
-            <div class="header-actions">
-                <button class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-                <button class="icon-btn"><i class="fa-solid fa-pen-to-square"></i></button>
-            </div>
+        <!-- MAIN CHAT LIST HEADER -->
+        <header class="chat-header">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <h1>Chat</h1>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         </header>
 
-        <!-- Segment Controller -->
-        <div class="tab-segment-container">
-            <button class="segment-btn active" id="tab-messages" onclick="switchTab('messages')">
-                <i class="fa-solid fa-message"></i> Messages
-            </button>
-            <button class="segment-btn" id="tab-groups" onclick="switchTab('groups')">
-                <i class="fa-solid fa-users"></i> Groups
-            </button>
+        <!-- SEARCH BOX -->
+        <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" placeholder="Search conversations">
         </div>
 
-        <!-- High-Fidelity Static Cards Track -->
-        <main class="directory-view-scroll" id="mainDirectoryFeed">
+        <!-- FILTER TABS -->
+        <div class="filter-tabs">
+            <div class="tab active">All</div>
+            <div class="tab">Messages</div>
+            <div class="tab">Groups</div>
+            <div class="tab">Channels</div>
+        </div>
+
+        <!-- CONVERSATIONS LIST (Sack kamar hoton) -->
+        <div class="chat-list">
             
-            <!-- AI Card Segment -->
-            <div class="convo-card ai-assistant-card msg-node-item" onclick="openChat('AI Study Assistant', true)">
+            <!-- 1. Fatima Muhammad -->
+            <div class="chat-item" onclick="openChat('Fatima Muhammad', 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150', true)">
+                <div class="avatar-container" onclick="event.stopPropagation(); window.location.href='profile.html'">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" alt="Fatima">
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-meta">
+                        <span class="chat-name">Fatima Muhammad</span>
+                        <span class="chat-time">10:30 AM</span>
+                    </div>
+                    <div class="chat-preview-row">
+                        <span class="chat-preview">Thanks! That really helps 😊</span>
+                        <span class="badge">2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. John Doe -->
+            <div class="chat-item" onclick="openChat('John Doe', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150', true)">
+                <div class="avatar-container" onclick="event.stopPropagation(); window.location.href='profile.html'">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="John">
+                    <div class="status-dot online"></div>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-meta">
+                        <span class="chat-name">John Doe</span>
+                        <span class="chat-time">9:45 AM</span>
+                    </div>
+                    <div class="chat-preview-row">
+                        <span class="chat-preview">Do you have the assignment?</span>
+                        <span class="badge">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Study Group (CS300) -->
+            <div class="chat-item" onclick="openChat('Study Group (CS300)', '', false)">
                 <div class="avatar-container">
-                    <div class="avatar-img ai-avatar-glow"><i class="fa-solid fa-microchip"></i></div>
-                    <div class="online-dot"></div>
+                    <div class="avatar-placeholder" style="background:#eff6ff; color:#2563eb;">🤝</div>
                 </div>
-                <div class="card-content-block">
-                    <div class="card-top-row">
-                        <div class="card-title">AI Study Assistant <i class="fa-solid fa-circle-check verified-badge"></i></div>
-                        <div class="meta-timestamp">07:04 PM</div>
+                <div class="chat-info">
+                    <div class="chat-meta">
+                        <span class="chat-name">Study Group (CS300)</span>
+                        <span class="chat-time">9:20 AM</span>
                     </div>
-                    <div class="card-bottom-row">
-                        <span class="msg-preview-text">Quiz matrix generated successfully based on your notes.</span>
+                    <div class="chat-preview-row">
+                        <span class="chat-preview">Maryam: I'll send the notes</span>
+                        <span class="badge">6</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Standard Chat Segment (Ahmad Musa) -->
-            <div class="convo-card msg-node-item" onclick="openChat('Ahmad Musa', false)">
+            <!-- 4. Maryam Hassan -->
+            <div class="chat-item" onclick="openChat('Maryam Hassan', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150', false)">
+                <div class="avatar-container" onclick="event.stopPropagation(); window.location.href='profile.html'">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" alt="Maryam">
+                    <div class="status-dot"></div>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-meta">
+                        <span class="chat-name">Maryam Hassan</span>
+                        <span class="chat-time">Yesterday</span>
+                    </div>
+                    <div class="chat-preview-row">
+                        <span class="chat-preview">Alright, see you tomorrow</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. David Okafor -->
+            <div class="chat-item" onclick="openChat('David Okafor', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150', false)">
+                <div class="avatar-container" onclick="event.stopPropagation(); window.location.href='profile.html'">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="David">
+                    <div class="status-dot"></div>
+                </div>
+                <div class="chat-info">
+                    <div class="chat-meta">
+                        <span class="chat-name">David Okafor</span>
+                        <span class="chat-time">Yesterday</span>
+                    </div>
+                    <div class="chat-preview-row">
+                        <span class="chat-preview">Okay, got it. Thanks!</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. AI Study Assistant -->
+            <div class="chat-item" onclick="openChat('AI Study Assistant 🤖', '', false)">
                 <div class="avatar-container">
-                    <img src="https://i.pravatar.cc/120?u=user88" class="avatar-img">
-                    <div class="online-dot"></div>
+                    <div class="avatar-placeholder" style="background:#f5f3ff; color:#7c3aed;">🤖</div>
                 </div>
-                <div class="card-content-block">
-                    <div class="card-top-row">
-                        <div class="card-title">Ahmad Musa <i class="fa-solid fa-circle-check verified-badge"></i></div>
-                        <div class="meta-timestamp">06:12 PM</div>
+                <div class="chat-info">
+                    <div class="chat-meta">
+                        <span class="chat-name">AI Study Assistant 🤖</span>
+                        <span class="chat-time">Yesterday</span>
                     </div>
-                    <div class="card-bottom-row">
-                        <span class="msg-preview-text voice-indicator-text"><i class="fa-solid fa-microphone"></i> Voice Note (0:42)</span>
-                        <div class="counter-badge">2</div>
+                    <div class="chat-preview-row">
+                        <span class="chat-preview">Here's a quick summary for you</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Group Item Placeholder -->
-            <div class="convo-card group-node-item" style="display: none;" onclick="openChat('Computer Science Devs', false)">
-                <div class="avatar-container">
-                    <img src="https://i.pravatar.cc/120?u=group12" class="avatar-img">
-                </div>
-                <div class="card-content-block">
-                    <div class="card-top-row">
-                        <div class="card-title">Computer Science Devs</div>
-                        <div class="meta-timestamp">05:11 PM</div>
-                    </div>
-                    <div class="card-bottom-row">
-                        <span class="msg-preview-text">Fatima Muhammad shared a PDF document.</span>
-                        <div class="counter-badge">5</div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <!-- Minimalist Luxury Bottom Bar — Unified Layout with Alert at Bottom -->
-        <nav class="bottom-nav-bar">
-            <a href="home.html" class="nav-link-item"><i class="fa-solid fa-house"></i></a>
-            <a href="explore.html" class="nav-link-item"><i class="fa-solid fa-compass"></i></a>
-            <a href="studyhub.html" class="nav-link-item"><i class="fa-solid fa-book"></i></a>
-            <a href="chat.html" class="nav-link-item active-nav-route"><i class="fa-solid fa-message"></i></a>
-            <a href="notifications.html" class="nav-link-item"><i class="fa-solid fa-bell"></i></a>
-            <a href="profile.html" class="nav-link-item"><i class="fa-solid fa-user"></i></a>
-        </nav>
-
-        <!-- Slide-In Chat Workspace Panel -->
-        <div class="active-conversation-panel" id="activeConversationSheet">
-            <header class="convo-panel-header">
-                <div class="header-left-convo">
-                    <button class="icon-btn" onclick="closeChat()" style="margin-right: 10px;"><i class="fa-solid fa-arrow-left"></i></button>
-                    <div class="convo-meta-info">
-                        <div class="convo-header-title" id="chatActiveTitle">AI Study Assistant</div>
-                        <div class="convo-header-status">Online</div>
-                    </div>
-                </div>
-            </header>
-
-            <div class="message-stream-track" id="chatMessageTrack">
-                <!-- Messages injection layer -->
-            </div>
-
-            <footer class="convo-input-dock-footer">
-                <div class="dock-main-control-row" style="display: flex; align-items: center;">
-                    <div class="input-glass-container">
-                        <input type="text" class="text-typing-field" placeholder="Type secure message...">
-                    </div>
-                    <button class="send-action-trigger"><i class="fa-solid fa-paper-plane"></i></button>
-                </div>
-            </footer>
         </div>
+
+        <!-- --- DYNAMIC INSIDE CHAT WINDOW SCREEN --- -->
+        <div class="inside-chat-view" id="insideChatView">
+            <div class="inside-header">
+                <div class="back-btn" onclick="closeChat()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </div>
+                <div class="avatar-container" style="width:40px; height:40px;" onclick="window.location.href='profile.html'">
+                    <img src="" id="targetAvatar" alt="">
+                    <div class="status-dot" id="targetStatus"></div>
+                </div>
+                <div style="flex:1;">
+                    <div class="chat-name" id="targetName" style="font-size:15px;">Fatima Muhammad</div>
+                    <div style="font-size:11px; color:#10b981; font-weight:600;" id="targetStateText">Online</div>
+                </div>
+                <div>📍</div>
+            </div>
+
+            <!-- MESSAGES CONTAINER -->
+            <div class="messages-area" id="msgArea">
+                <!-- Pinned Notice -->
+                <div style="background:#fffbeb; font-size:12px; padding:6px 12px; border-radius:8px; display:flex; align-items:center; gap:6px; color:#b45309; font-weight:600;">
+                    <span>📍 Pinned:</span> <span style="font-weight:500;">Karfe 10:00 AM zamuyi group study.</span>
+                </div>
+
+                <!-- Incoming -->
+                <div class="msg-wrapper incoming">
+                    <div class="msg-bubble" oncontextmenu="handleLongPress(event, this)">
+                        Ina kwana Yusuf! Do you have the assignment template?
+                    </div>
+                    <div class="msg-meta">10:28 AM</div>
+                </div>
+
+                <!-- Outgoing -->
+                <div class="msg-wrapper outgoing">
+                    <div class="msg-bubble" oncontextmenu="handleLongPress(event, this)">
+                        Ina kwana, eyy gashi nan na tura miki duba.
+                    </div>
+                    <div class="msg-meta">10:29 AM <span>✓✓</span></div>
+                </div>
+
+                <!-- Incoming Voice Note -->
+                <div class="msg-wrapper incoming">
+                    <div class="msg-bubble">
+                        <div class="voice-player">
+                            <button class="play-btn" onclick="playVoiceSimulation(this)">▶</button>
+                            <div class="voice-wave"><div class="voice-progress"></div></div>
+                            <span style="font-size:11px; font-weight:600;">0:14</span>
+                        </div>
+                    </div>
+                    <div class="msg-meta">10:30 AM</div>
+                </div>
+
+                <!-- Incoming text finished -->
+                <div class="msg-wrapper incoming">
+                    <div class="msg-bubble" oncontextmenu="handleLongPress(event, this)">
+                        Thanks! That really helps 😊
+                    </div>
+                    <div class="msg-meta">10:30 AM</div>
+                </div>
+            </div>
+
+            <!-- INPUT BAR -->
+            <div class="chat-input-bar">
+                <button class="action-icon-btn" onclick="openMediaMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                </button>
+                <div class="input-wrapper">
+                    <input type="text" id="chatMessageInput" placeholder="Type a message...">
+                    <button class="action-icon-btn" onclick="sendViewOnceAudio()">👁️</button>
+                </div>
+                <button class="send-btn" onclick="sendMessageNow()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                </button>
+            </div>
+        </div>
+        <!-- CONTEXT ACTION MENU -->
+        <div class="context-menu" id="msgContextMenu">
+            <div class="context-option" onclick="copySelectedMessage()">Copy <span>📋</span></div>
+            <div class="context-option" onclick="shareSelectedMessage()">Share <span>📤</span></div>
+            <div class="context-option delete" onclick="deleteSelectedMessage()">Delete <span>🗑️</span></div>
+        </div>
+
+        <!-- VIEW ONCE MEDIA ATTACH MODAL -->
+        <div class="media-modal" id="mediaModal" onclick="closeMediaMenu()">
+            <div class="media-content" onclick="event.stopPropagation()">
+                <div class="media-title">Send View Once Media 👁️</div>
+                <div class="media-grid">
+                    <div class="media-opt" onclick="sendViewOnce('📷 Photo')">
+                        <div class="media-opt-icon">📷</div>
+                        <span style="font-size:12px; font-weight:600;">Photo</span>
+                    </div>
+                    <div class="media-opt" onclick="sendViewOnce('🎥 Video')">
+                        <div class="media-opt-icon">🎥</div>
+                        <span style="font-size:12px; font-weight:600;">Video</span>
+                    </div>
+                    <div class="media-opt" onclick="sendViewOnce('🎵 Voice')">
+                        <div class="media-opt-icon">🎤</div>
+                        <span style="font-size:12px; font-weight:600;">Voice</span>
+                    </div>
+                    <div class="media-opt" onclick="sendViewOnce('📝 Text')">
+                        <div class="media-opt-icon">📝</div>
+                        <span style="font-size:12px; font-weight:600;">Text</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BOTTOM NAVIGATION BAR -->
+        <nav class="bottom-navigation">
+            <a href="home.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                <span>Home</span>
+            </a>
+            <a href="explore.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+                <span>Explore</span>
+            </a>
+            <a href="chat.html" class="nav-link active">
+                <div class="nav-notif-count">3</div>
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                <span>Chat</span>
+            </a>
+            <a href="studyhub.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <span>StudyHub</span>
+            </a>
+            <a href="profile.html" class="nav-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Profile</span>
+            </a>
+        </nav>
 
     </div>
 
+    <!-- CODE CONTROLLERS & LOGIC JS -->
     <script>
-        function switchTab(tab) {
-            document.querySelectorAll(".segment-btn").forEach(b => b.classList.remove("active"));
-            document.getElementById(`tab-${tab}`).classList.add("active");
-            
-            const msgItems = document.querySelectorAll(".msg-node-item");
-            const groupItems = document.querySelectorAll(".group-node-item");
+        let selectedMessageElement = null;
 
-            if(tab === "messages") {
-                msgItems.forEach(i => i.style.display = "flex");
-                groupItems.forEach(i => i.style.display = "none");
-            } else {
-                msgItems.forEach(i => i.style.display = "none");
-                groupItems.forEach(i => i.style.display = "flex");
-            }
-        }
-
-        function openChat(title, isAi) {
-            document.getElementById("chatActiveTitle").innerText = title;
-            const track = document.getElementById("chatMessageTrack");
+        // 1. Buɗe Inbox Chat Overlay
+        function openChat(name, avatarSrc, isOnline) {
+            document.getElementById('targetName').innerText = name;
+            const avatarImg = document.getElementById('targetAvatar');
+            const statusDot = document.getElementById('targetStatus');
+            const stateText = document.getElementById('targetStateText');
             
-            if(isAi) {
-                track.innerHTML = `
-                    <div class="msg-row-wrapper received-state">
-                        <div class="bubble-frame">Barka da zuwa StudentX AI. Tura mini bayanan karatunka don samar maka da takaitaccen bayani (Summary).</div>
-                    </div>`;
+            if(avatarSrc) {
+                avatarImg.style.display = "block";
+                avatarImg.src = avatarSrc;
             } else {
-                track.innerHTML = `
-                    <div class="msg-row-wrapper received-state">
-                        <div class="bubble-frame">Assalamu Alaikum, na tura maka sabon tsarin karatun da aka sabunta.</div>
-                    </div>`;
+                avatarImg.style.display = "none";
             }
-            document.getElementById("activeConversationSheet").classList.add("panel-active-state");
+
+            if(isOnline) {
+                statusDot.className = "status-dot online";
+                stateText.innerText = "Online";
+                stateText.style.color = "#10b981";
+            } else {
+                statusDot.className = "status-dot";
+                stateText.innerText = "Offline";
+                stateText.style.color = "#64748b";
+            }
+
+            document.getElementById('insideChatView').classList.add('active');
         }
 
         function closeChat() {
-            document.getElementById("activeConversationSheet").classList.remove("panel-active-state");
+            document.getElementById('insideChatView').classList.remove('active');
+            hideMenu();
+        }
+
+        // 2. Long Press Interface & Context Menu
+        function handleLongPress(e, element) {
+            e.preventDefault();
+            selectedMessageElement = element;
+            const menu = document.getElementById('msgContextMenu');
+            
+            let topPos = e.clientY;
+            let leftPos = e.clientX;
+
+            if (leftPos + 180 > window.innerWidth) { leftPos = window.innerWidth - 190; }
+            if (topPos + 120 > window.innerHeight) { topPos = window.innerHeight - 130; }
+
+            menu.style.top = topPos + "px";
+            menu.style.left = leftPos + "px";
+            menu.style.display = "flex";
+        }
+
+        function hideMenu() {
+            document.getElementById('msgContextMenu').style.display = "none";
+        }
+
+        document.addEventListener('click', hideMenu);
+
+        // 3. Actions: Copy, Share, Delete
+        function copySelectedMessage() {
+            if(selectedMessageElement) {
+                const textToCopy = selectedMessageElement.innerText;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    alert("Copied to Clipboard! 📋");
+                });
+            }
+        }
+
+        function shareSelectedMessage() {
+            if(selectedMessageElement && navigator.share) {
+                navigator.share({
+                    title: 'StudentX Chat Message',
+                    text: selectedMessageElement.innerText
+                }).catch(err => console.log(err));
+            } else {
+                alert("Native Native Share activated for: " + selectedMessageElement.innerText);
+            }
+        }
+
+        function deleteSelectedMessage() {
+            if(selectedMessageElement) {
+                selectedMessageElement.innerHTML = "🚫 This message was deleted";
+                selectedMessageElement.classList.add("msg-deleted");
+                // Cire oncontextmenu don kar a sake tsara ta
+                selectedMessageElement.removeAttribute("oncontextmenu");
+            }
+        }
+
+        // 4. Voice Message Simulation
+        function playVoiceSimulation(btn) {
+            const waveProgress = btn.nextElementSibling.querySelector('.voice-progress');
+            if(btn.innerText === "▶") {
+                btn.innerText = "⏸";
+                let width = 0;
+                const interval = setInterval(() => {
+                    if(width >= 100 || btn.innerText === "▶") {
+                        clearInterval(interval);
+                        if(width >= 100) { btn.innerText = "▶"; waveProgress.style.width = "0%"; }
+                    } else {
+                        width += 5;
+                        waveProgress.style.width = width + "%";
+                    }
+                }, 200);
+            } else {
+                btn.innerText = "▶";
+            }
+        }
+
+        // 5. Normal Send
+        function sendMessageNow() {
+            const input = document.getElementById('chatMessageInput');
+            if(input.value.trim() === "") return;
+
+            const area = document.getElementById('msgArea');
+            const wrapper = document.createElement('div');
+            wrapper.className = "msg-wrapper outgoing";
+            
+            wrapper.innerHTML = `
+                <div class="msg-bubble" oncontextmenu="handleLongPress(event, this)">${input.value}</div>
+                <div class="msg-meta">Just now <span style="color:#4f46e5;">✓✓</span></div>
+            `;
+            area.appendChild(wrapper);
+            input.value = "";
+            area.scrollTop = area.scrollHeight;
+        }
+
+        // 6. View Once Systems
+        function openMediaMenu() { document.getElementById('mediaModal').style.display = "flex"; }
+        function closeMediaMenu() { document.getElementById('mediaModal').style.display = "none"; }
+
+        function sendViewOnce(type) {
+            closeMediaMenu();
+            const area = document.getElementById('msgArea');
+            const wrapper = document.createElement('div');
+            wrapper.className = "msg-wrapper outgoing";
+            
+            wrapper.innerHTML = `
+                <div class="msg-bubble" style="padding:8px;" onclick="openViewOnceItem(this)">
+                    <div class="view-once-box">
+                        <span>👁️ View Once ${type}</span>
+                    </div>
+                </div>
+                <div class="msg-meta">Just now <span>✓✓</span></div>
+            `;
+            area.appendChild(wrapper);
+            area.scrollTop = area.scrollHeight;
+        }
+
+        function sendViewOnceAudio() {
+            sendViewOnce('🎵 Audio Track');
+        }
+
+        function openViewOnceItem(bubble) {
+            alert("Viewing Media Content! (Play once/View once demo active)");
+            bubble.innerHTML = `<div style="color:rgba(255,255,255,0.6); font-style:italic; display:flex; align-items:center; gap:6px;">👁️ Opened</div>`;
+            bubble.style.pointerEvents = "none";
         }
     </script>
 </body>
