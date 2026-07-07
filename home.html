@@ -726,7 +726,41 @@
         </nav>
 
     </div>
+<!-- START: WANNAN KOD DIN ZAI TILASTA FITOWAR MENU ICON DA REDIRECT -->
+    <style>
+        .header-left .hamburger {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 5px !important;
+            cursor: pointer !important;
+            width: 22px !important;
+            height: 18px !important;
+        }
+        .header-left .hamburger span {
+            display: block !important;
+            width: 22px !important;
+            height: 2.5px !important;
+            background-color: #0f172a !important;
+            border-radius: 2px !important;
+        }
+    </style>
 
+    <script>
+        // Wannan yana nemo inda '.header-left' yake ya saka icon din da kansa ta karfi
+        (function() {
+            var sashenHagu = document.querySelector('.header-left');
+            if (sashenHagu) {
+                sashenHagu.innerHTML = `
+                    <div class="hamburger" onclick="window.location.href='menu.html'">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+            }
+        })();
+    </script>
+    <!-- END: KOD DIN MENU -->
 </body>
 </html>
                
