@@ -5,154 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>StudentX - Explore</title>
     <style>
+        :root { --primary: #4f46e5; --text: #1e293b; --muted: #94a3b8; --border: #e2e8f0; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #f8fafc; color: #1e293b; padding-bottom: 80px; }
-        
-        /* Header */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #ffffff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f1f5f9; }
+        body { background-color: #f8fafc; color: var(--text); padding-bottom: 85px; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #ffffff; border-bottom: 1px solid var(--border); }
         .header h1 { font-size: 20px; font-weight: 700; }
         
-        /* Search Section */
-        .search-container { padding: 15px 20px; background: #ffffff; }
-        .search-wrapper { display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 10px 15px; border-radius: 12px; }
-        .search-wrapper input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
-        .filter-btn { background: none; border: none; font-size: 20px; }
-
-        /* Categories Scroll */
-        .categories { display: flex; overflow-x: auto; padding: 15px 20px; gap: 20px; background: #ffffff; scrollbar-width: none; }
-        .categories::-webkit-scrollbar { display: none; }
-        .cat-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 60px; text-decoration: none; color: #64748b; }
-        .cat-item.active { color: #4f46e5; }
-        .cat-icon { width: 50px; height: 50px; background: #f1f5f9; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
-        .cat-item.active .cat-icon { background: #e0e7ff; }
+        /* Search Bar */
+        .search-area { padding: 15px 20px; background: #ffffff; }
+        .search-box { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .search-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
+        
+        /* Categories */
+        .cat-scroll { display: flex; overflow-x: auto; padding: 10px 20px; gap: 15px; scrollbar-width: none; }
+        .cat-scroll::-webkit-scrollbar { display: none; }
+        .cat-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 600; background: white; white-space: nowrap; }
+        .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <a href="menu.html" style="color:black;"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+        <a href="menu.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
         <h1>Explore</h1>
-        <a href="notifications.html" style="color:black; position:relative;"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span style="position:absolute; top:-2px; right:0; background:blue; color:white; font-size:9px; border-radius:50%; width:12px; height:12px; text-align:center;">8</span></a>
+        <a href="notifications.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg></a>
     </div>
 
-    <div class="search-container">
-        <div class="search-wrapper">
-            <svg width="20" height="20" stroke="currentColor" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <div class="search-area">
+        <div class="search-box">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             <input type="text" id="searchInput" placeholder="Search students, posts, communities...">
-            <button class="filter-btn">⚙️</button>
         </div>
     </div>
 
-    <div class="categories">
-        <a href="#" class="cat-item active"><div class="cat-icon">▤</div><span>All</span></a>
-        <a href="#" class="cat-item"><div class="cat-icon">🎓</div><span>Academic</span></a>
-        <a href="#" class="cat-item"><div class="cat-icon">🏆</div><span>Scholarships</span></a>
-        <a href="#" class="cat-item"><div class="cat-icon">💼</div><span>Careers</span></a>
-        <a href="#" class="cat-item"><div class="cat-icon"> </> </div><span>Projects</span></a>
-        <a href="#" class="cat-item"><div class="cat-icon">♥</div><span>Lifestyle</span></a>
+    <div class="cat-scroll">
+        <button class="cat-btn active">All</button>
+        <button class="cat-btn">Academic</button>
+        <button class="cat-btn">Scholarships</button>
+        <button class="cat-btn">Careers</button>
     </div>
-    <style>
-        .section { padding: 20px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .section-header h2 { font-size: 18px; }
-        .section-header a { font-size: 14px; color: #4f46e5; text-decoration: none; }
-        
-        /* Topics */
-        .topic-card { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
-        .topic-info h4 { font-size: 15px; }
-        .topic-info p { font-size: 12px; color: #64748b; }
-
-        /* Communities */
-        .communities-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .comm-card { background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #f1f5f9; text-align: center; }
-        .comm-icon { width: 40px; height: 40px; margin: 0 auto 10px; background: #e0e7ff; border-radius: 8px; display: flex; justify-content: center; align-items: center; }
-        .join-btn { width: 100%; padding: 8px; border: none; border-radius: 6px; background: #4f46e5; color: white; cursor: pointer; font-size: 12px; font-weight: 600; }
-    </style>
-
-    <div class="section">
-        <div class="section-header"><h2>Trending Topics 🔥</h2><a href="#">See all</a></div>
-        <div class="topic-card">
-            <div class="topic-info"><h4>#AI in Education</h4><p>12.5K posts</p></div>
-            <span style="color:green;">↗</span>
-        </div>
-        <div class="topic-card">
-            <div class="topic-info"><h4>#Exam Tips</h4><p>9.8K posts</p></div>
-            <span style="color:orange;">↗</span>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="section-header"><h2>Popular Communities</h2><a href="#">See all</a></div>
-        <div class="communities-grid">
-            <div class="comm-card">
-                <div class="comm-icon">💻</div>
-                <h4 style="font-size: 13px;">CS Hub</h4>
-                <p style="font-size: 10px; color: #64748b; margin-bottom: 8px;">12K members</p>
-                <button class="join-btn" onclick="toggleJoin(this)">Join</button>
-            </div>
-            <div class="comm-card">
-                <div class="comm-icon">🔧</div>
-                <h4 style="font-size: 13px;">Eng Students</h4>
-                <p style="font-size: 10px; color: #64748b; margin-bottom: 8px;">8.4K members</p>
-                <button class="join-btn" onclick="toggleJoin(this)">Join</button>
-            </div>
-        </div>
-    </div>
-    <style>
-        .suggested-card { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .user-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-        .follow-btn { padding: 6px 15px; border: 1px solid #4f46e5; background: transparent; color: #4f46e5; border-radius: 20px; font-weight: 600; cursor: pointer; }
-        
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px; background: white; border-top: 1px solid #eee; }
-    </style>
-
-    <div class="section">
-        <div class="section-header"><h2>Suggested for You</h2><a href="#">See all</a></div>
-        <div class="suggested-card">
-            <div class="user-info">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" class="user-img">
-                <div><h4>Fatima</h4><p style="font-size: 11px;">Computer Science</p></div>
-            </div>
-            <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
-        </div>
-    </div>
-
-    <!-- Bottom Nav -->
-    <div class="bottom-nav">
-        <a href="home.html" style="color:#94a3b8; text-decoration:none;">🏠</a>
-        <a href="explore.html" style="color:#4f46e5; text-decoration:none;">🧭</a>
-        <a href="chat.html" style="color:#94a3b8; text-decoration:none;">💬</a>
-        <a href="studyhub.html" style="color:#94a3b8; text-decoration:none;">📚</a>
-        <a href="profile.html" style="color:#94a3b8; text-decoration:none;">👤</a>
-    </div>
-
-    <script>
-        // Join Button Logic
-        function toggleJoin(btn) {
-            if(btn.innerText === "Join") {
-                btn.innerText = "Joined";
-                btn.style.background = "#e2e8f0";
-                btn.style.color = "#475569";
-            } else {
-                btn.innerText = "Join";
-                btn.style.background = "#4f46e5";
-                btn.style.color = "white";
-            }
-        }
-
-        // Follow Button Logic
-        function toggleFollow(btn) {
-            if(btn.innerText === "Follow") {
-                btn.innerText = "Following";
-                btn.style.background = "#4f46e5";
-                btn.style.color = "white";
-            } else {
-                btn.innerText = "Follow";
-                btn.style.background = "transparent";
-                btn.style.color = "#4f46e5";
-            }
-        }
-    </script>
-</body>
-</html>
