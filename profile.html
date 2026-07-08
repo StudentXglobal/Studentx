@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Premium Profile</title>
+    <title>StudentX - Profile</title>
     <style>
         :root {
             --primary-purple: #7c3aed;
@@ -109,7 +109,7 @@
         .profile-info { flex: 1; }
         .name-wrapper { display: flex; align-items: center; gap: 5px; }
         .user-name { font-size: 21px; font-weight: 700; letter-spacing: -0.3px; }
-        .blue-tick { color: var(--verified-blue); display: flex; align-items: center; }
+        .blue-tick { color: var(--verified-blue); display: inline-flex; align-items: center; }
         .user-handle { color: var(--text-gray); font-size: 13.5px; margin-top: 1px; }
         
         .follow-counter-row {
@@ -133,15 +133,12 @@
         .stat-text { font-size: 11.5px; color: var(--text-gray); margin-top: 1px; }
 
         .options-list { background: white; border-radius: 20px; margin: 16px 24px; padding: 4px 0; box-shadow: var(--card-shadow); border: 1px solid rgba(241, 245, 249, 0.6); }
-        .opt-item { display: flex; align-items: center; padding: 14px 18px; cursor: pointer; }
+        .opt-item { display: flex; align-items: center; padding: 14px 18px; cursor: pointer; text-decoration: none; }
         .opt-item:not(:last-child) { border-bottom: 1px solid #f8fafc; }
         .opt-icon-wrapper { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
         .bg-indigo { background: #eef2ff; color: #4f46e5; }
         .bg-blue { background: #eff6ff; color: #2563eb; }
         .bg-pink { background: #fff1f2; color: #f43f5e; }
-        .bg-teal { background: #e6fffa; color: #0d9488; }
-        .bg-orange { background: #fff7ed; color: #ea580c; }
-        .bg-purple { background: #f5f3ff; color: #7c3aed; }
         .opt-details { flex: 1; }
         .opt-title { font-size: 14.5px; font-weight: 600; color: var(--text-dark); }
         .opt-subtitle { font-size: 11.5px; color: var(--text-gray); margin-top: 1px; }
@@ -157,13 +154,11 @@
         .hex-shape { width: 50px; height: 50px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
         .hex-purple { background: #f3e8ff; color: #a855f7; }
         .hex-green { background: #dcfce7; color: #22c55e; }
-        .hex-blue { background: #dbeafe; color: #3b82f6; }
-        .hex-amber { background: #fef9c3; color: #eab308; }
         .hex-name { font-size: 11px; font-weight: 700; color: var(--text-dark); }
         .hex-meta { font-size: 9.5px; color: var(--text-gray); margin-top: 2px; }
 
         .tab-navigator { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 10px 6px 12px; border-top: 1px solid var(--border-light); z-index: 100; }
-        .tab-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; background: transparent; border: none; cursor: pointer; color: #94a3b8; font-size: 10.5px; font-weight: 600; flex: 1; position: relative; }
+        .tab-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; background: transparent; border: none; cursor: pointer; color: #94a3b8; font-size: 10.5px; font-weight: 600; flex: 1; position: relative; text-decoration: none; }
         .tab-cell.active { color: var(--primary-purple); }
         .tab-badge { position: absolute; top: -3px; right: 24%; background: #ef4444; color: white; font-size: 9px; font-weight: 700; border-radius: 8px; padding: 1px 4px; border: 1.5px solid white; }
         .home-indicator { position: absolute; bottom: 4px; width: 140px; height: 4px; background: #000000; border-radius: 2px; left: 50%; transform: translateX(-50%); }
@@ -184,7 +179,7 @@
 </head>
 <body>
     <div class="app-screen">
-        <!-- Header: An cire alamar Setting gaba ɗaya -->
+        <!-- Header Section (Babu Alamar Settings Kamar Hoto) -->
         <header class="main-header">
             <div style="width: 40px;"></div> 
             <h1>Profile</h1>
@@ -198,10 +193,9 @@
             </div>
         </header>
 
-        <!-- Profile Hero Section -->
+        <!-- Profile Hero Area -->
         <section class="profile-hero">
             <div class="avatar-holder">
-                <!-- Anonymous/Joker Mask Placeholder Icon -->
                 <div class="avatar-mask">
                     <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
@@ -216,13 +210,15 @@
             <div class="profile-info">
                 <div class="name-wrapper">
                     <span class="user-name" id="namePlate">Yusuf Alhaji Garba</span>
+                    <!-- Cikakken Alamar Verified Badge Na Asali -->
                     <span class="blue-tick">
-                        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.99-3.818-3.99-.48 0-.944.09-1.37.26C14.75 2.513 13.483 1.5 12 1.5s-2.75 1.013-3.395 2.27c-.426-.17-.89-.26-1.37-.26-2.108 0-3.818 1.78-3.818 3.99 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.71 3.99 3.818 3.99.48 0 .944-.09 1.37-.26.645 1.257 1.912 2.27 3.395 2.27s2.75-1.013 3.395-2.27c.426.17.89.26 1.37.26 2.108 0 3.818-1.78 3.818-3.99 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.72 4.22l-3.22-3.22 1.42-1.42 1.8 1.8 4.8-4.8 1.42 1.42-6.22 6.22z"/>
+                        </svg>
                     </span>
                 </div>
                 <div class="user-handle" id="handlePlate">@yusuf_garba</div>
                 
-                <!-- Adadin Followers da Following daidai a kasan username -->
                 <div class="follow-counter-row">
                     <div><span class="count-num">14.2K</span> <span class="count-lbl">Followers</span></div>
                     <div><span class="count-num">385</span> <span class="count-lbl">Following</span></div>
@@ -243,7 +239,7 @@
             </div>
         </section>
 
-        <!-- Stats Grid Box -->
+        <!-- Stats Boxes Row -->
         <section class="stats-row">
             <div class="stat-box">
                 <div class="stat-icon" style="color: #6366f1;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
@@ -262,7 +258,7 @@
             </div>
         </section>
 
-        <!-- Options Menu Navigation List -->
+        <!-- Options Links List -->
         <section class="options-list">
             <div class="opt-item" onclick="openEditModal()">
                 <div class="opt-icon-wrapper bg-blue"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
@@ -274,531 +270,9 @@
                 <div class="opt-details"><div class="opt-title">Account & Security</div><div class="opt-subtitle">Manage password and security</div></div>
                 <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
-            <div class="opt-item">
-                <div class="opt-icon-wrapper bg-pink"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
-                <div class="opt-details"><div class="opt-title">Notifications</div><div class="opt-subtitle">Manage your notification preferences</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-            <div class="opt-item">
-                <div class="opt-icon-wrapper bg-teal"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
-                <div class="opt-details"><div class="opt-title">Privacy</div><div class="opt-subtitle">Control your privacy settings</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-            <div class="opt-item">
-                <div class="opt-icon-wrapper bg-orange"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M12 6a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"></path></svg></div>
-                <div class="opt-details"><div class="opt-title">Appearance</div><div class="opt-subtitle">Choose your app theme</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
         </section>
 
-        <!-- Achievements Slider Section -->
-        <div class="section-nav"><div class="section-lbl">Achievements</div><a href="#" class="action-lbl">View All</a></div>
-        <div class="badges-slider">
-            <div class="hex-card">
-                <div class="hex-shape hex-purple"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
-                <div class="hex-name">Early Explorer</div><div class="hex-meta">Joined early</div>
-            </div>
-            <div class="hex-card">
-                <div class="hex-shape hex-green"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                <div class="hex-name">Top Contributor</div><div class="hex-meta">10+ posts</div>
-            </div>
-            <div class="hex-card">
-                <div class="hex-shape hex-blue"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
-                <div class="hex-name">Social Butterfly</div><div class="hex-meta">50+ links</div>
-            </div>
-        </div>
-
-        <!-- Bottom Tab Navigation Bar: (An daidaita shi baya nuna kowane alert na rubutu gaba daya) -->
-        <nav class="tab-navigator">
-            <button class="tab-cell" onclick="switchTab(this)"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></button>
-            <button class="tab-cell" onclick="switchTab(this)"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg><span>Explore</span></button>
-            <button class="tab-cell" onclick="switchTab(this)"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span>Chat</span><span class="tab-badge">3</span></button>
-            <button class="tab-cell" onclick="switchTab(this)"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><span>StudyHub</span></button>
-            <button class="tab-cell active" onclick="switchTab(this)"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></button>
-            <div class="home-indicator"></div>
-        </nav>
-                    </div>
-                    <!-- Edit Profile Modal System (An saka wajen Upload na Camera da Files na waya direct) -->
-    <div class="overlay-layer" id="editProfileModal">
-        <div class="bottom-sheet">
-            <div class="sheet-hdr">
-                <div class="sheet-title">Edit Profile Details</div>
-                <button class="sheet-close" onclick="closeEditModal()">✕</button>
-            </div>
-            
-            <!-- Akwatin canza hoto na Files ko Camera direct -->
-            <div class="input-item">
-                <label>Canza Profile Picture (Daga Files ko Camera)</label>
-                <input type="file" id="profileImageInput" accept="image/*" class="input-field" style="padding: 8px;">
-            </div>
-
-            <div class="input-item">
-                <label>Display Name</label>
-                <input type="text" class="input-field" id="inputName" value="Yusuf Alhaji Garba">
-            </div>
-            <div class="input-item">
-                <label>Username</label>
-                <input type="text" class="input-field" id="inputHandle" value="@yusuf_garba">
-            </div>
-            <div class="input-item">
-                <label>Bio Details</label>
-                <input type="text" class="input-field" id="inputBio" value="Computer Science student passionate about learning and building innovative solutions.">
-            </div>
-            <div class="input-item">
-                <label>Location</label>
-                <input type="text" class="input-field" id="inputLoc" value="Abuja, Nigeria">
-            </div>
-
-            <button class="btn-action" onclick="commitChanges()">Save Profile Info</button>
-        </div>
-    </div>
-
-    <!-- JavaScript Actions Logic Controller System -->
-    <script>
-        function openEditModal() {
-            document.getElementById('editProfileModal').classList.add('active');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editProfileModal').classList.remove('active');
-        }
-
-        function commitChanges() {
-            document.getElementById('namePlate').innerText = document.getElementById('inputName').value;
-            document.getElementById('handlePlate').innerText = document.getElementById('inputHandle').value;
-            document.getElementById('bioPlate').innerText = document.getElementById('inputBio').value;
-            document.getElementById('locPlate').innerText = document.getElementById('inputLoc').value;
-
-            // Sarrafa fayil din hoto ko Daukar hoto daga Camera na waya direct
-            const imageInput = document.getElementById('profileImageInput');
-            if (imageInput.files && imageInput.files[0]) {
-                const file = imageInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const avatarMask = document.querySelector('.avatar-mask');
-                    // Maye gurbin tsohon zane da ainihin sabon hoton da ka dauko
-                    avatarMask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
-                }
-                reader.readAsDataURL(file);
-            }
-            closeEditModal();
-        }
-
-        // Sauya active state na tab bar cikin sirri ba tare da wani alert ko rubutu ba
-        function switchTab(element) {
-            document.querySelectorAll('.tab-cell').forEach(tab => tab.classList.remove('active'));
-            element.classList.add('active');
-        }
-        <!-- JavaScript Controller: Gyaran Harshe, Direct Links, da Kyamara -->
-<script>
-    // 1 & 3: Sauya fasalin Modal din zuwa Turanci gaba daya da kuma raba wajen Hoto gida biyu
-    const modalLayer = document.getElementById('editProfileModal');
-    if (modalLayer) {
-        modalLayer.innerHTML = `
-            <div class="bottom-sheet">
-                <div class="sheet-hdr">
-                    <div class="sheet-title">Edit Profile Details</div>
-                    <button class="sheet-close" onclick="closeEditModal()">✕</button>
-                </div>
-                
-                <!-- Wajen canza hoto: An raba Upload da Kyamara daban-daban -->
-                <div class="input-item">
-                    <label>Profile Picture</label>
-                    <div style="display: flex; gap: 12px; margin-top: 6px;">
-                        <button type="button" onclick="document.getElementById('uploadPhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                            Upload Photo
-                        </button>
-                        <button type="button" onclick="document.getElementById('takePhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                            Take Photo
-                        </button>
-                    </div>
-                    <!-- Hidden Core Inputs to trigger native system -->
-                    <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;" onchange="processImage(this)">
-                    <input type="file" id="takePhotoInput" accept="image/*" capture="user" style="display: none;" onchange="processImage(this)">
-                </div>
-
-                <div class="input-item">
-                    <label>Display Name</label>
-                    <input type="text" class="input-field" id="inputName" value="${document.getElementById('namePlate')?.innerText || 'Yusuf Alhaji Garba'}">
-                </div>
-                <div class="input-item">
-                    <label>Username</label>
-                    <input type="text" class="input-field" id="inputHandle" value="${document.getElementById('handlePlate')?.innerText || '@yusuf_garba'}">
-                </div>
-                <div class="input-item">
-                    <label>Bio Details</label>
-                    <input type="text" class="input-field" id="inputBio" value="${document.getElementById('bioPlate')?.innerText || ''}">
-                </div>
-                <div class="input-item">
-                    <label>Location</label>
-                    <input type="text" class="input-field" id="inputLoc" value="${document.getElementById('locPlate')?.innerText || 'Abuja, Nigeria'}">
-                </div>
-
-                <button class="btn-action" onclick="commitChanges()">Save Profile Info</button>
-            </div>
-        `;
-    }
-
-    // 2: Sanya kowane Icon na kasa ya kai mutum direct zuwa ga tabbataccen HTML file dinsa
-    const tabButtons = document.querySelectorAll('.tab-navigator .tab-cell');
-    const targetPages = ['home.html', 'explore.html', 'chat.html', 'studyhub.html', 'profile.html'];
-    
-    tabButtons.forEach((button, index) => {
-        button.removeAttribute('onclick'); // Cire tsohon logic din alert/toggle
-        button.addEventListener('click', () => {
-            window.location.href = targetPages[index];
-        });
-    });
-
-    // Core Profile Modal Interactivity Functions
-    function openEditModal() {
-        document.getElementById('editProfileModal').classList.add('active');
-    }
-
-    function closeEditModal() {
-        document.getElementById('editProfileModal').classList.remove('active');
-    }
-
-    function processImage(input) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const avatarMask = document.querySelector('.avatar-mask');
-                if (avatarMask) {
-                    avatarMask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
-                }
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function commitChanges() {
-        if (document.getElementById('namePlate')) document.getElementById('namePlate').innerText = document.getElementById('inputName').value;
-        if (document.getElementById('handlePlate')) document.getElementById('handlePlate').innerText = document.getElementById('inputHandle').value;
-        if (document.getElementById('bioPlate')) document.getElementById('bioPlate').innerText = document.getElementById('inputBio').value;
-        if (document.getElementById('locPlate')) document.getElementById('locPlate').innerText = document.getElementById('inputLoc').value;
-        closeEditModal();
-    }<!-- ========================================================= -->
-    <!-- 1️⃣ EDIT PROFILE MODAL (An dawo da shi domin kada ya baje)  -->
-    <!-- ========================================================= -->
-    <div class="overlay-layer" id="editProfileModal">
-        <div class="bottom-sheet">
-            <div class="sheet-hdr">
-                <div class="sheet-title">Edit Profile Details</div>
-                <button class="sheet-close" onclick="closeEditModal()">✕</button>
-            </div>
-            
-            <!-- Profile Picture Section (Upload vs Take Photo) -->
-            <div class="input-item">
-                <label>Profile Picture</label>
-                <div style="display: flex; gap: 12px; margin-top: 6px;">
-                    <!-- Madannin hotunan cikin waya -->
-                    <button type="button" onclick="document.getElementById('uploadPhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                        Upload Photo
-                    </button>
-                    <!-- Madannin kunna Kyamara direct -->
-                    <button type="button" onclick="document.getElementById('takePhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        Take Photo
-                    </button>
-                </div>
-                <!-- Boyayyun kofofi na system din waya -->
-                <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;" onchange="processImage(this)">
-                <input type="file" id="takePhotoInput" accept="image/*" capture="user" style="display: none;" onchange="processImage(this)">
-            </div>
-
-            <div class="input-item">
-                <label>Display Name</label>
-                <input type="text" class="input-field" id="inputName" value="Yusuf Alhaji Garba">
-            </div>
-            <div class="input-item">
-                <label>Username</label>
-                <input type="text" class="input-field" id="inputHandle" value="@yusuf_garba">
-            </div>
-            <div class="input-item">
-                <label>Bio Details</label>
-                <input type="text" class="input-field" id="inputBio" value="Computer Science student passionate about learning and building innovative solutions.">
-            </div>
-            <div class="input-item">
-                <label>Location</label>
-                <input type="text" class="input-field" id="inputLoc" value="Abuja, Nigeria">
-            </div>
-
-            <button class="btn-action" onclick="commitChanges()">Save Profile Info</button>
-        </div>
-    </div>
-
-    <!-- ========================================================= -->
-    <!-- 2️⃣ JAVASCRIPT CONTROLLER (Gyaran matsalolin duka)         -->
-    <!-- ========================================================= -->
-    <script>
-        // Gyara na 2: Kunna Edit Modal ba tare da matsala ba
-        function openEditModal() {
-            var modal = document.getElementById('editProfileModal');
-            if (modal) {
-                modal.classList.add('active');
-            }
-        }
-
-        function closeEditModal() {
-            var modal = document.getElementById('editProfileModal');
-            if (modal) {
-                modal.classList.remove('active');
-            }
-        }
-
-        // Karbar hoto da sanya shi a profile icon direct
-        function processImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const avatarMask = document.querySelector('.avatar-mask');
-                    if (avatarMask) {
-                        avatarMask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // Adana canje-canje
-        function commitChanges() {
-            if (document.getElementById('namePlate')) document.getElementById('namePlate').innerText = document.getElementById('inputName').value;
-            if (document.getElementById('handlePlate')) document.getElementById('handlePlate').innerText = document.getElementById('inputHandle').value;
-            if (document.getElementById('bioPlate')) document.getElementById('bioPlate').innerText = document.getElementById('inputBio').value;
-            if (document.getElementById('locPlate')) document.getElementById('locPlate').innerText = document.getElementById('inputLoc').value;
-            closeEditModal();
-        }
-
-        // Gyara na 1: Direct Link Navigation ga duka Icons na Kasa (Home, Explore, Chat, etc.)
-        (function() {
-            const tabs = document.querySelectorAll('.tab-navigator .tab-cell');
-            const links = ['home.html', 'explore.html', 'chat.html', 'studyhub.html', 'profile.html'];
-            
-            if (tabs.length > 0) {
-                tabs.forEach((tab, i) => {
-                    tab.onclick = function(e) {
-                        e.preventDefault();
-                        window.location.href = links[i];
-    <!-- ========================================================= -->
-    <!-- 1️⃣ EDIT PROFILE MODAL (An gyara shi 100% da Turanci)       -->
-    <!-- ========================================================= -->
-    <div class="overlay-layer" id="editProfileModal">
-        <div class="bottom-sheet">
-            <div class="sheet-hdr">
-                <div class="sheet-title">Edit Profile Details</div>
-                <button class="sheet-close" id="forceCloseModalBtn">✕</button>
-            </div>
-            
-            <!-- Profile Picture Section (Upload vs Take Photo) -->
-            <div class="input-item">
-                <label>Profile Picture</label>
-                <div style="display: flex; gap: 12px; margin-top: 6px;">
-                    <!-- Upload Button -->
-                    <button type="button" onclick="document.getElementById('uploadPhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                        Upload Photo
-                    </button>
-                    <!-- Take Photo Button -->
-                    <button type="button" onclick="document.getElementById('takePhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        Take Photo
-                    </button>
-                </div>
-                <!-- Core hidden system inputs -->
-                <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;" onchange="processImage(this)">
-                <input type="file" id="takePhotoInput" accept="image/*" capture="user" style="display: none;" onchange="processImage(this)">
-            </div>
-
-            <div class="input-item">
-                <label>Display Name</label>
-                <input type="text" class="input-field" id="inputName" value="Yusuf Alhaji Garba">
-            </div>
-            <div class="input-item">
-                <label>Username</label>
-                <input type="text" class="input-field" id="inputHandle" value="@yusuf_garba">
-            </div>
-            <div class="input-item">
-                <label>Bio Details</label>
-                <input type="text" class="input-field" id="inputBio" value="Computer Science student passionate about learning and building innovative solutions.">
-            </div>
-            <div class="input-item">
-                <label>Location</label>
-                <input type="text" class="input-field" id="inputLoc" value="Abuja, Nigeria">
-            </div>
-
-            <button class="btn-action" id="forceSaveModalBtn">Save Profile Info</button>
-        </div>
-    </div>
-
-    <!-- ========================================================= -->
-    <!-- 2️⃣ JAVASCRIPT CONTROLLER (Super Override System)           -->
-    <!-- ========================================================= -->
-    <script>
-        // Global Modal Core Functions (Don tsofaffin onclick su amsa)
-        function openEditModal() {
-            var modal = document.getElementById('editProfileModal');
-            if (modal) modal.classList.add('active');
-        }
-        function closeEditModal() {
-            var modal = document.getElementById('editProfileModal');
-            if (modal) modal.classList.remove('active');
-        }
-        function switchTab(el) { /* Override active system conflict */ }
-
-        // Sarrafa sanya Hoto
-        function processImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const avatarMask = document.querySelector('.avatar-mask');
-                    if (avatarMask) {
-                        avatarMask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        // Adana duka canje-canje
-        function commitChanges() {
-            if (document.getElementById('namePlate')) document.getElementById('namePlate').innerText = document.getElementById('inputName').value;
-            if (document.getElementById('handlePlate')) document.getElementById('handlePlate').innerText = document.getElementById('inputHandle').value;
-            if (document.getElementById('bioPlate')) document.getElementById('bioPlate').innerText = document.getElementById('inputBio').value;
-            if (document.getElementById('locPlate')) document.getElementById('locPlate').innerText = document.getElementById('inputLoc').value;
-            closeEditModal();
-        }
-
-        // IDAN SHAFI YA GAMA LODAWA: Wannan tsarin zai tilasta kowane abu yin aiki da karfi
-        document.addEventListener("DOMContentLoaded", function() {
-            
-            // A. Tilasta kunnuwa da boye Edit Profile Modal
-            const editBtnInHeader = document.querySelector('.main-header button[onclick="openEditModal()"]') || document.querySelector('.main-header button');
-            const editOptionItem = document.querySelector('.opt-item'); // Na farko a jikin jerin dake tsakiya
-            const camBadgeIcon = document.querySelector('.cam-badge');
-
-            const openModalAction = function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                openEditModal();
-            };
-
-            if (editBtnInHeader) editBtnInHeader.onclick = openModalAction;
-            if (editOptionItem) editOptionItem.onclick = openModalAction;
-            if (camBadgeIcon) camBadgeIcon.onclick = openModalAction;
-
-            const closeBtn = document.getElementById('forceCloseModalBtn');
-            if (closeBtn) closeBtn.onclick = function() { closeEditModal(); };
-
-            const saveBtn = document.getElementById('forceSaveModalBtn');
-            if (saveBtn) saveBtn.onclick = function() { commitChanges(); };
-
-
-            // B. Tilasta duka Tab Icons na Kasa su tafi da mutum shafukan HTML daban-daban
-            const tabs = document.querySelectorAll('.tab-navigator .tab-cell');
-            const targetPages = ['home.html', 'explore.html', 'chat.html', 'studyhub.html', 'profile.html'];
-            
-            if (tabs.length > 0) {
-                tabs.forEach((tab, index) => {
-                    // Cire kowane tsohon cikas da karfi
-                    tab.setAttribute('onclick', ''); 
-                    tab.onclick = function(e) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        window.location.href = targetPages[index];
-                        <!-- ========================================================= -->
-        <!-- 2️⃣ PROFILE HERO SECTION (Gyaran Fuska da Verified Check) -->
-        <!-- ========================================================= -->
-        <section class="profile-hero">
-            <div class="avatar-holder">
-                <!-- Anonymous/Joker Mask Placeholder Icon -->
-                <div class="avatar-mask">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <path d="M8 10c1-1 2-1 4 0s3 1 4 0" stroke-width="2.2"/>
-                        <path d="M9 14s1.5 2 3 2 3-2 3-2" stroke-width="2.2"/>
-                    </svg>
-                </div>
-                <!-- Cam Badge to Open Modal Direct -->
-                <div class="cam-badge" onclick="openEditModal()">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                </div>
-            </div>
-            <div class="profile-info">
-                <div class="name-wrapper">
-                    <span class="user-name" id="namePlate">Yusuf Alhaji Garba</span>
-                    <!-- Gyararren Verified Badge na Gaskiya (Premium Design) -->
-                    <span class="blue-tick" style="display: inline-flex; align-items: center; color: #1d9bf0;">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                            <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.99-3.818-3.99-.48 0-.944.09-1.37.26C14.75 2.513 13.483 1.5 12 1.5s-2.75 1.013-3.395 2.27c-.426-.17-.89-.26-1.37-.26-2.108 0-3.818 1.78-3.818 3.99 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.71 3.99 3.818 3.99.48 0 .944-.09 1.37-.26.645 1.257 1.912 2.27 3.395 2.27s2.75-1.013 3.395-2.27c.426.17.89.26 1.37.26 2.108 0 3.818-1.78 3.818-3.99 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.72 4.22l-3.22-3.22 1.42-1.42 1.8 1.8 4.8-4.8 1.42 1.42-6.22 6.22z"/>
-                        </svg>
-                    </span>
-                </div>
-                <div class="user-handle" id="handlePlate">@yusuf_garba</div>
-                
-                <!-- Adadin Followers da Following -->
-                <div class="follow-counter-row">
-                    <div><span class="count-num">14.2K</span> <span class="count-lbl">Followers</span></div>
-                    <div><span class="count-num">385</span> <span class="count-lbl">Following</span></div>
-                </div>
-
-                <div class="user-bio" id="bioPlate">Computer Science student passionate about learning and building innovative solutions.</div>
-                
-                <div class="meta-row">
-                    <div class="meta-cell">
-                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span id="locPlate">Abuja, Nigeria</span>
-                    </div>
-                    <div class="meta-cell">
-                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        <span>Joined Jan 2024</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Stats Grid Box -->
-        <section class="stats-row">
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #6366f1;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
-                <div class="stat-num">128</div>
-                <div class="stat-text">Connections</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #22c55e;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
-                <div class="stat-num">24</div>
-                <div class="stat-text">Posts</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #eab308;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
-                <div class="stat-num">1.2K</div>
-                <div class="stat-text">Points</div>
-            </div>
-        </section>
-
-        <!-- Options Menu Navigation List (An gyara Edit Profile na tsakiya shima) -->
-        <section class="options-list">
-            <div class="opt-item" onclick="openEditModal()" style="cursor: pointer;">
-                <div class="opt-icon-wrapper bg-blue"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                <div class="opt-details"><div class="opt-title">Edit Profile</div><div class="opt-subtitle">Update your personal information</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-            <div class="opt-item">
-                <div class="opt-icon-wrapper bg-indigo"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-                <div class="opt-details"><div class="opt-title">Account & Security</div><div class="opt-subtitle">Manage password and security</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-            <div class="opt-item">
-                <div class="opt-icon-wrapper bg-pink"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
-                <div class="opt-details"><div class="opt-title">Notifications</div><div class="opt-subtitle">Manage your notification preferences</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-        </section>
-
-        <!-- Achievements Section -->
+        <!-- Achievements Slider -->
         <div class="section-nav"><div class="section-lbl">Achievements</div><a href="#" class="action-lbl">View All</a></div>
         <div class="badges-slider">
             <div class="hex-card">
@@ -811,22 +285,17 @@
             </div>
         </div>
 
-        <!-- ========================================================= -->
-        <!-- 3️⃣ BOTTOM TAB NAVIGATION (An mayar da su HTML Links Direct)-->
-        <!-- ========================================================= -->
+        <!-- Tab Bar: An canza su zuwa 'a' Tags na gaskiya domin su kai mutum direct ba tare da jiran JS ba -->
         <nav class="tab-navigator">
-            <a href="home.html" class="tab-cell" style="text-decoration:none;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></a>
-            <a href="explore.html" class="tab-cell" style="text-decoration:none;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg><span>Explore</span></a>
-            <a href="chat.html" class="tab-cell" style="text-decoration:none;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span>Chat</span><span class="tab-badge">3</span></a>
-            <a href="studyhub.html" class="tab-cell" style="text-decoration:none;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><span>StudyHub</span></a>
-            <a href="profile.html" class="tab-cell active" style="text-decoration:none;"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></a>
+            <a href="home.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></a>
+            <a href="explore.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg><span>Explore</span></a>
+            <a href="chat.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span>Chat</span><span class="tab-badge">3</span></a>
+            <a href="studyhub.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><span>StudyHub</span></a>
+            <a href="profile.html" class="tab-cell active"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></a>
             <div class="home-indicator"></div>
         </nav>
     </div>
-
-    <!-- ========================================================= -->
-    <!-- 4️⃣ EDIT PROFILE MODAL BOX                                -->
-    <!-- ========================================================= -->
+    <!-- Edit Profile Bottom Sheet Modal Panel -->
     <div class="overlay-layer" id="editProfileModal">
         <div class="bottom-sheet">
             <div class="sheet-hdr">
@@ -834,22 +303,24 @@
                 <button class="sheet-close" onclick="closeEditModal()">✕</button>
             </div>
             
+            <!-- Turanci zalla: Upload Photo (Files) vs Take Photo (Camera direct) -->
             <div class="input-item">
                 <label>Profile Picture</label>
                 <div style="display: flex; gap: 12px; margin-top: 6px;">
-                    <!-- Native file upload handler -->
-                    <button type="button" onclick="document.getElementById('uploadPhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                    <!-- Madannin Upload na Files na ciki -->
+                    <button type="button" onclick="document.getElementById('uploadFromFiles').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                         Upload Photo
                     </button>
-                    <!-- Native camera prompt handler -->
-                    <button type="button" onclick="document.getElementById('takePhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                    <!-- Madannin Take Photo na kunna Camera direct -->
+                    <button type="button" onclick="document.getElementById('takeFromCamera').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                         Take Photo
                     </button>
                 </div>
-                <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;" onchange="processImage(this)">
-                <input type="file" id="takePhotoInput" accept="image/*" capture="user" style="display: none;" onchange="processImage(this)">
+                <!-- Native core triggers -->
+                <input type="file" id="uploadFromFiles" accept="image/*" style="display: none;" onchange="updateProfileAvatar(this)">
+                <input type="file" id="takeFromCamera" accept="image/*" capture="user" style="display: none;" onchange="updateProfileAvatar(this)">
             </div>
 
             <div class="input-item">
@@ -873,9 +344,7 @@
         </div>
     </div>
 
-    <!-- ========================================================= -->
-    <!-- 5️⃣ CORE SYSTEM CORE JAVASCRIPT                           -->
-    <!-- ========================================================= -->
+    <!-- Core Actions JavaScript Engine Logic -->
     <script>
         function openEditModal() {
             var modal = document.getElementById('editProfileModal');
@@ -887,13 +356,13 @@
             if (modal) modal.classList.remove('active');
         }
 
-        function processImage(input) {
+        function updateProfileAvatar(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const avatarMask = document.querySelector('.avatar-mask');
-                    if (avatarMask) {
-                        avatarMask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                    const mask = document.querySelector('.avatar-mask');
+                    if (mask) {
+                        mask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
                     }
                 }
                 reader.readAsDataURL(input.files[0]);
