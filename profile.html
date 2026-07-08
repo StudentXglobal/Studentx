@@ -428,5 +428,63 @@
             closeEditModal();
         }
     </script>
+    <!-- Ƙarin code don canza girman icons da verified mark ba tare da canza ainihin HTML ba -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Canza Verified Checkmark ya zama Katuwar Tiki (✓) kalar Blue
+            const namePlateContainer = document.querySelector('.name-wrapper');
+            if (namePlateContainer) {
+                // Fara cire duk wani SVG na verified da ke ciki (kamar tsohon tauraron nan)
+                const oldVerified = namePlateContainer.querySelector('svg');
+                if (oldVerified) {
+                    oldVerified.parentElement.remove(); // Cire <span> da ke rike da svg din
+                }
+                
+                // Saka sabon verified checkmark (Blue Tick)
+                const blueTick = document.createElement('span');
+                blueTick.className = 'blue-tick';
+                blueTick.style.display = 'inline-flex';
+                blueTick.style.alignItems = 'center';
+                blueTick.style.marginLeft = '4px'; // Dan bada tazara
+                
+                // Kalar tana nan daidai da na hoton (Indigo/Blue)
+                blueTick.innerHTML = `
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4f46e5" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+                namePlateContainer.appendChild(blueTick);
+            }
+
+            // 2. Kara girma da kaurin Icons din kasa (Tab Navigator)
+            const tabIcons = document.querySelectorAll('.tab-navigator .tab-cell svg:not(.tab-badge)');
+            tabIcons.forEach(icon => {
+                // Kara girma zuwa 28px
+                icon.setAttribute('width', '28');
+                icon.setAttribute('height', '28');
+                // Kara kauri (stroke-width)
+                icon.setAttribute('stroke-width', '2.2');
+                // Saka musu rounded corners kamar yadda ake yi wa icons
+                icon.setAttribute('stroke-linecap', 'round');
+                icon.setAttribute('stroke-linejoin', 'round');
+            });
+            
+            // Kara girman rubutun kasansu kadan don ya hau da icons din
+            const tabTexts = document.querySelectorAll('.tab-navigator .tab-cell span:not(.tab-badge)');
+            tabTexts.forEach(text => {
+                text.style.fontSize = '11.5px';
+                text.style.marginTop = '4px';
+            });
+            
+            // Idan akwai alamar badge (kamar ta chat) mu gyara ta kar ta bace
+            const badges = document.querySelectorAll('.tab-navigator .tab-badge');
+            badges.forEach(badge => {
+                badge.style.top = '-2px';
+                badge.style.right = '20%';
+                badge.style.fontSize = '10px';
+            });
+        });
+                                  </script>
 </body>
 </html>
