@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentX - Chat</title>
     <style>
         :root { --primary: #4f46e5; --text: #1e293b; --inactive: #94a3b8; --border: #e2e8f0; }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #ffffff; color: var(--text); padding-bottom: 85px; }
+        body { background-color: #ffffff; padding-bottom: 80px; }
         
         /* Header */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid var(--border); }
@@ -15,21 +15,32 @@
         
         /* Search */
         .search-area { padding: 15px 20px; }
-        .search-box { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); }
-        .search-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
+        .search-box { background: #f8fafc; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+        .search-box input { border: none; background: transparent; width: 100%; outline: none; }
 
         /* Tabs */
         .tabs { display: flex; gap: 10px; padding: 0 20px 15px; overflow-x: auto; }
         .tab-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--border); background: white; font-size: 13px; font-weight: 600; }
         .tab-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* Chat Item */
+        .chat-list { padding: 0 20px; }
+        .chat-item { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
+        .avatar { width: 50px; height: 50px; background: #e2e8f0; border-radius: 50%; }
+        
+        /* Navigation Bar (Consolidated) */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; align-items: center; padding: 10px 0; background: white; border-top: 1px solid var(--border); }
+        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--inactive); flex: 1; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item span { font-size: 11px; margin-top: 4px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <a href="menu.html" style="color:black;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+        <a href="menu.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
         <h1>Chat</h1>
-        <a href="compose.html" style="color:black;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
+        <a href="compose.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.5"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></a>
     </div>
 
     <div class="search-area">
@@ -45,47 +56,26 @@
         <button class="tab-btn">Groups</button>
         <button class="tab-btn">Channels</button>
     </div>
-    <div id="chatList" style="padding: 0 20px;">
-        <!-- Chat Item -->
-        <div class="chat-item" onclick="showMenu()" style="display:flex; align-items:center; gap:15px; padding:15px 0; border-bottom:1px solid var(--border);">
-            <div style="width:50px; height:50px; background:#e0e7ff; border-radius:50%;"></div>
-            <div style="flex:1;">
-                <div style="display:flex; justify-content:space-between;">
-                    <h4 style="font-size: 15px;">Fatima Muhammad</h4>
-                    <span style="font-size: 11px; color: var(--inactive);">10:30 AM</span>
+
+    <div class="chat-list">
+        <a href="chat_detail.html" style="text-decoration:none; color:inherit;">
+            <div class="chat-item">
+                <div class="avatar"></div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between;"><h4>Fatima Muhammad</h4><span style="font-size:11px; color:var(--inactive);">10:30 AM</span></div>
+                    <p style="font-size: 13px; color: var(--inactive);">Thanks! That really helps</p>
                 </div>
-                <p style="font-size: 13px; color: var(--inactive);">Thanks! That really helps</p>
             </div>
-        </div>
+        </a>
     </div>
 
-    <!-- Context Menu Modal -->
-    <div id="menuModal" style="display:none; position:fixed; bottom:0; width:100%; background:white; padding:20px; border-radius:20px 20px 0 0; box-shadow:0 -5px 20px rgba(0,0,0,0.1);">
-        <button onclick="hideMenu()" style="width:100%; padding:15px; border:none; background:none; text-align:left; font-weight:600;">Reply</button>
-        <button style="width:100%; padding:15px; border:none; background:none; text-align:left; font-weight:600;">Share</button>
-        <button style="width:100%; padding:15px; border:none; background:none; text-align:left; color:red; font-weight:600;">Delete</button>
+    <!-- Correct Navigation Bar -->
+    <div class="nav-bar">
+        <a href="home.html" class="nav-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path></svg><span>Home</span></a>
+        <a href="explore.html" class="nav-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg><span>Explore</span></a>
+        <a href="chat.html" class="nav-item active"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span>Chat</span></a>
+        <a href="studyhub.html" class="nav-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path></svg><span>StudyHub</span></a>
+        <a href="profile.html" class="nav-item"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg><span>Profile</span></a>
     </div>
-    <!-- Input Bar (For chat detail page) -->
-    <div style="position:fixed; bottom:80px; width:100%; padding:10px; background:white; display:flex; gap:10px; align-items:center; border-top:1px solid var(--border);">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> <!-- Camera -->
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line></svg> <!-- Voice -->
-        <input type="text" placeholder="Message..." style="flex:1; border:none; background:#f1f5f9; padding:10px; border-radius:20px;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg> <!-- View Once -->
-    </div>
-
-    <!-- Nav Bar (Master Consistency) -->
-    <div style="height:80px;"></div>
-    <div style="position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; align-items:center; padding:10px 0; background:white; border-top:1px solid var(--border); z-index:1000;">
-        <a href="home.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path></svg><span style="font-size:11px;">Home</span></a>
-        <a href="explore.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg><span style="font-size:11px;">Explore</span></a>
-        <a href="chat.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--primary); flex:1;"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span style="font-size:11px; font-weight:700;">Chat</span></a>
-        <a href="studyhub.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path></svg><span style="font-size:11px;">StudyHub</span></a>
-        <a href="profile.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg><span style="font-size:11px;">Profile</span></a>
-    </div>
-
-    <script>
-        function showMenu() { document.getElementById('menuModal').style.display = 'block'; }
-        function hideMenu() { document.getElementById('menuModal').style.display = 'none'; }
-    </script>
 </body>
 </html>
