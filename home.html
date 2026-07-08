@@ -378,6 +378,64 @@
             <span>Profile</span>
         </a>
     </div>
+<script>
+    // 1. Logic don Like Button
+    document.querySelectorAll('.stat-btn').forEach(btn => {
+        // Duba ko button ɗin 'Like' ne (yana ɗauke da svg na zuciya)
+        if(btn.innerHTML.includes('20.84 4.61')) { 
+            btn.addEventListener('click', function() {
+                const svg = this.querySelector('svg');
+                let countSpan = this.innerText.match(/\d+/) ? parseInt(this.innerText.match(/\d+/)[0]) : 0;
+                
+                if(!this.classList.contains('liked')) {
+                    this.classList.add('liked');
+                    svg.setAttribute('fill', '#ef4444');
+                    svg.setAttribute('stroke', '#ef4444');
+                    this.innerHTML = this.innerHTML.replace(countSpan, countSpan + 1);
+                } else {
+                    this.classList.remove('liked');
+                    svg.setAttribute('fill', 'none');
+                    svg.setAttribute('stroke', 'currentColor');
+                    this.innerHTML = this.innerHTML.replace(countSpan, countSpan - 1);
+                }
+            });
+        }
+        
+        // 2. Logic don Bookmark Button
+        if(btn.querySelector('path[d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"]')) {
+            btn.addEventListener('click', function() {
+                const svg = this.querySelector('svg');
+                if(!this.classList.contains('saved')) {
+                    this.classList.add('saved');
+                    svg.setAttribute('fill', '#000000'); // Bookmark zai zama filled
+                } else {
+                    this.classList.remove('saved');
+                    svg.setAttribute('fill', 'none');
+                }
+            });
+        }
+    });
 
+    // 3. Story Upload (Simulated)
+    const storyRing = document.querySelector('.avatar-ring.mine');
+    storyRing.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = e => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = storyRing.querySelector('img');
+                    img.src = e.target.result; // Wannan zai nuna hoton da ka zaba a matsayin story
+                    alert("Story uploaded successfully!");
+                }
+                reader.readAsDataURL(file);
+            }
+        };
+        input.click();
+    });
+</script>
 </body>
 </html>
