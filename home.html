@@ -1,872 +1,119 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Home Feed</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <title>StudentX - Home</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { background-color: #f8fafc; color: #1e293b; padding-bottom: 75px; overflow-x: hidden; }
+        
+        /* Header Styling */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #ffffff; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; border-bottom: 1px solid #f1f5f9; }
+        .header h1 { font-size: 22px; font-weight: 700; color: #0f172a; text-align: center; flex: 1; }
+        .header-actions { display: flex; gap: 18px; align-items: center; }
+        .icon-btn { background: none; border: none; cursor: pointer; position: relative; text-decoration: none; color: #0f172a; }
+        .badge { position: absolute; top: -6px; right: -6px; background: #4f46e5; color: white; font-size: 10px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid #ffffff; }
 
-        body {
-            background-color: #f8fafc; /* Hasken bango mai sanyi */
-            color: #0f172a;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
+        /* Stories Styling */
+        .main-container { margin-top: 65px; padding: 15px 0; }
+        .stories-container { display: flex; gap: 15px; padding: 10px 20px; overflow-x: auto; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #f1f5f9; }
+        .stories-container::-webkit-scrollbar { display: none; }
+        .story-card { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 72px; text-decoration: none; }
+        .avatar-ring { width: 70px; height: 70px; border-radius: 50%; padding: 2.5px; display: flex; justify-content: center; align-items: center; position: relative; }
+        .avatar-ring.premium { background: linear-gradient(135deg, #8b5cf6, #3b82f6); }
+        .avatar-ring.unviewed { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+        .avatar-ring.mine { background: #e2e8f0; }
+        .story-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #ffffff; }
+        .plus-icon { position: absolute; bottom: 1px; right: 1px; background: #3b82f6; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; justify-content: center; align-items: center; border: 2px solid #ffffff; font-size: 12px; font-weight: bold; }
+        .story-name { font-size: 12px; color: #475569; font-weight: 500; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* Mobile Container to look like GitHub Page mockup */
-        .app-container {
-            width: 100%;
-            max-width: 430px;
-            background-color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.03);
-        }
-
-        /* --- STICKY HEADER --- */
-        .app-header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            max-width: 430px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            z-index: 1000;
-            border-bottom: 1px solid #f1f5f9;
-        }
-<div class="header-left">
-    <!-- Mun mayar da shi DIV na asali domin kada ya sake bacewa, kuma zai yi redirect -->
-    <div class="hamburger" onclick="window.location.href='menu.html'">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-</div>
-        }
-
-        .hamburger span {
-            display: block;
-            width: 22px;
-            height: 2.5px;
-            background-color: #0f172a;
-            border-radius: 2px;
-        }
-
-        .header-center h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0f172a;
-            letter-spacing: -0.5px;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .header-btn {
-            background: none;
-            border: none;
-            color: #0f172a;
-            cursor: pointer;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            background-color: #6366f1; /* Purple baje na sanarwa */
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #ffffff;
-        }
-
-        /* --- MAIN SCROLL CONTENT --- */
-        .main-content {
-            padding-top: 65px;
-            padding-bottom: 90px;
-            background-color: #f8fafc;
-            overflow-y: auto;
-        }
-
-        /* --- STORIES SECTION --- */
-        .stories-container {
-            display: flex;
-            gap: 14px;
-            padding: 16px 20px;
-            background-color: #ffffff;
-            overflow-x: auto;
-            scrollbar-width: none;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .stories-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .story-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 68px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .avatar-ring {
-            width: 66px;
-            height: 66px;
-            border-radius: 50%;
-            padding: 2.5px;
-            background: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            margin-bottom: 6px;
-        }
-
-        .story-item.user-node .avatar-ring {
-            background: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6);
-        }
-
-        .avatar-ring img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2.5px solid #ffffff;
-        }
-
-        .plus-icon {
-            position: absolute;
-            bottom: 1px;
-            right: 1px;
-            background-color: #3b82f6;
-            color: white;
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: 800;
-            border: 2px solid #ffffff;
-        }
-
-        .story-name {
-            font-size: 11px;
-            color: #475569;
-            font-weight: 500;
-            text-align: center;
-        }
-
-        /* --- COMPOSER BOX --- */
-        .composer-card {
-            background-color: #ffffff;
-            margin: 12px 16px;
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
-            padding: 16px 16px 8px 16px;
-        }
-
-        .composer-top {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
-
-        .composer-top img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .composer-input-placeholder {
-            color: #94a3b8;
-            font-size: 15px;
-            font-weight: 400;
-        }
-
-        .composer-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border-top: 1px solid #f1f5f9;
-            padding-top: 10px;
-        }
-
-        .composer-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 13px;
-            color: #475569;
-            font-weight: 600;
-            cursor: pointer;
-            padding: 6px 0;
-        }
-
-        .composer-btn:not(:last-child) {
-            border-right: 1px solid #f1f5f9;
-        }
-
-        /* --- TIMELINE POSTS --- */
-        .post-card {
-            background-color: #ffffff;
-            margin: 0 16px 12px 16px;
-            border-radius: 16px;
-            border: 1px solid #e2e8f0;
-            padding: 16px;
-        }
-
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 12px;
-        }
-
-        .post-author {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .post-author img {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .author-info .name-row {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 15px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .verified-badge {
-            color: #3b82f6;
-            display: inline-flex;
-        }
-
-        .author-info .subtitle {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 1px;
-        }
-
-        .author-info .time-text {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 1px;
-        }
-
-        .more-options {
-            color: #64748b;
-            cursor: pointer;
-        }
-
-        .post-body {
-            font-size: 14.5px;
-            color: #334155;
-            line-height: 1.5;
-            margin-bottom: 14px;
-        }
-
-        /* Attachment File Style */
-        .file-attachment {
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 12px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 14px;
-            cursor: pointer;
-        }
-
-        .file-icon {
-            background-color: #ef4444;
-            color: white;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 10px 8px;
-            border-radius: 8px;
-            text-align: center;
-            line-height: 1;
-        }
-
-        .file-details .file-name {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .file-details .file-size {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        /* Action Buttons Area */
-        .post-footer-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px solid #f1f5f9;
-            padding-top: 12px;
-            margin-bottom: 12px;
-        }
-
-        .action-node {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            color: #64748b;
-            font-weight: 500;
-            background: none;
-            border: none;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .social-proof {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding-top: 4px;
-        }
-
-        .proof-avatars {
-            display: flex;
-        }
-
-        .proof-avatars img {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #ffffff;
-        }
-
-        .proof-avatars img:not(:first-child) {
-            margin-left: -6px;
-        }
-
-        .proof-text {
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        /* --- INTERACTIVE PROFILE PROMPT BANNER --- */
-        .profile-prompt-banner {
-            background-color: #f5f3ff; /* Zallon kalar Lavender */
-            margin: 4px 16px 16px 16px;
-            border-radius: 16px;
-            padding: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: relative;
-        }
-
-        .prompt-left-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .trophy-circle {
-            width: 40px;
-            height: 40px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08);
-        }
-
-        .prompt-text-stack .prompt-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .prompt-text-stack .prompt-desc {
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        .prompt-actions-right {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 12px;
-        }
-
-        .close-banner-btn {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            background: none;
-            border: none;
-            color: #94a3b8;
-            cursor: pointer;
-        }
-
-        .complete-now-btn {
-            background-color: #4f46e5; /* Deep Indigo Purple Button */
-            color: #ffffff;
-            font-size: 12px;
-            font-weight: 600;
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        /* --- STICKY BOTTOM NAVIGATION BAR --- */
-        .bottom-navigation {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 430px;
-            background-color: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0 14px 0;
-            z-index: 1000;
-        }
-
-        .nav-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #64748b; /* Grey regular icons */
-            font-size: 10px;
-            font-weight: 600;
-            gap: 4px;
-            position: relative;
-            width: 65px;
-        }
-
-        .nav-link.active {
-            color: #4f46e5; /* Active Indigo color */
-        }
-
-        .nav-link svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .nav-notif-count {
-            position: absolute;
-            top: -4px;
-            right: 14px;
-            background-color: #4f46e5;
-            color: white;
-            font-size: 9px;
-            font-weight: 700;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid #ffffff;
-        }
+        /* Create Post Box */
+        .create-post { background: #ffffff; margin: 12px 16px; padding: 16px; border-radius: 16px; border: 1px solid #f1f5f9; }
+        .input-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; text-decoration: none; }
+        .user-avatar-small { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+        .placeholder-text { color: #64748b; font-size: 15px; font-weight: 400; }
+        .actions-row { display: flex; justify-content: space-between; border-top: 1px solid #f8fafc; padding-top: 12px; }
+        .action-item { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #475569; text-decoration: none; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <header class="app-header">
-            <div class="header-left">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <div class="header-center">
-                <h1>Home</h1>
-            </div>
-            <div class="header-right">
-                <button class="header-btn">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                </button>
-                <a href="notifications.html" class="header-btn">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="notif-badge">8</span>
-                </a>
-            </div>
-        </header>
-
-        <main class="main-content">
-            
-            <div class="stories-container">
-                <a href="story.html" class="story-item user-node">
-                    <div class="avatar-ring">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="Your Story">
-                        <div class="plus-icon">+</div>
-                    </div>
-                    <span class="story-name">Your Story</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="avatar-ring">
-                        <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150" alt="Fatima">
-                    </div>
-                    <span class="story-name">Fatima</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="avatar-ring">
-                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=150" alt="John">
-                    </div>
-                    <span class="story-name">John</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="avatar-ring">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" alt="Maryam">
-                    </div>
-                    <span class="story-name">Maryam</span>
-                </a>
-                <a href="story.html" class="story-item">
-                    <div class="avatar-ring">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="David">
-                    </div>
-                    <span class="story-name">David</span>
-                </a>
-            </div>
-
-            <div class="composer-card">
-                <div class="composer-top">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150" alt="Profile">
-                    <span class="composer-input-placeholder">What's on your mind?</span>
-                </div>
-                <div class="composer-actions">
-                    <div class="composer-btn"><span style="color:#22c55e;">🖼️</span> Photo</div>
-                    <div class="composer-btn"><span style="color:#a855f7;">📹</span> Video</div>
-                    <div class="composer-btn"><span style="color:#3b82f6;">📊</span> Poll</div>
-                    <div class="composer-btn"><span style="color:#eab308;">😊</span> Feeling</div>
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="post-author">
-                        <img src="https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=150" alt="Fatima">
-                        <div class="author-info">
-                            <div class="name-row">
-                                Fatima Muhammad
-                                <span class="verified-badge">
-                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-                                </span>
-                            </div>
-                            <div class="subtitle">Computer Science • ABU Zaria</div>
-                            <div class="time-text">2h ago</div>
-                        </div>
-                    </div>
-                    <div class="more-options">•••</div>
-                </div>
-                <div class="post-body">
-                    Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀
-                </div>
-                <div class="file-attachment">
-                    <div class="file-icon">PDF</div>
-                    <div class="file-details">
-                        <div class="file-name">Data Structures & Algorithms.pdf</div>
-                        <div class="file-size">4.2 MB</div>
-                    </div>
-                </div>
-                <div class="post-footer-actions">
-                    <button class="action-node">❤️ 245</button>
-                    <a href="comments.html" class="action-node">💬 32</a>
-                    <button class="action-node">🔄 18</button>
-                    <button class="action-node">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                    </button>
-                </div>
-                <div class="social-proof">
-                    <div class="proof-avatars">
-                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=50" alt="User">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50" alt="User">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=50" alt="User">
-                    </div>
-                    <span class="proof-text">Liked by John, Maryam and 243 others</span>
-                </div>
-            </div>
-
-            <div class="post-card">
-                <div class="post-header">
-                    <div class="post-author">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" alt="David">
-                        <div class="author-info">
-                            <div class="name-row">David Okafor</div>
-                            <div class="subtitle">@david.engineering • UNN</div>
-                            <div class="time-text">3h ago</div>
-                        </div>
-                    </div>
-                    <div class="more-options">•••</div>
-                </div>
-                <div class="post-body">
-                    Can anyone explain this thermodynamics question? I'm stuck on part (b).
-                </div>
-                <div class="post-footer-actions">
-                    <button class="action-node">❤️ 112</button>
-                    <a href="comments.html" class="action-node">💬 26</button>
-                    <button class="action-node">🔄 9</button>
-                    <button class="action-node">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-                    </button>
-                </div>
-            </div>
-
-            <div class="profile-prompt-banner">
-                <button class="close-banner-btn">✕</button>
-                <div class="prompt-left-content">
-                    <div class="trophy-circle">
-                        <span style="font-size: 20px;">🏆</span>
-                    </div>
-                    <div class="prompt-text-stack">
-                        <div class="prompt-title">Complete your profile</div>
-                        <div class="prompt-desc">Add more details to connect with more students.</div>
-                    </div>
-                </div>
-                <button class="complete-now-btn">Complete Now</button>
-            </div>
-
-        </main>
-
-        <nav class="bottom-navigation">
-            <a href="home.html" class="nav-link active">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-                </svg>
-                <span>Home</span>
+    <!-- Header -->
+    <div class="header">
+        <a href="menu.html" class="icon-btn">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </a>
+        <h1>Home</h1>
+        <div class="header-actions">
+            <a href="search.html" class="icon-btn">
+                <svg viewBox="0 0 24 24" width="23" height="23" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
             </a>
-
-            <a href="explore.html" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                </svg>
-                <span>Explore</span>
+            <a href="notifications.html" class="icon-btn">
+                <svg viewBox="0 0 24 24" width="23" height="23" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <div class="badge">8</div>
             </a>
-
-            <a href="chat.html" class="nav-link">
-                <div class="nav-notif-count">3</div>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span>Chat</span>
-            </a>
-
-            <a href="studyhub.html" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                <span>StudyHub</span>
-            </a>
-
-            <a href="profile.html" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span>Profile</span>
-            </a>
-        </nav>
-
+        </div>
     </div>
-<!-- START: WANNAN KOD DIN ZAI TILASTA FITOWAR MENU ICON DA REDIRECT -->
-    <style>
-        .header-left .hamburger {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 5px !important;
-            cursor: pointer !important;
-            width: 22px !important;
-            height: 18px !important;
-        }
-        .header-left .hamburger span {
-            display: block !important;
-            width: 22px !important;
-            height: 2.5px !important;
-            background-color: #0f172a !important;
-            border-radius: 2px !important;
-        }
-    </style>
 
-    <script>
-        // Wannan yana nemo inda '.header-left' yake ya saka icon din da kansa ta karfi
-        (function() {
-            var sashenHagu = document.querySelector('.header-left');
-            if (sashenHagu) {
-                sashenHagu.innerHTML = `
-                    <div class="hamburger" onclick="window.location.href='menu.html'">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                `;
-            }
-        })();
-    </script>
-    <!-- END: KOD DIN MENU -->
-    <!-- Kod din gyara madannai na shafin Home -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navBar = document.querySelector('.tab-navigator');
-            if (navBar) {
-                navBar.innerHTML = `
-                    <svg width="0" height="0" style="position:absolute;"><defs>
-                        <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-                        <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient>
-                    </defs></svg>
-                    <a href="home.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Home</span>
-                    </a>
-                    <a href="explore.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#exploreGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="url(#exploreGrad)"></polygon></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Explore</span>
-                    </a>
-                    <a href="chat.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; position: relative; padding: 6px 0;">
-                        <div style="position: absolute; top: 0px; right: 20%; background-color: #ef4444; color: white; font-size: 10px; font-weight: bold; width: 17px; height: 17px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white; z-index: 10;">3</div>
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path><circle cx="8" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="12" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="16" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Chat</span>
-                    </a>
-                    <a href="studyhub.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path><line x1="7" y1="9" x2="9" y2="9"></line><line x1="7" y1="13" x2="9" y2="13"></line><path d="M15 4v6l1.5-1.2L18 10V4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">StudyHub</span>
-                    </a>
-                    <a href="profile.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Profile</span>
-                    </a>
-                `;
-                navBar.style.display = 'flex';
-                navBar.style.justifyContent = 'space-around';
-                navBar.style.alignItems = 'center';
-                navBar.style.paddingBottom = '10px';
-            }
-        });
-    </script>
-    <!-- Kod din gyara madannai na shafin Home -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Wannan zai nemo navbar ko da wane suna aka sanya mata
-            const navBar = document.querySelector('.nav-bar') || document.querySelector('.navbar') || document.querySelector('.tab-navigator');
-            if (navBar) {
-                navBar.innerHTML = `
-                    <svg width="0" height="0" style="position:absolute;"><defs>
-                        <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-                        <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient>
-                    </defs></svg>
-                    <a href="home.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Home</span>
-                    </a>
-                    <a href="explore.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#exploreGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="url(#exploreGrad)"></polygon></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Explore</span>
-                    </a>
-                    <a href="chat.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; position: relative; padding: 6px 0;">
-                        <div style="position: absolute; top: 0px; right: 20%; background-color: #ef4444; color: white; font-size: 10px; font-weight: bold; width: 17px; height: 17px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white; z-index: 10;">3</div>
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path><circle cx="8" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="12" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="16" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Chat</span>
-                    </a>
-                    <a href="studyhub.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path><line x1="7" y1="9" x2="9" y2="9"></line><line x1="7" y1="13" x2="9" y2="13"></line><path d="M15 4v6l1.5-1.2L18 10V4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">StudyHub</span>
-                    </a>
-                    <a href="profile.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Profile</span>
-                    </a>
-                `;
-                navBar.style.display = 'flex';
-                navBar.style.justifyContent = 'space-around';
-                navBar.style.alignItems = 'center';
-                navBar.style.paddingBottom = '10px';
-            }
-        });
-    </script>
-    <div class="nav-bar" style="display: flex; justify-content: space-around; align-items: center; padding-bottom: 10px; background: #ffffff; border-top: 1px solid #e2e8f0;">
-    <svg width="0" height="0" style="position:absolute;"><defs>
-        <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-        <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient>
-    </defs></svg>
-    <a href="home.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Home</span>
-    </a>
-    <a href="explore.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94a3b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-        <span style="font-size: 12px; font-weight: 500; color: #94a3b8; margin-top: 5px;">Explore</span>
-    </a>
-    <a href="chat.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; position: relative; padding: 6px 0;">
-        <div style="position: absolute; top: 0px; right: 20%; background-color: #ef4444; color: white; font-size: 10px; font-weight: bold; width: 17px; height: 17px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white; z-index: 10;">3</div>
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94a3b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-        <span style="font-size: 12px; font-weight: 500; color: #94a3b8; margin-top: 5px;">Chat</span>
-    </a>
-    <a href="studyhub.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94a3b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path></svg>
-        <span style="font-size: 12px; font-weight: 500; color: #94a3b8; margin-top: 5px;">StudyHub</span>
-    </a>
-    <a href="profile.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#94a3b8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-        <span style="font-size: 12px; font-weight: 500; color: #94a3b8; margin-top: 5px;">Profile</span>
-    </a>
-    </div>
-</body>
-</html>
-               
+    <div class="main-container">
+        <!-- Stories -->
+        <div class="stories-container">
+            <a href="createstory.html" class="story-card">
+                <div class="avatar-ring mine">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="story-img">
+                    <div class="plus-icon">+</div>
+                </div>
+                <span class="story-name">Your Story</span>
+            </a>
+            <a href="story1.html" class="story-card">
+                <div class="avatar-ring unviewed">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" class="story-img">
+                </div>
+                <span class="story-name">Fatima</span>
+            </a>
+            <a href="story2.html" class="story-card">
+                <div class="avatar-ring premium">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" class="story-img">
+                </div>
+                <span class="story-name">John</span>
+            </a>
+            <a href="story3.html" class="story-card">
+                <div class="avatar-ring unviewed">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80" class="story-img">
+                </div>
+                <span class="story-name">Maryam</span>
+            </a>
+            <a href="story4.html" class="story-card">
+                <div class="avatar-ring premium">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" class="story-img">
+                </div>
+                <span class="story-name">David</span>
+            </a>
+        </div>
+
+        <!-- Create Post Box -->
+        <div class="create-post">
+            <a href="createpost.html" class="input-row">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="user-avatar-small">
+                <span class="placeholder-text">What's on your mind?</span>
+            </a>
+            <div class="actions-row">
+                <a href="createpost.html?type=photo" class="action-item">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#10b981" stroke-width="2.5" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    Photo
+                </a>
+                <a href="createpost.html?type=video" class="action-item">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#8b5cf6" stroke-width="2.5" fill="none"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    Video
+                </a>
+                <a href="createpost.html?type=poll" class="action-item">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#3b82f6" stroke-width="2.5" fill="none"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    Poll
+                </a>
+                <a href="createpost.html?type=feeling" class="action-item">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#f59e0b" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    Feeling
+                </a>
+            </div>
+        </div>
