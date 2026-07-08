@@ -1,856 +1,156 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Explore Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <title>StudentX - Explore</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: #1e293b; padding-bottom: 80px; }
+        
+        /* Header */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #ffffff; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f1f5f9; }
+        .header h1 { font-size: 20px; font-weight: 700; }
+        
+        /* Search Section */
+        .search-container { padding: 15px 20px; background: #ffffff; }
+        .search-wrapper { display: flex; align-items: center; gap: 10px; background: #f1f5f9; padding: 10px 15px; border-radius: 12px; }
+        .search-wrapper input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
+        .filter-btn { background: none; border: none; font-size: 20px; }
 
-        body {
-            background-color: #f8fafc;
-            color: #0f172a;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 430px;
-            background-color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.03);
-        }
-
-        /* --- STICKY TOP HEADER --- */
-        .app-header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            max-width: 430px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 20px;
-            z-index: 1000;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .header-left .hamburger {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            display: block;
-            width: 22px;
-            height: 2.5px;
-            background-color: #0f172a;
-            border-radius: 2px;
-        }
-
-        .header-center h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: #0f172a;
-            letter-spacing: -0.5px;
-        }
-
-        .header-right {
-            position: relative;
-        }
-
-        .notif-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #4f46e5;
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #ffffff;
-        }
-
-        /* --- MAIN AREA --- */
-        .main-content {
-            padding-top: 65px;
-            padding-bottom: 90px;
-            overflow-y: auto;
-            background-color: #ffffff;
-        }
-
-        /* SEARCH BAR */
-        .search-container {
-            padding: 16px;
-            display: flex;
-            gap: 12px;
-            align-items: center;
-        }
-
-        .search-wrapper {
-            position: relative;
-            flex: 1;
-            display: flex;
-            align-items: center;
-        }
-
-        .search-wrapper svg {
-            position: absolute;
-            left: 14px;
-            color: #94a3b8;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 12px 14px 12px 42px;
-            background-color: #f1f5f9;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            color: #0f172a;
-            outline: none;
-            font-weight: 500;
-        }
-
-        .filter-btn {
-            background: none;
-            border: 1px solid #e2e8f0;
-            padding: 10px;
-            border-radius: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* HORIZONTAL CATEGORIES */
-        .categories-scroll {
-            display: flex;
-            gap: 16px;
-            padding: 8px 16px 20px 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .categories-scroll::-webkit-scrollbar { display: none; }
-
-        .cat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            min-width: 65px;
-        }
-
-        .cat-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .cat-item span {
-            font-size: 12px;
-            font-weight: 600;
-            color: #64748b;
-        }
-
-        .cat-item.active span {
-            color: #4f46e5;
-        }
-
-        /* SECTION HEADING */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px 16px 12px 16px;
-        }
-
-        .section-header h2 {
-            font-size: 16px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .section-header .see-all {
-            font-size: 13px;
-            font-weight: 600;
-            color: #4f46e5;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        /* --- TRENDING TOPICS LIST --- */
-        .trending-list {
-            display: flex;
-            flex-direction: column;
-            padding: 0 16px;
-        }
-
-        .trending-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-            cursor: pointer;
-        }
-
-        .trend-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .trend-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-        }
-
-        .trend-title {
-            font-size: 14.5px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .trend-posts {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        .hidden-item {
-            display: none !important;
-        }
-
-        /* --- POPULAR COMMUNITIES (HORIZONTAL CARDS) --- */
-        .communities-scroll {
-            display: flex;
-            gap: 12px;
-            padding: 4px 16px 16px 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-        }
-        .communities-scroll::-webkit-scrollbar { display: none; }
-
-        .community-card {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 16px;
-            min-width: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .comm-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            margin-bottom: 12px;
-        }
-
-        .comm-title {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: #0f172a;
-            line-height: 1.3;
-            height: 36px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .comm-members {
-            font-size: 11px;
-            color: #64748b;
-            margin: 4px 0 12px 0;
-        }
-
-        /* PREMIUM DYNAMIC BUTTONS */
-        .btn-premium {
-            width: 100%;
-            padding: 8px 0;
-            border: 1.5px solid #4f46e5;
-            background: transparent;
-            color: #4f46e5;
-            font-size: 12.5px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-premium.joined {
-            background-color: #10b981 !important;
-            border-color: #10b981 !important;
-            color: #ffffff !important;
-        }
-
-        .btn-premium-follow {
-            padding: 6px 16px;
-            border: 1.5px solid #4f46e5;
-            background: transparent;
-            color: #4f46e5;
-            font-size: 12.5px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            min-width: 90px;
-        }
-
-        .btn-premium-follow.following {
-            background-color: #f1f5f9 !important;
-            border-color: #e2e8f0 !important;
-            color: #64748b !important;
-        }
-
-        /* --- SUGGESTED FOR YOU (PEOPLE) --- */
-        .suggested-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 0 16px;
-        }
-
-        .user-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 6px 0;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .user-meta .u-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .verified-badge {
-            color: #4f46e5;
-            display: inline-flex;
-                }
-
-        .user-meta .u-details {
-            font-size: 11.5px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-
-        .user-meta .u-mutual {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-top: 2px;
-        }
-
-        /* --- DYNAMIC SEARCH LIVE RESULTS PANEL --- */
-        .search-results-panel {
-            display: none;
-            padding: 0 16px;
-        }
-
-        .search-category-block {
-            margin-bottom: 20px;
-        }
-
-        .search-category-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #4f46e5;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid #f1f5f9;
-            padding-bottom: 4px;
-        }
-
-        .result-item {
-            padding: 10px 0;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid #f8fafc;
-        }
-
-        .result-item-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background-color: #f1f5f9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .result-item-text .r-main {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .result-item-text .r-sub {
-            font-size: 11.5px;
-            color: #64748b;
-        }
-
-
-        /* --- STICKY BOTTOM NAVIGATION BAR --- */
-        .bottom-navigation {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            max-width: 430px;
-            background-color: #ffffff;
-            border-top: 1px solid #e2e8f0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 10px 0 14px 0;
-            z-index: 1000;
-        }
-
-        .nav-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-decoration: none;
-            color: #64748b;
-            font-size: 10px;
-            font-weight: 600;
-            gap: 4px;
-            position: relative;
-            width: 65px;
-        }
-
-        .nav-link.active {
-            color: #4f46e5;
-        }
-
-        .nav-link svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .nav-notif-count {
-            position: absolute;
-            top: -4px;
-            right: 14px;
-            background-color: #4f46e5;
-            color: white;
-            font-size: 9px;
-            font-weight: 700;
-            width: 15px;
-            height: 15px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1.5px solid #ffffff;
-        }
+        /* Categories Scroll */
+        .categories { display: flex; overflow-x: auto; padding: 15px 20px; gap: 20px; background: #ffffff; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        .cat-item { display: flex; flex-direction: column; align-items: center; gap: 8px; min-width: 60px; text-decoration: none; color: #64748b; }
+        .cat-item.active { color: #4f46e5; }
+        .cat-icon { width: 50px; height: 50px; background: #f1f5f9; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
+        .cat-item.active .cat-icon { background: #e0e7ff; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
+    <div class="header">
+        <a href="menu.html" style="color:black;"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
+        <h1>Explore</h1>
+        <a href="notifications.html" style="color:black; position:relative;"><svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span style="position:absolute; top:-2px; right:0; background:blue; color:white; font-size:9px; border-radius:50%; width:12px; height:12px; text-align:center;">8</span></a>
+    </div>
+
+    <div class="search-container">
+        <div class="search-wrapper">
+            <svg width="20" height="20" stroke="currentColor" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="searchInput" placeholder="Search students, posts, communities...">
+            <button class="filter-btn">⚙️</button>
+        </div>
+    </div>
+
+    <div class="categories">
+        <a href="#" class="cat-item active"><div class="cat-icon">▤</div><span>All</span></a>
+        <a href="#" class="cat-item"><div class="cat-icon">🎓</div><span>Academic</span></a>
+        <a href="#" class="cat-item"><div class="cat-icon">🏆</div><span>Scholarships</span></a>
+        <a href="#" class="cat-item"><div class="cat-icon">💼</div><span>Careers</span></a>
+        <a href="#" class="cat-item"><div class="cat-icon"> </> </div><span>Projects</span></a>
+        <a href="#" class="cat-item"><div class="cat-icon">♥</div><span>Lifestyle</span></a>
+    </div>
+    <style>
+        .section { padding: 20px; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header h2 { font-size: 18px; }
+        .section-header a { font-size: 14px; color: #4f46e5; text-decoration: none; }
         
-        <header class="app-header">
-            <div class="header-left">
-                <div class="hamburger" onclick="window.location.href='menu.html'">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
+        /* Topics */
+        .topic-card { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+        .topic-info h4 { font-size: 15px; }
+        .topic-info p { font-size: 12px; color: #64748b; }
+
+        /* Communities */
+        .communities-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .comm-card { background: #ffffff; padding: 15px; border-radius: 12px; border: 1px solid #f1f5f9; text-align: center; }
+        .comm-icon { width: 40px; height: 40px; margin: 0 auto 10px; background: #e0e7ff; border-radius: 8px; display: flex; justify-content: center; align-items: center; }
+        .join-btn { width: 100%; padding: 8px; border: none; border-radius: 6px; background: #4f46e5; color: white; cursor: pointer; font-size: 12px; font-weight: 600; }
+    </style>
+
+    <div class="section">
+        <div class="section-header"><h2>Trending Topics 🔥</h2><a href="#">See all</a></div>
+        <div class="topic-card">
+            <div class="topic-info"><h4>#AI in Education</h4><p>12.5K posts</p></div>
+            <span style="color:green;">↗</span>
+        </div>
+        <div class="topic-card">
+            <div class="topic-info"><h4>#Exam Tips</h4><p>9.8K posts</p></div>
+            <span style="color:orange;">↗</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header"><h2>Popular Communities</h2><a href="#">See all</a></div>
+        <div class="communities-grid">
+            <div class="comm-card">
+                <div class="comm-icon">💻</div>
+                <h4 style="font-size: 13px;">CS Hub</h4>
+                <p style="font-size: 10px; color: #64748b; margin-bottom: 8px;">12K members</p>
+                <button class="join-btn" onclick="toggleJoin(this)">Join</button>
             </div>
-            <div class="header-center">
-                <h1>Explore</h1>
+            <div class="comm-card">
+                <div class="comm-icon">🔧</div>
+                <h4 style="font-size: 13px;">Eng Students</h4>
+                <p style="font-size: 10px; color: #64748b; margin-bottom: 8px;">8.4K members</p>
+                <button class="join-btn" onclick="toggleJoin(this)">Join</button>
             </div>
-            <div class="header-right" onclick="window.location.href='notifications.html'" style="cursor:pointer;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <span class="notif-badge">8</span>
+        </div>
+    </div>
+    <style>
+        .suggested-card { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+        .follow-btn { padding: 6px 15px; border: 1px solid #4f46e5; background: transparent; color: #4f46e5; border-radius: 20px; font-weight: 600; cursor: pointer; }
+        
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; display: flex; justify-content: space-around; padding: 15px; background: white; border-top: 1px solid #eee; }
+    </style>
+
+    <div class="section">
+        <div class="section-header"><h2>Suggested for You</h2><a href="#">See all</a></div>
+        <div class="suggested-card">
+            <div class="user-info">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" class="user-img">
+                <div><h4>Fatima</h4><p style="font-size: 11px;">Computer Science</p></div>
             </div>
-        </header>
+            <button class="follow-btn" onclick="toggleFollow(this)">Follow</button>
+        </div>
+    </div>
 
-        <main class="main-content">
-            
-            <div class="search-container">
-                <div class="search-wrapper">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                    <input type="text" class="search-input" id="mainSearch" placeholder="Search students, posts, communities..." oninput="handleSearch(this.value)">
-                </div>
-                <button class="filter-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
-                </button>
-            </div>
-
-            <div id="exploreMainContent">
-                
-                <div class="categories-scroll">
-                    <div class="cat-item active" onclick="window.location.href='explore.html'">
-                        <div class="cat-icon" style="background-color: #f5f3ff; color: #4f46e5;">🎯</div>
-                        <span>All</span>
-                    </div>
-                    <div class="cat-item" onclick="window.location.href='academic.html'">
-                        <div class="cat-icon" style="background-color: #ecfdf5; color: #10b981;">🎓</div>
-                        <span>Academic</span>
-                    </div>
-                    <div class="cat-item" onclick="window.location.href='scholarships.html'">
-                        <div class="cat-icon" style="background-color: #fffbeb; color: #f59e0b;">🏆</div>
-                        <span>Scholarships</span>
-                    </div>
-                    <div class="cat-item" onclick="window.location.href='careers.html'">
-                        <div class="cat-icon" style="background-color: #eff6ff; color: #3b82f6;">💼</div>
-                        <span>Careers</span>
-                    </div>
-                    <div class="cat-item" onclick="window.location.href='projects.html'">
-                        <div class="cat-icon" style="background-color: #fdf2f8; color: #ec4899;">&lt;/&gt;</div>
-                        <span>Projects</span>
-                    </div>
-                    <div class="cat-item" onclick="window.location.href='lifestyle.html'">
-                        <div class="cat-icon" style="background-color: #fff5f5; color: #ef4444;">❤️</div>
-                        <span>Lifestyle</span>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h2>Trending Topics 🔥</h2>
-                    <span class="see-all" onclick="toggleSeeAll('trending')">See all</span>
-                </div>
-                <div class="trending-list" id="trendingList">
-                    <div class="trending-item">
-                        <div class="trend-left">
-                            <div class="trend-icon" style="background-color: #e0f2fe; color: #0369a1;">🤖</div>
-                            <div>
-                                <div class="trend-title">#AI in Education</div>
-                                <div class="trend-posts">12.5K posts</div>
-                            </div>
-                        </div>
-                        <span style="color:#10b981; font-weight:bold;">📈</span>
-                    </div>
-                    <div class="trending-item">
-                        <div class="trend-left">
-                            <div class="trend-icon" style="background-color: #fef3c7; color: #b45309;">📝</div>
-                            <div>
-                                <div class="trend-title">#Exam Tips</div>
-                                <div class="trend-posts">9.8K posts</div>
-                            </div>
-                        </div>
-                        <span style="color:#f59e0b; font-weight:bold;">📈</span>
-                    </div>
-                    <div class="trending-item hidden-item trending-hidden">
-                        <div class="trend-left">
-                            <div class="trend-icon" style="background-color: #dcfce7; color: #15803d;">💰</div>
-                            <div>
-                                <div class="trend-title">#Scholarships 2024</div>
-                                <div class="trend-posts">8.1K posts</div>
-                            </div>
-                        </div>
-                        <span style="color:#10b981;">📈</span>
-                    </div>
-                    <div class="trending-item hidden-item trending-hidden">
-                        <div class="trend-left">
-                            <div class="trend-icon" style="background-color: #fce7f3; color: #b91c1c;">💻</div>
-                            <div>
-                                <div class="trend-title">#Final Year Projects</div>
-                                <div class="trend-posts">7.6K posts</div>
-                            </div>
-                        </div>
-                        <span style="color:#64748b;">📊</span>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h2>Popular Communities</h2>
-                    <span class="see-all" onclick="toggleSeeAll('communities')">See all</span>
-                </div>
-                <div class="communities-scroll" id="communitiesScroll">
-                    <div class="community-card">
-                        <div class="comm-icon" style="background-color:#eff6ff; color:#2563eb;">💻</div>
-                        <div class="comm-title">Computer Science Hub</div>
-                        <div class="comm-members">12.6K members</div>
-                        <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
-                    </div>
-                    <div class="community-card">
-                        <div class="comm-icon" style="background-color:#f5f3ff; color:#7c3aed;">⚙️</div>
-                        <div class="comm-title">Engineering Students</div>
-                        <div class="comm-members">8.4K members</div>
-                        <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
-                    </div>
-                    <div class="community-card hidden-item comm-hidden">
-                        <div class="comm-icon" style="background-color:#f0fdf4; color:#16a34a;">📈</div>
-                        <div class="comm-title">Business & Finance</div>
-                        <div class="comm-members">6.2K members</div>
-                        <button class="btn-premium" onclick="toggleJoin(this)">Join</button>
-                    </div>
-                </div>
-
-                <div class="section-header">
-                    <h2>Suggested for You</h2>
-                    <span class="see-all" onclick="toggleSeeAll('suggested')">See all</span>
-                </div>
-                <div class="suggested-list" id="suggestedList">
-                    <div class="user-row">
-                        <div class="user-info">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150" class="user-avatar" alt="Fatima">
-                            <div class="user-meta">
-                                <div class="u-name">Fatima Muhammad <span class="verified-badge">✓</span></div>
-                                <div class="u-details">Computer Science • ABU Zaria</div>
-                                <div class="u-mutual">24 mutual friends</div>
-                            </div>
-                        </div>
-                        <button class="btn-premium-follow" onclick="toggleFollow(this)">Follow</button>
-                    </div>
-                    
-                    <div class="user-row">
-                        <div class="user-info">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150" class="user-avatar" alt="David">
-                            <div class="user-meta">
-                                <div class="u-name">David Okafor <span class="verified-badge">✓</span></div>
-                                <div class="u-details">Mechanical Engineering • UNN</div>
-                                <div class="u-mutual">18 mutual friends</div>
-                            </div>
-                        </div>
-                        <button class="btn-premium-follow" onclick="toggleFollow(this)">Follow</button>
-                    </div>
-
-                    <div class="user-row hidden-item suggested-hidden">
-                        <div class="user-info">
-                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="user-avatar" alt="Maryam">
-                            <div class="user-meta">
-                                <div class="u-name">Maryam Hassan <span class="verified-badge">✓</span></div>
-                                <div class="u-details">Pharmacy • UMYU</div>
-                                <div class="u-mutual">15 mutual friends</div>
-                            </div>
-                        </div>
-                        <button class="btn-premium-follow" onclick="toggleFollow(this)">Follow</button>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="search-results-panel" id="searchResultsPanel">
-                
-                <div class="search-category-block">
-                    <div class="search-category-title">Groups & Communities</div>
-                    <div class="result-item" onclick="window.location.href='studyhub.html'">
-                        <div class="result-item-icon">💻</div>
-                        <div class="result-item-text">
-                            <div class="r-main">Computer Science Hub</div>
-                            <div class="r-sub">Community • 12,600 Students</div>
-                        </div>
-                    </div>
-                    <div class="result-item" onclick="window.location.href='studyhub.html'">
-                        <div class="result-item-icon">🚀</div>
-                        <div class="result-item-text">
-                            <div class="r-main">AI & Coding Hub</div>
-                            <div class="r-sub">Group • 1,420 Active Members</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="search-category-block">
-                    <div class="search-category-title">People / Students</div>
-                    <div class="result-item" onclick="window.location.href='profile.html'">
-                        <div class="result-item-icon">👤</div>
-                        <div class="result-item-text">
-                            <div class="r-main">Fatima Muhammad</div>
-                            <div class="r-sub">Computer Science • ABU Zaria</div>
-                        </div>
-                    </div>
-                    <div class="result-item" onclick="window.location.href='profile.html'">
-                        <div class="result-item-icon">👤</div>
-                        <div class="result-item-text">
-                            <div class="r-main">David Okafor</div>
-                            <div class="r-sub">Mechanical Eng. • UNN</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="search-category-block">
-                    <div class="search-category-title">Books & Courses</div>
-                    <div class="result-item">
-                        <div class="result-item-icon">📕</div>
-                        <div class="result-item-text">
-                            <div class="r-main">Data_Structures_Summary.pdf</div>
-                            <div class="r-sub">Course Material • 4.2 MB</div>
-                        </div>
-                    </div>
-                    <div class="result-item">
-                        <div class="result-item-icon">📘</div>
-                        <div class="result-item-text">
-                            <div class="r-main">Organic Chemistry Lab Report</div>
-                            <div class="r-sub">Book / Template • 1.8 MB</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="search-category-block">
-                    <div class="search-category-title">Posts & Academics</div>
-                    <div class="result-item" onclick="window.location.href='home.html'">
-                        <div class="result-item-icon">📄</div>
-                        <div class="result-item-text">
-                            <div class="r-main">An tura cikakken bayani akan 'Data Structures'</div>
-                            <div class="r-sub">Post by Fatima Muhammad • 2h ago</div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </main>
-        <nav class="bottom-navigation">
-            <a href="home.html" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                <span>Home</span>
-            </a>
-
-            <a href="explore.html" class="nav-link active">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="#ffffff" stroke="currentColor" stroke-width="2"></polygon>
-                </svg>
-                <span>Explore</span>
-            </a>
-
-            <a href="chat.html" class="nav-link">
-                <div class="nav-notif-count">3</div>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-                <span>Chat</span>
-            </a>
-
-            <a href="studyhub.html" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                <span>StudyHub</span>
-            </a>
-
-            <a href="profile.html" class="nav-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4-4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span>Profile</span>
-            </a>
-        </nav>
-
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+        <a href="home.html" style="color:#94a3b8; text-decoration:none;">🏠</a>
+        <a href="explore.html" style="color:#4f46e5; text-decoration:none;">🧭</a>
+        <a href="chat.html" style="color:#94a3b8; text-decoration:none;">💬</a>
+        <a href="studyhub.html" style="color:#94a3b8; text-decoration:none;">📚</a>
+        <a href="profile.html" style="color:#94a3b8; text-decoration:none;">👤</a>
     </div>
 
     <script>
-        // 1. Canza Join -> Joined
+        // Join Button Logic
         function toggleJoin(btn) {
-            if (btn.innerText === "Join") {
+            if(btn.innerText === "Join") {
                 btn.innerText = "Joined";
-                btn.classList.add("joined");
+                btn.style.background = "#e2e8f0";
+                btn.style.color = "#475569";
             } else {
                 btn.innerText = "Join";
-                btn.classList.remove("joined");
+                btn.style.background = "#4f46e5";
+                btn.style.color = "white";
             }
         }
 
-        // 2. Canza Follow -> Following
+        // Follow Button Logic
         function toggleFollow(btn) {
-            if (btn.innerText === "Follow") {
+            if(btn.innerText === "Follow") {
                 btn.innerText = "Following";
-                btn.classList.add("following");
+                btn.style.background = "#4f46e5";
+                btn.style.color = "white";
             } else {
                 btn.innerText = "Follow";
-                btn.classList.remove("following");
-            }
-        }
-
-        // 3. See All Functionality (Nuna duka)
-        function toggleSeeAll(type) {
-            let hiddenItems;
-            if (type === 'trending') {
-                hiddenItems = document.querySelectorAll('.trending-hidden');
-            } else if (type === 'communities') {
-                hiddenItems = document.querySelectorAll('.comm-hidden');
-            } else if (type === 'suggested') {
-                hiddenItems = document.querySelectorAll('.suggested-hidden');
-            }
-
-            hiddenItems.forEach(item => {
-                if (item.style.display === "flex" || item.style.display === "block") {
-                    item.style.setProperty("display", "none", "important");
-                } else {
-                    item.style.setProperty("display", "flex", "important");
-                }
-            });
-        }
-
-        // 4. Dynamic Live Search
-        function handleSearch(query) {
-            const mainContent = document.getElementById('exploreMainContent');
-            const resultsPanel = document.getElementById('searchResultsPanel');
-
-            if (query.trim().length > 0) {
-                mainContent.style.display = "none";
-                resultsPanel.style.display = "block";
-            } else {
-                mainContent.style.display = "block";
-                resultsPanel.style.display = "none";
+                btn.style.background = "transparent";
+                btn.style.color = "#4f46e5";
             }
         }
     </script>
