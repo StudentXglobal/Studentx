@@ -1045,6 +1045,190 @@ function handleFileSelect(input) {
     // Wanke bakin input din
     input.value = "";
 }
+        // =========================================================================
+// PREMIUM EXTENSION: REAL VOICE RECORDER, CAMERA SELECTION, & PLAY ONCE LOGIC
+// =========================================================================
+
+// Variables na sarrafa sauti da View Once
+let voiceRecorder;
+let voiceChunks = [];
+let voiceRecordingActive = false;
+let viewOnceToggle = false; // Shin an kunna alamar 👁️ (View/Play Once)?
+
+// 1. Shigar da Sabbin Icons (Camera & Mic) cikin Input Bar ta atomatik
+document.addEventListener("DOMContentLoaded", function() {
+    const inputBar = document.querySelector('.chat-input-bar');
+    const inputWrapper = document.querySelector('.input-wrapper');
+    const viewOnceBtn = inputWrapper.querySelector('button[onclick="sendViewOnceAudio()"]');
+    
+    // Canza aikin tsohon ikon idan an danna 👁️ ya zama Toggle (Kunna/Kashe)
+    if(viewOnceBtn) {
+        viewOnceBtn.setAttribute('onclick', 'toggleViewOnceMode(this)');
+        viewOnceBtn.style.transition = "all 0.2s ease";
+    }
+
+    // Canza tsohon ikon hagu ya koma alamar Kamara 📷
+    const leftBtn = inputBar.querySelector('.action-icon-btn');
+    if(leftBtn) {
+        leftBtn.innerHTML = '📷';
+        leftBtn.setAttribute('onclick', 'openCameraOrFiles()');
+    }
+
+    // Kara ikon Microphone 🎤 a kusa da Send Button
+    const sendBtn = inputBar.querySelector('.send-btn');
+    if(sendBtn && !document.getElementById('micRecordBtn')) {
+        const micBtn = document.createElement('button');
+        micBtn.className = "action-icon-btn";
+        micBtn.id = "micRecordBtn";
+        micBtn.style.fontSize = "20px";
+        micBtn.style.marginRight = "8px";
+        micBtn.innerHTML = "🎤";
+        micBtn.setAttribute('onclick', 'handleVoiceRecording(this)');
+        sendBtn.parentNode.insertBefore(micBtn, sendBtn);
+    }
+});
+
+// 2. Kunna ko Kashe Tsarin View Once / Play Once (Toggle Mode)
+function toggleViewOnceMode(btn) {
+    viewOnceToggle = !viewOnceToggle;
+    if(viewOnceToggle) {
+        btn.style.color = "#4f46e5"; // Shudin App
+        btn.style.transform = "scale(1.2)";
+        alert("View Once / Play Once Mode: Active 👁️");
+    } else {
+        btn.style.color = "#64748b"; // Tsohon launi
+        btn.style.transform = "scale(1.0)";
+    }
+}
+
+// 3. Bude Kamara ko Files na waya kai tsaye (Zabi tsakanin daukar hoto/bidiyo ko shiga Files)
+function openCameraOrFiles() {
+    let camInput = document.getElementById('chatCameraInput');
+    if (!camInput) {
+        camInput = document.createElement('input');
+        camInput.type = 'file';
+        camInput.id = 'chatCameraInput';
+        // Wannan accept din zai sa Android ta kawo zabin Kamara, Bidiyo, ko Files gaba daya!
+        camInput.accept = 'image/*,video/*'; 
+        camInput.style.display = 'none';
+        document.body.appendChild(camInput);
+        camInput.addEventListener('change', function() {
+            handleFileSelect(this); // Amfani da tsohon aikinmu na Caption
+        });
+    }
+    camInput.click();
+}
+
+// 4. Daukar Sautin Murya na Gaske (Voice Recording API)
+async function handleVoiceRecording(btn) {
+    const area = document.getElementById('msgArea');
+    
+    if (!voiceRecordingActive) {
+        // Fara Recording
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("Sorrry, wayarka bata amince da daukar sauti ta Browser ba.");
+            return;
+        }
+        
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            voiceRecorder = new MediaRecorder(stream);
+            voiceChunks = [];
+            
+            voiceRecorder.ondataavailable = e => {
+                if (e.data.size > 0) voiceChunks.push(e.data);
+            };
+            
+            voiceRecorder.onstop = () => {
+                const audioBlob = new Blob(voiceChunks, { type: 'audio/mp3' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                sendRecordedVoiceMessage(audioUrl, viewOnceToggle);
+                
+                // Kashe mod din View once idan an gama tura sakon
+                if(viewOnceToggle) {
+                    const viewOnceBtn = document.querySelector('.input-wrapper button');
+                    toggleViewOnceMode(viewOnceBtn);
+                }
+            };
+            
+            voiceRecorder.start();
+            voiceRecordingActive = true;
+            btn.innerHTML = "🔴"; // Alamar tana daukar sauti
+            btn.style.animation = "pulse 1s infinite alternate";
+        } catch (err) {
+            alert("An samu matsalar samun izinin amfani da Makirfo (Microphone).");
+        }
+    } else {
+        // Tsayar da Recording da kuma Turawa
+        voiceRecorder.stop();
+        voiceRecordingActive = false;
+        btn.innerHTML = "🎤";
+        btn.style.animation = "none";
+    }
+}
+
+// 5. Tura Sautin da aka Dauka zuwa Allon Hira (Chat Feed)
+function sendRecordedVoiceMessage(url, isPlayOnce) {
+    const area = document.getElementById('msgArea');
+    const wrapper = document.createElement('div');
+    wrapper.className = "msg-wrapper outgoing";
+    
+    let voiceBubbleHtml = "";
+    
+    if (isPlayOnce) {
+        // Idan Play Once Ne
+        voiceBubbleHtml = `
+            <div class="view-once-box" onclick="handlePlayOnceVoice(this, '${url}')">
+                <span>🎵 Play Once Voice Note 👁️</span>
+            </div>
+        `;
+    } else {
+        // Idan Voice Note na kullum ne
+        voiceBubbleHtml = `
+            <div class="voice-player">
+                <button class="play-btn" onclick="playVoiceSimulation(this, '${url}')">▶</button>
+                <div class="voice-wave"><div class="voice-progress"></div></div>
+                <span style="font-size:11px; font-weight:600;">Audio</span>
+            </div>
+        `;
+    }
+    
+    wrapper.innerHTML = `
+        <div class="msg-bubble" style="padding: 12px 14px;" oncontextmenu="handleLongPress(event, this)">
+            ${voiceBubbleHtml}
+        </div>
+        <div class="msg-meta">Just now <span style="color:#ffffff; font-weight:bold;">✓✓</span></div>
+    `;
+    
+    area.appendChild(wrapper);
+    area.scrollTop = area.scrollHeight;
+}
+
+// 6. Sarrafa Kunna Sauti na Play Once (Yana konewa bayan ya gama)
+function handlePlayOnceVoice(element, url) {
+    alert("Kunna sautin Play Once! Bayan ya gama zai goge kansa ta atomatik.");
+    
+    const audio = new Audio(url);
+    element.innerHTML = "🔊 Playing once...";
+    element.style.pointerEvents = "none";
+    
+    audio.play();
+    
+    audio.onended = function() {
+        // Goge sautin gaba daya bayan ya gama tsaf
+        element.parentNode.innerHTML = `<div style="color:rgba(255,255,255,0.6); font-style:italic; display:flex; align-items:center; gap:6px;">👁️ Opened</div>`;
+    };
+}
+
+// CSS Pulse Animation don Ikon Voice Record na jini-jini (🔴)
+const style = document.createElement('style');
+style.innerHTML = `
+    @keyframes pulse {
+        from { transform: scale(1); opacity: 1; }
+        to { transform: scale(1.2); opacity: 0.7; }
+    }
+`;
+document.head.appendChild(style);
     </script>
 </body>
 </html>
