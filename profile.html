@@ -3,126 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Profile Dashboard</title>
+    <title>StudentX - Premium Profile</title>
     <style>
         :root {
-            --primary: #4f46e5;
-            --primary-light: #eef2ff;
-            --bg-gradient: linear-gradient(180deg, #f5f3ff 0%, #ffffff 100%);
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --card-bg: #ffffff;
-            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-md: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            --border-radius: 24px;
+            --primary-purple: #7c3aed;
+            --verified-blue: #1d9bf0;
+            --bg-gradient: linear-gradient(180deg, #f9f8ff 0%, #ffffff 100%);
+            --text-dark: #0f172a;
+            --text-gray: #64748b;
+            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
+            --border-light: #f1f5f9;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
             background: var(--bg-gradient);
-            color: var(--text-main);
+            color: var(--text-dark);
             min-height: 100vh;
             display: flex;
             justify-content: center;
         }
 
-        /* Mobile Container to match Oukitel WP19 Pro layout */
-        .app-container {
+        /* Wayar Oukitel WP19 Pro Container ba tare da Status Bar ba */
+        .app-screen {
             width: 100%;
             max-width: 480px;
             background: transparent;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 90px;
-            overflow-x: hidden;
+            padding-bottom: 100px;
         }
 
-        /* Status Bar Simulation */
-        .status-bar {
+        /* Header Navigation - Yanzu shi ne saman kowane abu */
+        .main-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 24px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-main);
+            padding: 20px 24px 10px;
         }
-        .status-icons {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        /* Header Navigation Line */
-        .header-nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 24px;
-        }
-        .header-title {
+        .main-header h1 {
             font-size: 20px;
             font-weight: 700;
+            color: var(--text-dark);
         }
-        .icon-btn {
+        .hdr-btn {
             background: transparent;
             border: none;
             cursor: pointer;
-            color: var(--text-main);
+            color: var(--text-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
-            transition: background 0.2s;
         }
-        .icon-btn:active {
-            background: rgba(0, 0, 0, 0.05);
+        .hdr-btn:active {
+            background: rgba(0,0,0,0.04);
         }
-        .header-right {
+        .hdr-right {
             display: flex;
-            gap: 8px;
+            gap: 4px;
         }
 
-        /* Profile Details Layout */
+        /* Profile Hero Card */
         .profile-hero {
             display: flex;
             align-items: center;
-            padding: 24px;
-            gap: 20px;
+            padding: 16px 24px;
+            gap: 16px;
         }
-        .avatar-container {
+        .avatar-holder {
             position: relative;
-            width: 110px;
-            height: 110px;
+            width: 105px;
+            height: 105px;
+            flex-shrink: 0;
         }
-        .profile-avatar {
+        .avatar-mask {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 4px solid white;
-            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(0,0,0,0.05);
             overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
         }
-        .camera-overlay {
+        .cam-badge {
             position: absolute;
-            bottom: 2px;
-            right: 2px;
-            background: var(--primary);
-            width: 32px;
-            height: 32px;
+            bottom: 0;
+            right: 0;
+            background: var(--primary-purple);
+            width: 30px;
+            height: 30px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -130,817 +112,580 @@
             color: white;
             border: 3px solid white;
             cursor: pointer;
-            box-shadow: var(--shadow-sm);
-        }
-        .profile-details {
-            flex: 1;
-        }
-        .profile-name-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .profile-name {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-        .verified-badge {
-            color: #1d9bf0;
-            display: inline-flex;
-            align-items: center;
-        }
-        .profile-handle {
-            color: var(--text-muted);
-            font-size: 15px;
-            margin-top: 1px;
-        }
-        .profile-bio {
-            font-size: 14px;
-            color: #475569;
-            margin-top: 10px;
-            line-height: 1.45;
-        }
-        .profile-meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
-        /* 3-Column Profile Stats Layout */
-        .stats-grid {
+        .profile-info {
+            flex: 1;
+        }
+        .name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .user-name {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+        .blue-tick {
+            color: var(--verified-blue);
+            display: flex;
+            align-items: center;
+        }
+        .user-handle {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-top: 2px;
+        }
+        .user-bio {
+            font-size: 13.5px;
+            color: #475569;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        .meta-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 10px;
+            font-size: 12.5px;
+            color: var(--text-gray);
+        }
+        .meta-cell {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* 3-Column Stats Grid */
+        .stats-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
-            padding: 4px 24px;
+            padding: 12px 24px;
         }
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 16px 8px;
+        .stat-box {
+            background: white;
+            border-radius: 16px;
+            padding: 14px 8px;
             text-align: center;
-            box-shadow: var(--shadow-sm);
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(241, 245, 249, 0.6);
         }
-        .stat-card:active {
-            transform: scale(0.96);
-        }
-        .stat-icon-wrapper {
-            margin-bottom: 8px;
+        .stat-icon {
             display: flex;
-            align-items: center;
             justify-content: center;
+            margin-bottom: 6px;
         }
-        .stat-value {
-            font-size: 18px;
+        .stat-num {
+            font-size: 17px;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--text-dark);
         }
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
+        .stat-text {
+            font-size: 11.5px;
+            color: var(--text-gray);
+            margin-top: 1px;
         }
 
-        /* Menu Options Configurations */
-        .menu-section {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            margin: 24px;
-            padding: 6px 0;
-            box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(241, 245, 249, 0.8);
+        /* Menu Options System */
+        .options-list {
+            background: white;
+            border-radius: 20px;
+            margin: 16px 24px;
+            padding: 4px 0;
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(241, 245, 249, 0.6);
         }
-        .menu-item {
+        .opt-item {
             display: flex;
             align-items: center;
-            padding: 16px 20px;
+            padding: 14px 18px;
             cursor: pointer;
-            transition: background 0.2s;
         }
-        .menu-item:not(:last-child) {
+        .opt-item:not(:last-child) {
             border-bottom: 1px solid #f8fafc;
         }
-        .menu-item:active {
-            background: #f8fafc;
-        }
-        .menu-icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
+        .opt-icon-wrapper {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 14px;
+            margin-right: 12px;
         }
-        /* Exact color schemes matching the image */
-        .icon-blue-bg { background: #eff6ff; color: #2563eb; }
-        .icon-shield-bg { background: #e0f2fe; color: #0284c7; }
-        .icon-pink-bg { background: #fff1f2; color: #f43f5e; }
-        .icon-teal-bg { background: #e6fffa; color: #0d9488; }
-        .icon-orange-bg { background: #fff7ed; color: #ea580c; }
-        .icon-purple-bg { background: #f5f3ff; color: #7c3aed; }
+        /* Color matching code codes */
+        .bg-indigo { background: #eef2ff; color: #4f46e5; }
+        .bg-blue { background: #eff6ff; color: #2563eb; }
+        .bg-pink { background: #fff1f2; color: #f43f5e; }
+        .bg-teal { background: #e6fffa; color: #0d9488; }
+        .bg-orange { background: #fff7ed; color: #ea580c; }
+        .bg-purple { background: #f5f3ff; color: #7c3aed; }
 
-        .menu-text {
+        .opt-details {
             flex: 1;
         }
-        .menu-title {
-            font-size: 15px;
+        .opt-title {
+            font-size: 14.5px;
             font-weight: 600;
-            color: var(--text-main);
+            color: var(--text-dark);
         }
-        .menu-sub {
-            font-size: 12.5px;
-            color: var(--text-muted);
-            margin-top: 2px;
+        .opt-subtitle {
+            font-size: 11.5px;
+            color: var(--text-gray);
+            margin-top: 1px;
         }
-        .menu-arrow {
-            color: #94a3b8;
+        .opt-chevron {
+            color: #cbd5e1;
             display: flex;
             align-items: center;
         }
 
-        /* Horizontal Badges Section */
-        .section-header {
+        /* Achievements Header & Row */
+        .section-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 24px;
-            margin-top: 8px;
+            padding: 8px 24px 4px;
         }
-        .section-title {
-            font-size: 16px;
+        .section-lbl {
+            font-size: 15.5px;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--text-dark);
         }
-        .view-all-link {
-            font-size: 13px;
-            color: var(--primary);
+        .action-lbl {
+            font-size: 12.5px;
+            color: var(--primary-purple);
             font-weight: 600;
             text-decoration: none;
-            cursor: pointer;
         }
 
-        .achievements-row {
+        .badges-slider {
             display: flex;
-            gap: 14px;
-            padding: 16px 24px;
+            gap: 12px;
+            padding: 12px 24px;
             overflow-x: auto;
             scrollbar-width: none;
         }
-        .achievements-row::-webkit-scrollbar { display: none; }
-        
-        .badge-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 16px 12px;
-            min-width: 108px;
+        .badges-slider::-webkit-scrollbar { display: none; }
+
+        .hex-card {
+            background: white;
+            border-radius: 18px;
+            padding: 14px 10px;
+            min-width: 102px;
             text-align: center;
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--card-shadow);
+            border: 1px solid rgba(241, 245, 249, 0.6);
             flex-shrink: 0;
-            cursor: pointer;
         }
-        .badge-hexagon {
-            width: 54px;
-            height: 54px;
-            margin: 0 auto 10px;
+        .hex-shape {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         }
-        .hex-purple { background: #f3e8ff; color: #9333ea; }
-        .hex-green { background: #dcfce7; color: #16a34a; }
-        .hex-blue { background: #dbeafe; color: #2563eb; }
-        .hex-gold { background: #fef9c3; color: #ca8a04; }
+        .hex-purple { background: #f3e8ff; color: #a855f7; }
+        .hex-green { background: #dcfce7; color: #22c55e; }
+        .hex-blue { background: #dbeafe; color: #3b82f6; }
+        .hex-amber { background: #fef9c3; color: #eab308; }
 
-        .badge-title {
-            font-size: 11.5px;
+        .hex-name {
+            font-size: 11px;
             font-weight: 700;
-            color: var(--text-main);
+            color: var(--text-dark);
         }
-        .badge-desc {
-            font-size: 10px;
-            color: var(--text-muted);
-            margin-top: 3px;
+        .hex-meta {
+            font-size: 9.5px;
+            color: var(--text-gray);
+            margin-top: 2px;
         }
 
-        /* Bottom Tab Navigator Elements */
-        .bottom-nav {
+        /* Bottom Tab Navigation Bar */
+        .tab-navigator {
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
             max-width: 480px;
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
-            padding: 12px 10px 14px;
-            border-top: 1px solid #f1f5f9;
-            box-shadow: 0 -4px 24px rgba(0,0,0,0.02);
+            padding: 10px 6px 12px;
+            border-top: 1px solid var(--border-light);
             z-index: 100;
         }
-        .nav-item {
+        .tab-cell {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             background: transparent;
             border: none;
             cursor: pointer;
             color: #94a3b8;
-            font-size: 11px;
+            font-size: 10.5px;
             font-weight: 600;
-            position: relative;
             flex: 1;
+            position: relative;
         }
-        .nav-item.active {
-            color: var(--primary);
+        .tab-cell.active {
+            color: var(--primary-purple);
         }
-        .nav-icon-wrap {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 24px;
-        }
-        .nav-badge {
+        .tab-badge {
             position: absolute;
-            top: -4px;
-            right: 22%;
+            top: -3px;
+            right: 24%;
             background: #ef4444;
             color: white;
             font-size: 9px;
             font-weight: 700;
-            border-radius: 10px;
-            padding: 1px 5px;
-            border: 2px solid white;
+            border-radius: 8px;
+            padding: 1px 4px;
+            border: 1.5px solid white;
+        }
+        .home-indicator {
+            position: absolute;
+            bottom: 4px;
+            width: 140px;
+            height: 4px;
+            background: #000000;
+            border-radius: 2px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        /* Modals Sheet Presentation Base Overlay */
-        .modal-overlay {
+        /* Modals Sheet Design Layout */
+        .overlay-layer {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.3);
-            backdrop-filter: blur(6px);
-            z-index: 1000;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.25);
+            backdrop-filter: blur(4px);
+            z-index: 500;
             display: flex;
             justify-content: center;
             align-items: flex-end;
             visibility: hidden;
             opacity: 0;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.25s ease-out;
         }
-        .modal-overlay.active {
+        .overlay-layer.active {
             visibility: visible;
             opacity: 1;
         }
-        .modal-sheet {
+        .bottom-sheet {
             width: 100%;
             max-width: 480px;
-            background: #ffffff;
-            border-top-left-radius: 28px;
-            border-top-right-radius: 28px;
+            background: white;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
             padding: 24px;
-            max-height: 85vh;
-            overflow-y: auto;
             transform: translateY(100%);
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.08);
+            transition: transform 0.25s ease-out;
         }
-        .modal-overlay.active .modal-sheet {
+        .overlay-layer.active .bottom-sheet {
             transform: translateY(0);
         }
-        .modal-header {
+        .sheet-hdr {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 22px;
+            margin-bottom: 20px;
         }
-        .modal-title {
-            font-size: 18px;
-            font-weight: 700;
-        }
-        .modal-close {
-            background: #f1f5f9;
-            border: none;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .form-group {
-            margin-bottom: 18px;
-            position: relative;
-        }
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: #475569;
-            margin-bottom: 6px;
-        }
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            outline: none;
-            font-size: 14.5px;
-            transition: border 0.2s;
-        }
-        .form-input:focus {
-            border-color: var(--primary);
-        }
-        .clickable-input {
-            background: #f8fafc;
-            cursor: pointer;
-        }
-        .save-btn {
-            width: 100%;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-        .location-picker-view {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            z-index: 10;
-            display: none;
-            flex-direction: column;
-            padding: 24px;
-        }
-        .search-box {
-            position: relative;
-            margin-bottom: 16px;
-        }
-        .search-input {
-            width: 100%;
-            padding: 12px 16px;
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            outline: none;
-            font-size: 14.5px;
-        }
-        .location-list {
-            list-style: none;
-            overflow-y: auto;
-            flex: 1;
-        }
-        .location-item {
-            padding: 14px 8px;
-            border-bottom: 1px solid #f8fafc;
-            cursor: pointer;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .info-panel-content {
-            text-align: center;
-            padding: 24px 12px;
-        }
-        .info-panel-icon {
-            margin-bottom: 16px;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        .sheet-title { font-size: 17px; font-weight: 700; }
+        .sheet-close { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-weight: 700; }
+        .input-item { margin-bottom: 16px; }
+        .input-item label { display: block; font-size: 12.5px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+        .input-field { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; font-size: 14spx; }
+        .input-field:focus { border-color: var(--primary-purple); }
+        .btn-action { width: 100%; background: var(--primary-purple); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 14.5px; font-weight: 700; cursor: pointer; margin-top: 6px; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <!-- Status Bar Simulation -->
-        <div class="status-bar">
-            <div>9:41</div>
-            <div class="status-icons">
-                <!-- Battery / Signal Vector Graphics Simulation -->
-                <svg width="18" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h.01M7 16h10M9 12h6M11 8h2"/></svg>
-                <svg width="18" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M2 20h20V4L2 20z"/></svg>
-                <svg width="22" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="16" height="10" rx="2" ry="2"/><line x1="22" y1="11" x2="22" y2="13"/></svg>
-            </div>
-        </div>
+    <div class="app-screen">
 
-        <!-- Top Navigation Area -->
-        <header class="header-nav">
-            <button class="icon-btn" onclick="openAppFeature('⚙️ Settings & Configuration Dashboard')">
+        <!-- Top Navigation Header Line -->
+        <header class="main-header">
+            <button class="hdr-btn" onclick="triggerNav('Settings')">
                 <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </button>
-            <div class="header-title">Profile</div>
-            <div class="header-right">
-                <button class="icon-btn" onclick="openEditProfileModal()">
+            <h1>Profile</h1>
+            <div class="hdr-right">
+                <button class="hdr-btn" onclick="openEditModal()">
                     <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                 </button>
-                <button class="icon-btn" onclick="openAppFeature('More Options Menu')">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+                <button class="hdr-btn" onclick="triggerNav('More Menu')">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="1.2"></circle><circle cx="12" cy="5" r="1.2"></circle><circle cx="12" cy="19" r="1.2"></circle></svg>
                 </button>
             </div>
         </header>
 
-        <!-- Profile Hero Base Segment -->
+        <!-- Profile Hero Section -->
         <section class="profile-hero">
-            <div class="avatar-container">
-                <!-- Anonymous/Joker Custom Vector Mask Face Design Illustration -->
-                <div class="profile-avatar" id="mainAvatarDisplay">
-                    <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="#f3e8ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <div class="avatar-holder">
+                <!-- Anonymous / Joker Face Vector Mask Design Illustration -->
+                <div class="avatar-mask">
+                    <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                         <path d="M8 10c1-1 2-1 4 0s3 1 4 0" stroke-width="2"/>
                         <path d="M9 14s1.5 2 3 2 3-2 3-2" stroke-width="2"/>
                     </svg>
                 </div>
-                <div class="camera-overlay" onclick="openEditProfileModal()">
-                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                <div class="cam-badge" onclick="openEditModal()">
+                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
                 </div>
             </div>
-            <div class="profile-details">
-                <div class="profile-name-row">
-                    <span class="profile-name" id="mainNameDisplay">Yusuf Alhaji Garba</span>
-                    <span class="verified-badge" title="Verified Profile">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            <div class="profile-info">
+                <div class="name-wrapper">
+                    <span class="user-name" id="namePlate">Yusuf Alhaji Garba</span>
+                    <span class="blue-tick">
+                        <svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
                     </span>
                 </div>
-                <div class="profile-handle" id="mainHandleDisplay">@yusuf_garba</div>
-                <div class="profile-bio" id="mainBioDisplay">Computer Science student passionate about learning and building innovative solutions.</div>
+                <div class="user-handle" id="handlePlate">@yusuf_garba</div>
+                <div class="user-bio" id="bioPlate">Computer Science student passionate about learning and building innovative solutions.</div>
                 
-                <div class="profile-meta">
-                    <div class="meta-item">
-                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span id="mainLocationDisplay">Abuja, Nigeria</span>
+                <div class="meta-row">
+                    <div class="meta-cell">
+                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span id="locPlate">Abuja, Nigeria</span>
                     </div>
-                    <div class="meta-item">
-                        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    <div class="meta-cell">
+                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         <span>Joined Jan 2024</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Exact Image Layout 3-Columns Stats Dashboard Block -->
-        <section class="stats-grid">
-            <div class="stat-card" onclick="openAppFeature('Connections List Hub')">
-                <div class="stat-icon-wrapper" style="color: #6366f1;">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        <!-- Exact Image Layout 3-Column Profile Stats -->
+        <section class="stats-row">
+            <div class="stat-box">
+                <div class="stat-icon" style="color: #6366f1;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
                 </div>
-                <div class="stat-value">128</div>
-                <div class="stat-label">Connections</div>
+                <div class="stat-num">128</div>
+                <div class="stat-text">Connections</div>
             </div>
-            <div class="stat-card" onclick="openAppFeature('User Posts Registry')">
-                <div class="stat-icon-wrapper" style="color: #22c55e;">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <div class="stat-box">
+                <div class="stat-icon" style="color: #22c55e;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                 </div>
-                <div class="stat-value">24</div>
-                <div class="stat-label">Posts</div>
+                <div class="stat-num">24</div>
+                <div class="stat-text">Posts</div>
             </div>
-            <div class="stat-card" onclick="openAppFeature('User Awarded Points System')">
-                <div class="stat-icon-wrapper" style="color: #eab308;">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" stroke="currentColor" stroke-width="1"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+            <div class="stat-box">
+                <div class="stat-icon" style="color: #eab308;">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
                 </div>
-                <div class="stat-value">1.2K</div>
-                <div class="stat-label">Points</div>
+                <div class="stat-num">1.2K</div>
+                <div class="stat-text">Points</div>
             </div>
         </section>
 
-        <!-- Menu Action Options Segment List -->
-        <section class="menu-section">
-            <div class="menu-item" onclick="openEditProfileModal()">
-                <div class="menu-icon-box icon-blue-bg">
+        <!-- Menu Navigation Rows Section -->
+        <section class="options-list">
+            <div class="opt-item" onclick="openEditModal()">
+                <div class="opt-icon-wrapper bg-blue">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">Edit Profile</div>
-                    <div class="menu-sub">Update your personal information</div>
+                <div class="opt-details">
+                    <div class="opt-title">Edit Profile</div>
+                    <div class="opt-subtitle">Update your personal information</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
 
-            <div class="menu-item" onclick="openAppFeature('🛡️ Account & Security Control View')">
-                <div class="menu-icon-box icon-shield-bg">
+            <div class="opt-item" onclick="triggerNav('Account & Security')">
+                <div class="opt-icon-wrapper bg-indigo">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">Account & Security</div>
-                    <div class="menu-sub">Manage password and security</div>
+                <div class="opt-details">
+                    <div class="opt-title">Account & Security</div>
+                    <div class="opt-subtitle">Manage password and security</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
 
-            <div class="menu-item" onclick="openAppFeature('🔔 Push Notifications Setup Framework')">
-                <div class="menu-icon-box icon-pink-bg">
+            <div class="opt-item" onclick="triggerNav('Notifications')">
+                <div class="opt-icon-wrapper bg-pink">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">Notifications</div>
-                    <div class="menu-sub">Manage your notification preferences</div>
+                <div class="opt-details">
+                    <div class="opt-title">Notifications</div>
+                    <div class="opt-subtitle">Manage your notification preferences</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
 
-            <div class="menu-item" onclick="openAppFeature('🔒 Data Privacy Matrix Config')">
-                <div class="menu-icon-box icon-teal-bg">
+            <div class="opt-item" onclick="triggerNav('Privacy')">
+                <div class="opt-icon-wrapper bg-teal">
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">Privacy</div>
-                    <div class="menu-sub">Control your privacy settings</div>
+                <div class="opt-details">
+                    <div class="opt-title">Privacy</div>
+                    <div class="opt-subtitle">Control your privacy settings</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
 
-            <div class="menu-item" onclick="openAppFeature('🎨 UI Theme & Appearance Options')">
-                <div class="menu-icon-box icon-orange-bg">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 22C17.52 22 22 17.52 22 12S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10zM12 6a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm-3.5 3.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm0 5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zM12 15a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm3.5-1.5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3zm0-5a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"></path></svg>
+            <div class="opt-item" onclick="triggerNav('Appearance')">
+                <div class="opt-icon-wrapper bg-orange">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M12 6a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3z"></path></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">Appearance</div>
-                    <div class="menu-sub">Choose your app theme</div>
+                <div class="opt-details">
+                    <div class="opt-title">Appearance</div>
+                    <div class="opt-subtitle">Choose your app theme</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
 
-            <div class="menu-item" onclick="openAppFeature('❓ Customer Help Desk Registry')">
-                <div class="menu-icon-box icon-purple-bg">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <div class="opt-item" onclick="triggerNav('Help & Support')">
+                <div class="opt-icon-wrapper bg-purple">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">Help & Support</div>
-                    <div class="menu-sub">Get help and view FAQs</div>
+                <div class="opt-details">
+                    <div class="opt-title">Help & Support</div>
+                    <div class="opt-subtitle">Get help and view FAQs</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
         </section>
 
-        <!-- Hexagonal Badges Area -->
-        <section class="section-header">
-            <div class="section-title">Achievements</div>
-            <div class="view-all-link" onclick="openAppFeature('🏅 All Achievements Matrix Screen')">View All</div>
-        </section>
+        <!-- Achievements Section Grid Layer -->
+        <div class="section-nav">
+            <div class="section-lbl">Achievements</div>
+            <a href="#" class="action-lbl" onclick="triggerNav('View All Achievements')">View All</a>
+        </div>
 
-        <div class="achievements-row">
-            <div class="badge-card" onclick="openAppFeature('🚀 Early Explorer Badge Overview')">
-                <div class="badge-hexagon hex-purple">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-                </div>
-                <div class="badge-title">Early Explorer</div>
-                <div class="badge-desc">Joined early</div>
+        <div class="badges-slider">
+            <div class="hex-card" onclick="triggerNav('Early Explorer')">
+                <div class="hex-shape hex-purple"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                <div class="hex-name">Early Explorer</div>
+                <div class="hex-meta">Joined early</div>
             </div>
-            <div class="badge-card" onclick="openAppFeature('✍️ Top Contributor Badge Overview')">
-                <div class="badge-hexagon hex-green">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-                </div>
-                <div class="badge-title">Top Contributor</div>
-                <div class="badge-desc">10+ posts</div>
+            <div class="hex-card" onclick="triggerNav('Top Contributor')">
+                <div class="hex-shape hex-green"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+                <div class="hex-name">Top Contributor</div>
+                <div class="hex-meta">10+ posts</div>
             </div>
-            <div class="badge-card" onclick="openAppFeature('🦋 Social Butterfly Badge Overview')">
-                <div class="badge-hexagon hex-blue">
-                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-                </div>
-                <div class="badge-title">Social Butterfly</div>
-                <div class="badge-desc">50+ connections</div>
+            <div class="hex-card" onclick="triggerNav('Social Butterfly')">
+                <div class="hex-shape hex-blue"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
+                <div class="hex-name">Social Butterfly</div>
+                <div class="hex-meta">50+ connections</div>
             </div>
-            <div class="badge-card" onclick="openAppFeature('⭐ Helpful Student Badge Overview')">
-                <div class="badge-hexagon hex-gold">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </div>
-                <div class="badge-title">Helpful Student</div>
-                <div class="badge-desc">100+ likes received</div>
+            <div class="hex-card" onclick="triggerNav('Helpful Student')">
+                <div class="hex-shape hex-amber"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+                <div class="hex-name">Helpful Student</div>
+                <div class="hex-meta">100+ received</div>
             </div>
         </div>
 
-        <!-- Extended Badge Entry Card Layout -->
-        <section class="menu-section" style="margin-top: 0;">
-            <div class="menu-item" onclick="openAppFeature('🎖️ Complete Badges Archive Panel')">
-                <div class="menu-icon-box" style="background:#f3e8ff; color:#7c3aed;">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+        <!-- Extended Badges Item Box -->
+        <section class="options-list" style="margin-top: 4px;">
+            <div class="opt-item" onclick="triggerNav('My Badges Sub-Archive')">
+                <div class="opt-icon-wrapper bg-purple">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
                 </div>
-                <div class="menu-text">
-                    <div class="menu-title">My Badges</div>
-                    <div class="menu-sub">See all your badges and achievements</div>
+                <div class="opt-details">
+                    <div class="opt-title">My Badges</div>
+                    <div class="opt-subtitle">See all your badges and achievements</div>
                 </div>
-                <div class="menu-arrow">
-                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </div>
+                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
             </div>
         </section>
 
-        <!-- Bottom Tab Navigator Framework -->
-        <nav class="bottom-nav">
-            <button class="nav-item" onclick="openAppFeature('🏠 StudentX Home Stream UI')">
-                <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg></div>
+        <!-- Bottom Tab Navigation Bar with Home Bar Indicator -->
+        <nav class="tab-navigator">
+            <button class="tab-cell" onclick="triggerNav('Home Window')">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
                 <span>Home</span>
             </button>
-            <button class="nav-item" onclick="openAppFeature('🧭 Explore Feed Dashboard')">
-                <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg></div>
+            <button class="tab-cell" onclick="triggerNav('Explore Window')">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
                 <span>Explore</span>
             </button>
-            <button class="nav-item" onclick="openAppFeature('💬 Instant Messaging Conversations')">
-                <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div>
+            <button class="tab-cell" onclick="triggerNav('Chat Messaging Panel')">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
                 <span>Chat</span>
-                <span class="nav-badge">3</span>
+                <span class="tab-badge">3</span>
             </button>
-            <button class="nav-item" onclick="openAppFeature('📖 StudyHub Resources Core Management')">
-                <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
+            <button class="tab-cell" onclick="triggerNav('StudyHub Workspace')">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
                 <span>StudyHub</span>
             </button>
-            <button class="nav-item active" onclick="location.reload();">
-                <div class="nav-icon-wrap"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+            <button class="tab-cell active" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 <span>Profile</span>
             </button>
+            <div class="home-indicator"></div>
         </nav>
     </div>
-    <!-- PROFILE EDIT SYSTEM MODAL SHEETS -->
-    <div class="modal-overlay" id="editProfileModal">
-        <div class="modal-sheet">
-            <div class="modal-header">
-                <div class="modal-title">Edit Profile Information</div>
-                <button class="modal-close" onclick="closeEditProfileModal()">✕</button>
+    <!-- EDIT PROFILE SYSTEM SHEET MODAL -->
+    <div class="overlay-layer" id="editProfileModal">
+        <div class="bottom-sheet">
+            <div class="sheet-hdr">
+                <div class="sheet-title">Edit Profile Details</div>
+                <button class="sheet-close" onclick="closeEditModal()">✕</button>
             </div>
             
-            <div class="form-group">
-                <label class="form-label">Full Display Name</label>
-                <input type="text" class="form-input" id="editNameInput" value="Yusuf Alhaji Garba">
+            <div class="input-item">
+                <label>Display Name</label>
+                <input type="text" class="input-field" id="inputName" value="Yusuf Alhaji Garba">
             </div>
-            <div class="form-group">
-                <label class="form-label">Username Handle</label>
-                <input type="text" class="form-input" id="editHandleInput" value="@yusuf_garba">
+            <div class="input-item">
+                <label>Username</label>
+                <input type="text" class="input-field" id="inputHandle" value="@yusuf_garba">
             </div>
-            <div class="form-group">
-                <label class="form-label">Biography Statement</label>
-                <input type="text" class="form-input" id="editBioInput" value="Computer Science student passionate about learning and building innovative solutions.">
+            <div class="input-item">
+                <label>Bio Details</label>
+                <input type="text" class="input-field" id="inputBio" value="Computer Science student passionate about learning and building innovative solutions.">
             </div>
-            <div class="form-group">
-                <label class="form-label">Geographical Location</label>
-                <input type="text" class="form-input clickable-input" id="editLocationInput" value="Abuja, Nigeria" readonly onclick="showWorldLocationPicker()">
+            <div class="input-item">
+                <label>Location</label>
+                <input type="text" class="input-field" id="inputLoc" value="Abuja, Nigeria">
             </div>
 
-            <button class="save-btn" onclick="saveProfileChangesData()">Apply & Save Changes</button>
-
-            <!-- SUB-VIEW OVERLAY: INTERACTIVE WORLD LOCATION LOOKUP SEARCH ENGINE -->
-            <div class="location-picker-view" id="worldLocationPickerLayer">
-                <div class="modal-header" style="margin-bottom: 12px;">
-                    <div class="modal-title" style="font-size: 16px;">Select World Location</div>
-                    <button class="modal-close" onclick="hideWorldLocationPicker()">✕</button>
-                </div>
-                <div class="search-box">
-                    <input type="text" class="search-input" id="locationSearchBox" placeholder="Search cities or countries..." oninput="filterWorldLocations()">
-                </div>
-                <ul class="location-list" id="globalLocationsUl"></ul>
-            </div>
-        </div>
-    </div>
-
-    <!-- UNIVERSAL POPUP PANEL INTERACTION SHEET -->
-    <div class="modal-overlay" id="universalFeatureModal">
-        <div class="modal-sheet">
-            <div class="modal-header">
-                <div class="modal-title" id="universalModalTitle">Feature View</div>
-                <button class="modal-close" onclick="closeUniversalFeatureModal()">✕</button>
-            </div>
-            <div class="info-panel-content">
-                <div class="info-panel-icon" id="universalModalIcon">
-                    <!-- Standard vector representation inside info views -->
-                    <svg viewBox="0 0 24 24" width="48" height="48" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                </div>
-                <p id="universalModalDesc" style="color: var(--text-muted); line-height: 1.5; font-size: 15px; margin-bottom: 15px;">Loading context workspace...</p>
-                <button class="save-btn" style="background:#f1f5f9; color:var(--text-main); margin-top:20px;" onclick="closeUniversalFeatureModal()">Return Back</button>
-            </div>
+            <button class="btn-action" onclick="commitChanges()">Save Profile Info</button>
         </div>
     </div>
 
 
-    <!-- PROGRAMMATIC OPERATIONS ARCHITECTURE -->
+    <!-- JAVASCRIPT ACTIONS CONTROLLER -->
     <script>
-        // Preset international lookup database list for geography selection
-        const worldLocationsDatabase = [
-            "Abuja, Nigeria", "Lagos, Nigeria", "Kano, Nigeria", "Kaduna, Nigeria",
-            "London, United Kingdom", "New York, United States", "Cairo, Egypt", 
-            "Nairobi, Kenya", "Accra, Ghana", "Dubai, UAE", "Paris, France", 
-            "Tokyo, Japan", "Toronto, Canada"
-        ];
-
-        // Edit Profile View State Changes
-        function openEditProfileModal() {
+        // Modal Sheet Control logic
+        function openEditModal() {
             document.getElementById('editProfileModal').classList.add('active');
         }
-        function closeEditProfileModal() {
+
+        function closeEditModal() {
             document.getElementById('editProfileModal').classList.remove('active');
-            hideWorldLocationPicker();
         }
 
-        // Sub-Modal Selector Actions for Location Engine
-        function showWorldLocationPicker() {
-            const listContainer = document.getElementById('globalLocationsUl');
-            listContainer.innerHTML = '';
-            
-            worldLocationsDatabase.forEach(loc => {
-                const li = document.createElement('li');
-                li.className = 'location-item';
-                li.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="gray" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg> <span>${loc}</span>`;
-                li.onclick = function() { selectTargetLocation(loc); };
-                listContainer.appendChild(li);
-            });
-            document.getElementById('worldLocationPickerLayer').style.display = 'flex';
+        // Apply input data back to DOM text nodes
+        function commitChanges() {
+            const nameVal = document.getElementById('inputName').value;
+            const handleVal = document.getElementById('inputHandle').value;
+            const bioVal = document.getElementById('inputBio').value;
+            const locVal = document.getElementById('inputLoc').value;
+
+            document.getElementById('namePlate').innerText = nameVal;
+            document.getElementById('handlePlate').innerText = handleVal;
+            document.getElementById('bioPlate').innerText = bioVal;
+            document.getElementById('locPlate').innerText = locVal;
+
+            closeEditModal();
         }
 
-        function hideWorldLocationPicker() {
-            document.getElementById('worldLocationPickerLayer').style.display = 'none';
-            document.getElementById('locationSearchBox').value = '';
-        }
-
-        function filterWorldLocations() {
-            const query = document.getElementById('locationSearchBox').value.toLowerCase();
-            const listContainer = document.getElementById('globalLocationsUl');
-            listContainer.innerHTML = '';
-
-            const filtered = worldLocationsDatabase.filter(item => item.toLowerCase().includes(query));
-
-            if(filtered.length === 0) {
-                listContainer.innerHTML = `<li class='location-item' style='color:gray; cursor:default;'>No results for "${query}"</li>`;
-                return;
-            }
-
-            filtered.forEach(loc => {
-                const li = document.createElement('li');
-                li.className = 'location-item';
-                li.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="gray" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20"/></svg> <span>${loc}</span>`;
-                li.onclick = function() { selectTargetLocation(loc); };
-                listContainer.appendChild(li);
-            });
-        }
-
-        function selectTargetLocation(val) {
-            document.getElementById('editLocationInput').value = val;
-            hideWorldLocationPicker();
-        }
-
-        // Commit modifications directly inside DOM targets
-        function saveProfileChangesData() {
-            const updatedName = document.getElementById('editNameInput').value;
-            const updatedHandle = document.getElementById('editHandleInput').value;
-            const updatedBio = document.getElementById('editBioInput').value;
-            const updatedLocation = document.getElementById('editLocationInput').value;
-
-            document.getElementById('mainNameDisplay').innerText = updatedName;
-            document.getElementById('mainHandleDisplay').innerText = updatedHandle;
-            document.getElementById('mainBioDisplay').innerText = updatedBio;
-            document.getElementById('mainLocationDisplay').innerText = updatedLocation;
-            
-            closeEditProfileModal();
-        }
-
-        // Routing Screen Event Dispatches
-        function openAppFeature(featureTitleText) {
-            document.getElementById('universalModalTitle').innerText = featureTitleText;
-            document.getElementById('universalModalDesc').innerHTML = `Wannan shi ne cikakken sashen <strong>${featureTitleText}</strong> na manhajarka ta StudentX kamar yadda yake a tsarin zane.`;
-            document.getElementById('universalFeatureModal').classList.add('active');
-        }
-
-        function closeUniversalFeatureModal() {
-            document.getElementById('universalFeatureModal').classList.remove('active');
+        // Debug alerts mock for sub-features
+        function triggerNav(targetName) {
+            alert("Ka danna: " + targetName);
         }
     </script>
 </body>
