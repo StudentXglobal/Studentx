@@ -1229,6 +1229,249 @@ style.innerHTML = `
     }
 `;
 document.head.appendChild(style);
+        // =========================================================================
+// ULTRA-MODERN INPUT SYSTEM: PREVIEW RECORDING, SEPARATE MEDIA & EYE ICONS
+// =========================================================================
+
+let voiceRecorderInstance;
+let voiceAudioChunks = [];
+let isVoiceRecording = false;
+let previewAudioInstance = null;
+let currentRecordedAudioUrl = "";
+let viewOnceToggleState = false;
+
+// 1. Sake Tsara Allon Input (Input Bar) don Fitar da Duka Icons daban-daban na Alfarman Gaske
+document.addEventListener("DOMContentLoaded", function() {
+    const inputBar = document.querySelector('.chat-input-bar');
+    if (!inputBar) return;
+
+    // Sauya fasalin Input Bar zuwa na zamani mai duka icons a bayyane
+    inputBar.innerHTML = `
+        <!-- Ikon Hoto daban -->
+        <button class="action-icon-btn" id="modernPhotoBtn" onclick="triggerModernPick('photo')" style="font-size: 20px; transition: transform 0.2s;">🖼️</button>
+        <!-- Ikon Bidiyo daban -->
+        <button class="action-icon-btn" id="modernVideoBtn" onclick="triggerModernPick('video')" style="font-size: 20px; margin-right: 4px; transition: transform 0.2s;">🎥</button>
+        
+        <!-- Akwatin Rubutu da alamar Eye (View Once) -->
+        <div class="input-wrapper" id="chatInputWrapper" style="position: relative; display: flex; align-items: center; flex: 1; background: #f1f5f9; border-radius: 20px; padding: 6px 14px;">
+            <input type="text" id="chatMessageInput" placeholder="Type a message..." style="flex: 1; background: transparent; border: none; outline: none; font-size: 15px;">
+            <button class="action-icon-btn" id="viewOnceBtn" onclick="toggleViewOnceMode(this)" style="font-size: 18px; color: #64748b; cursor: pointer;">👁️</button>
+        </div>
+
+        <!-- Ikon Voice Recorder daban -->
+        <button class="action-icon-btn" id="micRecordBtn" onclick="handleVoiceRecording(this)" style="font-size: 20px; margin-left: 4px; transition: all 0.2s;">🎤</button>
+        
+        <!-- Ikon Tura Sako (Send) -->
+        <button class="send-btn" onclick="sendMessageNow()" style="width: 40px; height: 40px; border-radius: 50%; background: #4f46e5; color: white; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        </button>
+    `;
+
+    // Gina hidden inputs a karkashin kasa
+    createModernFileInputs();
+});
+
+// 2. Kunna/Kashe Tsarin View Once (Eye) Mode
+function toggleViewOnceMode(btn) {
+    viewOnceToggleState = !viewOnceToggleState;
+    if(viewOnceToggleState) {
+        btn.style.color = "#4f46e5"; // Shudin App din
+        btn.style.transform = "scale(1.2) rotate(15deg)";
+    } else {
+        btn.style.color = "#64748b";
+        btn.style.transform = "scale(1.0) rotate(0deg)";
+    }
+}
+
+// 3. Kirkirar Hidden Inputs don Hoto da Bidiyo daban-daban
+function createModernFileInputs() {
+    if (!document.getElementById('photoFileInput')) {
+        const pInput = document.createElement('input');
+        pInput.type = 'file'; pInput.id = 'photoFileInput'; pInput.accept = 'image/*'; pInput.style.display = 'none';
+        pInput.addEventListener('change', function() { handleModernFileSelect(this, 'image'); });
+        document.body.appendChild(pInput);
+    }
+    if (!document.getElementById('videoFileInput')) {
+        const vInput = document.createElement('input');
+        vInput.type = 'file'; vInput.id = 'videoFileInput'; vInput.accept = 'video/*'; vInput.style.display = 'none';
+        vInput.addEventListener('change', function() { handleModernFileSelect(this, 'video'); });
+        document.body.appendChild(vInput);
+    }
+}
+
+function triggerModernPick(type) {
+    if (type === 'photo') document.getElementById('photoFileInput').click();
+    if (type === 'video') document.getElementById('videoFileInput').click();
+}
+
+// 4. Tsarin Daukar Sautin Murya da Gaske (MediaRecorder API)
+async function handleVoiceRecording(btn) {
+    if (!isVoiceRecording) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            alert("Sorrry, wayarka bata amince da daukar sauti ta Browser ba.");
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            voiceRecorderInstance = new MediaRecorder(stream);
+            voiceAudioChunks = [];
+            
+            voiceRecorderInstance.ondataavailable = e => { if (e.data.size > 0) voiceAudioChunks.push(e.data); };
+            
+            voiceRecorderInstance.onstop = () => {
+                const audioBlob = new Blob(voiceAudioChunks, { type: 'audio/mp3' });
+                currentRecordedAudioUrl = URL.createObjectURL(audioBlob);
+                // Nuna allon preview maimakon tura shi kai tsaye!
+                showAudioPreviewBar();
+            };
+            
+            voiceRecorderInstance.start();
+            isVoiceRecording = true;
+            btn.innerHTML = "🛑";
+            btn.style.color = "#ef4444";
+        } catch (err) {
+            alert("An kasa samun izinin amfani da Microphone.");
+        }
+    } else {
+        voiceRecorderInstance.stop();
+        isVoiceRecording = false;
+        btn.innerHTML = "🎤";
+        btn.style.color = "#64748b";
+    }
+}
+
+// 5. ALLON BITAR AUDIO (PREVIEW BAR): Saurari muryarka kafin tura sako!
+function showAudioPreviewBar() {
+    const wrapper = document.getElementById('chatInputWrapper');
+    
+    wrapper.innerHTML = `
+        <div style="display: flex; align-items: center; width: 100%; gap: 10px; background: #e2e8f0; padding: 4px 10px; border-radius: 14px; animation: slideInUp 0.2s ease;">
+            <!-- Alamar Play don sauraron recording din da kayi -->
+            <button onclick="playPreviewAudio(this)" style="background: #4f46e5; color: white; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center;">▶</button>
+            <span style="font-size: 12px; font-weight: 700; color: #0f172a; flex: 1;">Listen to Voice Note...</span>
+            <!-- Alamar Goge Recording din idan baka so -->
+            <button onclick="cancelPreviewAudio()" style="background: transparent; border: none; color: #ef4444; font-size: 16px; cursor: pointer; padding: 0 4px;">🗑️</button>
+            <!-- Alamar Tura shi idan yayi maka dadi -->
+            <button onclick="sendPreviewAudio()" style="background: #10b981; color: white; border: none; padding: 5px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer;">Send</button>
+        </div>
+    `;
+}
+
+// Kunna sautin da kayi recording don ka ji shi da kanka
+function playPreviewAudio(btn) {
+    if (!currentRecordedAudioUrl) return;
+    
+    if (previewAudioInstance && !previewAudioInstance.paused) {
+        previewAudioInstance.pause();
+        btn.innerHTML = "▶";
+    } else {
+        if (!previewAudioInstance) {
+            previewAudioInstance = new Audio(currentRecordedAudioUrl);
+            previewAudioInstance.onended = () => { btn.innerHTML = "▶"; };
+        }
+        previewAudioInstance.play();
+        btn.innerHTML = "⏸";
+    }
+}
+
+// Share recording din da kayi gaba daya
+function cancelPreviewAudio() {
+    if (previewAudioInstance) { previewAudioInstance.pause(); previewAudioInstance = null; }
+    currentRecordedAudioUrl = "";
+    restoreInputWrapperUI();
+}
+
+// Amincewa da turawa zuwa allon hira
+function sendPreviewAudio() {
+    if (previewAudioInstance) { previewAudioInstance.pause(); previewAudioInstance = null; }
+    if (!currentRecordedAudioUrl) return;
+    
+    // Kira babban tsarinmu na tura voice note
+    sendRecordedVoiceMessage(currentRecordedAudioUrl, viewOnceToggleState);
+    
+    currentRecordedAudioUrl = "";
+    restoreInputWrapperUI();
+    
+    // Kashe View Once idan an riga an tura saƙon
+    if (viewOnceToggleState) {
+        viewOnceToggleState = false;
+        const btn = document.getElementById('viewOnceBtn');
+        if (btn) { btn.style.color = "#64748b"; btn.style.transform = "scale(1.0) rotate(0deg)"; }
+    }
+}
+
+function restoreInputWrapperUI() {
+    const wrapper = document.getElementById('chatInputWrapper');
+    wrapper.innerHTML = `
+        <input type="text" id="chatMessageInput" placeholder="Type a message..." style="flex: 1; background: transparent; border: none; outline: none; font-size: 15px;">
+        <button class="action-icon-btn" id="viewOnceBtn" onclick="toggleViewOnceMode(this)" style="font-size: 18px; color: ${viewOnceToggleState ? '#4f46e5' : '#64748b'}; transform: ${viewOnceToggleState ? 'scale(1.2)' : 'scale(1.0)'};">👁️</button>
+    `;
+}
+
+// 6. Sarrafa Shigo da Fayilolin Hoto da Bidiyo Tare da Caption da View Once
+function handleModernFileSelect(input, mimeType) {
+    if (!input.files || !input.files[0]) return;
+    
+    const file = input.files[0];
+    const fileUrl = URL.createObjectURL(file);
+    const area = document.getElementById('msgArea');
+    const wrapper = document.createElement('div');
+    wrapper.className = "msg-wrapper outgoing";
+    
+    let captionText = prompt(`Rubuta bayani (Caption) don wannan ${mimeType === 'image' ? 'Hoto' : 'Bidiyo'}:`);
+    if (captionText === null) { input.value = ""; return; }
+
+    let mediaHtml = "";
+    if (mimeType === 'image') {
+        mediaHtml = `<img src="${fileUrl}" style="width: 100%; max-width: 200px; border-radius: 12px; display: block; object-fit: cover;">`;
+    } else {
+        mediaHtml = `<video src="${fileUrl}" controls style="width: 100%; max-width: 200px; border-radius: 12px; display: block;"></video>`;
+    }
+
+    if (viewOnceToggleState) {
+        // IDAN AN KUNNA VIEW ONCE (EYE VIEW)
+        wrapper.innerHTML = `
+            <div class="msg-bubble" style="padding: 12px; background: #4f46e5; color: white; border-radius: 18px; border-bottom-right-radius: 4px;" onclick="openModernViewOnceItem(this, '${mediaHtml}', '${captionText}')" oncontextmenu="handleLongPress(event, this)">
+                <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; cursor: pointer;">
+                    <span>👁️ View Once ${mimeType === 'image' ? '📷 Photo' : '🎥 Video'}</span>
+                </div>
+            </div>
+            <div class="msg-meta" style="display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 10.5px; color: #cbd5e1; margin-top: 4px;">Just now <span>✓✓</span></div>
+        `;
+        // Kashe Eye icon
+        viewOnceToggleState = false;
+        const b = document.getElementById('viewOnceBtn');
+        if(b) { b.style.color = "#64748b"; b.style.transform = "scale(1.0)"; }
+    } else {
+        // TURAWAN KULLUM TARE DA CAPTION
+        if (captionText.trim() !== "") {
+            mediaHtml += `<p style="margin-top: 8px; font-size: 14.5px; word-break: break-word; color: #ffffff; text-align: left; line-height: 1.4;">${captionText}</p>`;
+        }
+        wrapper.innerHTML = `
+            <div class="msg-bubble" style="padding: 8px; background: #4f46e5; color: white; border-radius: 18px; border-bottom-right-radius: 4px;" oncontextmenu="handleLongPress(event, this)">
+                ${mediaHtml}
+            </div>
+            <div class="msg-meta" style="display: flex; align-items: center; justify-content: flex-end; gap: 4px; font-size: 10.5px; color: #cbd5e1; margin-top: 4px;">Just now <span>✓✓</span></div>
+        `;
+    }
+
+    area.appendChild(wrapper);
+    area.scrollTop = area.scrollHeight;
+    input.value = "";
+}
+
+function openModernViewOnceItem(bubble, mediaHtml, caption) {
+    alert("Viewing private file! It will be destroyed in 6 seconds.");
+    let content = mediaHtml;
+    if(caption && caption.trim() !== "") {
+        content += `<p style="margin-top: 8px; font-size: 14px; color: #ffffff;">${caption}</p>`;
+    }
+    bubble.innerHTML = content;
+    setTimeout(() => {
+        bubble.innerHTML = `<div style="color:rgba(255,255,255,0.6); font-style:italic; display:flex; align-items:center; gap:6px;">👁️ Opened</div>`;
+        bubble.style.pointerEvents = "none";
+    }, 6000);
+    }
     </script>
 </body>
 </html>
