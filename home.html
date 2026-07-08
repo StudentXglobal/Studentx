@@ -117,3 +117,154 @@
                 </a>
             </div>
         </div>
+<style>
+        /* Feed Cards Styling */
+        .post-card { background: #ffffff; margin: 0 16px 12px 16px; padding: 16px; border-radius: 16px; border: 1px solid #f1f5f9; }
+        .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .post-user-info { display: flex; gap: 10px; align-items: center; text-decoration: none; color: inherit; }
+        .post-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+        .user-meta h4 { font-size: 15px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 4px; }
+        .verified-badge { color: #3b82f6; display: inline-flex; }
+        .user-meta p { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .post-content { font-size: 14.5px; line-height: 1.5; color: #334155; margin-bottom: 12px; }
+        
+        /* Attachment Box */
+        .pdf-attachment { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 12px; }
+        .pdf-icon { background: #ef4444; color: white; font-weight: 700; font-size: 11px; padding: 6px 8px; border-radius: 6px; }
+        .pdf-details h5 { font-size: 14px; font-weight: 600; color: #1e293b; }
+        .pdf-details p { font-size: 11px; color: #64748b; margin-top: 1px; }
+
+        /* Post Actions Row */
+        .post-stats { display: flex; justify-content: space-between; border-top: 1px solid #f8fafc; border-bottom: 1px solid #f8fafc; padding: 10px 4px; margin-bottom: 10px; }
+        .stat-btn { background: none; border: none; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; text-decoration: none; }
+        .likers-row { display: flex; align-items: center; gap: 6px; padding: 2px 4px; }
+        .likers-avatars { display: flex; }
+        .liker-mini { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid white; object-fit: cover; margin-left: -5px; }
+        .liker-mini:first-child { margin-left: 0; }
+        .likers-text { font-size: 12px; color: #64748b; font-weight: 500; }
+        
+        /* Inline Profile Completion Widget */
+        .completion-widget { background: #f0f4ff; border: 1px solid #dbeafe; border-radius: 16px; margin: 0 16px 12px 16px; padding: 16px; display: flex; align-items: center; justify-content: space-between; position: relative; }
+        .completion-left { display: flex; gap: 12px; align-items: center; }
+        .completion-icon { background: #ffffff; border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .completion-text h4 { font-size: 14px; font-weight: 700; color: #1e3a8a; }
+        .completion-text p { font-size: 11.5px; color: #4338ca; margin-top: 2px; }
+        .complete-btn { background: #4f46e5; color: white; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; }
+        .close-widget { position: absolute; top: 8px; right: 8px; background: none; border: none; color: #93c5fd; font-size: 14px; cursor: pointer; }
+    </style>
+
+    <div class="feed-container">
+        <!-- Post 1 (Fatima) -->
+        <div class="post-card">
+            <div class="post-header">
+                <a href="profile.html?user=fatima" class="post-user-info">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" class="post-avatar">
+                    <div class="user-meta">
+                        <h4>Fatima Muhammad <span class="verified-badge">✓</span></h4>
+                        <p>Computer Science • ABU Zaria • 2h ago</p>
+                    </div>
+                </a>
+                <button class="icon-btn"><svg viewBox="0 0 24 24" width="20" height="20" stroke="#64748b" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+            </div>
+            <div class="post-content">Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀</div>
+            <a href="viewfile.html?id=dsa-notes" class="pdf-attachment">
+                <div class="pdf-icon">PDF</div>
+                <div class="pdf-details">
+                    <h5>Data Structures & Algorithms.pdf</h5>
+                    <p>4.2 MB</p>
+                </div>
+            </a>
+            <div class="post-stats">
+                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="#ef4444" fill="#ef4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 245</button>
+                <a href="comments.html?post=1" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 32</a>
+                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> 18</button>
+                <button class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+            </div>
+            <div class="likers-row">
+                <div class="likers-avatars">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=50&q=80" class="liker-mini">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=50&q=80" class="liker-mini">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=50&q=80" class="liker-mini">
+                </div>
+                <span class="likers-text">Liked by John, Maryam and 243 others</span>
+            </div>
+        </div>
+
+        <!-- Post 2 (David) -->
+        <div class="post-card">
+            <div class="post-header">
+                <a href="profile.html?user=david" class="post-user-info">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" class="post-avatar">
+                    <div class="user-meta">
+                        <h4>David Okafor</h4>
+                        <p>@david.engineering • UNN • 3h ago</p>
+                    </div>
+                </a>
+                <button class="icon-btn"><svg viewBox="0 0 24 24" width="20" height="20" stroke="#64748b" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
+            </div>
+            <div class="post-content">Can anyone explain this thermodynamics question? I'm stuck on part (b).</div>
+            <div class="post-stats">
+                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 112</button>
+                <a href="comments.html?post=2" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 26</a>
+                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> 9</button>
+                <button class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
+            </div>
+        </div>
+
+        <!-- Profile Completion Widget -->
+        <div class="completion-widget">
+            <div class="completion-left">
+                <div class="completion-icon">🏆</div>
+                <div class="completion-text">
+                    <h4>Complete your profile</h4>
+                    <p>Add more details to connect with more students.</p>
+                </div>
+            </div>
+            <a href="profile.html?action=edit" class="complete-btn">Complete Now</a>
+            <button class="close-widget">×</button>
+        </div>
+
+        <!-- Post 3 (Ahmad) -->
+        <div class="post-card">
+            <div class="post-header">
+                <a href="profile.html?user=ahmad" class="post-user-info">
+                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=150&q=80" class="post-avatar">
+                    <div class="user-meta">
+                        <h4>Ahmad Aliyu</h4>
+                        <p>Software Engineering • Bayero University • 4h ago</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-content">Just finished building my first web app clone completely on my smartphone using HTML/CSS. Hard work pays off! 🔥💻</div>
+            <div class="post-stats"><a href="comments.html?post=3" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 45</a></div>
+        </div>
+
+        <!-- Post 4 (Zainab) -->
+        <div class="post-card">
+            <div class="post-header">
+                <a href="profile.html?user=zainab" class="post-user-info">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=150&q=80" class="post-avatar">
+                    <div class="user-meta">
+                        <h4>Zainab Bello</h4>
+                        <p>Civil Engineering • FUT Minna • 5h ago</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-content">Who has the textbook link or PDF for Fluid Mechanics? Kindly share please. 🙏</div>
+            <div class="post-stats"><a href="comments.html?post=4" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 12</a></div>
+        </div>
+
+        <!-- Post 5 (John) -->
+        <div class="post-card">
+            <div class="post-header">
+                <a href="profile.html?user=john" class="post-user-info">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" class="post-avatar">
+                    <div class="user-meta">
+                        <h4>John Doe</h4>
+                        <p>Biochemistry • Unilag • 6h ago</p>
+                    </div>
+                </a>
+            </div>
+            <div class="post-content">Chemistry practicals tomorrow morning. Time to study all night long! 🧪⚡</div>
+            <div class="post-stats"><a href="comments.html?post=5" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 8</a></div>
+        </div>
