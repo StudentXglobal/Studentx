@@ -583,10 +583,136 @@
                     tab.onclick = function(e) {
                         e.preventDefault();
                         window.location.href = links[i];
+    <!-- ========================================================= -->
+    <!-- 1️⃣ EDIT PROFILE MODAL (An gyara shi 100% da Turanci)       -->
+    <!-- ========================================================= -->
+    <div class="overlay-layer" id="editProfileModal">
+        <div class="bottom-sheet">
+            <div class="sheet-hdr">
+                <div class="sheet-title">Edit Profile Details</div>
+                <button class="sheet-close" id="forceCloseModalBtn">✕</button>
+            </div>
+            
+            <!-- Profile Picture Section (Upload vs Take Photo) -->
+            <div class="input-item">
+                <label>Profile Picture</label>
+                <div style="display: flex; gap: 12px; margin-top: 6px;">
+                    <!-- Upload Button -->
+                    <button type="button" onclick="document.getElementById('uploadPhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                        Upload Photo
+                    </button>
+                    <!-- Take Photo Button -->
+                    <button type="button" onclick="document.getElementById('takePhotoInput').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        Take Photo
+                    </button>
+                </div>
+                <!-- Core hidden system inputs -->
+                <input type="file" id="uploadPhotoInput" accept="image/*" style="display: none;" onchange="processImage(this)">
+                <input type="file" id="takePhotoInput" accept="image/*" capture="user" style="display: none;" onchange="processImage(this)">
+            </div>
+
+            <div class="input-item">
+                <label>Display Name</label>
+                <input type="text" class="input-field" id="inputName" value="Yusuf Alhaji Garba">
+            </div>
+            <div class="input-item">
+                <label>Username</label>
+                <input type="text" class="input-field" id="inputHandle" value="@yusuf_garba">
+            </div>
+            <div class="input-item">
+                <label>Bio Details</label>
+                <input type="text" class="input-field" id="inputBio" value="Computer Science student passionate about learning and building innovative solutions.">
+            </div>
+            <div class="input-item">
+                <label>Location</label>
+                <input type="text" class="input-field" id="inputLoc" value="Abuja, Nigeria">
+            </div>
+
+            <button class="btn-action" id="forceSaveModalBtn">Save Profile Info</button>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- 2️⃣ JAVASCRIPT CONTROLLER (Super Override System)           -->
+    <!-- ========================================================= -->
+    <script>
+        // Global Modal Core Functions (Don tsofaffin onclick su amsa)
+        function openEditModal() {
+            var modal = document.getElementById('editProfileModal');
+            if (modal) modal.classList.add('active');
+        }
+        function closeEditModal() {
+            var modal = document.getElementById('editProfileModal');
+            if (modal) modal.classList.remove('active');
+        }
+        function switchTab(el) { /* Override active system conflict */ }
+
+        // Sarrafa sanya Hoto
+        function processImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarMask = document.querySelector('.avatar-mask');
+                    if (avatarMask) {
+                        avatarMask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Adana duka canje-canje
+        function commitChanges() {
+            if (document.getElementById('namePlate')) document.getElementById('namePlate').innerText = document.getElementById('inputName').value;
+            if (document.getElementById('handlePlate')) document.getElementById('handlePlate').innerText = document.getElementById('inputHandle').value;
+            if (document.getElementById('bioPlate')) document.getElementById('bioPlate').innerText = document.getElementById('inputBio').value;
+            if (document.getElementById('locPlate')) document.getElementById('locPlate').innerText = document.getElementById('inputLoc').value;
+            closeEditModal();
+        }
+
+        // IDAN SHAFI YA GAMA LODAWA: Wannan tsarin zai tilasta kowane abu yin aiki da karfi
+        document.addEventListener("DOMContentLoaded", function() {
+            
+            // A. Tilasta kunnuwa da boye Edit Profile Modal
+            const editBtnInHeader = document.querySelector('.main-header button[onclick="openEditModal()"]') || document.querySelector('.main-header button');
+            const editOptionItem = document.querySelector('.opt-item'); // Na farko a jikin jerin dake tsakiya
+            const camBadgeIcon = document.querySelector('.cam-badge');
+
+            const openModalAction = function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                openEditModal();
+            };
+
+            if (editBtnInHeader) editBtnInHeader.onclick = openModalAction;
+            if (editOptionItem) editOptionItem.onclick = openModalAction;
+            if (camBadgeIcon) camBadgeIcon.onclick = openModalAction;
+
+            const closeBtn = document.getElementById('forceCloseModalBtn');
+            if (closeBtn) closeBtn.onclick = function() { closeEditModal(); };
+
+            const saveBtn = document.getElementById('forceSaveModalBtn');
+            if (saveBtn) saveBtn.onclick = function() { commitChanges(); };
+
+
+            // B. Tilasta duka Tab Icons na Kasa su tafi da mutum shafukan HTML daban-daban
+            const tabs = document.querySelectorAll('.tab-navigator .tab-cell');
+            const targetPages = ['home.html', 'explore.html', 'chat.html', 'studyhub.html', 'profile.html'];
+            
+            if (tabs.length > 0) {
+                tabs.forEach((tab, index) => {
+                    // Cire kowane tsohon cikas da karfi
+                    tab.setAttribute('onclick', ''); 
+                    tab.onclick = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        window.location.href = targetPages[index];
                     };
                 });
             }
-        })();
+        });
     </script>
 </body>
 </html>
