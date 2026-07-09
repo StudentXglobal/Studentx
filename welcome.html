@@ -1,208 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Welcome</title>
-    <!-- Premium Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        body {
-            /* Daidai da bakin bango mai duhun gaske irin na hoton */
-            background: radial-gradient(circle at center, #070c1e 0%, #03050c 100%);
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .phone-shell {
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            position: relative;
-        }
-
-        /* Logo Branding Area */
-        .logo-wrapper {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo-main {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 64px;
-            font-weight: 800;
-            letter-spacing: -2px;
-        }
-
-        .text-student {
-            color: #FFFFFF;
-        }
-
-        /* Stylized Gradient X matching the premium look */
-        .text-x {
-            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-style: italic;
-            margin-left: 2px;
-            padding-right: 4px;
-        }
-
-        /* Slogan Bar matching EXACT colors from screenshot */
-        .slogan-bar {
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 3px;
-            margin-top: 10px;
-            text-transform: uppercase;
-            opacity: 0.9;
-        }
-
-        .slogan-blue {
-            color: #1E40AF; /* Deep Premium Blue */
-        }
-        .slogan-light-blue {
-            color: #3B82F6; /* Tech Blue */
-        }
-        .slogan-pink {
-            color: #EC4899; /* Magenta Pink */
-        }
-
-        /* Loading Component Area */
-        .loading-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 40px;
-            gap: 15px;
-        }
-
-        /* Dotted Spinner Animation */
-        .spinner-dots {
-            width: 40px;
-            height: 40px;
-            position: relative;
-            animation: rotateSpinner 1.8s linear infinite;
-        }
-
-        .dot {
-            width: 5px;
-            height: 5px;
-            background-color: #3B82F6;
-            border-radius: 50%;
-            position: absolute;
-        }
-
-        /* Positioning the dots in a clean circle */
-        .dot:nth-child(1) { top: 0; left: 50%; transform: translateX(-50%); opacity: 1; background-color: #3B82F6;}
-        .dot:nth-child(2) { top: 14%; right: 14%; opacity: 0.85; background-color: #6366F1;}
-        .dot:nth-child(3) { top: 50%; right: 0; transform: translateY(-50%); opacity: 0.7; background-color: #8B5CF6;}
-        .dot:nth-child(4) { bottom: 14%; right: 14%; opacity: 0.55; background-color: #A855F7;}
-        .dot:nth-child(5) { bottom: 0; left: 50%; transform: translateX(-50%); opacity: 0.4; background-color: #D946EF;}
-        .dot:nth-child(6) { bottom: 14%; left: 14%; opacity: 0.3; background-color: #EC4899;}
-        .dot:nth-child(7) { top: 50%; left: 0; transform: translateY(-50%); opacity: 0.2; }
-        .dot:nth-child(8) { top: 14%; left: 14%; opacity: 0.1; }
-
-        @keyframes rotateSpinner {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .loading-text {
-            font-size: 14px;
-            color: #94A3B8;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        /* Bottom Linear Gradient Progress Bar */
-        .bottom-progress-container {
-            position: absolute;
-            bottom: 60px;
-            width: 200px;
-            height: 6px;
-            background-color: #13192B;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #3B82F6 0%, #EC4899 100%);
-            border-radius: 10px;
-            animation: fillProgress 4s linear forwards;
-        }
-
-        @keyframes fillProgress {
-            0% { width: 0%; }
-            100% { width: 45%; } /* Yana tsayawa a inda yake a hoton kafin ya wuce */
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.wrap{text-align:center;margin-top:-40px}
+.brand{font-size:46px;font-weight:900;letter-spacing:-1.5px;color:#ffffff;line-height:1}
+.brand b{font-weight:900;background:linear-gradient(135deg,#8b5cf6,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:42px}
+.sub{margin-top:14px;font-size:11px;font-weight:600;letter-spacing:4px}
+.c1{color:#8b5cf6}.c2{color:#c084fc}.c3{color:#22d3ee}.c4{color:#34d399}
+.bot{position:fixed;bottom:70px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.spin{width:32px;height:32px;border:3px solid rgba(255,255,255,0.06);border-top-color:#8b5cf6;border-bottom-color:#c084fc;border-radius:50%;animation:sp .9s linear infinite}
+.pbar{width:140px;height:3px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.pfill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#8b5cf6,#a855f7,#22d3ee);animation:pf 3.5s ease forwards}
+.ltxt{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;font-weight:600;animation:pl 1.5s ease infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes pf{to{width:100%}}
+@keyframes pl{0%,100%{opacity:.3}50%{opacity:.7}}
+</style>
 </head>
 <body>
-
-    <div class="phone-shell">
-        
-        <!-- Logo Setup from Screenshot -->
-        <div class="logo-wrapper">
-            <div class="logo-main">
-                <span class="text-student">Student</span><span class="text-x">X</span>
-            </div>
-            <div class="slogan-bar">
-                <span class="slogan-light-blue">CONNECT.</span> 
-                <span class="slogan-light-blue">LEARN.</span> 
-                <span class="slogan-pink">SHARE.</span> 
-                <span class="slogan-blue">GROW.</span>
-            </div>
-        </div>
-
-        <!-- Animated Loading Dots and Text -->
-        <div class="loading-box">
-            <div class="spinner-dots">
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-            </div>
-            <p class="loading-text">Loading...</p>
-        </div>
-
-        <!-- Bottom Linear Progress Track -->
-        <div class="bottom-progress-container">
-            <div class="progress-bar-fill"></div>
-        </div>
-
-    </div>
-
-    <script>
-        // Bayan tsawon dakika 4, zai canza shafi zuwa login.html kai tsaye
-        setTimeout(function() {
-            window.location.href = "login.html";
-        }, 4000);
-    </script>
+<div class="wrap">
+<div class="brand">Student <b>X</b></div>
+<div class="sub">
+<span class="c1">CONNECT.</span>
+<span class="c2">LEARN.</span>
+<span class="c3">SHARE.</span>
+<span class="c4">GROW.</span>
+</div>
+</div>
+<div class="bot">
+<div class="spin"></div>
+<div class="pbar"><div class="pfill"></div></div>
+<div class="ltxt">Loading...</div>
+</div>
+<script>setTimeout(function(){window.location.href="login.html"},4000)</script>
 </body>
 </html>
