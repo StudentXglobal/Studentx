@@ -1,441 +1,249 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX - Home</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: #f8fafc; color: #1e293b; padding-bottom: 75px; overflow-x: hidden; }
-        
-        /* Header Styling */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #ffffff; position: fixed; top: 0; left: 0; right: 0; z-index: 1000; border-bottom: 1px solid #f1f5f9; }
-        .header h1 { font-size: 22px; font-weight: 700; color: #0f172a; text-align: center; flex: 1; }
-        .header-actions { display: flex; gap: 18px; align-items: center; }
-        .icon-btn { background: none; border: none; cursor: pointer; position: relative; text-decoration: none; color: #0f172a; }
-        .badge { position: absolute; top: -6px; right: -6px; background: #4f46e5; color: white; font-size: 10px; font-weight: 700; width: 16px; height: 16px; border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 2px solid #ffffff; }
-
-        /* Stories Styling */
-        .main-container { margin-top: 65px; padding: 15px 0; }
-        .stories-container { display: flex; gap: 15px; padding: 10px 20px; overflow-x: auto; scrollbar-width: none; background: #ffffff; border-bottom: 1px solid #f1f5f9; }
-        .stories-container::-webkit-scrollbar { display: none; }
-        .story-card { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 72px; text-decoration: none; }
-        .avatar-ring { width: 70px; height: 70px; border-radius: 50%; padding: 2.5px; display: flex; justify-content: center; align-items: center; position: relative; }
-        .avatar-ring.premium { background: linear-gradient(135deg, #8b5cf6, #3b82f6); }
-        .avatar-ring.unviewed { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
-        .avatar-ring.mine { background: #e2e8f0; }
-        .story-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #ffffff; }
-        .plus-icon { position: absolute; bottom: 1px; right: 1px; background: #3b82f6; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; justify-content: center; align-items: center; border: 2px solid #ffffff; font-size: 12px; font-weight: bold; }
-        .story-name { font-size: 12px; color: #475569; font-weight: 500; text-align: center; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-        /* Create Post Box */
-        .create-post { background: #ffffff; margin: 12px 16px; padding: 16px; border-radius: 16px; border: 1px solid #f1f5f9; }
-        .input-row { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; text-decoration: none; }
-        .user-avatar-small { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
-        .placeholder-text { color: #64748b; font-size: 15px; font-weight: 400; }
-        .actions-row { display: flex; justify-content: space-between; border-top: 1px solid #f8fafc; padding-top: 12px; }
-        .action-item { display: flex; align-items: center; gap: 6px; background: none; border: none; cursor: pointer; font-size: 13px; font-weight: 600; color: #475569; text-decoration: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:60px}
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,15,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.hdr-menu{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:18px}
+.hdr-logo{font-size:18px;font-weight:900;letter-spacing:-.5px}
+.hdr-logo b{font-weight:900;background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-r{display:flex;gap:4px}
+.hdr-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:16px;position:relative}
+.hdr-dot{position:absolute;top:7px;right:7px;width:7px;height:7px;border-radius:50%;background:#ef4444;border:2px solid #0a0a0f}
+.stories{display:flex;gap:14px;overflow-x:auto;padding:14px 14px 10px;scrollbar-width:none}
+.stories::-webkit-scrollbar{display:none}
+.st{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer}
+.st-ring{width:58px;height:58px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4)}
+.st-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid #0a0a0f}
+.st-add{width:58px;height:58px;border-radius:50%;border:2px dashed rgba(124,58,237,.5);display:flex;align-items:center;justify-content:center;font-size:20px;color:#a855f7;background:rgba(124,58,237,.08)}
+.st-nm{font-size:10px;color:rgba(255,255,255,.4);max-width:60px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cpb{display:flex;align-items:center;gap:10px;padding:12px;margin:0 14px 10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:14px;cursor:pointer;transition:border-color .2s}
+.cpb:hover{border-color:rgba(124,58,237,.3)}
+.cpb img{width:36px;height:36px;border-radius:50%;object-fit:cover;cursor:pointer}
+.cpb-in{flex:1;padding:8px 12px;border-radius:20px;background:rgba(255,255,255,.04);color:rgba(255,255,255,.3);font-size:12px}
+.cpb-tools{display:flex;gap:10px}
+.cpb-t{color:rgba(255,255,255,.35);font-size:16px}
+.cpb-t.g{color:#10b981}.cpb-t.r{color:#ef4444}.cpb-t.y{color:#f59e0b}
+.comp{display:flex;align-items:center;gap:10px;padding:12px 14px;margin:0 14px 12px;background:rgba(124,58,237,.08);border:1px solid rgba(124,58,237,.15);border-radius:12px;cursor:pointer;transition:background .2s}
+.comp:hover{background:rgba(124,58,237,.12)}
+.comp i{color:#a855f7;font-size:18px}
+.comp p{flex:1;font-size:12px;font-weight:600}
+.comp .ar{color:#a855f7;font-size:12px}
+.post{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:16px;margin:0 14px 12px;overflow:hidden}
+.p-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.p-av{width:38px;height:38px;border-radius:50%;object-fit:cover;cursor:pointer}
+.p-info{flex:1;min-width:0}
+.p-nm{font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px}
+.p-nm .vd{color:#a855f7;font-size:10px}
+.p-meta{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+.p-more{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:14px}
+.p-body{padding:0 14px 8px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.7)}
+.p-file{margin:0 14px 10px;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .2s}
+.p-file:hover{border-color:rgba(124,58,237,.3)}
+.p-file-ic{width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;color:#ef4444;font-size:18px}
+.p-file-inf{flex:1;min-width:0}
+.p-file-nm{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-file-sz{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.p-file-dl{color:#a855f7;font-size:13px}
+.p-acts{display:flex;align-items:center;padding:4px 8px 10px;gap:2px}
+.p-a{display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.4);font-weight:600;transition:all .15s}
+.p-a:hover{background:rgba(124,58,237,.1);color:#a855f7}
+.p-a.lk{color:rgba(255,255,255,.4)}.p-a.lk.on{color:#ef4444}
+.p-a.lk.on i{animation:lp .3s ease}
+@keyframes lp{50%{transform:scale(1.3)}}
+.p-a-r{margin-left:auto}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;display:flex;align-items:center;justify-content:space-around;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);z-index:200}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:500;color:rgba(255,255,255,.3);transition:color .2s}
+.nb i{font-size:19px}
+.nb.on{color:#a855f7}
+.mnu-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
+.mnu-ov.show{display:flex}
+.mnu-sh{position:fixed;inset:0;background:rgba(0,0,0,.5)}
+.mnu-glass{position:relative;z-index:1;width:100%;max-width:430px;background:rgba(20,20,45,.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:12px 0 24px;animation:mnuUp .25s ease}
+@keyframes mnuUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mnu-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:4px;margin:0 auto 12px}
+.mnu-item{display:flex;align-items:center;gap:12px;padding:13px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);transition:all .15s}
+.mnu-item:hover{background:rgba(124,58,237,.1);color:#fff}
+.mnu-item i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.4)}
+.mnu-item.dng{color:#ef4444}.mnu-item.dng i{color:#ef4444}
+.mnu-div{height:1px;background:rgba(255,255,255,.06);margin:6px 20px}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
 </head>
 <body>
+<header class="hdr">
+<div class="hdr-l">
+<div class="hdr-menu" onclick="showMsg('Menu coming soon')"><i class="fas fa-bars"></i></div>
+<div class="hdr-logo">Student<b>X</b></div>
+</div>
+<div class="hdr-r">
+<div class="hdr-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i></div>
+<div class="hdr-btn" onclick="window.location.href='notification.html'"><i class="fas fa-bell"></i><span class="hdr-dot"></span></div>
+</div>
+</header>
 
-    <!-- Header -->
-    <div class="header">
-        <a href="menu.html" class="icon-btn">
-            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </a>
-        <h1>Home</h1>
-        <div class="header-actions">
-            <a href="search.html" class="icon-btn">
-                <svg viewBox="0 0 24 24" width="23" height="23" stroke="currentColor" stroke-width="2.5" fill="none"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            </a>
-            <a href="notifications.html" class="icon-btn">
-                <svg viewBox="0 0 24 24" width="23" height="23" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <div class="badge">8</div>
-            </a>
-        </div>
-    </div>
+<div class="stories" id="stories"></div>
 
-    <div class="main-container">
-        <!-- Stories -->
-        <div class="stories-container">
-            <a href="createstory.html" class="story-card">
-                <div class="avatar-ring mine">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="story-img">
-                    <div class="plus-icon">+</div>
-                </div>
-                <span class="story-name">Your Story</span>
-            </a>
-            <a href="story1.html" class="story-card">
-                <div class="avatar-ring unviewed">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" class="story-img">
-                </div>
-                <span class="story-name">Fatima</span>
-            </a>
-            <a href="story2.html" class="story-card">
-                <div class="avatar-ring premium">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" class="story-img">
-                </div>
-                <span class="story-name">John</span>
-            </a>
-            <a href="story3.html" class="story-card">
-                <div class="avatar-ring unviewed">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80" class="story-img">
-                </div>
-                <span class="story-name">Maryam</span>
-            </a>
-            <a href="story4.html" class="story-card">
-                <div class="avatar-ring premium">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" class="story-img">
-                </div>
-                <span class="story-name">David</span>
-            </a>
-        </div>
+<div class="cpb" onclick="window.location.href='create-post.html'">
+<img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" onclick="event.stopPropagation();window.location.href='profile.html'" alt="">
+<div class="cpb-in">What's on your mind?</div>
+<div class="cpb-tools">
+<div class="cpb-t g"><i class="fas fa-image"></i></div>
+<div class="cpb-t r"><i class="fas fa-video"></i></div>
+<div class="cpb-t y"><i class="fas fa-poll"></i></div>
+</div>
+</div>
 
-        <!-- Create Post Box -->
-        <div class="create-post">
-            <a href="createpost.html" class="input-row">
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80" class="user-avatar-small">
-                <span class="placeholder-text">What's on your mind?</span>
-            </a>
-            <div class="actions-row">
-                <a href="createpost.html?type=photo" class="action-item">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#10b981" stroke-width="2.5" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                    Photo
-                </a>
-                <a href="createpost.html?type=video" class="action-item">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#8b5cf6" stroke-width="2.5" fill="none"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
-                    Video
-                </a>
-                <a href="createpost.html?type=poll" class="action-item">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#3b82f6" stroke-width="2.5" fill="none"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    Poll
-                </a>
-                <a href="createpost.html?type=feeling" class="action-item">
-                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="#f59e0b" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-                    Feeling
-                </a>
-            </div>
-        </div>
-<style>
-        /* Feed Cards Styling */
-        .post-card { background: #ffffff; margin: 0 16px 12px 16px; padding: 16px; border-radius: 16px; border: 1px solid #f1f5f9; }
-        .post-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .post-user-info { display: flex; gap: 10px; align-items: center; text-decoration: none; color: inherit; }
-        .post-avatar { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
-        .user-meta h4 { font-size: 15px; font-weight: 700; color: #0f172a; display: flex; align-items: center; gap: 4px; }
-        .verified-badge { color: #3b82f6; display: inline-flex; }
-        .user-meta p { font-size: 12px; color: #64748b; margin-top: 2px; }
-        .post-content { font-size: 14.5px; line-height: 1.5; color: #334155; margin-bottom: 12px; }
-        
-        /* Attachment Box */
-        .pdf-attachment { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 12px; }
-        .pdf-icon { background: #ef4444; color: white; font-weight: 700; font-size: 11px; padding: 6px 8px; border-radius: 6px; }
-        .pdf-details h5 { font-size: 14px; font-weight: 600; color: #1e293b; }
-        .pdf-details p { font-size: 11px; color: #64748b; margin-top: 1px; }
+<div class="comp" onclick="window.location.href='profile.html'">
+<i class="fas fa-user-plus"></i>
+<p>Complete your profile</p>
+<i class="fas fa-chevron-right ar"></i>
+</div>
 
-        /* Post Actions Row */
-        .post-stats { display: flex; justify-content: space-between; border-top: 1px solid #f8fafc; border-bottom: 1px solid #f8fafc; padding: 10px 4px; margin-bottom: 10px; }
-        .stat-btn { background: none; border: none; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #64748b; cursor: pointer; text-decoration: none; }
-        .likers-row { display: flex; align-items: center; gap: 6px; padding: 2px 4px; }
-        .likers-avatars { display: flex; }
-        .liker-mini { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid white; object-fit: cover; margin-left: -5px; }
-        .liker-mini:first-child { margin-left: 0; }
-        .likers-text { font-size: 12px; color: #64748b; font-weight: 500; }
-        
-        /* Inline Profile Completion Widget */
-        .completion-widget { background: #f0f4ff; border: 1px solid #dbeafe; border-radius: 16px; margin: 0 16px 12px 16px; padding: 16px; display: flex; align-items: center; justify-content: space-between; position: relative; }
-        .completion-left { display: flex; gap: 12px; align-items: center; }
-        .completion-icon { background: #ffffff; border-radius: 50%; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .completion-text h4 { font-size: 14px; font-weight: 700; color: #1e3a8a; }
-        .completion-text p { font-size: 11.5px; color: #4338ca; margin-top: 2px; }
-        .complete-btn { background: #4f46e5; color: white; border: none; padding: 8px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: none; }
-        .close-widget { position: absolute; top: 8px; right: 8px; background: none; border: none; color: #93c5fd; font-size: 14px; cursor: pointer; }
-    </style>
+<div id="feed"></div>
 
-    <div class="feed-container">
-        <!-- Post 1 (Fatima) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=fatima" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Fatima Muhammad <span class="verified-badge">✓</span></h4>
-                        <p>Computer Science • ABU Zaria • 2h ago</p>
-                    </div>
-                </a>
-                <button class="icon-btn"><svg viewBox="0 0 24 24" width="20" height="20" stroke="#64748b" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
-            </div>
-            <div class="post-content">Shared my new notes on Data Structures and Algorithms. Check it out and let me know what you think! 🚀</div>
-            <a href="viewfile.html?id=dsa-notes" class="pdf-attachment">
-                <div class="pdf-icon">PDF</div>
-                <div class="pdf-details">
-                    <h5>Data Structures & Algorithms.pdf</h5>
-                    <p>4.2 MB</p>
-                </div>
-            </a>
-            <div class="post-stats">
-                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="#ef4444" fill="#ef4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 245</button>
-                <a href="comments.html?post=1" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 32</a>
-                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> 18</button>
-                <button class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
-            </div>
-            <div class="likers-row">
-                <div class="likers-avatars">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=50&q=80" class="liker-mini">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=50&q=80" class="liker-mini">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=50&q=80" class="liker-mini">
-                </div>
-                <span class="likers-text">Liked by John, Maryam and 243 others</span>
-            </div>
-        </div>
+<nav class="bnav">
+<div class="nb on" onclick="window.location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div>
+<div class="nb" onclick="window.location.href='explore.html'"><i class="fas fa-compass"></i><span>Explore</span></div>
+<div class="nb" onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i><span>Chat</span></div>
+<div class="nb" onclick="window.location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div>
+<div class="nb" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div>
+</nav>
 
-        <!-- Post 2 (David) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=david" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>David Okafor</h4>
-                        <p>@david.engineering • UNN • 3h ago</p>
-                    </div>
-                </a>
-                <button class="icon-btn"><svg viewBox="0 0 24 24" width="20" height="20" stroke="#64748b" stroke-width="2.5" fill="none"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
-            </div>
-            <div class="post-content">Can anyone explain this thermodynamics question? I'm stuck on part (b).</div>
-            <div class="post-stats">
-                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg> 112</button>
-                <a href="comments.html?post=2" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 26</a>
-                <button class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg> 9</button>
-                <button class="icon-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
-            </div>
-        </div>
-
-        <!-- Profile Completion Widget -->
-        <div class="completion-widget">
-            <div class="completion-left">
-                <div class="completion-icon">🏆</div>
-                <div class="completion-text">
-                    <h4>Complete your profile</h4>
-                    <p>Add more details to connect with more students.</p>
-                </div>
-            </div>
-            <a href="profile.html?action=edit" class="complete-btn">Complete Now</a>
-            <button class="close-widget">×</button>
-        </div>
-
-        <!-- Post 3 (Ahmad) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=ahmad" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Ahmad Aliyu</h4>
-                        <p>Software Engineering • Bayero University • 4h ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Just finished building my first web app clone completely on my smartphone using HTML/CSS. Hard work pays off! 🔥💻</div>
-            <div class="post-stats"><a href="comments.html?post=3" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 45</a></div>
-        </div>
-
-        <!-- Post 4 (Zainab) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=zainab" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Zainab Bello</h4>
-                        <p>Civil Engineering • FUT Minna • 5h ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Who has the textbook link or PDF for Fluid Mechanics? Kindly share please. 🙏</div>
-            <div class="post-stats"><a href="comments.html?post=4" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 12</a></div>
-        </div>
-
-        <!-- Post 5 (John) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=john" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>John Doe</h4>
-                        <p>Biochemistry • Unilag • 6h ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Chemistry practicals tomorrow morning. Time to study all night long! 🧪⚡</div>
-            <div class="post-stats"><a href="comments.html?post=5" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 8</a></div>
-        </div>
-<!-- Post 6 (Maryam) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=maryam" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Maryam Umar</h4>
-                        <p>Cyber Security • NDA • 7h ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Always protect your credentials. Cyber hygiene is very important for every student developer nowadays. 🔐</div>
-            <div class="post-stats"><a href="comments.html?post=6" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 19</a></div>
-        </div>
-
-        <!-- Post 7 (Ali) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=ali" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Ali Ibrahim</h4>
-                        <p>Mechanical Eng • BUK • 1d ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Project defense next week. Wish me luck guys! ⚙️🎓</div>
-            <div class="post-stats"><a href="comments.html?post=7" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 88</a></div>
-        </div>
-
-        <!-- Post 8 (Khadija) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=khadija" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Khadija Adam</h4>
-                        <p>Medicine • Unilorin • 1d ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Anatomy lines are complicated, but consistency beats intelligence any day. Let's keep pushing. 🩺📈</div>
-            <div class="post-stats"><a href="comments.html?post=8" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 54</a></div>
-        </div>
-
-        <!-- Post 9 (Musa) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=musa" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Musa Haruna</h4>
-                        <p>Economics • Uniabuja • 2d ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Group assignments are either full of life or completely dead. No in-between. 😂📊</div>
-            <div class="post-stats"><a href="comments.html?post=9" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 31</a></div>
-        </div>
-
-        <!-- Post 10 (Sadiya) -->
-        <div class="post-card">
-            <div class="post-header">
-                <a href="profile.html?user=sadiya" class="post-user-info">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" class="post-avatar">
-                    <div class="user-meta">
-                        <h4>Sadiya Yusuf</h4>
-                        <p>Accounting • ATBU Bauchi • 2d ago</p>
-                    </div>
-                </a>
-            </div>
-            <div class="post-content">Weekend mood activated. Time to rest and reset for next week's tasks! ✨</div>
-            <div class="post-stats"><a href="comments.html?post=10" class="stat-btn"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg> 15</a></div>
-        </div>
-    </div>
-
-    <!-- Bottom Navigation Bar CSS & HTML -->
-    <style>
-        .bottom-nav { display: flex; justify-content: space-around; align-items: center; padding: 10px 0 12px 0; background: #ffffff; border-top: 1px solid #e2e8f0; position: fixed; bottom: 0; left: 0; right: 0; z-index: 2000; box-shadow: 0 -4px 12px rgba(0,0,0,0.03); }
-        .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; cursor: pointer; }
-        .nav-item span { font-size: 11px; font-weight: 500; margin-top: 4px; }
-        .nav-item.active span { font-weight: 700; color: #4f46e5; }
-    </style>
-
-    <div class="bottom-nav">
-        <svg width="0" height="0" style="position:absolute;"><defs>
-            <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-        </defs></svg>
-        <a href="home.html" class="nav-item active">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-            <span>Home</span>
-        </a>
-        <a href="explore.html" class="nav-item" style="color: #94a3b8;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-            <span>Explore</span>
-        </a>
-        <a href="chat.html" class="nav-item" style="color: #94a3b8; position: relative;">
-            <div style="position: absolute; top: -4px; right: 22%; background-color: #ef4444; color: white; font-size: 9px; font-weight: bold; width: 16px; height: 16px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white;">3</div>
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-            <span>Chat</span>
-        </a>
-        <a href="studyhub.html" class="nav-item" style="color: #94a3b8;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path></svg>
-            <span>StudyHub</span>
-        </a>
-        <a href="profile.html" class="nav-item" style="color: #94a3b8;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-            <span>Profile</span>
-        </a>
-    </div>
+<div class="mnu-ov" id="menuOv">
+<div class="mnu-sh" onclick="closeMenu()"></div>
+<div class="mnu-glass" id="menuGlass">
+<div class="mnu-handle"></div>
+<div id="menuItems"></div>
+</div>
+</div>
 <script>
-    // 1. Logic don Like Button
-    document.querySelectorAll('.stat-btn').forEach(btn => {
-        // Duba ko button ɗin 'Like' ne (yana ɗauke da svg na zuciya)
-        if(btn.innerHTML.includes('20.84 4.61')) { 
-            btn.addEventListener('click', function() {
-                const svg = this.querySelector('svg');
-                let countSpan = this.innerText.match(/\d+/) ? parseInt(this.innerText.match(/\d+/)[0]) : 0;
-                
-                if(!this.classList.contains('liked')) {
-                    this.classList.add('liked');
-                    svg.setAttribute('fill', '#ef4444');
-                    svg.setAttribute('stroke', '#ef4444');
-                    this.innerHTML = this.innerHTML.replace(countSpan, countSpan + 1);
-                } else {
-                    this.classList.remove('liked');
-                    svg.setAttribute('fill', 'none');
-                    svg.setAttribute('stroke', 'currentColor');
-                    this.innerHTML = this.innerHTML.replace(countSpan, countSpan - 1);
-                }
-            });
-        }
-        
-        // 2. Logic don Bookmark Button
-        if(btn.querySelector('path[d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"]')) {
-            btn.addEventListener('click', function() {
-                const svg = this.querySelector('svg');
-                if(!this.classList.contains('saved')) {
-                    this.classList.add('saved');
-                    svg.setAttribute('fill', '#000000'); // Bookmark zai zama filled
-                } else {
-                    this.classList.remove('saved');
-                    svg.setAttribute('fill', 'none');
-                }
-            });
-        }
-    });
+var myId = 1;
 
-    // 3. Story Upload (Simulated)
-    const storyRing = document.querySelector('.avatar-ring.mine');
-    storyRing.addEventListener('click', () => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'image/*';
-        input.onchange = e => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    const img = storyRing.querySelector('img');
-                    img.src = e.target.result; // Wannan zai nuna hoton da ka zaba a matsayin story
-                    alert("Story uploaded successfully!");
-                }
-                reader.readAsDataURL(file);
-            }
-        };
-        input.click();
-    });
+var users = [
+  {id:1,name:'John Doe',school:'ABU Zaria',avatar:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop',verified:false},
+  {id:2,name:'Fatima Muhammad',school:'UNILAG',avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',verified:true},
+  {id:3,name:'David Okafor',school:'FUT Minna',avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',verified:false},
+  {id:4,name:'Aisha Bello',school:'Bayero Univ',avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',verified:true},
+  {id:5,name:'Emeka Nwankwo',school:'UNN',avatar:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',verified:false},
+  {id:6,name:'Halima Yusuf',school:'UDUS',avatar:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',verified:false}
+];
+
+var posts = [
+  {id:1,user:2,text:'',file:{name:'Data Structures & Algorithms.pdf',size:'4.2 MB'},likes:245,comments:32,shares:18,liked:false,saved:false,time:Date.now()-3600000},
+  {id:2,user:3,text:'Can someone explain the second law of thermodynamics in simple terms? I have an exam next week and I am struggling with the concept.',file:null,likes:56,comments:23,shares:5,liked:false,saved:false,time:Date.now()-7200000},
+  {id:3,user:6,text:'Just finished my documentary on campus life! Check it out when you get a chance.',file:null,image:'https://images.unsplash.com/photo-1523050854058-8df90110c476?w=600&h=400&fit=crop',likes:189,comments:41,shares:27,liked:false,saved:false,time:Date.now()-14400000},
+  {id:4,user:4,text:'Pro tip for med students: Use spaced repetition for anatomy. It changed my study game completely.',file:null,likes:412,comments:67,shares:89,liked:false,saved:false,time:Date.now()-28800000}
+];
+
+function timeAgo(t){
+  var s=Math.floor((Date.now()-t)/1000);
+  if(s<60)return'Just now';
+  if(s<3600)return Math.floor(s/60)+'m ago';
+  if(s<86400)return Math.floor(s/3600)+'h ago';
+  return Math.floor(s/86400)+'d ago';
+}
+
+function getU(id){return users.find(function(u){return u.id===id})}
+
+function renderStories(){
+  var h='<div class="st" onclick="window.location.href=\'story-upload.html\'"><div class="st-add"><i class="fas fa-plus"></i></div><div class="st-nm">Your Story</div></div>';
+  users.slice(1,6).forEach(function(u){
+    h+='<div class="st" onclick="window.location.href=\'story-upload.html\'"><div class="st-ring"><img src="'+u.avatar+'" alt=""></div><div class="st-nm">'+u.name.split(' ')[0]+'</div></div>';
+  });
+  document.getElementById('stories').innerHTML=h;
+}
+
+function renderFeed(){
+  var c=document.getElementById('feed');
+  c.innerHTML=posts.map(function(p){
+    var u=getU(p.user);
+    var fileH='';
+    if(p.file){
+      fileH='<div class="p-file" onclick="showMsg(\'Downloading '+p.file.name+'\')"><div class="p-file-ic"><i class="fas fa-file-pdf"></i></div><div class="p-file-inf"><div class="p-file-nm">'+p.file.name+'</div><div class="p-file-sz">'+p.file.size+'</div></div><div class="p-file-dl"><i class="fas fa-download"></i></div></div>';
+    }
+    var imgH='';
+    if(p.image){
+      imgH='<img src="'+p.image+'" style="width:100%;aspect-ratio:3/2;object-fit:cover" alt="">';
+    }
+    return'<div class="post"><div class="p-hdr"><img class="p-av" src="'+u.avatar+'" onclick="window.location.href=\'profile.html\'" alt=""><div class="p-info"><div class="p-nm">'+u.name+(u.verified?' <i class="fas fa-check-circle vd"></i>':'')+'</div><div class="p-meta">'+u.school+' · '+timeAgo(p.time)+'</div></div><div class="p-more" onclick="openMenu('+p.id+','+p.user+')"><i class="fas fa-ellipsis-h"></i></div></div>'+(p.text?'<div class="p-body">'+p.text+'</div>':'')+fileH+imgH+'<div class="p-acts"><div class="p-a lk '+(p.liked?'on':'')+'" onclick="toggleLike('+p.id+')"><i class="'+(p.liked?'fas':'far')+' fa-heart"></i> '+p.likes+'</div><div class="p-a" onclick="window.location.href=\'comment.html?post='+p.id+'\'"><i class="far fa-comment"></i> '+p.comments+'</div><div class="p-a" onclick="repost('+p.id+')"><i class="fas fa-retweet"></i> '+p.shares+'</div><div class="p-a p-a-r" onclick="toggleSave('+p.id+')"><i class="'+(p.saved?'fas':'far')+' fa-bookmark" style="color:'+(p.saved?'#f59e0b':'')+'"></i></div></div></div>';
+  }).join('');
+}
+
+function toggleLike(id){
+  var p=posts.find(function(x){return x.id===id});
+  if(p){p.liked=!p.liked;p.likes+=p.liked?1:-1;renderFeed()}
+}
+
+function toggleSave(id){
+  var p=posts.find(function(x){return x.id===id});
+  if(p){p.saved=!p.saved;renderFeed();showMsg(p.saved?'Post saved':'Post removed from saved')}
+}
+
+function repost(id){
+  var p=posts.find(function(x){return x.id===id});
+  if(p){p.shares+=1;renderFeed();showMsg('Reposted!')}
+}
+
+function openMenu(postId,userId){
+  var isMine=userId===myId;
+  var h='';
+  if(isMine){
+    h+='<div class="mnu-item" onclick="showMsg(\'Edit post\');closeMenu()"><i class="fas fa-pen"></i> Edit Post</div>';
+    h+='<div class="mnu-item" onclick="showMsg(\'Post pinned\');closeMenu()"><i class="fas fa-thumbtack"></i> Pin Post</div>';
+    h+='<div class="mnu-item dng" onclick="deletePost('+postId+');closeMenu()"><i class="fas fa-trash"></i> Delete Post</div>';
+    h+='<div class="mnu-div"></div>';
+  }
+  h+='<div class="mnu-item" onclick="showMsg(\'Post saved\');closeMenu()"><i class="far fa-bookmark"></i> Save Post</div>';
+  h+='<div class="mnu-item" onclick="showMsg(\'Share coming soon\');closeMenu()"><i class="fas fa-share"></i> Share Post</div>';
+  h+='<div class="mnu-item" onclick="copyLink();closeMenu()"><i class="fas fa-link"></i> Copy Link</div>';
+  h+='<div class="mnu-div"></div>';
+  h+='<div class="mnu-item" onclick="window.location.href=\'profile.html\'"><i class="fas fa-user"></i> View Profile</div>';
+  h+='<div class="mnu-item" onclick="showMsg(\'Followed!\');closeMenu()"><i class="fas fa-user-plus"></i> Follow User</div>';
+  h+='<div class="mnu-item" onclick="showMsg(\'User muted\');closeMenu()"><i class="fas fa-volume-mute"></i> Mute User</div>';
+  h+='<div class="mnu-item" onclick="hidePost('+postId+');closeMenu()"><i class="fas fa-eye-slash"></i> Hide Post</div>';
+  h+='<div class="mnu-item dng" onclick="showMsg(\'Post reported\');closeMenu()"><i class="fas fa-flag"></i> Report Post</div>';
+  document.getElementById('menuItems').innerHTML=h;
+  document.getElementById('menuOv').classList.add('show');
+}
+
+function closeMenu(){document.getElementById('menuOv').classList.remove('show')}
+
+function deletePost(id){
+  posts=posts.filter(function(x){return x.id!==id});
+  renderFeed();
+  showMsg('Post deleted');
+}
+
+function hidePost(id){
+  deletePost(id);
+  showMsg('Post hidden');
+}
+
+function copyLink(){
+  var url=window.location.href;
+  if(navigator.clipboard){navigator.clipboard.writeText(url)}
+  showMsg('Link copied!');
+}
+
+function showMsg(t){
+  var d=document.createElement('div');
+  d.className='toast';
+  d.textContent=t;
+  document.body.appendChild(d);
+  setTimeout(function(){d.remove()},2500);
+}
+
+renderStories();
+renderFeed();
 </script>
 </body>
 </html>
