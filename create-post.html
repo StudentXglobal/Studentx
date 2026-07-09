@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Create Post</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;display:flex;flex-direction:column}
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.hdr-back{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:18px}
+.hdr-title{font-size:15px;font-weight:700}
+.hdr-post{padding:8px 20px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:13px;font-weight:700}
+.user-bar{display:flex;align-items:center;gap:12px;padding:16px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+.user-bar img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.user-bar .nm{font-size:14px;font-weight:700}
+.user-bar .sc{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
+textarea{width:100%;min-height:200px;padding:16px 14px;background:transparent;border:none;color:#fff;font-size:15px;line-height:1.6;resize:none;font-family:Poppins,sans-serif}
+textarea:focus{outline:none}
+textarea::placeholder{color:rgba(255,255,255,.2)}
+.preview-area{padding:0 14px}
+.img-preview{position:relative;border-radius:14px;overflow:hidden;margin-bottom:10px}
+.img-preview img{width:100%;border-radius:14px;display:block}
+.img-preview .rm{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.file-preview{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:10px}
+.file-preview .ic{width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,.1);color:#ef4444;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.file-preview .inf{flex:1;min-width:0}
+.file-preview .fn{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-preview .fs{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.file-preview .rm{color:rgba(255,255,255,.4);font-size:14px;padding:8px}
+.tools{padding:14px;border-top:1px solid rgba(255,255,255,.05);display:flex;gap:4px}
+.tool-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);transition:all .2s}
+.tool-btn:hover{border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.06)}
+.tool-btn i{font-size:20px}
+.tool-btn span{font-size:10px;font-weight:600;color:rgba(255,255,255,.5)}
+.tool-btn.g i{color:#10b981}
+.tool-btn.r i{color:#ef4444}
+.tool-btn.y i{color:#f59e0b}
+.tool-btn.b i{color:#3b82f6}
+.tool-btn.p i{color:#a855f7}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-l">
+<div class="hdr-back" onclick="cancelPost()"><i class="fas fa-times"></i></div>
+<div class="hdr-title">Create Post</div>
+</div>
+<div class="hdr-post" onclick="publishPost()">Post</div>
+</header>
+
+<div class="user-bar">
+<img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" alt="">
+<div>
+<div class="nm">John Doe</div>
+<div class="sc"><i class="fas fa-globe-africa" style="margin-right:4px"></i> Public</div>
+</div>
+</div>
+
+<textarea id="postText" placeholder="What's on your mind?"></textarea>
+
+<div class="preview-area" id="previewArea"></div>
+
+<div class="tools">
+<div class="tool-btn g" onclick="pickFile('image')">
+<i class="fas fa-image"></i>
+<span>Photo</span>
+</div>
+<div class="tool-btn r" onclick="pickFile('video')">
+<i class="fas fa-video"></i>
+<span>Video</span>
+</div>
+<div class="tool-btn b" onclick="pickFile('file')">
+<i class="fas fa-file-pdf"></i>
+<span>File</span>
+</div>
+<div class="tool-btn y" onclick="showMsg('Poll creation coming soon')">
+<i class="fas fa-poll"></i>
+<span>Poll</span>
+</div>
+<div class="tool-btn p" onclick="showMsg('Tag students coming soon')">
+<i class="fas fa-user-tag"></i>
+<span>Tag</span>
+</div>
+</div>
+
+<input type="file" id="fileInput" accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx" style="display:none" onchange="handleFile(this)">
+
+<script>
+var hasFile = false;
+var fileName = '';
+var fileSize = '';
+var fileType = '';
+
+function pickFile(type) {
+  var input = document.getElementById('fileInput');
+  if (type === 'image') {
+    input.accept = 'image/*';
+  } else if (type === 'video') {
+    input.accept = 'video/*';
+  } else {
+    input.accept = '.pdf,.doc,.docx,.ppt,.pptx,.txt';
+  }
+  input.click();
+}
+
+function handleFile(input) {
+  var file = input.files[0];
+  if (!file) return;
+
+  var area = document.getElementById('previewArea');
+  hasFile = true;
+  fileName = file.name;
+  fileSize = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+
+  if (file.type.startsWith('image/')) {
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      area.innerHTML = '<div class="img-preview"><img src="' + e.target.result + '" alt=""><div class="rm" onclick="removeFile()"><i class="fas fa-times"></i></div></div>';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    var icon = 'fa-file';
+    var color = '#3b82f6';
+    if (file.name.endsWith('.pdf')) { icon = 'fa-file-pdf'; color = '#ef4444'; }
+    else if (file.name.endsWith('.doc') || file.name.endsWith('.docx')) { icon = 'fa-file-word'; color = '#3b82f6'; }
+    else if (file.name.endsWith('.ppt') || file.name.endsWith('.pptx')) { icon = 'fa-file-powerpoint'; color = '#f59e0b'; }
+    else if (file.type.startsWith('video/')) { icon = 'fa-file-video'; color = '#ef4444'; }
+    area.innerHTML = '<div class="file-preview"><div class="ic" style="background:' + color + '15;color:' + color + '"><i class="fas ' + icon + '"></i></div><div class="inf"><div class="fn">' + file.name + '</div><div class="fs">' + fileSize + '</div></div><div class="rm" onclick="removeFile()"><i class="fas fa-times"></i></div></div>';
+  }
+  input.value = '';
+}
+
+function removeFile() {
+  hasFile = false;
+  fileName = '';
+  fileSize = '';
+  document.getElementById('previewArea').innerHTML = '';
+}
+
+function publishPost() {
+  var text = document.getElementById('postText').value.trim();
+  if (!text && !hasFile) {
+    showMsg('Write something or add a file');
+    return;
+  }
+  showMsg('Post published!');
+  setTimeout(function() {
+    window.location.href = 'home.html';
+  }, 800);
+}
+
+function cancelPost() {
+  var text = document.getElementById('postText').value.trim();
+  if (text || hasFile) {
+    showMsg('Draft discarded');
+  }
+  window.location.href = 'home.html';
+}
+
+function showMsg(t) {
+  var d = document.createElement('div');
+  d.className = 'toast';
+  d.textContent = t;
+  document.body.appendChild(d);
+  setTimeout(function() { d.remove(); }, 2500);
+}
+</script>
+</body>
+</html>
