@@ -1,386 +1,139 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX — Log In</title>
-    <!-- Premium Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-
-        body {
-            background-color: #03050c;
-            color: #ffffff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Container mimicking the exact mobile view layout */
-        .phone-container {
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            background: linear-gradient(180deg, #0b112c 0%, #050716 40%);
-            position: relative;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 0 30px rgba(0,0,0,0.5);
-        }
-
-        /* Top Header & Branding Status Area */
-        .top-header {
-            padding: 40px 24px 10px 24px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo-area {
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            margin-bottom: 4px;
-        }
-
-        .logo-x {
-            background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-style: italic;
-        }
-
-        .sub-slogan {
-            font-size: 12px;
-            color: #94A3B8;
-            font-weight: 500;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-        }
-
-        .main-title {
-            font-size: 28px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 12px;
-        }
-
-        .gradient-title {
-            background: linear-gradient(90deg, #3B82F6 0%, #A855F7 50%, #EC4899 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .description-text {
-            font-size: 13px;
-            color: #94A3B8;
-            line-height: 1.5;
-            padding: 0 20px;
-        }
-
-        /* Dynamic Student Image Section matching the mockup placement */
-        .students-hero-box {
-            width: 100%;
-            height: 200px;
-            background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=600&q=80');
-            background-size: cover;
-            background-position: center;
-            margin-top: 15px;
-            margin-bottom: -30px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Bottom White Form Card Overlay */
-        .form-card {
-            background-color: #FFFFFF;
-            border-top-left-radius: 32px;
-            border-top-right-radius: 32px;
-            padding: 30px 24px;
-            width: 100%;
-            margin-top: auto;
-            position: relative;
-            z-index: 3;
-            color: #1E293B;
-            box-shadow: 0 -10px 25px rgba(0,0,0,0.15);
-        }
-
-        /* Tab Switchers */
-        .tab-header {
-            display: flex;
-            border-bottom: 1px solid #E2E8F0;
-            margin-bottom: 24px;
-        }
-
-        .tab-btn {
-            flex: 1;
-            text-align: center;
-            padding-bottom: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            color: #94A3B8;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .tab-btn.active {
-            color: #4F46E5;
-            border-bottom: 3px solid #4F46E5;
-        }
-
-        /* Social Authentication Buttons */
-        .social-btn {
-            width: 100%;
-            height: 48px;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #FFFFFF;
-            font-size: 14px;
-            font-weight: 600;
-            color: #1E293B;
-            margin-bottom: 12px;
-            cursor: pointer;
-            gap: 10px;
-            transition: background 0.2s;
-        }
-
-        .social-btn:hover {
-            background-color: #F8FAFC;
-        }
-
-        .social-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Divider Design */
-        .divider-box {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 20px 0;
-            color: #94A3B8;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .divider-box::before, .divider-box::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #E2E8F0;
-        }
-
-        .divider-box:not(:empty)::before { margin-right: .75em; }
-        .divider-box:not(:empty)::after { margin-left: .75em; }
-
-        /* Input Form Elements */
-        .input-group {
-            position: relative;
-            margin-bottom: 16px;
-        }
-
-        .input-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94A3B8;
-            display: flex;
-            align-items: center;
-        }
-
-        .input-field {
-            width: 100%;
-            height: 52px;
-            border: 1px solid #E2E8F0;
-            border-radius: 12px;
-            padding: 0 45px;
-            font-size: 14px;
-            color: #1E293B;
-            outline: none;
-            background-color: #FFFFFF;
-        }
-
-        .input-field:focus {
-            border-color: #4F46E5;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #94A3B8;
-            cursor: pointer;
-        }
-
-        /* Options Row (Remember Me & Forgot Pass) */
-        .options-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            margin-bottom: 24px;
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #64748B;
-            font-weight: 500;
-            cursor: pointer;
-        }
-
-        .checkbox-container input {
-            accent-color: #4F46E5;
-            width: 16px;
-            height: 16px;
-        }
-
-        .forgot-link {
-            color: #4F46E5;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        /* Core Action Login Button */
-        .primary-login-btn {
-            width: 100%;
-            height: 52px;
-            background: linear-gradient(90deg, #4F46E5 0%, #3B82F6 100%);
-            border: none;
-            border-radius: 14px;
-            color: #FFFFFF;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.25);
-            transition: opacity 0.2s;
-        }
-
-        .primary-login-btn:hover {
-            opacity: 0.95;
-        }
-
-        /* Bottom Footer Link */
-        .footer-signup-text {
-            text-align: center;
-            font-size: 13px;
-            color: #64748B;
-            margin-top: 20px;
-            font-weight: 500;
-        }
-
-        .footer-signup-text a {
-            color: #4F46E5;
-            text-decoration: none;
-            font-weight: 700;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Log In</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;min-height:100vh;position:relative;overflow-x:hidden}
+.bg{position:fixed;top:0;left:0;width:100%;height:100%;background:url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&q=80') center/cover;opacity:.12;filter:blur(30px)}
+.bg2{position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(180deg,rgba(10,10,15,.9) 0%,rgba(10,10,15,.95) 100%)}
+.wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 20px}
+.top{text-align:center;margin-bottom:28px}
+.top .logo{font-size:32px;font-weight:900;color:#fff;letter-spacing:-1px}
+.top .logo b{font-weight:900;background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.top .sub{margin-top:6px;font-size:10px;font-weight:500;letter-spacing:3px}
+.top .sub .a{color:#7c3aed}.top .sub .b{color:#a855f7}.top .sub .c{color:#06b6d4}
+.top h2{color:#fff;font-size:16px;font-weight:700;margin-top:14px}
+.top p{color:rgba(255,255,255,.45);font-size:12px;margin-top:6px;line-height:1.5;max-width:280px}
+.card{width:100%;max-width:360px;background:rgba(20,20,40,.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:24px 20px}
+.tabs{display:flex;background:rgba(255,255,255,.05);border-radius:12px;padding:3px;margin-bottom:22px}
+.tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:600;border-radius:10px;color:rgba(255,255,255,.4);cursor:pointer;transition:all .25s}
+.tab.on{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.social{display:flex;gap:10px;margin-bottom:20px}
+.social button{flex:1;padding:11px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:rgba(255,255,255,.6);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;cursor:pointer}
+.social button:hover{border-color:rgba(124,58,237,.4);color:#fff}
+.social button i{font-size:16px}
+.or{display:flex;align-items:center;gap:12px;margin-bottom:18px;color:rgba(255,255,255,.25);font-size:11px}
+.or::before,.or::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.08)}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:12px;font-weight:500;color:rgba(255,255,255,.5);margin-bottom:6px}
+.fg input{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#fff;font-size:14px;transition:border-color .2s}
+.fg input:focus{border-color:#7c3aed}
+.fg input::placeholder{color:rgba(255,255,255,.2)}
+.row{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.row label{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.5);cursor:pointer}
+.row label input{width:14px;height:14px;accent-color:#7c3aed}
+.row a{font-size:12px;color:#a855f7;font-weight:600}
+.btn{width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:transform .15s;box-shadow:0 4px 20px rgba(124,58,237,.3)}
+.btn:hover{transform:scale(1.02)}
+.btn:active{transform:scale(.98)}
+.foot{text-align:center;margin-top:18px;font-size:12px;color:rgba(255,255,255,.35)}
+.foot span{color:#a855f7;font-weight:700;cursor:pointer}
+</style>
 </head>
 <body>
+<div class="bg"></div>
+<div class="bg2"></div>
+<div class="wrap">
+<div class="top">
+<div class="logo">Student<b>X</b></div>
+<div class="sub"><span class="a">Connect</span> · <span class="b">Learn</span> · <span class="c">Share</span></div>
+<h2>The Future of Student Networking</h2>
+<p>Join millions of students worldwide. Share knowledge, connect with peers, and grow together.</p>
+</div>
+<div class="card">
+<div class="tabs">
+<div class="tab on" id="tabLogin" onclick="switchTab('login')">Log In</div>
+<div class="tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</div>
+</div>
+<div class="social">
+<button onclick="googleLogin()"><i class="fab fa-google"></i> Google</button>
+<button onclick="showMsg('Facebook login coming soon')"><i class="fab fa-facebook-f"></i> Facebook</button>
+<button onclick="showMsg('Apple login coming soon')"><i class="fab fa-apple"></i> Apple</button>
+</div>
+<div class="or">OR</div>
+<div class="fg">
+<label>Email or Username</label>
+<input type="text" id="emailInput" placeholder="Enter your email or username">
+</div>
+<div class="fg">
+<label>Password</label>
+<input type="password" id="passInput" placeholder="Enter your password">
+</div>
+<div class="row">
+<label><input type="checkbox" checked> Remember me</label>
+<a href="#" onclick="showMsg('Reset password link sent')">Forgot Password?</a>
+</div>
+<button class="btn" id="mainBtn" onclick="handleBtn()">Log In</button>
+<div class="foot" id="footText">Don't have an account? <span onclick="goSignup()">Sign Up</span></div>
+</div>
+</div>
+<script>
+var mode = 'login';
 
-    <div class="phone-container">
-        
-        <!-- Header Section -->
-        <div class="top-header">
-            <div class="logo-area">Student<span class="logo-x">X</span></div>
-            <div class="sub-slogan">Connect • Learn • Share</div>
-            <h1 class="main-title">The Future of <br><span class="gradient-title">Student Networking</span></h1>
-            <p class="description-text">Connect with students, learn together and build your future.</p>
-        </div>
+function switchTab(m) {
+  mode = m;
+  document.getElementById('tabLogin').classList.toggle('on', m === 'login');
+  document.getElementById('tabSignup').classList.toggle('on', m === 'signup');
+  if (m === 'signup') {
+    goSignup();
+  }
+}
 
-        <!-- Student Group Banner View -->
-        <div class="students-hero-box"></div>
+function goSignup() {
+  window.location.href = 'signup.html';
+}
 
-        <!-- White Interactive Card Sheet -->
-        <div class="form-card">
-            
-            <!-- Tabs Area -->
-            <div class="tab-header">
-                <div class="tab-btn active" id="loginTab">Log In</div>
-                <a href="signup.html" class="tab-btn" id="signupTab">Sign Up</a>
-            </div>
+function googleLogin() {
+  window.location.href = 'https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&scope=user:email';
+}
 
-            <!-- Social Providers -->
-            <button class="social-btn">
-                <img class="social-icon" src="https://fonts.gstatic.com/s/i/productlogos/googleg/v6/web-24dp/copy_of_v6_24dp.png" alt="Google">
-                Continue with Google
-            </button>
-            <button class="social-btn">
-                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/2021_Facebook_icon.svg" alt="Facebook">
-                Continue with Facebook
-            </button>
-            <button class="social-btn">
-                <img class="social-icon" src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
-                Continue with Apple
-            </button>
+function handleBtn() {
+  if (mode === 'signup') {
+    goSignup();
+    return;
+  }
+  var e = document.getElementById('emailInput').value.trim();
+  var p = document.getElementById('passInput').value.trim();
+  if (!e) {
+    showMsg('Please enter your email or username');
+    return;
+  }
+  if (!p) {
+    showMsg('Please enter your password');
+    return;
+  }
+  showMsg('Welcome back!');
+  setTimeout(function() {
+    window.location.href = 'home.html';
+  }, 800);
+}
 
-            <div class="divider-box">OR</div>
+function showMsg(t) {
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:12px 20px;background:rgba(124,58,237,0.9);color:#fff;border-radius:12px;font-size:13px;font-weight:600;font-family:Poppins,sans-serif;box-shadow:0 4px 20px rgba(0,0,0,0.3);animation:fi .3s ease';
+  d.textContent = t;
+  document.body.appendChild(d);
+  setTimeout(function() { d.remove(); }, 2500);
+}
 
-            <!-- Standard Input Fields Form -->
-            <form id="authForm" onsubmit="handleFormSubmit(event)">
-                <div class="input-group">
-                    <span class="input-icon">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 002-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </span>
-                    <input type="text" class="input-field" id="usernameField" placeholder="Email or Username" required>
-                </div>
-
-                <div class="input-group">
-                    <span class="input-icon">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                    </span>
-                    <input type="password" class="input-field" placeholder="Password" required>
-                    <span class="password-toggle">
-                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18"></path></svg>
-                    </span>
-                </div>
-
-                <!-- Remember & Forgot Password Links -->
-                <div class="options-row">
-                    <label class="checkbox-container">
-                        <input type="checkbox" checked>
-                        Remember me
-                    </label>
-                    <a href="#" class="forgot-link">Forgot Password?</a>
-                </div>
-
-                <!-- Submit Action Elements -->
-                <button type="submit" class="primary-login-btn">Log In</button>
-            </form>
-
-            <div class="footer-signup-text">
-                Don't have an account? <a href="signup.html">Sign Up</a>
-            </div>
-
-        </div>
-    </div>
-
-    <script>
-        // Idan mutum ya danna Log In tab, zai mayar da hankali kai tsaye zuwa gurin saka Email
-        document.getElementById('loginTab').addEventListener('click', function() {
-            document.getElementById('usernameField').focus();
-        });
-
-        // Idan mutum ya danna madannin Log In bayan ya cika komai, zai kai shi home.html
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            window.location.href = "home.html";
-        }
-    </script>
+var st = document.createElement('style');
+st.textContent = '@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}';
+document.head.appendChild(st);
+</script>
 </body>
 </html>
