@@ -1,129 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudentX - Explore</title>
-    <style>
-        :root { --primary: #4f46e5; --text: #1e293b; --inactive: #94a3b8; --border: #e2e8f0; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #f8fafc; color: var(--text); padding-bottom: 85px; }
-        
-        /* Header */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #ffffff; border-bottom: 1px solid var(--border); }
-        .header h1 { font-size: 20px; font-weight: 700; color: var(--text); }
-        
-        /* Search */
-        .search-area { padding: 15px 20px; background: #ffffff; }
-        .search-box { display: flex; align-items: center; gap: 10px; background: #f8fafc; padding: 12px 15px; border-radius: 12px; border: 1px solid var(--border); }
-        .search-box input { border: none; background: transparent; width: 100%; outline: none; font-size: 15px; }
-        
-        /* Categories */
-        .categories { display: flex; overflow-x: auto; padding: 10px 20px; gap: 10px; }
-        .cat-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; font-size: 13px; font-weight: 600; background: white; white-space: nowrap; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;font-family:Poppins,sans-serif;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.up{text-align:center}
+.logo{font-size:54px;font-weight:900;letter-spacing:-1px}
+.logo .s{color:#fff}
+.logo .x{background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.tag{margin-top:16px;font-size:11px;font-weight:600;letter-spacing:4px}
+.tag .a{color:#7c3aed}.tag .b{color:#a855f7}.tag .c{color:#06b6d4}.tag .d{color:#10b981}
+.dn{position:fixed;bottom:70px;text-align:center}
+.dn .cr{width:34px;height:34px;margin:0 auto;border:3px solid rgba(255,255,255,.07);border-top-color:#7c3aed;border-right-color:#a855f7;border-bottom-color:#06b6d4;border-radius:50%;animation:sp 1s linear infinite}
+.dn .tx{color:rgba(255,255,255,.3);font-size:10px;letter-spacing:3px;font-weight:600;margin-top:10px;animation:bk 1.5s ease infinite}
+.dn .br{width:120px;height:2px;background:rgba(255,255,255,.07);border-radius:2px;margin:10px auto 0;overflow:hidden}
+.dn .br i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#a855f7,#06b6d4);border-radius:2px;animation:gr 3.5s ease forwards}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes bk{0%,100%{opacity:.3}50%{opacity:.7}}
+@keyframes gr{to{width:100%}}
+</style>
 </head>
 <body>
-
-    <div class="header">
-        <a href="menu.html" style="color:black;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></a>
-        <h1>Explore</h1>
-        <a href="notifications.html" style="color:black;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg></a>
-    </div>
-
-    <div class="search-area">
-        <div class="search-box">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--inactive)" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="searchInput" placeholder="Search students, posts, communities...">
-        </div>
-    </div>
-    <div id="mainContent" style="padding: 20px;">
-        <h3 style="font-size: 16px; margin-bottom: 15px;">Trending Topics</h3>
-        <div id="trendingList">
-            <div style="padding: 10px 0; border-bottom: 1px solid var(--border);"><h4>#AI in Education</h4><p style="font-size: 12px; color: var(--inactive);">12.5K posts</p></div>
-            <div style="padding: 10px 0; border-bottom: 1px solid var(--border);"><h4>#Exam Tips</h4><p style="font-size: 12px; color: var(--inactive);">9.8K posts</p></div>
-        </div>
-
-        <h3 style="font-size: 16px; margin: 20px 0 15px;">Popular Communities</h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-            <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
-                <h4>CS Hub</h4>
-                <p style="font-size: 11px; color: var(--inactive); margin: 5px 0;">12K members</p>
-                <button class="join-btn" onclick="toggleJoin(this)" style="width:100%; border:none; border-radius:8px; padding:8px; background:var(--primary); color:white; font-weight:600;">Join</button>
-            </div>
-            <div style="background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--border); text-align: center;">
-                <h4>Engineering</h4>
-                <p style="font-size: 11px; color: var(--inactive); margin: 5px 0;">8.4K members</p>
-                <button class="join-btn" onclick="toggleJoin(this)" style="width:100%; border:none; border-radius:8px; padding:8px; background:var(--primary); color:white; font-weight:600;">Join</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="resultsContainer" style="padding: 20px;"></div>
-    <div style="height: 80px;"></div>
-
-    <div style="position:fixed; bottom:0; width:100%; display:flex; justify-content:space-around; align-items:center; padding:10px 0; background:white; border-top:1px solid var(--border); z-index:1000;">
-        <a href="home.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path></svg>
-            <span style="font-size:11px; font-weight:500; margin-top:4px;">Home</span>
-        </a>
-        <a href="explore.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--primary); flex:1;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-            <span style="font-size:11px; font-weight:700; margin-top:4px;">Explore</span>
-        </a>
-        <a href="chat.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-            <span style="font-size:11px; font-weight:500; margin-top:4px;">Chat</span>
-        </a>
-        <a href="studyhub.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path></svg>
-            <span style="font-size:11px; font-weight:500; margin-top:4px;">StudyHub</span>
-        </a>
-        <a href="profile.html" style="text-decoration:none; display:flex; flex-direction:column; align-items:center; color:var(--inactive); flex:1;">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-            <span style="font-size:11px; font-weight:500; margin-top:4px;">Profile</span>
-        </a>
-    </div>
-
-    <script>
-        // Search functionality with Sponsored priority
-        const searchData = [
-            { name: "Sponsored: Advanced Python Course", type: "Course", sponsored: true },
-            { name: "Computer Science Hub", type: "Community", sponsored: false },
-            { name: "Fatima Muhammad", type: "Person", sponsored: false }
-        ];
-
-        document.getElementById('searchInput').addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            const res = document.getElementById('resultsContainer');
-            const main = document.getElementById('mainContent');
-            
-            if(query.length > 0) {
-                main.style.display = 'none';
-                res.innerHTML = '';
-                searchData.sort((a,b) => b.sponsored - a.sponsored)
-                          .filter(i => i.name.toLowerCase().includes(query))
-                          .forEach(item => {
-                              res.innerHTML += `<div style="padding:15px; border-bottom:1px solid #eee;"><strong>${item.name}</strong><br><small style="color:gray;">${item.type}</small></div>`;
-                          });
-            } else {
-                main.style.display = 'block';
-                res.innerHTML = '';
-            }
-        });
-
-        // Toggle Buttons
-        function toggleJoin(btn) {
-            if(btn.innerText === "Join") {
-                btn.innerText = "Joined";
-                btn.style.background = "#e2e8f0";
-                btn.style.color = "#475569";
-            } else {
-                btn.innerText = "Join";
-                btn.style.background = "#4f46e5";
-                btn.style.color = "white";
-            }
-        }
-    </script>
+<div class="up">
+<div class="logo"><span class="s">Student</span><span class="x">X</span></div>
+<div class="tag">
+<span class="a">CONNECT.</span>
+<span class="b">LEARN.</span>
+<span class="c">SHARE.</span>
+<span class="d">GROW.</span>
+</div>
+</div>
+<div class="dn">
+<div class="cr"></div>
+<div class="tx">Loading...</div>
+<div class="br"><i></i></div>
+</div>
+<script>
+setTimeout(function(){window.location.href="login.html"},4000);
+</script>
 </body>
 </html>
