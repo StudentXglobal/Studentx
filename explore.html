@@ -4,43 +4,41 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 <title>StudentX</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#000;font-family:Poppins,sans-serif;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.up{text-align:center}
-.logo{font-size:54px;font-weight:900;letter-spacing:-1px}
-.logo .s{color:#fff}
-.logo .x{background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.tag{margin-top:16px;font-size:11px;font-weight:600;letter-spacing:4px}
-.tag .a{color:#7c3aed}.tag .b{color:#a855f7}.tag .c{color:#06b6d4}.tag .d{color:#10b981}
-.dn{position:fixed;bottom:70px;text-align:center}
-.dn .cr{width:34px;height:34px;margin:0 auto;border:3px solid rgba(255,255,255,.07);border-top-color:#7c3aed;border-right-color:#a855f7;border-bottom-color:#06b6d4;border-radius:50%;animation:sp 1s linear infinite}
-.dn .tx{color:rgba(255,255,255,.3);font-size:10px;letter-spacing:3px;font-weight:600;margin-top:10px;animation:bk 1.5s ease infinite}
-.dn .br{width:120px;height:2px;background:rgba(255,255,255,.07);border-radius:2px;margin:10px auto 0;overflow:hidden}
-.dn .br i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#a855f7,#06b6d4);border-radius:2px;animation:gr 3.5s ease forwards}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Inter',sans-serif;background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.wrap{text-align:center;margin-top:-40px}
+.brand{font-size:46px;font-weight:900;letter-spacing:-1.5px;color:#ffffff;line-height:1}
+.brand b{font-weight:900;background:linear-gradient(135deg,#8b5cf6,#a855f7,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:42px}
+.sub{margin-top:14px;font-size:11px;font-weight:600;letter-spacing:4px}
+.c1{color:#8b5cf6}.c2{color:#c084fc}.c3{color:#22d3ee}.c4{color:#34d399}
+.bot{position:fixed;bottom:70px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.spin{width:32px;height:32px;border:3px solid rgba(255,255,255,0.06);border-top-color:#8b5cf6;border-bottom-color:#c084fc;border-radius:50%;animation:sp .9s linear infinite}
+.pbar{width:140px;height:3px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.pfill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#8b5cf6,#a855f7,#22d3ee);animation:pf 3.5s ease forwards}
+.ltxt{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;font-weight:600;animation:pl 1.5s ease infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
-@keyframes bk{0%,100%{opacity:.3}50%{opacity:.7}}
-@keyframes gr{to{width:100%}}
+@keyframes pf{to{width:100%}}
+@keyframes pl{0%,100%{opacity:.3}50%{opacity:.7}}
 </style>
 </head>
 <body>
-<div class="up">
-<div class="logo"><span class="s">Student</span><span class="x">X</span></div>
-<div class="tag">
-<span class="a">CONNECT.</span>
-<span class="b">LEARN.</span>
-<span class="c">SHARE.</span>
-<span class="d">GROW.</span>
+<div class="wrap">
+<div class="brand">Student <b>X</b></div>
+<div class="sub">
+<span class="c1">CONNECT.</span>
+<span class="c2">LEARN.</span>
+<span class="c3">SHARE.</span>
+<span class="c4">GROW.</span>
 </div>
 </div>
-<div class="dn">
-<div class="cr"></div>
-<div class="tx">Loading...</div>
-<div class="br"><i></i></div>
+<div class="bot">
+<div class="spin"></div>
+<div class="pbar"><div class="pfill"></div></div>
+<div class="ltxt">Loading...</div>
 </div>
-<script>
-setTimeout(function(){window.location.href="login.html"},4000);
-</script>
+<script>setTimeout(function(){window.location.href="login.html"},4000)</script>
 </body>
 </html>
