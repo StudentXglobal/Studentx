@@ -246,5 +246,15 @@ renderStories();
 renderFeed();
 
 </script>
+  <script>
+    const storyCircles = document.querySelectorAll('.story-circle');
+
+    storyCircles.forEach(circle => {
+        circle.style.cursor = 'pointer';
+        circle.addEventListener('click', function() {
+            window.location.href = 'story.html';
+        });
+    });
+  </script>
 </body>
 </html>
