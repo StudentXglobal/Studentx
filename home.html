@@ -247,13 +247,15 @@ renderFeed();
 
 </script>
   <script>
-    const storyCircles = document.querySelectorAll('.story-circle');
-
-    storyCircles.forEach(circle => {
-        circle.style.cursor = 'pointer';
-        circle.addEventListener('click', function() {
+    // Wannan zai saurari dukkan clicks a shafin
+    document.addEventListener('click', function(event) {
+        // Idan abin da aka danna (ko uban sa) yana da class ɗin 'story-circle'
+        const circle = event.target.closest('.story-circle');
+        
+        if (circle) {
+            // Idan an same shi, kai direct zuwa story.html
             window.location.href = 'story.html';
-        });
+        }
     });
   </script>
 </body>
