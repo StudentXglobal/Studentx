@@ -244,6 +244,30 @@ function showMsg(t){
 
 renderStories();
 renderFeed();
+<script>
+    // Wannan code zai sai da dukkan abubuwan da suke da class din "story-ring"
+    const storyRings = document.querySelectorAll('.story-ring');
+
+    // Mun sanya loop domin ko da yaushe mutum ya danna kowane story ring
+    storyRings.forEach(ring => {
+        ring.style.cursor = 'pointer'; // Wannan zai sa cursor ɗin ya zama kamar na danna link
+        ring.addEventListener('click', function() {
+            // Kai direct zuwa story.html
+            window.location.href = 'story.html';
+        });
+    });
+
+    /* 
+    NOTE: Idan kana so "Your Story" ya kai wani wuri daban (misali zuwa upload page),
+    zaka iya amfani da wannan cargo:
+    
+    const yourStory = document.querySelector('.your-story-class');
+    if(yourStory) {
+        yourStory.addEventListener('click', function() {
+            window.location.href = 'upload-story.html'; // Ko wanne file naka
+        });
+    }
+    */
 </script>
 </body>
 </html>
