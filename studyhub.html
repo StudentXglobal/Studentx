@@ -1,399 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX | StudyHub Premium</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        :root {
-            --bg-deep: #060B18;
-            --bg-glass: rgba(21, 28, 51, 0.45);
-            --bg-glass-bright: rgba(30, 41, 79, 0.65);
-            --text-main: #FFFFFF;
-            --text-sub: #94A3B8;
-            --purple: #7C3AED;
-            --blue: #2563EB;
-            --grad-premium: linear-gradient(135deg, #7C3AED 0%, #2563EB 100%);
-            --border-glass: 1px solid rgba(255, 255, 255, 0.08);
-            --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - StudyHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:70px}
+.hdr{position:sticky;top:0;z-index:100;padding:10px 14px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between}
+.hdr-title{font-size:20px;font-weight:800}
+.hdr-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:15px;transition:all .15s}
+.hdr-btn:hover{background:rgba(124,58,237,.1);color:#a855f7}
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-deep); color: var(--text-main); padding-bottom: 110px; overflow-x: hidden; }
+.banner{margin:14px;padding:24px 20px;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#6d28d9,#4f46e5);position:relative;overflow:hidden;cursor:pointer;transition:transform .2s}
+.banner:hover{transform:scale(1.01)}
+.banner::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.banner::after{content:'';position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.04)}
+.banner h2{font-size:20px;font-weight:800;margin-bottom:4px;position:relative}
+.banner p{font-size:13px;opacity:.8;position:relative;line-height:1.4}
+.banner-btn{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:9px 20px;border-radius:20px;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);font-size:12px;font-weight:700;position:relative;transition:background .2s}
+.banner-btn:hover{background:rgba(255,255,255,.25)}
 
-        /* Background Luxury Lights */
-        .ambient-light { position: fixed; border-radius: 50%; filter: blur(140px); z-index: -1; pointer-events: none; opacity: 0.2; }
-        .light-left { width: 350px; height: 350px; background: var(--purple); top: 10%; left: -100px; }
-        .light-right { width: 400px; height: 400px; background: var(--blue); bottom: 15%; right: -120px; }
+.sec{padding:0 14px;margin-bottom:20px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:15px;font-weight:700}
+.sec-link{font-size:11px;color:#a855f7;font-weight:600;cursor:pointer}
 
-        /* Header Layout */
-        .header { background: rgba(6, 11, 24, 0.75); backdrop-filter: blur(30px); padding: 20px; position: sticky; top: 0; z-index: 1000; border-bottom: var(--border-glass); }
-        .logo-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .logo { font-size: 22px; font-weight: 800; background: var(--grad-premium); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
-        .logo span { font-weight: 400; color: var(--text-main); font-size: 14px; margin-left: 6px; border-left: 1px solid rgba(255,255,255,0.2); padding-left: 8px; }
-        
-        .search-container { display: flex; align-items: center; gap: 10px; }
-        .search-wrapper { flex: 1; background: rgba(255, 255, 255, 0.04); padding: 12px 16px; border-radius: 16px; display: flex; align-items: center; gap: 12px; border: var(--border-glass); }
-        .search-wrapper input { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; }
-        .search-wrapper input::placeholder { color: var(--text-sub); }
-        .search-wrapper i { color: var(--text-sub); cursor: pointer; transition: 0.2s; }
-        .search-wrapper i:hover { color: white; }
-        .icon-btn { background: var(--bg-glass); border: var(--border-glass); padding: 12px; border-radius: 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.course{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.course:hover{border-color:rgba(124,58,237,.2);transform:translateY(-1px)}
+.course-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.course-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.course-info{flex:1;min-width:0}
+.course-name{font-size:13px;font-weight:700;line-height:1.3}
+.course-code{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
+.course-pct{font-size:13px;font-weight:700;flex-shrink:0}
+.prog-bar{height:6px;background:rgba(255,255,255,.06);border-radius:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:6px;transition:width 1s ease}
 
-        /* Category System */
-        .scroller-container { display: flex; gap: 10px; padding: 16px 20px; overflow-x: auto; scrollbar-width: none; }
-        .scroller-container::-webkit-scrollbar { display: none; }
-        .pill { padding: 10px 20px; background: var(--bg-glass); border-radius: 50px; border: var(--border-glass); white-space: nowrap; font-size: 13px; font-weight: 600; color: var(--text-sub); cursor: pointer; transition: 0.3s ease; }
-        .pill.active, .pill:hover { background: var(--grad-premium); color: white; border-color: transparent; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+.resource{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:8px;cursor:pointer;transition:all .2s}
+.resource:hover{border-color:rgba(124,58,237,.2)}
+.res-ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.res-info{flex:1;min-width:0}
+.res-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-meta{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.res-dl{color:#a855f7;font-size:13px;flex-shrink:0}
 
-        /* Section Headings */
-        .section-header { font-size: 16px; font-weight: 700; padding: 15px 20px 8px 20px; display: flex; justify-content: space-between; align-items: center; letter-spacing: -0.2px; }
-        .section-header span { font-size: 12px; color: var(--purple); font-weight: 600; cursor: pointer; }
+.deadline{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.deadline:last-child{border-bottom:none}
+.dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dl-info{flex:1;min-width:0}
+.dl-name{font-size:13px;font-weight:600}
+.dl-course{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
+.dl-date{font-size:11px;font-weight:700;text-align:right;flex-shrink:0}
+.dl-days{font-size:9px;font-weight:500;text-align:right;margin-top:1px;opacity:.5}
 
-        /* Horizon Cards Row */
-        .horizontal-cards { display: flex; gap: 14px; padding: 10px 20px 20px 20px; overflow-x: auto; scrollbar-width: none; }
-        .horizontal-cards::-webkit-scrollbar { display: none; }
-
-        /* Upload Panel Deck */
-        .upload-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 10px 20px; }
-        .upload-mini-card { background: var(--bg-glass); border: var(--border-glass); padding: 14px 10px; border-radius: 16px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .upload-mini-card:hover { background: var(--bg-glass-bright); transform: translateY(-2px); }
-        .upload-mini-card i { font-size: 18px; background: var(--grad-premium); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; display: block; }
-        .upload-mini-card span { font-size: 11px; font-weight: 600; color: var(--text-sub); display: block; }
-
-        /* Standard Material Feed Card */
-        .material-card { background: var(--bg-glass); backdrop-filter: blur(20px); border: var(--border-glass); border-radius: 24px; padding: 16px; width: 260px; flex-shrink: 0; position: relative; box-shadow: var(--shadow-soft); transition: 0.3s ease; display: flex; flex-direction: column; justify-content: space-between; }
-        .material-card:hover { background: var(--bg-glass-bright); }
-        .feed-card-full { width: 100% !important; margin-bottom: 12px; }
-        
-        .card-preview-box { height: 120px; border-radius: 16px; background: linear-gradient(45deg, rgba(124, 58, 237, 0.1), rgba(37, 99, 235, 0.1)); border: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; position: relative; margin-bottom: 12px; }
-        .card-preview-box i { font-size: 36px; background: var(--grad-premium); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .type-tag { position: absolute; top: 10px; left: 10px; background: rgba(6, 11, 24, 0.8); border: var(--border-glass); font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.5px; }
-        .rating-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.06); backdrop-filter: blur(5px); font-size: 10px; font-weight: 600; padding: 4px 8px; border-radius: 8px; border: var(--border-glass); display: flex; align-items: center; gap: 4px; }
-        
-        .info-title { font-size: 14px; font-weight: 700; line-height: 1.4; margin-bottom: 4px; color: var(--text-main); }
-        .info-meta { font-size: 11px; color: var(--text-sub); margin-bottom: 12px; display: flex; justify-content: space-between; }
-
-        /* Interactive Footer Row of Card */
-        .card-actions { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .action-triggers { display: flex; gap: 14px; }
-        .trigger-btn { background: transparent; border: none; color: var(--text-sub); cursor: pointer; font-size: 13px; display: flex; align-items: center; gap: 4px; transition: 0.2s; }
-        .trigger-btn:hover, .trigger-btn.active { color: white; }
-        .trigger-btn.active-purple { color: #A78BFA !important; }
-
-        /* Suggestions Tray */
-        .search-results-overlay { padding: 10px 20px; display: none; }
-
-        /* Bottom Fixed Navigation */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(6, 11, 24, 0.85); backdrop-filter: blur(30px); border-top: var(--border-glass); display: flex; justify-content: space-around; padding: 12px 10px; z-index: 1000; }
-        .nav-item { text-align: center; color: var(--text-sub); text-decoration: none; font-size: 10px; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 4px; width: 16%; }
-        .nav-item i { font-size: 20px; }
-        .nav-item.active { color: var(--purple); }
-    </style>
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;display:flex;align-items:center;justify-content:space-around;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);z-index:200}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:500;color:rgba(255,255,255,.3);transition:color .2s}
+.nb i{font-size:19px}
+.nb.on{color:#a855f7}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
 </head>
 <body>
+<header class="hdr">
+<div class="hdr-row">
+<div class="hdr-title">StudyHub</div>
+<div class="hdr-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i></div>
+</div>
+</header>
 
-    <div class="ambient-light light-left"></div>
-    <div class="ambient-light light-right"></div>
+<div class="banner" onclick="window.location.href='studyhub-progress.html'">
+<h2>Keep learning, keep growing!</h2>
+<p>Track your progress and access study resources</p>
+<div class="banner-btn"><i class="fas fa-chart-line"></i> View Progress</div>
+</div>
 
-    <!-- Top Header Layout -->
-    <header class="header">
-        <div class="logo-row">
-            <div class="logo">StudentX<span>StudyHub</span></div>
-            <div class="icon-btn" style="padding: 8px 12px; font-size: 12px; font-weight: 600;"><i class="fa-solid fa-cloud" style="margin-right: 6px; color: var(--text-sub);"></i> Offline OK</div>
-        </div>
-        <div class="search-container">
-            <div class="search-wrapper">
-                <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="hubSearchInput" placeholder="Search books, notes, videos, courses, PDFs..." oninput="executeHubSearch(this.value)">
-                <i class="fa-solid fa-microphone"></i>
-            </div>
-            <button class="icon-btn"><i class="fa-solid fa-sliders"></i></button>
-        </div>
-    </header>
+<div class="sec">
+<div class="sec-head">
+<div class="sec-title">My Courses</div>
+<div class="sec-link" onclick="window.location.href='studyhub-courses.html'">See all</div>
+</div>
+<div id="courseList"></div>
+</div>
 
-    <!-- Scrollable Categories Grid -->
-    <div class="scroller-container">
-        <div class="pill active">All Materials</div>
-        <div class="pill">Books</div>
-        <div class="pill">Notes</div>
-        <div class="pill">PDFs</div>
-        <div class="pill">Videos</div>
-        <div class="pill">Audio</div>
-        <div class="pill">Assignments</div>
-        <div class="pill">Past Questions</div>
-        <div class="pill">Courses</div>
-        <div class="pill">Scholarships</div>
-        <div class="pill">Research Papers</div>
-        <div class="pill">Saved Materials</div>
-    </div>
+<div class="sec">
+<div class="sec-head">
+<div class="sec-title">Recent Resources</div>
+<div class="sec-link" onclick="window.location.href='studyhub-resources.html'">See all</div>
+</div>
+<div id="resList"></div>
+</div>
 
-    <!-- Live Filter Output Target -->
-    <div class="search-results-overlay" id="hubSearchResultsTray">
-        <div class="section-header" style="padding: 10px 0;">Search Results</div>
-        <div id="searchCardsOutput"></div>
-    </div>
+<div class="sec">
+<div class="sec-head">
+<div class="sec-title">Upcoming Deadlines</div>
+</div>
+<div id="dlList"></div>
+</div>
 
-    <!-- Main Dynamic Interface Dashboard Frame -->
-    <div id="hubDefaultViewDeck">
-        
-        <!-- Upload Infrastructure Area -->
-        <div class="section-header">Upload Center</div>
-        <div class="upload-grid">
-            <div class="upload-mini-card">
-                <i class="fa-solid fa-file-lines"></i>
-                <span>Notes</span>
-            </div>
-            <div class="upload-mini-card">
-                <i class="fa-solid fa-file-pdf"></i>
-                <span>PDFs</span>
-            </div>
-            <div class="upload-mini-card">
-                <i class="fa-solid fa-video"></i>
-                <span>Videos</span>
-            </div>
-            <div class="upload-mini-card">
-                <i class="fa-solid fa-headphones"></i>
-                <span>Audio</span>
-            </div>
-            <div class="upload-mini-card">
-                <i class="fa-solid fa-paste"></i>
-                <span>Past Qs</span>
-            </div>
-            <div class="upload-mini-card">
-                <i class="fa-solid fa-graduation-cap"></i>
-                <span>Assignments</span>
-            </div>
-        </div>
+<nav class="bnav">
+<div class="nb" onclick="window.location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div>
+<div class="nb" onclick="window.location.href='explore.html'"><i class="fas fa-compass"></i><span>Explore</span></div>
+<div class="nb" onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i><span>Chat</span></div>
+<div class="nb on" onclick="window.location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div>
+<div class="nb" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div>
+</nav>
 
-        <!-- Continue Learning Module Section -->
-        <div class="section-header">Continue Learning <span>Track</span></div>
-        <div class="horizontal-cards">
-            <!-- Progress Card 1 -->
-            <div class="material-card" style="width: 280px;" onclick="window.location.href='course.html'">
-                <div style="display:flex; gap:12px; align-items:center;">
-                    <div style="width:50px; height:50px; background:rgba(255,255,255,0.04); border-radius:12px; display:flex; align-items:center; justify-content:center; border:var(--border-glass);"><i class="fa-solid fa-layer-group" style="color:var(--purple)"></i></div>
-                    <div>
-                        <div class="info-title" style="font-size:13px; margin:0;">Advanced Data Architectures</div>
-                        <span style="font-size:11px; color:var(--text-sub)">Module 4 of 12</span>
-                    </div>
-                </div>
-                <div style="margin-top:14px;">
-                    <div style="width:100%; height:4px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden;">
-                        <div style="width:65%; height:100%; background:var(--grad-premium);"></div>
-                    </div>
-                    <div style="display:flex; justify-content:space-between; font-size:10px; margin-top:6px; color:var(--text-sub);">
-                        <span>65% Completed</span>
-                        <span>Resume</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+<script>
+var courses=[
+  {name:'Data Structures & Algorithms',code:'CSC 301',pct:78,color:'#7c3aed',icon:'fa-code',page:'course-dsa.html'},
+  {name:'Calculus II',code:'MTH 202',pct:65,color:'#06b6d4',icon:'fa-square-root-variable',page:'course-calculus.html'},
+  {name:'Physics Mechanics',code:'PHY 201',pct:42,color:'#ef4444',icon:'fa-atom',page:'course-physics.html'}
+];
 
-        <!-- Trending Section Grid Stack Layout -->
-        <div class="section-header">Trending Section</div>
-        <div class="horizontal-cards">
-            <!-- Render Target 1 -->
-            <div class="material-card" onclick="window.location.href='note.html'">
-                <div class="card-preview-box">
-                    <span class="type-tag">Notes</span>
-                    <span class="rating-badge"><i class="fa-solid fa-star" style="color:#FBBF24;"></i> 4.9</span>
-                    <i class="fa-solid fa-note-sticky"></i>
-                </div>
-                <div>
-                    <div class="info-title">Discrete Mathematics Matrix</div>
-                    <div class="info-meta">
-                        <span>1.4k views</span>
-                        <span>PDF Included</span>
-                    </div>
-                </div>
-                <div class="card-actions" onclick="event.stopPropagation();">
-                    <div class="action-triggers">
-                        <button class="trigger-btn" onclick="toggleMetricAction(this)"><i class="fa-solid fa-heart"></i> <span>284</span></button>
-                        <button class="trigger-btn" onclick="toggleMetricAction(this)"><i class="fa-solid fa-comment"></i> <span>42</span></button>
-                    </div>
-                    <button class="trigger-btn" onclick="toggleSaveAction(this)"><i class="fa-solid fa-bookmark"></i></button>
-                </div>
-            </div>
+var resources=[
+  {name:'Lecture Notes - Week 8',type:'PDF',size:'2.1 MB',color:'#ef4444',icon:'fa-file-pdf',page:'studyhub-resources.html'},
+  {name:'Practice Problems Set',type:'DOCX',size:'856 KB',color:'#3b82f6',icon:'fa-file-word',page:'studyhub-resources.html'},
+  {name:'Exam Review Slides',type:'PPTX',size:'5.4 MB',color:'#f59e0b',icon:'fa-file-powerpoint',page:'studyhub-resources.html'}
+];
 
-            <!-- Render Target 2 -->
-            <div class="material-card" onclick="window.location.href='book.html'">
-                <div class="card-preview-box">
-                    <span class="type-tag">Books</span>
-                    <span class="rating-badge"><i class="fa-solid fa-star" style="color:#FBBF24;"></i> 4.8</span>
-                    <i class="fa-solid fa-book-open"></i>
-                </div>
-                <div>
-                    <div class="info-title">Quantum Mechanics Vol. II</div>
-                    <div class="info-meta">
-                        <span>940 views</span>
-                        <span>Free Access</span>
-                    </div>
-                </div>
-                <div class="card-actions" onclick="event.stopPropagation();">
-                    <div class="action-triggers">
-                        <button class="trigger-btn" onclick="toggleMetricAction(this)"><i class="fa-solid fa-heart"></i> <span>192</span></button>
-                        <button class="trigger-btn" onclick="toggleMetricAction(this)"><i class="fa-solid fa-comment"></i> <span>18</span></button>
-                    </div>
-                    <button class="trigger-btn" onclick="toggleSaveAction(this)"><i class="fa-solid fa-bookmark"></i></button>
-                </div>
-            </div>
-        </div>
+var deadlines=[
+  {name:'Assignment 5 - DSA',course:'CSC 301',date:'Jul 5',color:'#ef4444',days:'3 days left',page:'studyhub-deadlines.html'},
+  {name:'Lab Report - Mechanics',course:'PHY 201',date:'Jul 8',color:'#f59e0b',days:'6 days left',page:'studyhub-deadlines.html'},
+  {name:'Quiz 3 - Calculus',course:'MTH 202',date:'Jul 10',color:'#06b6d4',days:'8 days left',page:'studyhub-deadlines.html'}
+];
 
-        <!-- Bookmarks Section Block -->
-        <div class="section-header">Bookmarks & Saved Materials</div>
-        <div class="horizontal-cards">
-            <div class="material-card" onclick="window.location.href='video.html'">
-                <div class="card-preview-box">
-                    <span class="type-tag">Videos</span>
-                    <span class="rating-badge"><i class="fa-solid fa-star" style="color:#FBBF24;"></i> 5.0</span>
-                    <i class="fa-solid fa-circle-play"></i>
-                </div>
-                <div>
-                    <div class="info-title">Neural Network Walkthrough</div>
-                    <div class="info-meta">
-                        <span>3.1k views</span>
-                        <span>24 mins</span>
-                    </div>
-                </div>
-                <div class="card-actions" onclick="event.stopPropagation();">
-                    <div class="action-triggers">
-                        <button class="trigger-btn" onclick="toggleMetricAction(this)"><i class="fa-solid fa-heart"></i> <span>845</span></button>
-                        <button class="trigger-btn" onclick="toggleMetricAction(this)"><i class="fa-solid fa-comment"></i> <span>93</span></button>
-                    </div>
-                    <button class="trigger-btn active-purple" onclick="toggleSaveAction(this)"><i class="fa-solid fa-bookmark"></i></button>
-                </div>
-            </div>
-        </div>
+function renderCourses(){
+  document.getElementById('courseList').innerHTML=courses.map(function(c){
+    return'<div class="course" onclick="window.location.href=\''+c.page+'\'"><div class="course-top"><div class="course-ic" style="background:'+c.color+'15;color:'+c.color+'"><i class="fas '+c.icon+'"></i></div><div class="course-info"><div class="course-name">'+c.name+'</div><div class="course-code">'+c.code+'</div></div><div class="course-pct" style="color:'+c.color+'">'+c.pct+'%</div></div><div class="prog-bar"><div class="prog-fill" style="width:'+c.pct+'%;background:'+c.color+'"></div></div></div>';
+  }).join('');
+}
 
-        <!-- Downloads Management Section Shelf -->
-        <div class="section-header">Downloads & Offline Access</div>
-        <div class="horizontal-cards">
-            <div class="material-card" style="width:230px;" onclick="window.location.href='pdf.html'">
-                <div class="info-title" style="font-size:13px; margin-bottom:2px;"><i class="fa-solid fa-circle-check" style="color:#10B981; margin-right:6px;"></i> Architecture Syllabus.pdf</div>
-                <span style="font-size:11px; color:var(--text-sub)">4.2 MB • Ready Offline</span>
-            </div>
-        </div>
+function renderResources(){
+  document.getElementById('resList').innerHTML=resources.map(function(r){
+    return'<div class="resource" onclick="window.location.href=\''+r.page+'\'"><div class="res-ic" style="background:'+r.color+'15;color:'+r.color+'"><i class="fas '+r.icon+'"></i></div><div class="res-info"><div class="res-name">'+r.name+'</div><div class="res-meta">'+r.type+' · '+r.size+'</div></div><div class="res-dl"><i class="fas fa-download"></i></div></div>';
+  }).join('');
+}
 
-    </div>
+function renderDeadlines(){
+  document.getElementById('dlList').innerHTML=deadlines.map(function(d){
+    return'<div class="deadline" onclick="window.location.href=\''+d.page+'\'"><div class="dl-dot" style="background:'+d.color+'"></div><div class="dl-info"><div class="dl-name">'+d.name+'</div><div class="dl-course">'+d.course+'</div></div><div><div class="dl-date" style="color:'+d.color+'">'+d.date+'</div><div class="dl-days">'+d.days+'</div></div></div>';
+  }).join('');
+}
 
-    <!-- Bottom Navigation Bar Map Structure -->
-    <nav class="bottom-nav">
-        <a href="home.html" class="nav-item"><i class="fa-solid fa-house"></i>Home</a>
-        <a href="explore.html" class="nav-item"><i class="fa-solid fa-compass"></i>Explore</a>
-        <a href="studyhub.html" class="nav-item active"><i class="fa-solid fa-book"></i>StudyHub</a>
-        <a href="chat.html" class="nav-item"><i class="fa-solid fa-message"></i>Chat</a>
-        <a href="notifications.html" class="nav-item"><i class="fa-solid fa-bell"></i>Alerts</a>
-        <a href="profile.html" class="nav-item"><i class="fa-solid fa-user"></i>Profile</a>
-    </nav>
+function showMsg(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2500)}
 
-    <!-- JavaScript Interactive Database Search Router Engine -->
-    <script>
-        const studyhubDatabase = [
-            { title: "Discrete Mathematics Matrix Notes", type: "Notes", rating: "4.9", views: "1.4k views", route: "note.html", icon: "fa-note-sticky" },
-            { title: "Quantum Mechanics Reference Book", type: "Books", rating: "4.8", views: "940 views", route: "book.html", icon: "fa-book-open" },
-            { title: "Neural Network Walkthrough Video", type: "Videos", rating: "5.0", views: "3.1k views", route: "video.html", icon: "fa-circle-play" },
-            { title: "Syllabus of Advanced Architecture PDF", type: "PDFs", rating: "4.6", views: "410 views", route: "pdf.html", icon: "fa-file-pdf" },
-            { title: "Linguistic Audio Phonetics Guide", type: "Audio", rating: "4.7", views: "680 views", route: "audio.html", icon: "fa-headphones" },
-            { title: "Global Artificial Intelligence Scholarship", type: "Scholarships", rating: "4.9", views: "5.2k views", route: "scholarship.html", icon: "fa-award" },
-            { title: "Cloud Engineering Course Blueprint", type: "Courses", rating: "4.8", views: "2.1k views", route: "course.html", icon: "fa-layer-group" }
-        ];
-
-        function executeHubSearch(val) {
-            const tray = document.getElementById('hubSearchResultsTray');
-            const viewDeck = document.getElementById('hubDefaultViewDeck');
-            const output = document.getElementById('searchCardsOutput');
-
-            if (!val.trim()) {
-                tray.style.display = "none";
-                viewDeck.style.display = "block";
-                return;
-            }
-
-            viewDeck.style.display = "none";
-            tray.style.display = "block";
-
-            const matched = studyhubDatabase.filter(item => 
-                item.title.toLowerCase().includes(val.toLowerCase()) ||
-                item.type.toLowerCase().includes(val.toLowerCase())
-  <!-- Kod din gyara madannai na shafin StudyHub -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navBar = document.querySelector('.tab-navigator');
-            if (navBar) {
-                navBar.innerHTML = `
-                    <svg width="0" height="0" style="position:absolute;"><defs>
-                        <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-                        <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient>
-                    </defs></svg>
-                    <a href="home.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Home</span>
-                    </a>
-                    <a href="explore.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#exploreGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="url(#exploreGrad)"></polygon></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Explore</span>
-                    </a>
-                    <a href="chat.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; position: relative; padding: 6px 0;">
-                        <div style="position: absolute; top: 0px; right: 20%; background-color: #ef4444; color: white; font-size: 10px; font-weight: bold; width: 17px; height: 17px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white; z-index: 10;">3</div>
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path><circle cx="8" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="12" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="16" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Chat</span>
-                    </a>
-                    <a href="studyhub.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path><line x1="7" y1="9" x2="9" y2="9"></line><line x1="7" y1="13" x2="9" y2="13"></line><path d="M15 4v6l1.5-1.2L18 10V4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">StudyHub</span>
-                    </a>
-                    <a href="profile.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Profile</span>
-                    </a>
-                `;
-                navBar.style.display = 'flex';
-                navBar.style.justifyContent = 'space-around';
-                navBar.style.alignItems = 'center';
-                navBar.style.paddingBottom = '10px';
-            }
-        });
-    </script>
-<!-- Kod din gyara madannai na shafin StudyHub -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navBar = document.querySelector('.nav-bar') || document.querySelector('.navbar') || document.querySelector('.tab-navigator');
-            if (navBar) {
-                navBar.innerHTML = `
-                    <svg width="0" height="0" style="position:absolute;"><defs>
-                        <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-                        <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient>
-                    </defs></svg>
-                    <a href="home.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Home</span>
-                    </a>
-                    <a href="explore.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#exploreGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="url(#exploreGrad)"></polygon></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Explore</span>
-                    </a>
-                    <a href="chat.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; position: relative; padding: 6px 0;">
-                        <div style="position: absolute; top: 0px; right: 20%; background-color: #ef4444; color: white; font-size: 10px; font-weight: bold; width: 17px; height: 17px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white; z-index: 10;">3</div>
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path><circle cx="8" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="12" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="16" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Chat</span>
-                    </a>
-                    <a href="studyhub.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path><line x1="7" y1="9" x2="9" y2="9"></line><line x1="7" y1="13" x2="9" y2="13"></line><path d="M15 4v6l1.5-1.2L18 10V4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">StudyHub</span>
-                    </a>
-                    <a href="profile.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Profile</span>
-                    </a>
-                `;
-                navBar.style.display = 'flex';
-                navBar.style.justifyContent = 'space-around';
-                navBar.style.alignItems = 'center';
-                navBar.style.paddingBottom = '10px';
-            }
-        });
-    </script>
+renderCourses();
+renderResources();
+renderDeadlines();
+</script>
+</body>
+</html>
