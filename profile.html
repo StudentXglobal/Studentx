@@ -1,548 +1,307 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudentX - Profile</title>
-    <style>
-        :root {
-            --primary-purple: #7c3aed;
-            --verified-blue: #1d9bf0;
-            --bg-gradient: linear-gradient(180deg, #f9f8ff 0%, #ffffff 100%);
-            --text-dark: #0f172a;
-            --text-gray: #64748b;
-            --card-shadow: 0 4px 18px rgba(0, 0, 0, 0.03);
-            --border-light: #f1f5f9;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-dark);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-screen {
-            width: 100%;
-            max-width: 480px;
-            background: transparent;
-            min-height: 100vh;
-            position: relative;
-            padding-bottom: 100px;
-        }
-
-        .main-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px 10px;
-        }
-        .main-header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-        .hdr-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            color: var(--text-dark);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-        }
-        .hdr-btn:active { background: rgba(0,0,0,0.04); }
-        .hdr-right { display: flex; gap: 4px; }
-
-        .profile-hero {
-            display: flex;
-            align-items: flex-start;
-            padding: 16px 24px;
-            gap: 16px;
-        }
-        .avatar-holder {
-            position: relative;
-            width: 95px;
-            height: 95px;
-            flex-shrink: 0;
-        }
-        .avatar-mask {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid white;
-            overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-        }
-        .cam-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            background: var(--primary-purple);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            border: 3px solid white;
-            cursor: pointer;
-        }
-
-        .profile-info { flex: 1; }
-        .name-wrapper { display: flex; align-items: center; gap: 5px; }
-        .user-name { font-size: 21px; font-weight: 700; letter-spacing: -0.3px; }
-        .blue-tick { color: var(--verified-blue); display: inline-flex; align-items: center; }
-        .user-handle { color: var(--text-gray); font-size: 13.5px; margin-top: 1px; }
-        
-        .follow-counter-row {
-            display: flex;
-            gap: 16px;
-            margin-top: 6px;
-            font-size: 13.5px;
-            font-weight: 600;
-        }
-        .follow-counter-row .count-num { color: var(--text-dark); }
-        .follow-counter-row .count-lbl { color: var(--text-gray); font-weight: 400; }
-
-        .user-bio { font-size: 13.5px; color: #475569; margin-top: 8px; line-height: 1.4; }
-        .meta-row { display: flex; gap: 12px; margin-top: 10px; font-size: 12px; color: var(--text-gray); }
-        .meta-cell { display: flex; align-items: center; gap: 4px; }
-
-        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 12px 24px; }
-        .stat-box { background: white; border-radius: 16px; padding: 14px 8px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid rgba(241, 245, 249, 0.6); }
-        .stat-icon { display: flex; justify-content: center; margin-bottom: 6px; }
-        .stat-num { font-size: 17px; font-weight: 700; color: var(--text-dark); }
-        .stat-text { font-size: 11.5px; color: var(--text-gray); margin-top: 1px; }
-
-        .options-list { background: white; border-radius: 20px; margin: 16px 24px; padding: 4px 0; box-shadow: var(--card-shadow); border: 1px solid rgba(241, 245, 249, 0.6); }
-        .opt-item { display: flex; align-items: center; padding: 14px 18px; cursor: pointer; text-decoration: none; }
-        .opt-item:not(:last-child) { border-bottom: 1px solid #f8fafc; }
-        .opt-icon-wrapper { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 12px; }
-        .bg-indigo { background: #eef2ff; color: #4f46e5; }
-        .bg-blue { background: #eff6ff; color: #2563eb; }
-        .bg-pink { background: #fff1f2; color: #f43f5e; }
-        .opt-details { flex: 1; }
-        .opt-title { font-size: 14.5px; font-weight: 600; color: var(--text-dark); }
-        .opt-subtitle { font-size: 11.5px; color: var(--text-gray); margin-top: 1px; }
-        .opt-chevron { color: #cbd5e1; display: flex; align-items: center; }
-
-        .section-nav { display: flex; justify-content: space-between; align-items: center; padding: 8px 24px 4px; }
-        .section-lbl { font-size: 15.5px; font-weight: 700; color: var(--text-dark); }
-        .action-lbl { font-size: 12.5px; color: var(--primary-purple); font-weight: 600; text-decoration: none; }
-
-        .badges-slider { display: flex; gap: 12px; padding: 12px 24px; overflow-x: auto; scrollbar-width: none; }
-        .badges-slider::-webkit-scrollbar { display: none; }
-        .hex-card { background: white; border-radius: 18px; padding: 14px 10px; min-width: 102px; text-align: center; box-shadow: var(--card-shadow); border: 1px solid rgba(241, 245, 249, 0.6); flex-shrink: 0; }
-        .hex-shape { width: 50px; height: 50px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); }
-        .hex-purple { background: #f3e8ff; color: #a855f7; }
-        .hex-green { background: #dcfce7; color: #22c55e; }
-        .hex-name { font-size: 11px; font-weight: 700; color: var(--text-dark); }
-        .hex-meta { font-size: 9.5px; color: var(--text-gray); margin-top: 2px; }
-
-        .tab-navigator { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px); display: flex; justify-content: space-around; padding: 10px 6px 12px; border-top: 1px solid var(--border-light); z-index: 100; }
-        .tab-cell { display: flex; flex-direction: column; align-items: center; gap: 4px; background: transparent; border: none; cursor: pointer; color: #94a3b8; font-size: 10.5px; font-weight: 600; flex: 1; position: relative; text-decoration: none; }
-        .tab-cell.active { color: var(--primary-purple); }
-        .tab-badge { position: absolute; top: -3px; right: 24%; background: #ef4444; color: white; font-size: 9px; font-weight: 700; border-radius: 8px; padding: 1px 4px; border: 1.5px solid white; }
-        .home-indicator { position: absolute; bottom: 4px; width: 140px; height: 4px; background: #000000; border-radius: 2px; left: 50%; transform: translateX(-50%); }
-
-        .overlay-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.3); backdrop-filter: blur(4px); z-index: 500; display: flex; justify-content: center; align-items: flex-end; visibility: hidden; opacity: 0; transition: all 0.25s ease-out; }
-        .overlay-layer.active { visibility: visible; opacity: 1; }
-        .bottom-sheet { width: 100%; max-width: 480px; background: white; border-top-left-radius: 24px; border-top-right-radius: 24px; padding: 24px; transform: translateY(100%); transition: transform 0.25s ease-out; max-height: 85vh; overflow-y: auto; }
-        .overlay-layer.active .bottom-sheet { transform: translateY(0); }
-        .sheet-hdr { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .sheet-title { font-size: 17px; font-weight: 700; }
-        .sheet-close { background: #f1f5f9; border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-weight: 700; }
-        .input-item { margin-bottom: 16px; }
-        .input-item label { display: block; font-size: 12.5px; font-weight: 600; color: #475569; margin-bottom: 6px; }
-        .input-field { width: 100%; padding: 11px 14px; border-radius: 12px; border: 1px solid #e2e8f0; outline: none; font-size: 14px; }
-        .input-field:focus { border-color: var(--primary-purple); }
-        .btn-action { width: 100%; background: var(--primary-purple); color: white; border: none; padding: 12px; border-radius: 12px; font-size: 14.5px; font-weight: 700; cursor: pointer; margin-top: 6px; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:70px}
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-title{font-size:18px;font-weight:800}
+.hdr-edit{width:32px;height:26px;border-radius:6px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background .15s}
+.hdr-edit:hover{background:rgba(124,58,237,.2)}
+.hdr-edit span{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.6)}
+.cover{height:150px;position:relative;overflow:hidden;cursor:pointer}
+.cover-img{width:100%;height:100%;object-fit:cover}
+.cover-default{width:100%;height:100%;background:linear-gradient(90deg,#008751 33.33%,#fff 33.33%,#fff 66.66%,#008751 66.66%);display:flex;align-items:center;justify-content:center}
+.cover-default span{font-size:28px;font-weight:900;color:#008751;text-shadow:0 2px 8px rgba(255,255,255,.4);letter-spacing:2px}
+.cover-ov{position:absolute;inset:0;background:rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;gap:12px}
+.cover:hover .cover-ov{display:flex}
+.cover-opt{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;cursor:pointer;transition:background .15s}
+.cover-opt:hover{background:rgba(255,255,255,.3)}
+.av-wrap{position:absolute;bottom:-38px;left:20px;z-index:10;cursor:pointer}
+.av{width:80px;height:80px;border-radius:50%;border:4px solid #0a0a0f;object-fit:cover;background:#1a1a35;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#a855f7}
+.av-opts{position:absolute;top:44px;left:0;background:rgba(20,20,45,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:4px 0;min-width:160px;z-index:20;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:avUp .2s ease}
+.av-opts.show{display:block}
+@keyframes avUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.av-opt{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
+.av-opt:hover{background:rgba(124,58,237,.1);color:#fff}
+.av-opt i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.35)}
+.info{padding:50px 20px 0}
+.nm-row{display:flex;align-items:center;justify-content:space-between}
+.nm{font-size:20px;font-weight:800;display:flex;align-items:center;gap:5px}
+.nm .vd{color:#a855f7;font-size:14px}
+.share-btn{padding:7px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .15s}
+.share-btn:hover{border-color:rgba(124,58,237,.4);color:#a855f7}
+.handle{font-size:12px;color:rgba(255,255,255,.35);margin-top:2px}
+.course-label{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:5px 12px;border-radius:20px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);font-size:11px;font-weight:600;color:#a855f7}
+.course-label i{font-size:10px}
+.bio{font-size:13px;color:rgba(255,255,255,.65);margin-top:10px;line-height:1.5}
+.stats{display:flex;margin-top:16px;padding:14px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+.stat{flex:1;text-align:center}
+.stat:not(:last-child){border-right:1px solid rgba(255,255,255,.05)}
+.stat-num{font-size:16px;font-weight:800}
+.stat-label{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
+.btns{display:flex;gap:10px;margin-top:14px}
+.btn{flex:1;padding:10px;border-radius:12px;font-size:13px;font-weight:700;text-align:center;transition:all .15s;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.btn-primary:hover{filter:brightness(1.1)}
+.tabs{display:flex;margin-top:16px;border-bottom:1px solid rgba(255,255,255,.05)}
+.tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:rgba(255,255,255,.3);border-bottom:2px solid transparent;transition:all .2s;cursor:pointer}
+.tab.on{color:#a855f7;border-color:#a855f7}
+.posts{padding:16px 14px}
+.pin-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:rgba(255,255,255,.35);margin-bottom:10px;padding:0 2px}
+.pin-label i{color:#a855f7;font-size:10px}
+.post{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:14px;margin-bottom:12px;overflow:hidden}
+.p-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.p-av{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1a1a35;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#a855f7}
+.p-inf{flex:1;min-width:0}
+.p-nm{font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px}
+.p-nm .vd{color:#a855f7;font-size:10px}
+.p-meta{font-size:10px;color:rgba(255,255,255,.25);margin-top:1px}
+.p-more{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.25);font-size:14px}
+.p-body{padding:0 14px 12px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.65)}
+.p-acts{display:flex;align-items:center;padding:4px 8px 10px;gap:2px}
+.p-a{display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.35);font-weight:600;transition:all .15s}
+.p-a:hover{background:rgba(124,58,237,.1);color:#a855f7}
+.p-a.lk.on{color:#ef4444}
+.p-a.lk.on i{animation:lp .3s ease}
+@keyframes lp{50%{transform:scale(1.3)}}
+.p-a-r{margin-left:auto}
+.saved-empty{text-align:center;padding:50px 20px;color:rgba(255,255,255,.15)}
+.saved-empty i{font-size:36px;margin-bottom:10px;display:block}
+.saved-empty p{font-size:13px}
+.view-ov{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85)}
+.view-ov.show{display:flex}
+.view-ov img{max-width:92%;max-height:85vh;border-radius:16px;object-fit:contain}
+.view-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;cursor:pointer}
+.em-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
+.em-ov.show{display:flex}
+.em-bg{position:fixed;inset:0;background:rgba(0,0,0,.5)}
+.em-sheet{position:relative;z-index:1;width:100%;max-width:430px;background:rgba(20,20,45,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:12px 0 24px;animation:su .25s ease}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.em-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:0 auto 12px}
+.em-item{display:flex;align-items:center;gap:12px;padding:13px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
+.em-item:hover{background:rgba(124,58,237,.1);color:#fff}
+.em-item i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.35)}
+.em-item.dng{color:#ef4444}.em-item.dng i{color:#ef4444}
+.em-div{height:1px;background:rgba(255,255,255,.06);margin:4px 0}
+.sh-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
+.sh-ov.show{display:flex}
+.sh-bg{position:fixed;inset:0;background:rgba(0,0,0,.5)}
+.sh-sheet{position:relative;z-index:1;width:100%;max-width:430px;max-height:80vh;background:rgba(15,15,30,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:su .25s ease}
+.sh-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:12px auto 0;flex-shrink:0}
+.sh-head{padding:16px 20px 12px;font-size:16px;font-weight:700;flex-shrink:0}
+.sh-opts{padding:0 20px 12px;flex-shrink:0}
+.sh-opt{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
+.sh-opt:active{opacity:.6}
+.sh-opt-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sh-opt-nm{font-size:14px;font-weight:600}
+.sh-opt-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:1px}
+.sh-search{margin:0 20px 12px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:none;flex-shrink:0}
+.sh-search input{width:100%;border:none;background:none;color:#fff;font-size:13px;outline:none}
+.sh-search input::placeholder{color:rgba(255,255,255,.25)}
+.sh-search.show{display:block}
+.sh-list{flex:1;overflow-y:auto;padding:0 20px 20px;display:none}
+.sh-list.show{display:block}
+.sh-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
+.sh-item:active{background:rgba(124,58,237,.08);margin:0 -20px;padding:11px 20px;border-radius:10px}
+.sh-item img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.sh-item .sh-inf{flex:1;min-width:0}
+.sh-item .sh-nm{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-item .sh-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:1px}
+.sh-item .sh-chk{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;flex-shrink:0;transition:all .15s}
+.sh-item.sel .sh-chk{background:linear-gradient(135deg,#7c3aed,#a855f7);border-color:transparent;color:#fff}
+.sh-sel-bar{display:none;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.sh-sel-bar.show{display:flex}
+.sh-sel-count{font-size:13px;font-weight:600;color:rgba(255,255,255,.5)}
+.sh-sel-btn{padding:9px 24px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:13px;font-weight:700}
+.no-res{text-align:center;padding:30px 20px;color:rgba(255,255,255,.15);font-size:13px}
+.pm-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
+.pm-ov.show{display:flex}
+.pm-bg{position:fixed;inset:0;background:rgba(0,0,0,.5)}
+.pm-sheet{position:relative;z-index:1;width:100%;max-width:430px;background:rgba(20,20,45,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:12px 0 24px;animation:su .25s ease}
+.pm-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:0 auto 12px}
+.pm-item{display:flex;align-items:center;gap:12px;padding:13px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
+.pm-item:hover{background:rgba(124,58,237,.1);color:#fff}
+.pm-item i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.35)}
+.pm-item.dng{color:#ef4444}.pm-item.dng i{color:#ef4444}
+.pm-div{height:1px;background:rgba(255,255,255,.06);margin:4px 0}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;display:flex;align-items:center;justify-content:space-around;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);z-index:200}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:500;color:rgba(255,255,255,.3);transition:color .2s}
+.nb i{font-size:19px}
+.nb.on{color:#a855f7}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
 </head>
 <body>
-    <div class="app-screen">
-        <!-- Header Section (Babu Alamar Settings Kamar Hoto) -->
-        <header class="main-header">
-            <div style="width: 40px;"></div> 
-            <h1>Profile</h1>
-            <div class="hdr-right">
-                <button class="hdr-btn" onclick="openEditModal()">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-                </button>
-                <button class="hdr-btn">
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="1.2"></circle><circle cx="12" cy="5" r="1.2"></circle><circle cx="12" cy="19" r="1.2"></circle></svg>
-                </button>
-            </div>
-        </header>
+<header class="hdr">
+<div class="hdr-title">Profile</div>
+<div class="hdr-edit" onclick="openEditMenu()"><span></span><span></span><span></span></div>
+</header>
 
-        <!-- Profile Hero Area -->
-        <section class="profile-hero">
-            <div class="avatar-holder">
-                <div class="avatar-mask">
-                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <path d="M8 10c1-1 2-1 4 0s3 1 4 0" stroke-width="2.2"/>
-                        <path d="M9 14s1.5 2 3 2 3-2 3-2" stroke-width="2.2"/>
-                    </svg>
-                </div>
-                <div class="cam-badge" onclick="openEditModal()">
-                    <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
-                </div>
-            </div>
-            <div class="profile-info">
-                <div class="name-wrapper">
-                    <span class="user-name" id="namePlate">Yusuf Alhaji Garba</span>
-                    <!-- Cikakken Alamar Verified Badge Na Asali -->
-                    <span class="blue-tick">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                            <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.99-3.818-3.99-.48 0-.944.09-1.37.26C14.75 2.513 13.483 1.5 12 1.5s-2.75 1.013-3.395 2.27c-.426-.17-.89-.26-1.37-.26-2.108 0-3.818 1.78-3.818 3.99 0 .495.084.965.238 1.4-1.273.65-2.148 2.02-2.148 3.6 0 1.58.875 2.95 2.148 3.6-.154.435-.238.905-.238 1.4 0 2.21 1.71 3.99 3.818 3.99.48 0 .944-.09 1.37-.26.645 1.257 1.912 2.27 3.395 2.27s2.75-1.013 3.395-2.27c.426.17.89.26 1.37.26 2.108 0 3.818-1.78 3.818-3.99 0-.495-.084-.965-.238-1.4 1.273-.65 2.148-2.02 2.148-3.6zm-12.72 4.22l-3.22-3.22 1.42-1.42 1.8 1.8 4.8-4.8 1.42 1.42-6.22 6.22z"/>
-                        </svg>
-                    </span>
-                </div>
-                <div class="user-handle" id="handlePlate">@yusuf_garba</div>
-                
-                <div class="follow-counter-row">
-                    <div><span class="count-num">14.2K</span> <span class="count-lbl">Followers</span></div>
-                    <div><span class="count-num">385</span> <span class="count-lbl">Following</span></div>
-                </div>
+<div class="cover" id="coverEl" onclick="toggleCoverOpts()">
+<div id="coverDisplay"><div class="cover-default"><span>Nigeria</span></div></div>
+<div class="cover-ov" id="coverOv">
+<div class="cover-opt" onclick="event.stopPropagation();viewCover()"><i class="fas fa-eye"></i></div>
+<div class="cover-opt" onclick="event.stopPropagation();changeCover()"><i class="fas fa-camera"></i></div>
+</div>
+<div class="av-wrap" id="avWrap" onclick="event.stopPropagation();toggleAvOpts()">
+<div id="avDisplay"><div class="av">YG</div></div>
+<div class="av-opts" id="avOpts">
+<div class="av-opt" onclick="event.stopPropagation();viewPic()"><i class="fas fa-eye"></i> View Picture</div>
+<div class="av-opt" onclick="event.stopPropagation();changePic()"><i class="fas fa-camera"></i> Change Picture</div>
+</div>
+</div>
+</div>
 
-                <div class="user-bio" id="bioPlate">Computer Science student passionate about learning and building innovative solutions.</div>
-                
-                <div class="meta-row">
-                    <div class="meta-cell">
-                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                        <span id="locPlate">Abuja, Nigeria</span>
-                    </div>
-                    <div class="meta-cell">
-                        <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        <span>Joined Jan 2024</span>
-                    </div>
-                </div>
-            </div>
-        </section>
+<div class="info">
+<div class="nm-row">
+<div class="nm">Yusuf Alhaji Garba <i class="fas fa-check-circle vd"></i></div>
+<div class="share-btn" onclick="openShare()"><i class="fas fa-share-alt"></i> Share</div>
+</div>
+<div class="handle">@yusuftsm</div>
+<div class="course-label"><i class="fas fa-code"></i> Software Engineering</div>
+<div class="bio">Federal University Dutse<br>Build my future one step at a time 🚀</div>
+<div class="stats">
+<div class="stat"><div class="stat-num">24</div><div class="stat-label">Posts</div></div>
+<div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">Followers</div></div>
+<div class="stat"><div class="stat-num">320</div><div class="stat-label">Following</div></div>
+<div class="stat"><div class="stat-num">18</div><div class="stat-label">Communities</div></div>
+</div>
+<div class="btns"><div class="btn btn-primary" onclick="window.location.href='edit-profile.html'">Edit Profile</div></div>
+<div class="tabs">
+<div class="tab on" onclick="switchTab('posts',this)">Posts</div>
+<div class="tab" onclick="switchTab('saved',this)">Saved</div>
+</div>
+</div>
 
-        <!-- Stats Boxes Row -->
-        <section class="stats-row">
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #6366f1;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg></div>
-                <div class="stat-num">128</div>
-                <div class="stat-text">Connections</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #22c55e;"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg></div>
-                <div class="stat-num">24</div>
-                <div class="stat-text">Posts</div>
-            </div>
-            <div class="stat-box">
-                <div class="stat-icon" style="color: #eab308;"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
-                <div class="stat-num">1.2K</div>
-                <div class="stat-text">Points</div>
-            </div>
-        </section>
+<div class="posts" id="postsView"></div>
+<div class="saved-empty" id="savedView" style="display:none"><i class="far fa-bookmark"></i><p>No saved posts yet</p></div>
 
-        <!-- Options Links List -->
-        <section class="options-list">
-            <div class="opt-item" onclick="openEditModal()">
-                <div class="opt-icon-wrapper bg-blue"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                <div class="opt-details"><div class="opt-title">Edit Profile</div><div class="opt-subtitle">Update your personal information</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-            <div class="opt-item">
-                <div class="opt-icon-wrapper bg-indigo"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
-                <div class="opt-details"><div class="opt-title">Account & Security</div><div class="opt-subtitle">Manage password and security</div></div>
-                <div class="opt-chevron"><svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><polyline points="9 18 15 12 9 6"></polyline></svg></div>
-            </div>
-        </section>
+<div class="view-ov" id="viewOv" onclick="closeView()"><div class="view-close"><i class="fas fa-times"></i></div><img id="viewImg" src="" alt=""></div>
 
-        <!-- Achievements Slider -->
-        <div class="section-nav"><div class="section-lbl">Achievements</div><a href="#" class="action-lbl">View All</a></div>
-        <div class="badges-slider">
-            <div class="hex-card">
-                <div class="hex-shape hex-purple"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
-                <div class="hex-name">Early Explorer</div><div class="hex-meta">Joined early</div>
-            </div>
-            <div class="hex-card">
-                <div class="hex-shape hex-green"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-                <div class="hex-name">Top Contributor</div><div class="hex-meta">10+ posts</div>
-            </div>
-        </div>
+<div class="em-ov" id="emOv">
+<div class="em-bg" onclick="closeEditMenu()"></div>
+<div class="em-sheet">
+<div class="em-handle"></div>
+<div class="em-item" onclick="closeEditMenu();changePic()"><i class="fas fa-user-circle"></i> Edit Profile Picture</div>
+<div class="em-item" onclick="closeEditMenu();changeCover()"><i class="fas fa-image"></i> Edit Cover Photo</div>
+<div class="em-item" onclick="closeEditMenu();window.location.href='edit-username.html'"><i class="fas fa-at"></i> Edit Username</div>
+<div class="em-div"></div>
+<div class="em-item" onclick="closeEditMenu();toggleLock()"><i class="fas fa-lock" id="lockIcon"></i> <span id="lockText">Lock Profile</span></div>
+</div>
+</div>
 
-        <!-- Tab Bar: An canza su zuwa 'a' Tags na gaskiya domin su kai mutum direct ba tare da jiran JS ba -->
-        <nav class="tab-navigator">
-            <a href="home.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg><span>Home</span></a>
-            <a href="explore.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg><span>Explore</span></a>
-            <a href="chat.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg><span>Chat</span><span class="tab-badge">3</span></a>
-            <a href="studyhub.html" class="tab-cell"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg><span>StudyHub</span></a>
-            <a href="profile.html" class="tab-cell active"><svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Profile</span></a>
-            <div class="home-indicator"></div>
-        </nav>
-    </div>
-    <!-- Edit Profile Bottom Sheet Modal Panel -->
-    <div class="overlay-layer" id="editProfileModal">
-        <div class="bottom-sheet">
-            <div class="sheet-hdr">
-                <div class="sheet-title">Edit Profile Details</div>
-                <button class="sheet-close" onclick="closeEditModal()">✕</button>
-            </div>
-            
-            <!-- Turanci zalla: Upload Photo (Files) vs Take Photo (Camera direct) -->
-            <div class="input-item">
-                <label>Profile Picture</label>
-                <div style="display: flex; gap: 12px; margin-top: 6px;">
-                    <!-- Madannin Upload na Files na ciki -->
-                    <button type="button" onclick="document.getElementById('uploadFromFiles').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-                        Upload Photo
-                    </button>
-                    <!-- Madannin Take Photo na kunna Camera direct -->
-                    <button type="button" onclick="document.getElementById('takeFromCamera').click()" style="flex: 1; background: #f1f5f9; color: #475569; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        Take Photo
-                    </button>
-                </div>
-                <!-- Native core triggers -->
-                <input type="file" id="uploadFromFiles" accept="image/*" style="display: none;" onchange="updateProfileAvatar(this)">
-                <input type="file" id="takeFromCamera" accept="image/*" capture="user" style="display: none;" onchange="updateProfileAvatar(this)">
-            </div>
+<div class="sh-ov" id="shOv">
+<div class="sh-bg" onclick="closeShare()"></div>
+<div class="sh-sheet">
+<div class="sh-handle"></div>
+<div class="sh-head" id="shHead">Share Profile</div>
+<div class="sh-opts" id="shOpts"></div>
+<div class="sh-search" id="shSearch"><input type="text" id="shInput" placeholder="Search..." oninput="searchSh(this.value)"></div>
+<div class="sh-list" id="shList"></div>
+<div class="sh-sel-bar" id="shBar"><div class="sh-sel-count" id="shCount">0 selected</div><div class="sh-sel-btn" onclick="doShare()">Share</div></div>
+</div>
+</div>
 
-            <div class="input-item">
-                <label>Display Name</label>
-                <input type="text" class="input-field" id="inputName" value="Yusuf Alhaji Garba">
-            </div>
-            <div class="input-item">
-                <label>Username</label>
-                <input type="text" class="input-field" id="inputHandle" value="@yusuf_garba">
-            </div>
-            <div class="input-item">
-                <label>Bio Details</label>
-                <input type="text" class="input-field" id="inputBio" value="Computer Science student passionate about learning and building innovative solutions.">
-            </div>
-            <div class="input-item">
-                <label>Location</label>
-                <input type="text" class="input-field" id="inputLoc" value="Abuja, Nigeria">
-            </div>
+<div class="pm-ov" id="pmOv">
+<div class="pm-bg" onclick="closePm()"></div>
+<div class="pm-sheet"><div class="pm-handle"></div><div id="pmItems"></div></div>
+</div>
 
-            <button class="btn-action" onclick="commitChanges()">Save Profile Info</button>
-        </div>
-    </div>
+<input type="file" id="picInput" accept="image/*" style="display:none" onchange="handlePic(this)">
+<input type="file" id="coverInput" accept="image/*" style="display:none" onchange="handleCover(this)">
 
-    <!-- Core Actions JavaScript Engine Logic -->
-    <script>
-        function openEditModal() {
-            var modal = document.getElementById('editProfileModal');
-            if (modal) modal.classList.add('active');
-        }
+<nav class="bnav">
+<div class="nb" onclick="window.location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div>
+<div class="nb" onclick="window.location.href='explore.html'"><i class="fas fa-compass"></i><span>Explore</span></div>
+<div class="nb" onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i><span>Chat</span></div>
+<div class="nb" onclick="window.location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div>
+<div class="nb on" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div>
+</nav>
 
-        function closeEditModal() {
-            var modal = document.getElementById('editProfileModal');
-            if (modal) modal.classList.remove('active');
-        }
+<script>
+    var myPosts=[
+  {id:2,text:'Shared my Data Structures assignment solution. Let me know if you have questions!',likes:32,comments:8,shares:3,liked:false,saved:false,time:Date.now()-86400000,views:456,pinned:false},
+  {id:1,text:'Just finished a great session on Machine Learning basics. Here are some key notes for everyone. Hope it helps!',likes:45,comments:12,shares:8,liked:false,saved:false,time:Date.now()-7200000,views:892,pinned:true},
+  {id:3,text:'Exam tip: Use the Feynman technique. Try explaining the concept to someone who knows nothing about it.',likes:128,comments:34,shares:67,liked:false,saved:false,time:Date.now()-172800000,views:2340,pinned:false}
+];
+var friends=[
+  {id:2,name:'Fatima Muhammad',av:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop'},
+  {id:3,name:'David Okafor',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop'},
+  {id:4,name:'Aisha Bello',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop'},
+  {id:5,name:'Emeka Nwankwo',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop'},
+  {id:6,name:'Halima Yusuf',av:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'},
+  {id:7,name:'Ibrahim Kano',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop'},
+  {id:8,name:'Maryam Ibrahim',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop'},
+  {id:9,name:'Khalid Ali',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop'}
+];
+var groups=[
+  {id:1,name:'Study Group CS300',members:48,av:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100&h=100&fit=crop'},
+  {id:2,name:'Software Engineering Hub',members:120,av:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop'},
+  {id:3,name:'Med Students Forum',members:89,av:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=100&h=100&fit=crop'},
+  {id:4,name:'Engineering Hub',members:67,av:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop'},
+  {id:5,name:'Law Students',members:54,av:'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=100&h=100&fit=crop'}
+];
+var curPicSrc=null,isCustomPic=false,curCoverSrc=null,isCustomCover=false,shMode='',shSelected=[],curPmId=null,isLocked=false;
 
-        function updateProfileAvatar(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const mask = document.querySelector('.avatar-mask');
-                    if (mask) {
-                        mask.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">`;
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
+function ta(t){var s=Math.floor((Date.now()-t)/1000);if(s<60)return'Just now';if(s<3600)return Math.floor(s/60)+'h ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
+function fmtV(v){if(v>=1000)return(v/1000).toFixed(1)+'K';return v.toString()}
+function avH(){if(isCustomPic&&curPicSrc)return'<img class="av" src="'+curPicSrc+'">';return'<div class="av">YG</div>'}
+function pAvH(){if(isCustomPic&&curPicSrc)return'<img class="p-av" src="'+curPicSrc+'">';return'<div class="p-av">YG</div>'}
 
-        function commitChanges() {
-            if (document.getElementById('namePlate')) document.getElementById('namePlate').innerText = document.getElementById('inputName').value;
-            if (document.getElementById('handlePlate')) document.getElementById('handlePlate').innerText = document.getElementById('inputHandle').value;
-            if (document.getElementById('bioPlate')) document.getElementById('bioPlate').innerText = document.getElementById('inputBio').value;
-            if (document.getElementById('locPlate')) document.getElementById('locPlate').innerText = document.getElementById('inputLoc').value;
-          <!-- Tab Bar: An canza icons daidai da hoton ka kuma kowanne yana kai mutum direct shafinsa -->
-        <nav class="tab-navigator">
-            <!-- 1. Home -->
-            <a href="home.html" class="tab-cell">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                </svg>
-                <span>Home</span>
-            </a>
+function renderPosts(){
+  var pinned=myPosts.filter(function(p){return p.pinned});
+  var unpinned=myPosts.filter(function(p){return !p.pinned});
+  var h='';
+  if(pinned.length){h+='<div class="pin-label"><i class="fas fa-thumbtack"></i> Pinned</div>';pinned.forEach(function(p){h+=postH(p)})}
+  unpinned.forEach(function(p){h+=postH(p)});
+  document.getElementById('postsView').innerHTML=h;
+}
+function postH(p){
+  return'<div class="post"><div class="p-hdr">'+pAvH()+'<div class="p-inf"><div class="p-nm">Yusuf Alhaji Garba <i class="fas fa-check-circle vd"></i></div><div class="p-meta">@yusuftsm · '+ta(p.time)+'</div></div><div class="p-more" onclick="openPm('+p.id+')"><i class="fas fa-ellipsis-h"></i></div></div><div class="p-body">'+p.text+'</div><div class="p-acts"><div class="p-a lk '+(p.liked?'on':'')+'" onclick="toggleLike('+p.id+')"><i class="'+(p.liked?'fas':'far')+' fa-heart"></i> '+p.likes+'</div><div class="p-a" onclick="window.location.href=\'comment.html?post='+p.id+'\'"><i class="far fa-comment"></i> '+p.comments+'</div><div class="p-a" onclick="showMsg(\'Shared!\')"><i class="fas fa-retweet"></i> '+p.shares+'</div><div class="p-a p-a-r" onclick="showMsg(\'Views: '+p.views+'\')"><i class="fas fa-chart-bar"></i> '+fmtV(p.views)+'</div></div></div>';
+}
+function toggleLike(id){var p=myPosts.find(function(x){return x.id===id});if(p){p.liked=!p.liked;p.likes+=p.liked?1:-1;renderPosts()}}
+function switchTab(t,el){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});el.classList.add('on');document.getElementById('postsView').style.display=t==='posts'?'block':'none';document.getElementById('savedView').style.display=t==='saved'?'block':'none'}
 
-            <!-- 2. Explore -->
-            <a href="explore.html" class="tab-cell">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                </svg>
-                <span>Explore</span>
-            </a>
+function toggleCoverOpts(){var o=document.getElementById('coverOv');o.style.display=o.style.display==='flex'?'none':'flex'}
+function viewCover(){document.getElementById('coverOv').style.display='none';if(!isCustomCover){showMsg('This is the default cover');return}document.getElementById('viewImg').src=curCoverSrc;document.getElementById('viewOv').classList.add('show')}
+function changeCover(){document.getElementById('coverOv').style.display='none';document.getElementById('coverInput').click()}
+function handleCover(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){curCoverSrc=e.target.result;isCustomCover=true;document.getElementById('coverDisplay').innerHTML='<img class="cover-img" src="'+curCoverSrc+'">';showMsg('Cover photo updated!')};r.readAsDataURL(f);inp.value=''}
+function closeView(){document.getElementById('viewOv').classList.remove('show')}
 
-            <!-- 3. Chat -->
-            <a href="chat.html" class="tab-cell">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    <circle cx="8" cy="10" r="1" fill="currentColor"></circle>
-                    <circle cx="12" cy="10" r="1" fill="currentColor"></circle>
-                    <circle cx="16" cy="10" r="1" fill="currentColor"></circle>
-                </svg>
-                <span class="tab-badge">3</span>
-                <span>Chat</span>
-            </a>
+function toggleAvOpts(){var o=document.getElementById('avOpts');o.classList.toggle('show');setTimeout(function(){document.addEventListener('click',function c(){o.classList.remove('show');document.removeEventListener('click',c)},{once:true})},10)}
+function viewPic(){document.getElementById('avOpts').classList.remove('show');if(!isCustomPic){showMsg('No custom picture yet');return}document.getElementById('viewImg').src=curPicSrc;document.getElementById('viewOv').classList.add('show')}
+function changePic(){document.getElementById('avOpts').classList.remove('show');document.getElementById('picInput').click()}
+function handlePic(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){curPicSrc=e.target.result;isCustomPic=true;document.getElementById('avDisplay').innerHTML=avH();renderPosts();showMsg('Profile picture updated!')};r.readAsDataURL(f);inp.value=''}
 
-            <!-- 4. StudyHub -->
-            <a href="studyhub.html" class="tab-cell">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                <span>StudyHub</span>
-            </a>
+function openEditMenu(){document.getElementById('emOv').classList.add('show')}
+function closeEditMenu(){document.getElementById('emOv').classList.remove('show')}
+function toggleLock(){isLocked=!isLocked;document.getElementById('lockIcon').className=isLocked?'fas fa-lock-open':'fas fa-lock';document.getElementById('lockText').textContent=isLocked?'Unlock Profile':'Lock Profile';showMsg(isLocked?'Profile locked':'Profile unlocked')}
 
-            <!-- 5. Profile -->
-            <a href="profile.html" class="tab-cell active">
-                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span>Profile</span>
-            </a>
-            <div class="home-indicator"></div>
-        </nav>
-            closeEditModal();
-        }
-    </script>
-    <!-- Ƙarin code don canza girman icons da verified mark ba tare da canza ainihin HTML ba -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // 1. Canza Verified Checkmark ya zama Katuwar Tiki (✓) kalar Blue
-            const namePlateContainer = document.querySelector('.name-wrapper');
-            if (namePlateContainer) {
-                // Fara cire duk wani SVG na verified da ke ciki (kamar tsohon tauraron nan)
-                const oldVerified = namePlateContainer.querySelector('svg');
-                if (oldVerified) {
-                    oldVerified.parentElement.remove(); // Cire <span> da ke rike da svg din
-                }
-                
-                // Saka sabon verified checkmark (Blue Tick)
-                const blueTick = document.createElement('span');
-                blueTick.className = 'blue-tick';
-                blueTick.style.display = 'inline-flex';
-                blueTick.style.alignItems = 'center';
-                blueTick.style.marginLeft = '4px'; // Dan bada tazara
-                
-                // Kalar tana nan daidai da na hoton (Indigo/Blue)
-                blueTick.innerHTML = `
-                    <svg viewBox="0 0 24 24" width="20" height="20" stroke="#4f46e5" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                `;
-                namePlateContainer.appendChild(blueTick);
-            }
+function openShare(){shMode='';shSelected=[];document.getElementById('shHead').textContent='Share Profile';document.getElementById('shOpts').innerHTML='<div class="sh-opt" onclick="startSG()"><div class="sh-opt-ic" style="background:rgba(124,58,237,.12);color:#a855f7"><i class="fas fa-users"></i></div><div><div class="sh-opt-nm">Share to Group</div><div class="sh-opt-sub">Share your profile link in a group</div></div></div><div class="sh-opt" onclick="startSF()"><div class="sh-opt-ic" style="background:rgba(16,185,129,.12);color:#10b981"><i class="fas fa-user-friends"></i></div><div><div class="sh-opt-nm">Share to Friend</div><div class="sh-opt-sub">Send your profile link to a friend</div></div></div><div class="sh-opt" onclick="copyPL()"><div class="sh-opt-ic" style="background:rgba(59,130,246,.12);color:#3b82f6"><i class="fas fa-link"></i></div><div><div class="sh-opt-nm">Copy Link</div><div class="sh-opt-sub">Copy your profile link to clipboard</div></div></div>';document.getElementById('shOpts').style.display='';document.getElementById('shSearch').classList.remove('show');document.getElementById('shList').classList.remove('show');document.getElementById('shBar').classList.remove('show');document.getElementById('shOv').classList.add('show')}
+function closeShare(){document.getElementById('shOv').classList.remove('show')}
+function startSG(){shMode='group';shSelected=[];document.getElementById('shHead').textContent='Share to Group';document.getElementById('shOpts').style.display='none';document.getElementById('shSearch').classList.add('show');document.getElementById('shInput').placeholder='Search groups...';document.getElementById('shInput').value='';document.getElementById('shList').classList.add('show');renderSL(groups);updateSB()}
+function startSF(){shMode='friend';shSelected=[];document.getElementById('shHead').textContent='Share to Friend';document.getElementById('shOpts').style.display='none';document.getElementById('shSearch').classList.add('show');document.getElementById('shInput').placeholder='Search friends...';document.getElementById('shInput').value='';document.getElementById('shList').classList.add('show');renderSL(friends);updateSB()}
+function renderSL(list){var el=document.getElementById('shList');if(!list.length){el.innerHTML='<div class="no-res">No results found</div>';return}el.innerHTML=list.map(function(i){var s=shSelected.indexOf(i.id)!==-1;return'<div class="sh-item '+(s?'sel':'')+'" onclick="toggleSS('+i.id+')"><img src="'+i.av+'"><div class="sh-inf"><div class="sh-nm">'+i.name+'</div>'+(shMode==='group'?'<div class="sh-sub">'+i.members+' members</div>':'')+'</div><div class="sh-chk"><i class="fas fa-check"></i></div></div>'}).join('')}
+function searchSh(v){var l=shMode==='group'?groups:friends;if(v.length<1){renderSL(l);return}var q=v.toLowerCase();renderSL(l.filter(function(i){return i.name.toLowerCase().indexOf(q)!==-1}))}
+function toggleSS(id){var i=shSelected.indexOf(id);if(i===-1)shSelected.push(id);else shSelected.splice(i,1);var l=shMode==='group'?groups:friends;var v=document.getElementById('shInput').value;if(v.length>=1){var q=v.toLowerCase();l=l.filter(function(i){return i.name.toLowerCase().indexOf(q)!==-1})}renderSL(l);updateSB()}
+function updateSB(){var b=document.getElementById('shBar');if(shSelected.length>0){b.classList.add('show');document.getElementById('shCount').textContent=shSelected.length+' selected'}else{b.classList.remove('show')}}
+function doShare(){if(!shSelected.length)return;var t=shMode==='group'?'group'+(shSelected.length>1?'s':''):'friend'+(shSelected.length>1?'s':'');closeShare();showMsg('Profile shared to '+shSelected.length+' '+t+'!');shSelected=[]}
+function copyPL(){closeShare();if(navigator.clipboard)navigator.clipboard.writeText(window.location.href);showMsg('Profile link copied!')}
 
-            // 2. Kara girma da kaurin Icons din kasa (Tab Navigator)
-            const tabIcons = document.querySelectorAll('.tab-navigator .tab-cell svg:not(.tab-badge)');
-            tabIcons.forEach(icon => {
-                // Kara girma zuwa 28px
-                icon.setAttribute('width', '28');
-                icon.setAttribute('height', '28');
-                // Kara kauri (stroke-width)
-                icon.setAttribute('stroke-width', '2.2');
-                // Saka musu rounded corners kamar yadda ake yi wa icons
-                icon.setAttribute('stroke-linecap', 'round');
-                icon.setAttribute('stroke-linejoin', 'round');
-            });
-            
-            // Kara girman rubutun kasansu kadan don ya hau da icons din
-            const tabTexts = document.querySelectorAll('.tab-navigator .tab-cell span:not(.tab-badge)');
-            tabTexts.forEach(text => {
-                text.style.fontSize = '11.5px';
-                text.style.marginTop = '4px';
-            });
-            
-            // Idan akwai alamar badge (kamar ta chat) mu gyara ta kar ta bace
-            const badges = document.querySelectorAll('.tab-navigator .tab-badge');
-            badges.forEach(badge => {
-                badge.style.top = '-2px';
-                badge.style.right = '20%';
-                badge.style.fontSize = '10px';
-            });
-        });
-                                  </script>
-    <!-- Kod din gyara madannai da kuma Verified Checkmark na shafin Profile -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // A. SAUKA DA SABABBIN ICONS NA KASA
-            const navBar = document.querySelector('.tab-navigator');
-            if (navBar) {
-                navBar.innerHTML = `
-                    <svg width="0" height="0" style="position:absolute;"><defs>
-                        <linearGradient id="premiumGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8b5cf6" /><stop offset="100%" stop-color="#3b82f6" /></linearGradient>
-                        <linearGradient id="exploreGrad" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#10b981" /><stop offset="100%" stop-color="#06b6d4" /></linearGradient>
-                    </defs></svg>
-                    <a href="home.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V21a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path><path d="M10 14h4v7h-4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Home</span>
-                    </a>
-                    <a href="explore.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#exploreGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="url(#exploreGrad)"></polygon></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Explore</span>
-                    </a>
-                    <a href="chat.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; position: relative; padding: 6px 0;">
-                        <div style="position: absolute; top: 0px; right: 20%; background-color: #ef4444; color: white; font-size: 10px; font-weight: bold; width: 17px; height: 17px; display: flex; justify-content: center; align-items: center; border-radius: 50%; border: 1.5px solid white; z-index: 10;">3</div>
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path><circle cx="8" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="12" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle><circle cx="16" cy="11.5" r="1.2" fill="url(#premiumGrad)" stroke="none"></circle></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Chat</span>
-                    </a>
-                    <a href="studyhub.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V5a2 2 0 0 0-2-2H4v16h6a2 2 0 0 1 2 2z"></path><path d="M12 21V5a2 2 0 0 1 2-2h6v16h-6a2 2 0 0 0-2 2z"></path><line x1="7" y1="9" x2="9" y2="9"></line><line x1="7" y1="13" x2="9" y2="13"></line><path d="M15 4v6l1.5-1.2L18 10V4z" fill="url(#premiumGrad)" stroke="none"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">StudyHub</span>
-                    </a>
-                    <a href="profile.html" style="display: flex; flex-direction: column; align-items: center; text-decoration: none; flex: 1; padding: 6px 0;">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="url(#premiumGrad)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="10" r="3"></circle><path d="M6 19a6 6 0 0 1 12 0"></path></svg>
-                        <span style="font-size: 12px; font-weight: 600; color: #475569; margin-top: 5px;">Profile</span>
-                    </a>
-                `;
-                navBar.style.display = 'flex';
-                navBar.style.justifyContent = 'space-around';
-                navBar.style.alignItems = 'center';
-                navBar.style.paddingBottom = '10px';
-            }
+function openPm(id){curPmId=id;var p=myPosts.find(function(x){return x.id===id});document.getElementById('pmItems').innerHTML='<div class="pm-item" onclick="closePm();pinP('+id+')"><i class="fas fa-thumbtack"></i> '+(p.pinned?'Unpin Post':'Pin Post to Profile')+'</div><div class="pm-item" onclick="closePm();showMsg(\'Viewing post analysis\')"><i class="fas fa-chart-line"></i> View Post Analysis</div><div class="pm-item" onclick="closePm();showMsg(\'Commenting turned off\')"><i class="fas fa-comment-slash"></i> Turn Off Commenting</div><div class="pm-div"></div><div class="pm-item dng" onclick="closePm();delP('+id+')"><i class="fas fa-trash"></i> Delete Post</div>';document.getElementById('pmOv').classList.add('show')}
+function closePm(){document.getElementById('pmOv').classList.remove('show')}
+function pinP(id){var p=myPosts.find(function(x){return x.id===id});if(p){p.pinned=!p.pinned;renderPosts();showMsg(p.pinned?'Post pinned':'Post unpinned')}}
+function delP(id){myPosts=myPosts.filter(function(x){return x.id!==id});renderPosts();showMsg('Post deleted')}
 
-            // B. CHANCHA VERIFIED MARKS ZUWA BLUE TICK RADAU
-            const nameWrapper = document.querySelector('.name-wrapper');
-            if (nameWrapper) {
-                const oldCheck = nameWrapper.querySelector('svg');
-                if (oldCheck) { oldCheck.parentElement.remove(); }
-                
-                const blueTickSpan = document.createElement('span');
-                blueTickSpan.style.display = 'inline-flex';
-                blueTickSpan.style.alignItems = 'center';
-                blueTickSpan.style.marginLeft = '5px';
-                blueTickSpan.innerHTML = `
-                    <svg viewBox="0 0 24 24" width="19" height="19" stroke="#4f46e5" stroke-width="3.8" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                `;
-                nameWrapper.appendChild(blueTickSpan);
-            }
-        });
-    </script>
+function showMsg(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2500)}
+renderPosts();
+</script>
 </body>
 </html>
