@@ -257,6 +257,26 @@ renderFeed();
             window.location.href = 'story.html';
         }
     });
+    <!-- Misalin yadda story circle ɗinka ya kamata ya kalli a HTML -->
+<div class="story-circle" data-story="true">
+    <img src="fatima.jpg" alt="Fatima">
+</div>
+  <script>
+    document.addEventListener('click', function(event) {
+        // Mun nemo ko abin da aka danna, ko uban sa, yana da alamar 'data-story'
+        const storyElement = event.target.closest('[data-story="true"]');
+        
+        if (storyElement) {
+            // Mun hana wasu scripts su ci gaba da gudana domin su karye wannan
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Sai ka kai direct zuwa story.html
+            window.location.href = 'story.html';
+            return false;
+        }
+    }, true); // Mun saka 'true' domin ya kama click ɗin kafin duk wani code
+</script>  
   </script>
 </body>
 </html>
