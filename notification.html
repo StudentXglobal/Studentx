@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Notifications</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:70px}
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.hdr-back{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:17px}
+.hdr-title{font-size:18px;font-weight:800}
+.hdr-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:15px;transition:all .15s}
+.hdr-btn:hover{background:rgba(124,58,237,.1);color:#a855f7}
+
+.tabs{display:flex;gap:8px;padding:14px 14px 6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:7px 16px;border-radius:20px;font-size:12px;font-weight:600;color:rgba(255,255,255,.35);white-space:nowrap;border:1px solid rgba(255,255,255,.06);transition:all .2s;cursor:pointer}
+.tab.on{background:linear-gradient(135deg,#7c3aed,#a855f7);border-color:transparent;color:#fff}
+.tab .badge{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:50%;background:#ef4444;font-size:10px;font-weight:700;color:#fff;margin-left:5px;padding:0 4px}
+
+.sect{padding:0 14px;margin-bottom:20px}
+.sect-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.sect-title a{font-size:11px;color:#a855f7;font-weight:600;text-transform:none;letter-spacing:0}
+
+.notif{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;transition:background .12s}
+.notif:active{background:rgba(124,58,237,.06);margin:0 -14px;padding:14px;border-radius:12px}
+.notif.unread{background:rgba(124,58,237,.04);margin:0 -14px;padding:14px;border-radius:12px;border-bottom-color:rgba(124,58,237,.08)}
+.notif-av{width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.notif-ic{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.notif-body{flex:1;min-width:0}
+.notif-text{font-size:13px;line-height:1.5;color:rgba(255,255,255,.7)}
+.notif-text strong{color:#fff;font-weight:700}
+.notif-time{font-size:10px;color:rgba(255,255,255,.25);margin-top:3px}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:#a855f7;flex-shrink:0;margin-top:6px}
+.notif-act{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-size:14px;flex-shrink:0;transition:all .12s;margin-top:2px}
+.notif-act:hover{background:rgba(124,58,237,.1);color:#a855f7}
+.follow-btn{margin-top:8px;padding:7px 18px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:11px;font-weight:700;border:none;cursor:pointer;transition:transform .15s}
+.follow-btn:hover{transform:scale(1.03)}
+.follow-btn.done{background:rgba(255,255,255,.06);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.08)}
+
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;display:flex;align-items:center;justify-content:space-around;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);z-index:200}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:500;color:rgba(255,255,255,.3);transition:color .2s}
+.nb i{font-size:19px}
+.nb.on{color:#a855f7}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-l">
+<div class="hdr-back" onclick="window.history.back()"><i class="fas fa-arrow-left"></i></div>
+<div class="hdr-title">Notifications</div>
+</div>
+<div class="hdr-btn" onclick="markAllRead()"><i class="fas fa-check-double"></i></div>
+</header>
+
+<div class="tabs" id="tabBar"></div>
+
+<div id="notifList"></div>
+
+<nav class="bnav">
+<div class="nb" onclick="window.location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div>
+<div class="nb" onclick="window.location.href='explore.html'"><i class="fas fa-compass"></i><span>Explore</span></div>
+<div class="nb" onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i><span>Chat</span></div>
+<div class="nb" onclick="window.location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div>
+<div class="nb" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div>
+</nav>
+
+<script>
+var notifs=[
+  {id:1,type:'like',user:'Fatima Muhammad',av:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop',text:'liked your post "Just finished a great session on Machine Learning basics"',time:Date.now()-300000,read:false,pg:'home.html'},
+  {id:2,type:'comment',user:'David Okafor',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',text:'commented: "This is really helpful! Thanks for sharing"',time:Date.now()-600000,read:false,pg:'home.html'},
+  {id:3,type:'follow',user:'Aisha Bello',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',text:'started following you',time:Date.now()-1800000,read:false,pg:'profile-aisha.html',followBack:true},
+  {id:4,type:'system',icon:'fa-bullhorn',color:'#7c3aed',text:'StudentX Plus is here! Upgrade for ad-free experience, AI Pro access, and more.',time:Date.now()-3600000,read:false},
+  {id:5,type:'like',user:'Halima Yusuf',av:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',text:'liked your post "Exam tip: Use the Feynmann technique"',time:Date.now()-7200000,read:true,pg:'home.html'},
+  {id:6,type:'comment',user:'Emeka Nwankwo',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',text:'replied to your comment: "Can you share the PDF?" - "Sure, sending now"',time:Date.now()-10800000,read:true,pg:'home.html'},
+  {id:7,type:'system',icon:'fa-shield-halved',color:'#10b981',text:'Your account security has been verified successfully. You are now a verified student!',time:Date.now()-14400000,read:true},
+  {id:8,type:'follow',user:'Ibrahim Kano',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',text:'started following you',time:Date.now()-18000000,read:true,pg:'profile-ibrahim.html',followBack:false},
+  {id:9,type:'like',user:'Maryam Ibrahim',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',text:'liked your comment on Fatima\'s post',time:Date.now()-21600000,read:true,pg:'home.html'},
+  {id:10,type:'system',icon:'fa-graduation-cap',color:'#f59e0b',text:'New course available: "Introduction to Machine Learning" in StudyHub. Enroll now!',time:Date.now()-28800000,read:true},
+  {id:11,type:'comment',user:'Khalid Ali',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',text:'mentioned you in Study Group CS300: "Check what @yusuftsm shared"',time:Date.now()-36000000,read:true,pg:'chat-group-cs300.html'},
+  {id:12,type:'system',icon:'fa-fire',color:'#ef4444',text:'Your post "Exam tip: Use the Feynman technique" is trending! 2.3K views and counting.',time:Date.now()-43200000,read:true}
+];
+
+var currentTab='all';
+var tabData=[
+  {k:'all',l:'All',count:0},
+  {k:'likes',l:'Likes',count:0},
+  {k:'comments',l:'Comments',count:0},
+  {k:'follows',l:'Follows',count:0},
+  {k:'system',l:'System',count:0}
+];
+
+function ta(t){var s=Math.floor((Date.now()-t)/1000);if(s<60)return'Just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';if(s<604800)return Math.floor(s/86400)+'d ago';return Math.floor(s/604800)+'w ago'}
+
+function countTabs(){
+  tabData.forEach(function(t){
+    if(t.k==='all')t.count=notifs.filter(function(n){return !n.read}).length;
+    else if(t.k==='likes')t.count=notifs.filter(function(n){return n.type==='like'&&!n.read}).length;
+    else if(t.k==='comments')t.count=notifs.filter(function(n){return n.type==='comment'&&!n.read}).length;
+    else if(t.k==='follows')t.count=notifs.filter(function(n){return n.type==='follow'&&!n.read}).length;
+    else if(t.k==='system')t.count=notifs.filter(function(n){return n.type==='system'&&!n.read}).length;
+  });
+}
+
+function renderTabs(){
+  countTabs();
+  document.getElementById('tabBar').innerHTML=tabData.map(function(t){
+    return'<div class="tab '+(currentTab===t.k?'on':'')+'" onclick="switchTab(\''+t.k+'\')">'+t.l+(t.count>0?'<span class="badge">'+t.count+'</span>':'')+'</div>';
+  }).join('');
+}
+
+function getFiltered(){
+  if(currentTab==='all')return notifs;
+  return notifs.filter(function(n){return n.type===currentTab});
+}
+
+function renderNotifs(){
+  var list=getFiltered();
+  var el=document.getElementById('notifList');
+  if(!list.length){el.innerHTML='<div style="text-align:center;padding:60px 20px;color:rgba(255,255,255,.15)"><i class="far fa-bell-slash" style="font-size:36px;display:block;margin-bottom:12px"></i><p style="font-size:13px">No notifications here</p></div>';return}
+  
+  var h='';
+  list.forEach(function(n){
+    var isFollow=n.type==='follow';
+    var isSystem=n.type==='system';
+    var isUnread=!n.read;
+
+    h+='<div class="notif '+(isUnread?'unread':'')+'" onclick="handleNotif('+n.id+')">';
+
+    if(isSystem){
+      h+='<div class="notif-ic" style="background:rgba(124,58,237,.1);color:'+n.color+'"><i class="fas '+n.icon+'"></i></div>';
+    } else {
+      h+='<img class="notif-av" src="'+n.av+'" onclick="event.stopPropagation();window.location.href=\''+n.pg+'\'" alt="">';
+    }
+
+    h+='<div class="notif-body">';
+    h+='<div class="notif-text">';
+    if(!isSystem)h+='<strong>'+n.user+'</strong> ';
+    h+=n.text;
+    h+='</div>';
+    h+='<div class="notif-time">'+ta(n.time)+'</div>';
+
+    if(isFollow && !n.followBack){
+      h+='<button class="follow-btn" onclick="event.stopPropagation();followBack('+n.id+')">Follow Back</button>';
+    }
+
+    h+='</div>';
+
+    if(isUnread)h+='<div class="notif-dot"></div>';
+    h+='</div>';
+  });
+
+  el.innerHTML=h;
+}
+
+function switchTab(k){
+  currentTab=k;
+  renderTabs();
+  renderNotifs();
+}
+
+function handleNotif(id){
+  var n=notifs.find(function(x){return x.id===id});
+  if(!n)return;
+  if(n.pg && n.type!=='system' && n.type!=='follow'){
+    window.location.href=n.pg;
+    return;
+  }
+  if(n.type==='follow' && n.followBack){
+    return;
+  }
+  n.read=true;
+  renderTabs();
+  renderNotifs();
+  showMsg('Notification marked as read');
+}
+
+function followBack(id){
+  var n=notifs.find(function(x){return x.id===id});
+  if(n){n.followBack=false;n.read=true;renderTabs();renderNotifs();showMsg('Following '+n.user+'!')}
+}
+
+function markAllRead(){
+  notifs.forEach(function(n){n.read=true});
+  renderTabs();
+  renderNotifs();
+  showMsg('All notifications marked as read');
+}
+
+function showMsg(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2500)}
+
+renderTabs();
+renderNotifs();
+</script>
+</body>
+</html>
