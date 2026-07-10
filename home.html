@@ -245,5 +245,14 @@ function showMsg(t){
 renderStories();
 renderFeed();
 </script>
+    document.querySelectorAll('.story-link').forEach(card => {
+        card.addEventListener('click', function() {
+            const url = this.getAttribute('data-url');
+            if (url) {
+                window.location.href = url;
+            }
+        });
+    });
+</script>
 </body>
 </html>
