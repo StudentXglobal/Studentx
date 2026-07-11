@@ -28,5 +28,22 @@ signupBtn.addEventListener("click", function (e) {
         return;
     }
 
-    alert("Success! Form validation passed.");
+    const { data, error } = await supabase.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+        data: {
+            full_name: fullName,
+            username: username,
+            university: university
+        }
+    }
+});
+
+if (error) {
+    alert(error.message);
+    return;
+}
+
+alert("Account created successfully!\n\nPlease check your email and click the verification link.");
 });
