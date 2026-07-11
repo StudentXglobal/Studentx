@@ -1,7 +1,6 @@
-// Get form elements
 const signupBtn = document.getElementById("signupBtn");
 
-signupBtn.addEventListener("click", function (e) {
+signupBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
     const fullName = document.getElementById("fullName").value.trim();
@@ -28,5 +27,23 @@ signupBtn.addEventListener("click", function (e) {
         return;
     }
 
-    alert("Success! Form validation passed.");
+    const { data, error } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            emailRedirectTo: "https://studentx-ew9e.vercel.app",
+            data: {
+                full_name: fullName,
+                username: username,
+                university: university
+            }
+        }
+    });
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    alert("Account created successfully! Please check your email to verify your account.");
 });
