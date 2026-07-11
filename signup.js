@@ -24,6 +24,7 @@ signupBtn.addEventListener("click", async function (e) {
         return;
     }
 
+    alert("Connecting to Supabase...");
     if (password !== confirmPassword) {
         alert("Passwords do not match.");
         return;
