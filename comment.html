@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comments - StudentX</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding-bottom: 70px;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #2c2c2c;
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            z-index: 100;
+        }
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            margin-right: 15px;
+            line-height: 1;
+        }
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .post-info {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            border-bottom: 1px solid #2c2c2c;
+        }
+        .post-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .post-info-text {
+            font-size: 14px;
+            color: #b0b3b8;
+        }
+        .post-info-text strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .comments-list {
+            padding: 15px;
+        }
+        .comment-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .comment-item img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .comment-main {
+            flex-grow: 1;
+        }
+        .comment-content {
+            background-color: #1e1e1e; 
+            padding: 10px 15px;
+            border-radius: 18px;
+            display: inline-block;
+            max-width: 90%;
+        }
+        .comment-user {
+            color: #fff;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 3px;
+        }
+        .comment-text {
+            color: #e4e6eb;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .comment-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 5px;
+            margin-left: 10px;
+        }
+        .action-btn {
+            background: none;
+            border: none;
+            color: #b0b3b8;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 0;
+        }
+        .action-btn.liked {
+            color: #8A2BE2;
+        }
+        .comment-time {
+            color: #b0b3b8;
+            font-size: 11px;
+        }
+        .reply-input-area {
+            display: none;
+            gap: 10px;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        .reply-input-area input {
+            flex-grow: 1;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 8px 12px;
+            color: #fff;
+            outline: none;
+            font-size: 13px;
+        }
+        .reply-input-area input:focus {
+            border-color: #8A2BE2;
+        }
+        .post-reply-btn {
+            color: #8A2BE2;
+            background: none;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .replies-list {
+            margin-top: 10px;
+            margin-left: 15px;
+            border-left: 2px solid #2c2c2c;
+            padding-left: 10px;
+        }
+        .comment-input-area {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: #121212;
+            border-top: 1px solid #2c2c2c;
+        }
+        .comment-input-area img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .comment-input-area input {
+            flex-grow: 1;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 20px;
+            padding: 10px 15px;
+            color: #fff;
+            outline: none;
+            font-size: 14px;
+        }
+        .comment-input-area input::placeholder {
+            color: #b0b3b8;
+        }
+        .post-comment-btn {
+            background-color: transparent;
+            color: #8A2BE2;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="home.html" class="back-btn">&larr;</a>
+        <div class="header-title">Comments</div>
+    </div>
+
+    <div class="post-info">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Fatima">
+        <div class="post-info-text">
+            <strong>Fatima Muhammad</strong>
+            Shared "Data Structures & Algorithms.pdf" (4.2 MB)
+        </div>
+    </div>
+
+    <div class="comments-list" id="commentsList">
+        <div class="comment-item">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="David">
+            <div class="comment-main">
+                <div class="comment-content">
+                    <div class="comment-user">David Okafor</div>
+                    <div class="comment-text">Great post! I have a question though, can someone explain the 2nd law of thermodynamics?</div>
+                </div>
+                <div class="comment-actions">
+                    <button class="action-btn like-btn">Like</button>
+                    <button class="action-btn reply-btn">Reply</button>
+                    <span class="comment-time">1h</span>
+                </div>
+                <div class="replies-list"></div>
+                <div class="reply-input-area">
+                    <input type="text" placeholder="Write a reply...">
+                    <button class="post-reply-btn">Reply</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="comment-item">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop" alt="Aisha">
+            <div class="comment-main">
+                <div class="comment-content">
+                    <div class="comment-user">Aisha Bello</div>
+                    <div class="comment-text">Thanks for sharing this! It really helped me with my assignment.</div>
+                </div>
+                <div class="comment-actions">
+                    <button class="action-btn like-btn">Like</button>
+                    <button class="action-btn reply-btn">Reply</button>
+                    <span class="comment-time">45m</span>
+                </div>
+                <div class="replies-list"></div>
+                <div class="reply-input-area">
+                    <input type="text" placeholder="Write a reply...">
+                    <button class="post-reply-btn">Reply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="comment-input-area">
+        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100&h=100&fit=crop" alt="You">
+        <input type="text" id="commentInput" placeholder="Write a comment...">
+        <button class="post-comment-btn" id="postCommentBtn">Post</button>
+                  </div>
+                      <script>
+        const commentsList = document.getElementById('commentsList');
+        const postBtn = document.getElementById('postCommentBtn');
+        const commentInput = document.getElementById('commentInput');
+
+        // Aikin tura sabon comment
+        postBtn.addEventListener('click', function() {
+            const text = commentInput.value.trim();
+            if (text !== '') {
+                const newComment = `
+                    <div class="comment-item">
+                        <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100&h=100&fit=crop" alt="You">
+                        <div class="comment-main">
+                            <div class="comment-content">
+                                <div class="comment-user">Yusuf Alhaji Garba</div>
+                                <div class="comment-text">${text}</div>
+                            </div>
+                            <div class="comment-actions">
+                                <button class="action-btn like-btn">Like</button>
+                                <button class="action-btn reply-btn">Reply</button>
+                                <span class="comment-time">Just now</span>
+                            </div>
+                            <div class="replies-list"></div>
+                            <div class="reply-input-area">
+                                <input type="text" placeholder="Write a reply...">
+                                <button class="post-reply-btn">Reply</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                commentsList.insertAdjacentHTML('beforeend', newComment);
+                commentInput.value = '';
+                commentsList.scrollTop = commentsList.scrollHeight; // Sauke shafin ƙasa don ganin sabon comment
+            }
+        });
+
+        // Aikin Like da Reply
+        commentsList.addEventListener('click', function(event) {
+            // Idan an danna Like
+            if (event.target.classList.contains('like-btn')) {
+                if (event.target.classList.contains('liked')) {
+                    event.target.classList.remove('liked');
+                    event.target.innerText = 'Like';
+                } else {
+                    event.target.classList.add('liked');
+                    event.target.innerText = 'Liked';
+                }
+            }
+
+            // Idan an danna Reply (Don buɗe akwatin)
+            if (event.target.classList.contains('reply-btn')) {
+                const commentMain = event.target.closest('.comment-main');
+                const replyInput = commentMain.querySelector('.reply-input-area');
+                replyInput.style.display = 'flex';
+                replyInput.querySelector('input').focus();
+            }
+
+            // Idan an tura Reply
+            if (event.target.classList.contains('post-reply-btn')) {
+                const replyInputArea = event.target.parentElement;
+                const inputField = replyInputArea.querySelector('input');
+                const replyText = inputField.value.trim();
+                
+                if (replyText !== '') {
+                    const repliesList = replyInputArea.previousElementSibling;
+                    const newReply = `
+                        <div class="comment-item" style="margin-top: 10px;">
+                            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100&h=100&fit=crop" alt="You">
+                            <div class="comment-main">
+                                <div class="comment-content">
+                                    <div class="comment-user">Yusuf Alhaji Garba</div>
+                                    <div class="comment-text">${replyText}</div>
+                                </div>
+                                <div class="comment-actions">
+                                    <button class="action-btn like-btn">Like</button>
+                                    <span class="comment-time">Just now</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    repliesList.insertAdjacentHTML('beforeend', newReply);
+                    inputField.value = '';
+                    replyInputArea.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
