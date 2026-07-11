@@ -81,7 +81,7 @@ body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100
 <body>
 <header class="hdr">
 <div class="hdr-l">
-<div class="hdr-menu" onclick="window.location.href='menu.html'"><i class="fas fa-bars"></i></div>
+<div class="hdr-menu" onclick="window.location.href='menu.html'"
 <div class="hdr-logo">Student<b>X</b></div>
 </div>
 <div class="hdr-r">
@@ -90,7 +90,7 @@ body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100
 </div>
 </header>
 
-  <div class="story-circle" onclick="window.location.href='story.html'" style="cursor: pointer;">
+<div class="stories" id="stories"></div>
 
 <div class="cpb" onclick="window.location.href='create-post.html'">
 <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" onclick="event.stopPropagation();window.location.href='profile.html'" alt="">
@@ -244,39 +244,6 @@ function showMsg(t){
 
 renderStories();
 renderFeed();
-
 </script>
-  <script>
-    // Wannan zai saurari dukkan clicks a shafin
-    document.addEventListener('click', function(event) {
-        // Idan abin da aka danna (ko uban sa) yana da class ɗin 'story-circle'
-        const circle = event.target.closest('.story-circle');
-        
-        if (circle) {
-            // Idan an same shi, kai direct zuwa story.html
-            window.location.href = 'story.html';
-        }
-    });
-    <!-- Misalin yadda story circle ɗinka ya kamata ya kalli a HTML -->
-<div class="story-circle" data-story="true">
-    <img src="fatima.jpg" alt="Fatima">
-</div>
-  <script>
-    document.addEventListener('click', function(event) {
-        // Mun nemo ko abin da aka danna, ko uban sa, yana da alamar 'data-story'
-        const storyElement = event.target.closest('[data-story="true"]');
-        
-        if (storyElement) {
-            // Mun hana wasu scripts su ci gaba da gudana domin su karye wannan
-            event.preventDefault();
-            event.stopPropagation();
-            
-            // Sai ka kai direct zuwa story.html
-            window.location.href = 'story.html';
-            return false;
-        }
-    }, true); // Mun saka 'true' domin ya kama click ɗin kafin duk wani code
-</script>  
-  </script>
 </body>
 </html>
