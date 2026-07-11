@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Story - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css.all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;overflow:hidden;position:fixed;inset:0}
+.st-bar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.st-back{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.5);font-size:16px;flex-shrink:0}
+.st-name{font-size:15px;font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-viewers{font-size:12px;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:4px;flex-shrink:0}
+
+.st-circles{position:fixed;top:64px;left:50%;transform:translateX(-50%);width:100%;max-width:430px;display:flex;gap:12px;padding:8px 16px;overflow-x:auto;scrollbar-width:none;z-index:90}
+.st-circles::-webkit-scrollbar{display:none}
+.st-c{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;cursor:pointer}
+.st-ring{width:64px;height:64px;border-radius:50%;padding:2.5px;background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);transition:transform .2s}
+.st-ring.seen{background:rgba(255,255,255,.1)}
+.st-ring:hover{transform:scale(1.06)}
+.st-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2.5px solid #0a0a0f}
+.st-add{width:64px;height:64px;border-radius:50%;border:2px dashed rgba(124,58,237,.5);display:flex;align-items:center;justify-content:center;font-size:24px;color:#a855f7;background:rgba(124,58,37,.06);transition:all .2s}
+.st-add:hover{background:rgba(124,58,37,.12);border-color:rgba(124,58,37,.5)}
+.st-nm{font-size:10px;color:rgba(255,255,255,.4);max-width:66px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-plus{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;position:absolute;bottom:0;right:0;border:2px solid #0a0a0f}
+
+/* STORY VIEWER */
+.st-view{position:fixed;inset:0;z-index:50;display:none;flex-direction:column;background:#000}
+.st-view.show{display:flex}
+.st-media{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.st-media img{width:100%;height:100%;object-fit:contain}
+.st-video{width:100%;height:100%;object-fit:cover}
+.st-prog{position:absolute;bottom:0;left:0;right:0;height:3px;background:rgba(255,255,255,.15);z-index:10}
+.st-prog-bar{height:100%;background:linear-gradient(90deg,#7c3aed,#a855f7);border-radius:3px;transition:width .1s linear}
+.st-timer{position:absolute;top:16px;right:16px;padding:6px 14px;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);border-radius:20px;font-size:13px;font-weight:700;z-index:10;display:none}
+.st-timer.show{display:block}
+.st-nav{position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);display:flex;justify-content:space-between;padding:0 8px;z-index:10;pointer-events:none}
+.st-nav-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;pointer-events:auto;cursor:pointer;transition:background .15s}
+.st-nav-btn:hover{background:rgba(255,255,255,.2)}
+.st-user-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0;z-index:10}
+.st-user-av{width:36px;height:36px;border-radius:50%;object-fit:cover;cursor:pointer}
+.st-user-info{flex:1;min-width:0}
+.st-user-name{font-size:13px;font-weight:700}
+.st-user-time{font-size:10px;color:rgba(255,255,255,.3);margin-top:1px}
+.st-actions{display:flex;gap:8px;align-items:center}
+.st-act{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:rgba(255,255,255,.6);cursor:pointer;transition:all .15s;flex-shrink:0}
+.st-act:hover{background:rgba(255,255,255,.1)}
+.st-act.liked{color:#ef4444;animation:hp .3s ease}
+@keyframes hp{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.st-act.saved{color:#f59e0b}
+
+/* COMMENTS */
+.st-comments{max-height:0;overflow:hidden;transition:max-height .3s ease;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.st-comments.show{max-height:180px;overflow-y:auto}
+.st-cmt{display:flex;gap:10px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.04)}
+.st-cmt:last-child{border-bottom:none}
+.st-cmt-av{width:30px;height:30px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.st-cmt-body{flex:1;min-width:0}
+.st-cmt-name{font-size:12px;font-weight:700}
+.st-cmt-text{font-size:12px;color:rgba(255,255,255,.6);margin-top:2px;line-height:1.4}
+.st-cmt-time{font-size:9px;color:rgba(255,255,255,.25);margin-top:3px}
+.st-cmt-input{display:flex;gap:8px;padding:8px 16px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
+.st-cmt-input input{flex:1;padding:8px 0;border:none;background:none;color:#fff;font-size:13px;outline:none;font-family:Poppins,sans-serif}
+.st-cmt-input input::placeholder{color:rgba(255,255,255,.25)}
+.st-cmt-send{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;flex-shrink:0;transition:transform .15s}
+.st-cmt-send:hover{transform:scale(1.06)}
+
+/* STORY END */
+.st-end{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);flex-direction:column;gap:12px}
+.st-end.show{display:flex}
+.st-end-icon{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:24px;color:rgba(255,255,255,.3)}
+.st-end-text{font-size:16px;font-weight:700;color:rgba(255,255,255,.5)}
+.st-end-sub{font-size:12px;color:rgba(255,255,255,.25)}
+.st-end-btn{margin-top:12px;padding:10px 28px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:transform .15s}
+.st-end-btn:hover{transform:scale(1.03)}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,37,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+
+<!-- STORY BAR -->
+<div class="st-bar">
+<div class="st-back" onclick="closeStory()"><i class="fas fa-arrow-left"></i></div>
+<div class="st-name" id="stViewerName">Your Story</div>
+<div class="st-viewers" id="stViewerCount"><i class="fas fa-eye"></i> <span>0</span></div>
+</div>
+
+<!-- STORY CIRCLES -->
+<div class="st-circles" id="stCircles"></div>
+
+<!-- STORY VIEWER -->
+<div class="st-view" id="stView">
+  <div class="st-media" id="stMedia">
+    <div class="st-prog"><div class="st-prog-bar" id="stProgBar"></div></div>
+    <div class="st-timer" id="stTimer">05</div>
+    <div class="st-nav">
+      <div class="st-nav-btn" id="stPrev" onclick="prevStory()"><i class="fas fa-chevron-left"></i></div>
+      <div class="st-nav-btn" id="stNext" onclick="nextStory()"><i class="fas fa-chevron-right"></div>
+    </div>
+  </div>
+  <div class="st-user-bar" id="stUserBar"></div>
+  <div class="st-actions">
+    <div class="st-act" id="stLikeBtn" onclick="likeStory()"><i class="far fa-heart"></i></div>
+    <div class="st-act" id="stSaveBtn" onclick="saveStory()"><i class="far fa-bookmark"></i></div>
+    <div class="st-act" onclick="toggleComments()"><i class="far fa-comment"></i></div>
+    <div class="st-act" onclick="shareStory()"><i class="fas fa-share"></i></div>
+  </div>
+  <div class="st-comments" id="stComments">
+    <div class="st-cmt-list" id="stCmtList"></div>
+    <div class="st-cmt-input">
+      <input type="text" id="stCmtInput" placeholder="Reply..." onkeydown="if(event.key==='Enter')sendStoryComment()">
+      <div class="st-cmt-send" onclick="sendStoryComment()"><i class="fas fa-paper-plane"></i></div>
+    </div>
+  </div>
+</div>
+
+<!-- STORY END -->
+<div class="st-end" id="stEnd">
+  <div class="st-end-icon"><i class="fas fa-check-circle"></i></div>
+  <div class="st-end-text">No more stories</div>
+  <div class="end-sub">You've seen all stories</div>
+  <button class="st-end-btn" onclick="closeStory()">Back to Home</button>
+</div>
+
+<input type="file" id="storyFileInput" accept="image/*,video/mp4,video/webm,video/3gpp" style="display:none" onchange="handleStoryFile(this)">
+
+<script>
+  src:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&h=900&fit=crop',views:312,time:Date.now()-18000000},{id:11,type:'image',src:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&h=900&fit=crop',views:178,time:Date.now()-259200000}]},
+  {id:3,name:'David Okafor',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',stories:[{id:12,type:'image',src:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=900&fit=crop',views:89,time:Date.now()-5400000},{id:13,type:'image',src:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=900&fit=crop',views:67,time:Date.now()-90000000}]},
+  {id:4,name:'Aisha Bello',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',stories:[{id:14,type:'image',src:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=900&fit=crop',views:201,time:Date.now()-129600000},{id:15,type:'image',src:'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&h=900&fit=crop',views:145,time:Date.now()-172800000}]},
+  {id:5,name:'Emeka Nwankwo',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',stories:[{id:16,type:'image',src:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=900&fit=crop',views:98,time:Date.now()-216000000}]},
+  {id:6,name:'Halima Yusuf',av:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop',stories:[{id:17,type:'image',src:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=600&h=900&fit=crop',views:234,time:Date.now()-302400000}]},
+  {id:7,name:'Ibrahim Kano',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop',stories:[{id:18,type:'image',src:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=900&fit=crop',views:67,time:Date.now()-388800000}]},
+  {id:8,name:'Maryam Ibrahim',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop',stories:[]},
+  {id:9,name:'Khalid Ali',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',stories:[]}
+];
+
+var allStories=[];
+users.forEach(function(u){u.stories.forEach(function(s){s.userName=u.name;s.userAv=u.av;allStories.push(s)})});
+allStories.sort(function(a,b){return b.time-a.time});
+
+var curIdx=0,isVideoPlaying=false,progTimer=null,timerInterval=null,commentsOpen=false;
+var curStory=null;
+
+function fmtV(v){if(v>=1000)return(v/1000).toFixed(1)+'K';return v.toString()}
+
+function renderCircles(){
+  var el=document.getElementById('stCircles');
+  var h='<div class="st-c" onclick="openUpload()"><div class="st-add"><i class="fas fa-plus" style="font-size:20px"></i></div><div class="st-nm">Your Story</div></div>';
+  users.forEach(function(u){
+    var last=u.stories[u.stories.length-1];
+    var seen=last?false:true;
+    h+='<div class="st-c" onclick="openUserStory('+u.id+')"><div class="st-ring'+(seen?' seen':'')+'"><img src="'+u.av+'" alt=""></div><div class="st-nm">'+u.name.split(' ')[0]+'</div></div>';
+  });
+  el.innerHTML=h;
+}
+
+function openUpload(){
+  document.getElementById('storyFileInput').click();
+}
+
+function handleStoryFile(inp){
+  var f=inp.files[0];if(!f)return;
+  var r=new FileReader();
+  r.onload=function(e){
+    var isVid=f.type.startsWith('video/');
+    var src=e.target.result;
+    if(isVid){src=null}
+    var newStory={id:Date.now(),type:isVid?'video':'image',src:src,videoSrc:e.target.result,views:0,likes:[],comments:[],time:Date.now(),saved:false,liked:false};
+    myStories.unshift(newStory);
+    allStories=[];
+    users[0].stories=myStories;
+    allStories.sort(function(a,b){return b.time-a.time});
+    curIdx=allStories.findIndex(function(s){return s.id===newStory.id});
+    openViewer();
+    r.readAsDataURL(f);
+  };
+  r.readAsDataURL(f);
+  inp.value='';
+}
+
+function openUserStory(userId){
+  var u=users.find(function(x){return x.id===userId});
+  if(!u||!u.stories.length)return;
+  allStories=[];
+  users.forEach(function(x){x.stories.forEach(function(s){s.userName=x.name;s.userAv=x.av;allStories.push(s)})});
+  allStories.sort(function(a,b){return b.time-a.time});
+  curIdx=allStories.findIndex(function(s){return s.id===u.stories[u.stories.length-1].id});
+  openViewer();
+}
+
+function openViewer(){
+  curStory=allStories[curIdx];
+  if(!curStory){
+    document.getElementById('stEnd').classList.add('show');
+    document.getElementById('stView').classList.remove('show');
+    return;
+  }
+  document.getElementById('stEnd').classList.remove('show');
+  document.getElementById('stView').classList.add('show');
+  renderViewer();
+  startTimer();
+}
+
+function renderViewer(){
+  var s=curStory;
+  var u=s.userName||'You';
+  document.getElementById('stViewerName').textContent=u;
+  document.getElementById('stViewerCount').querySelector('span').textContent=fmtV(s.views);
+  document.getElementById('stUserBar').innerHTML='<img class="st-user-av" src="'+(s.userAv||'')+'" onclick="goToProfile()" alt=""><div class="st-user-info"><div class="st-user-name">'+u+'</div><div class="st-user-time">'+ta(s.time)+'</div></div>';
+
+  var media=document.getElementById('stMedia');
+  if(s.type==='video'&&s.videoSrc){
+    media.innerHTML='<video class="st-video" id="stVideo" src="'+s.videoSrc+'" playsinline></video>';
+    media.onclick=function(){toggleVideo()};
+  } else if(s.src){
+    media.innerHTML='<img src="'+s.src+'" alt="">';
+    media.onclick=function(){nextStory()};
+  } else {
+    media.innerHTML='<div style="text-align:center;padding:40px;color:rgba(255,255,255,.3)"><i class="far fa-image" style="font-size:48px;display:block;margin-bottom:12px"></i><p>No media</p></div>';
+  }
+
+  // Update like/save buttons
+  document.getElementById('stLikeBtn').className='st-act'+(s.liked?' liked':'');
+  document.getElementById('stSaveBtn').className='st-act'+( s.saved?' saved':'');
+
+  // Comments
+  renderComments();
+}
+
+function toggleVideo(){
+  var v=document.getElementById('stVideo');
+  if(v.paused){
+    v.play();isVideoPlaying=true;
+    document.getElementById('stProgBar').style.animationDuration='5s';
+    document.getElementById('stProgBar').style.width='100%';
+  } else {
+    v.pause();isVideoPlaying=false;
+  }
+}
+
+function startTimer(){
+  if(progTimer)clearTimeout(progTimer);
+  var sec=5;
+  document.getElementById('stTimer').textContent='0'+sec;
+  document.getElementById('stTimer').classList.add('show');
+  timerInterval=setInterval(function(){
+    sec--;
+    document.getElementById('stTimer').textContent='0'+sec;
+    if(sec<=0){
+      clearInterval(timerInterval);
+      document.getElementById('stTimer').classList.remove('show');
+      nextStory();
+    }
+  },1000);
+  progTimer=setTimeout(function(){
+    clearInterval(timerInterval);
+    document.getElementById('stTimer').classList.remove('show');
+  },5100);
+}
+
+function prevStory(){
+  if(curIdx>0){curIdx--;openViewer()}else{document.getElementById('stEnd').classList.add('show');document.getElementById('stView').classList.remove('show')}
+}
+
+function nextStory(){
+  clearInterval(timerInterval);
+  if(progTimer)clearTimeout(progTimer);
+  document.getElementById('stTimer').classList.remove('show');
+  document.getElementById('stProgBar').style.transition='none';
+  document.getElementById('stProgBar').style.width='0%';
+  isVideoPlaying=false;
+  var v=document.getElementById('stVideo');
+  if(v){v.pause();v.currentTime=0}
+
+  curIdx++;
+  if(curIdx>=allStories.length){
+    document.getElementById('stEnd').classList.add('show');
+    document.getElementById('stView').classList.remove('show');
+    return;
+  }
+  openViewer();
+}
+
+function goToProfile(){closeStory();window.location.href='profile.html'}
+
+function likeStory(){
+  if(!curStory)return;
+  curStory.liked=!curStory.liked;
+  document.getElementById('stLikeBtn').className='st-act'+(curStory.liked?' liked':'');
+  if(curStory.liked)curStory.likes.push('self');
+  showMsg(curStory.liked?'Liked!':'Unliked');
+}
+
+function saveStory(){
+  if(!curStory)return;
+  curStory.saved=!curStory.saved;
+  document.getElementById('stSaveBtn').className='st-act'+( curStory.saved?' saved':'');
+  showMsg(curStory.saved?'Story saved to gallery':'Removed from gallery');
+}
+
+function shareStory(){showMsg('Share coming soon')}
+
+function toggleComments(){
+  commentsOpen=!commentsOpen;
+  document.getElementById('stComments').classList.toggle('show');
+}
+
+function renderComments(){
+  if(!curStory)return;
+  var el=document.getElementById('stCmtList');
+  if(!curStory.comments.length){el.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,.2);font-size:13px">No replies yet</div>';return}
+  el.innerHTML=curStory.comments.map(function(c){
+    return'<div class="st-cmt"><img class="st-cmt-av" src="'+c.av+'" onclick="goToUser(\''+c.userName.replace(/'/g,"\\'")+'\')"><div class="st-cmt-body"><div class="st-cmt-name">'+c.userName+'</div><div class="st-cmt-text">'+c.text+'</div><div class="st-cmt-time">'+ta(c.time)+'</div></div></div>';
+  }).join('');
+}
+
+function sendStoryComment(){
+  var inp=document.getElementById('stCmtInput');
+  var txt=inp.value.trim();
+  if(!txt)return;
+  if(!curStory)return;
+  curStory.comments.push({user:'Yusuf Alhaji Garba',av:'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop',text:txt,time:Date.now()});
+  inp.value='';
+  renderComments();
+  showMsg('Reply sent!');
+}
+
+function goToUser(name){
+  closeStory();
+  var u=users.find(function(x){return x.name===name});
+  if(u)window.location.href='profile.html';
+}
+
+function closeStory(){
+    clearInterval(timerInterval);
+    if(progTimer)clearTimeout(progTimer);
+    document.getElementById('stView').classList.remove('show');
+    document.getElementById('stTimer').classList.remove('show');
+    document.getElementById('stEnd').classList.remove('show');
+    document.getElementById('stProgBar').style.width='0%';
+    isVideoPlaying=false;
+    var v=document.getElementById('stVideo');
+    if(v){v.pause();v.currentTime=0}
+    window.history.back();
+}
+
+function ta(t){var s=Math.floor((Date.now()-t)/1000);if(s<60)return'Just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';if(s<604800)return Math.floor(s/86400)+'d ago';return Math.floor(s/604800)+'w ago'}
+
+function showMsg(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2500)}
+
+renderCircles();
+</script>
+</body>
+</html>

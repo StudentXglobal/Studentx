@@ -307,43 +307,44 @@
             <div class="divider">OR</div>
 
             <!-- Full Name Input -->
-            <div class="input-group">
-                <i class="fa-regular fa-user icon-left"></i>
-                <input type="text" placeholder="Full Name">
-            </div>
+<div class="input-group">
+    <i class="fa-regular fa-user icon-left"></i>
+    <input id="fullName" type="text" placeholder="Full Name">
+</div>
 
-            <!-- Username Input -->
-            <div class="input-group">
-                <i class="fa-solid fa-at icon-left"></i>
-                <input type="text" placeholder="Username">
-            </div>
+<!-- Username Input -->
+<div class="input-group">
+    <i class="fa-solid fa-at icon-left"></i>
+    <input id="username" type="text" placeholder="Username">
+</div>
 
-            <!-- University Input -->
-            <div class="input-group">
-                <i class="fa-solid fa-graduation-cap icon-left"></i>
-                <input type="text" placeholder="University">
-            </div>
+<!-- University Input -->
+<div class="input-group">
+    <i class="fa-solid fa-graduation-cap icon-left"></i>
+    <input id="university" type="text" placeholder="University">
+</div>
 
-            <!-- Email Input -->
-            <div class="input-group">
-                <i class="fa-regular fa-envelope icon-left"></i>
-                <input type="email" placeholder="Email Address">
-            </div>
+<!-- Email Input -->
+<div class="input-group">
+    <i class="fa-regular fa-envelope icon-left"></i>
+    <input id="email" type="email" placeholder="Email Address">
+</div>
 
-            <!-- Password Input -->
-            <div class="input-group">
-                <i class="fa-solid fa-lock icon-left"></i>
-                <input type="password" placeholder="Password">
-            </div>
+<!-- Password Input -->
+<div class="input-group">
+    <i class="fa-solid fa-lock icon-left"></i>
+    <input id="password" type="password" placeholder="Password">
+</div>
 
-            <!-- Confirm Password Input -->
-            <div class="input-group">
-                <i class="fa-solid fa-check-double icon-left"></i>
-                <input type="password" placeholder="Confirm Password">
-            </div>
+<!-- Confirm Password Input -->
+<div class="input-group">
+    <i class="fa-solid fa-check-double icon-left"></i>
+    <input id="confirmPassword" type="password" placeholder="Confirm Password">
+</div>
 
-            <!-- Sign Up Button -->
-            <button id="signupBtn" class="primary-btn">Create Account</button>
+<!-- Sign Up Button -->
+<button id="signupBtn" class="primary-btn">Create Account</button>
+            
 
             <!-- Footer -->
             <div class="footer">
@@ -353,11 +354,9 @@
 
     </div>
 
-    <!-- JavaScript Navigation -->
-    <script>
-        document.getElementById('signupBtn').onclick = function() {
-            window.location.href = 'home.html';
-        };
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="signup.js"></script>
+ 
 </body>
-                  </html>
+</html>

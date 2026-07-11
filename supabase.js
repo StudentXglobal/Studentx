@@ -1,13 +1,8 @@
-import { createClient } from
-'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+const SUPABASE_URL = "https://acragelglvdnqhvbjcgx.supabase.co";
 
-const supabaseUrl = 'PROJECT_URL'
+const SUPABASE_ANON_KEY = "sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH;
 
-const supabaseKey = 'ANON_KEY'
-
-const supabase = createClient(
-supabaseUrl,
-supabaseKey
-)
-
-console.log('StudentX Connected')
+const supabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
