@@ -3,6 +3,8 @@ const signupBtn = document.getElementById("signupBtn");
 signupBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
+    alert("Button is working");
+
     const fullName = document.getElementById("fullName").value.trim();
     const username = document.getElementById("username").value.trim();
     const university = document.getElementById("university").value.trim();
