@@ -30,7 +30,29 @@ signupBtn.addEventListener("click", async function (e) {
         return;
     }
 
+try {
     const { data, error } = await window.supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+            emailRedirectTo: "https://studentx-ew9e.vercel.app",
+            data: {
+                full_name: fullName,
+                username: username,
+                university: university
+            }
+        }
+    });
+
+    if (error) {
+        alert("Supabase Error: " + error.message);
+        return;
+    }
+
+    alert("Signup Success!");
+} catch (err) {
+    alert("JavaScript Error: " + err.message);
+}
         email: email,
         password: password,
         options: {
