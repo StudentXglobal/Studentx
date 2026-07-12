@@ -81,8 +81,13 @@ body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100
 <body>
 <header class="hdr">
 <div class="hdr-l">
-<div class="hdr-menu" onclick="window.location.href='menu.html'"
-<div class="hdr-logo">Student<b>X</b></div>
+<div class="hdr-menu" onclick="window.location.href='menu.html'">
+<i class="fas fa-bars"></i>
+</div>
+
+<div class="hdr-logo">
+Student<b>X</b>
+</div>
 </div>
 <div class="hdr-r">
 <div class="hdr-btn" onclick="window.location.href='search.html'"><i class="fas fa-search"></i></div>
@@ -93,8 +98,31 @@ body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100
 <div class="stories" id="stories"></div>
 
 <div class="cpb" onclick="window.location.href='create-post.html'">
-<img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop" onclick="event.stopPropagation();window.location.href='profile.html'" alt="">
-<div class="cpb-in">What's on your mind?</div>
+
+<img id="profileAvatar"
+src="https://via.placeholder.com/100"
+onclick="event.stopPropagation();window.location.href='profile.html'"
+alt="">
+
+<div style="flex:1">
+
+<h3 id="fullName"
+style="font-size:14px;color:white">
+Loading...
+</h3>
+
+<p id="username"
+style="font-size:11px;color:#999">
+@loading...
+</p>
+
+<div class="cpb-in">
+What's on your mind?
+</div>
+
+</div>
+
+</div>
 <div class="cpb-tools">
 <div class="cpb-t g"><i class="fas fa-image"></i></div>
 <div class="cpb-t r"><i class="fas fa-video"></i></div>
@@ -248,9 +276,8 @@ renderFeed();
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script src="auth.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="auth.js"></script>
 <script src="logout.js"></script>
+<script src="home.js"></script>
+
 </body>
 </html>
