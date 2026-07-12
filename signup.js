@@ -30,7 +30,7 @@ signupBtn.addEventListener("click", async function (e) {
         return;
     }
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await window.supabaseClient.auth.signUp({
         email: email,
         password: password,
         options: {
@@ -47,6 +47,7 @@ signupBtn.addEventListener("click", async function (e) {
         alert(error.message);
         return;
     }
-
+console.log(window.supabaseClient);
+alert(window.supabaseClient ? "Supabase Loaded" : "Supabase NOT Loaded");
     alert("Account created successfully! Please check your email to verify your account.");
 });
