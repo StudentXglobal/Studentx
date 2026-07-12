@@ -1,49 +1,38 @@
 document.addEventListener("DOMContentLoaded", async () => {
-
   // Duba ko user ya login
   const {
-    data: { user }
+    data: { user },
+    error
   } = await supabaseClient.auth.getUser();
 
-  if (!user) {
+  if (error || !user) {
     window.location.href = "login.html";
     return;
   }
 
   // Karanta profile daga database
-  const { data, error } = await supabaseClient
+  const { data: profile, error: profileError } = await supabaseClient
     .from("profiles")
     .select("*")
     .eq("id", user.id)
     .single();
 
-  if (error) {
-    console.error(error);
+  if (profileError) {
+    console.error(profileError);
     return;
   }
 
   // Full Name
-  const fullName = document.getElementById("fullName");
-  if (fullName) {
-    fullName.textContent = data.full_name;
-  }
+  document.getElementById("fullName").textContent =
+    profile.full_name || "StudentX User";
 
   // Username
-  const username = document.getElementById("username");
-  if (username) {
-    username.textContent = "@" + data.username;
-  }
-
-  // University
-  const university = document.getElementById("university");
-  if (university) {
-    university.textContent = data.university;
-  }
+  document.getElementById("username").textContent =
+    "@" + (profile.username || "student");
 
   // Avatar
-  const avatar = document.getElementById("profileAvatar");
-  if (avatar && data.avatar_url) {
-    avatar.src = data.avatar_url;
+  if (profile.avatar_url) {
+    document.getElementById("profileAvatar").src =
+      profile.avatar_url;
   }
-
 });
