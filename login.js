@@ -1,27 +1,32 @@
-const loginBtn = document.getElementById("loginBtn");
+document.getElementById("mainBtn").addEventListener("click", async function () {
 
-loginBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
+    const email = document.getElementById("emailInput").value.trim();
+    const password = document.getElementById("passInput").value;
 
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+    if (!email) {
+        showMsg("Please enter your email.");
+        return;
+    }
 
-    if (!email || !password) {
-        alert("Please enter your email and password.");
+    if (!password) {
+        showMsg("Please enter your password.");
         return;
     }
 
     const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+        email: email,
+        password: password
     });
 
     if (error) {
-        alert(error.message);
+        showMsg(error.message);
         return;
     }
 
-    alert("Login successful!");
+    showMsg("Login successful!");
 
-    window.location.href = "home.html";
+    setTimeout(() => {
+        window.location.href = "home.html";
+    }, 1000);
+
 });
