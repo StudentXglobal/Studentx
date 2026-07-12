@@ -78,7 +78,7 @@ body{font-family:Poppins,sans-serif;background:#0a0a0f;min-height:100vh;position
 <label><input type="checkbox" checked> Remember me</label>
 <a href="#" onclick="showMsg('Reset password link sent')">Forgot Password?</a>
 </div>
-<button class="btn" id="mainBtn" onclick="handleBtn()">Log In</button>
+<button class="btn" id="mainBtn">Log In</button>
 <div class="foot" id="footText">Don't have an account? <span onclick="goSignup()">Sign Up</span></div>
 </div>
 </div>
@@ -102,26 +102,7 @@ function googleLogin() {
   window.location.href = 'https://github.com/login/oauth/authorize?client_id=YOUR_CLIENT_ID&scope=user:email';
 }
 
-function handleBtn() {
-  if (mode === 'signup') {
-    goSignup();
-    return;
-  }
-  var e = document.getElementById('emailInput').value.trim();
-  var p = document.getElementById('passInput').value.trim();
-  if (!e) {
-    showMsg('Please enter your email or username');
-    return;
-  }
-  if (!p) {
-    showMsg('Please enter your password');
-    return;
-  }
-  showMsg('Welcome back!');
-  setTimeout(function() {
-    window.location.href = 'home.html';
-  }, 800);
-}
+
 
 function showMsg(t) {
   var d = document.createElement('div');
