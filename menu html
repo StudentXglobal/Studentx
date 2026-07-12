@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - StudentX</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background-color: #121212; /* Launin baya na app */
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Sashin Sama (Header) */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #2c2c2c;
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            z-index: 100;
+        }
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 24px;
+            margin-right: 15px;
+            line-height: 1;
+        }
+        .header-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Sashin Bayanin Mai Amfani (Profile Summary) */
+        .menu-profile {
+            display: flex;
+            align-items: center;
+            padding: 20px 15px;
+            border-bottom: 8px solid #1e1e1e; /* Layin da ya raba shi da sauran menu */
+        }
+        .menu-profile img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #8A2BE2; /* Launin Purple */
+        }
+        .menu-profile-info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        .menu-profile-info p {
+            color: #b0b3b8;
+            font-size: 13px;
+        }
+
+        /* Jerin Zaɓuɓɓuka (Menu List) */
+        .menu-list {
+            padding: 0 15px;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 10px;
+            text-decoration: none;
+            color: #fff;
+            border-bottom: 1px solid #2c2c2c;
+            transition: background-color 0.2s;
+        }
+        .menu-item:active {
+            background-color: #1e1e1e; /* Yana duhu idan aka danna shi */
+        }
+        .menu-icon {
+            font-size: 20px;
+            margin-right: 15px;
+            width: 25px;
+            text-align: center;
+        }
+        .menu-text {
+            flex-grow: 1;
+            font-size: 16px;
+        }
+        .menu-arrow {
+            color: #b0b3b8;
+            font-size: 18px;
+        }
+        
+        /* Zaɓin Fitawa (Logout) */
+        .logout {
+            color: #ff4b4b; /* Launin Jan saboda fita */
+        }
+        .logout .menu-arrow {
+            color: #ff4b4b;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sashin Sama (Header) -->
+    <div class="header">
+        <a href="home.html" class="back-btn">&larr;</a>
+        <div class="header-title">Menu</div>
+    </div>
+
+    <!-- Bayanin Mai Amfani a Sama -->
+    <a href="profile.html" class="menu-item" style="border-bottom: none;">
+        <div class="menu-profile">
+            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100&h=100&fit=crop" alt="Yusuf">
+            <div class="menu-profile-info">
+                <h3>Yusuf Alhaji Garba</h3>
+                <p>Software Engineering<br>Federal University Dutse</p>
+            </div>
+        </div>
+    </a>
+
+    <!-- Jerin Menu -->
+    <div class="menu-list">
+        <a href="studyhub.html" class="menu-item">
+            <span class="menu-icon">📚</span>
+            <span class="menu-text">StudyHub</span>
+            <span class="menu-arrow">&rsaquo;</span>
+        </a>
+        <a href="saved.html" class="menu-item">
+            <span class="menu-icon">🔖</span>
+            <span class="menu-text">Saved Posts</span>
+            <span class="menu-arrow">&rsaquo;</span>
+        </a>
+        <a href="communities.html" class="menu-item">
+            <span class="menu-icon">👥</span>
+            <span class="menu-text">My Communities</span>
+            <span class="menu-arrow">&rsaquo;</span>
+        </a>
+        <a href="settings.html" class="menu-item">
+            <span class="menu-icon">⚙️</span>
+            <span class="menu-text">Settings & Privacy</span>
+            <span class="menu-arrow">&rsaquo;</span>
+        </a>
+        <a href="help.html" class="menu-item">
+            <span class="menu-icon">❓</span>
+            <span class="menu-text">Help & Support</span>
+            <span class="menu-arrow">&rsaquo;</span>
+        </a>
+        
+        <!-- Maɓallin Fitawa -->
+        <a href="logout.html" class="menu-item logout">
+            <span class="menu-icon">🚪</span>
+            <span class="menu-text">Logout</span>
+        </a>
+    </div>
+
+</body>
+</html>
