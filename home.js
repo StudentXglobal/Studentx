@@ -36,3 +36,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       profile.avatar_url;
   }
 });
+alert(JSON.stringify(profile));
