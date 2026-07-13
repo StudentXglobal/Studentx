@@ -40,9 +40,9 @@ signupBtn.addEventListener("click", async (e) => {
 
     const user = data.user;
 
-    if (!user) {
-        alert("Please confirm your email first.");
-        return;
+alert("Account created successfully! Please check your email and confirm your account.");
+window.location.href = "login.html";
+return;
     }
 
     // Save profile
