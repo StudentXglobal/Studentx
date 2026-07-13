@@ -96,38 +96,45 @@ body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100
 
 <div class="stories" id="stories"></div>
 
-<div class="cpb" onclick="window.location.href='create-post.html'">
-
 <img id="profileAvatar"
 src="https://via.placeholder.com/100"
 onclick="event.stopPropagation();window.location.href='profile.html'"
 alt="">
+<div class="cpb" onclick="window.location.href='create-post.html'">
 
-<div style="flex:1">
+    <img
+        id="profileAvatar"
+        src="https://via.placeholder.com/100"
+        onclick="event.stopPropagation();window.location.href='profile.html'"
+        alt="Profile">
 
-<h3 id="fullName"
-style="font-size:14px;color:white">
-Loading...
-</h3>
+    <div class="cpb-in">
 
-<p id="username"
-style="font-size:11px;color:#999">
-@loading...
-</p>
+        <div id="fullName"
+            style="font-size:13px;font-weight:700;color:#fff;">
+            Loading...
+        </div>
 
-<div class="cpb-in">
-What's on your mind?
+        <div id="username"
+            style="font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;">
+            @loading...
+        </div>
+
+        <div
+            style="font-size:12px;color:rgba(255,255,255,.35);margin-top:8px;">
+            What's on your mind?
+        </div>
+
+    </div>
+
+    <div class="cpb-tools">
+        <div class="cpb-t g"><i class="fas fa-image"></i></div>
+        <div class="cpb-t r"><i class="fas fa-video"></i></div>
+        <div class="cpb-t y"><i class="fas fa-poll"></i></div>
+    </div>
+
 </div>
 
-</div>
-
-</div>
-<div class="cpb-tools">
-<div class="cpb-t g"><i class="fas fa-image"></i></div>
-<div class="cpb-t r"><i class="fas fa-video"></i></div>
-<div class="cpb-t y"><i class="fas fa-poll"></i></div>
-</div>
-</div>
 
 <div class="comp" onclick="window.location.href='profile.html'">
 <i class="fas fa-user-plus"></i>
