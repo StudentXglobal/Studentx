@@ -22,10 +22,11 @@ console.log("PROFILE ERROR:", profileError);
 
 alert("User ID: " + user.id);
 
-if (profile) {
-    alert("Profile Found");
-} else {
-    alert("Profile Not Found");
+const { data: allProfiles } = await supabaseClient
+  .from("profiles")
+  .select("id,email,username");
+
+alert(JSON.stringify(allProfiles));
 }
 
   if (profileError) {
