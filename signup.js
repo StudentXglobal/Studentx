@@ -1,6 +1,6 @@
 const signupBtn = document.getElementById("signupBtn");
 
-signupBtn.addEventListener("click", async function (e) {
+signupBtn.addEventListener("click", async (e) => {
     e.preventDefault();
 
     const fullName = document.getElementById("fullName").value.trim();
@@ -27,32 +27,44 @@ signupBtn.addEventListener("click", async function (e) {
         return;
     }
 
-    try {
-        const { data, error } = await supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-                emailRedirectTo: "https://studentx-ew9e.vercel.app",
-                data: {
-                    full_name: fullName,
-                    username: username,
-                    university: university
-                }
-            }
-        });
+    // Create account
+    const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password
+    });
 
-        if (error) {
-            alert(error.message);
-            console.error(error);
-            return;
-        }
-
-        alert("Account created successfully! Please check your email.");
-
-        console.log(data);
-
-    } catch (err) {
-        console.error(err);
-        alert("Unexpected error: " + err.message);
+    if (error) {
+        alert(error.message);
+        return;
     }
+
+    const user = data.user;
+
+    if (!user) {
+        alert("Please confirm your email first.");
+        return;
+    }
+
+    // Save profile
+    const { error: profileError } = await supabaseClient
+        .from("profiles")
+        .insert([
+            {
+                id: user.id,
+                full_name: fullName,
+                username: username,
+                university: university,
+                email: email
+            }
+        ]);
+
+    if (profileError) {
+        alert(profileError.message);
+        console.log(profileError);
+        return;
+    }
+
+    alert("Account created successfully!");
+
+    window.location.href = "login.html";
 });
