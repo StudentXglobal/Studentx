@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const { data: profile, error: profileError } = await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id", user.id)
-        .single();
+  .from("profiles")
+  .select("*")
+  .eq("id", user.id)
+  .maybeSingle();
 
     if (profileError) {
         alert(profileError.message);
