@@ -28,12 +28,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert("Profile not found");
         return;
     }
-
+alert(JSON.stringify(profile));
+    
     alert("Profile found!");
 
     document.getElementById("fullName").textContent = profile.full_name;
     document.getElementById("username").textContent = "@" + profile.username;
-
+alert("Name: " + profile.full_name);
+alert("Username: " + profile.username);
     if (profile.avatar_url) {
         document.getElementById("profileAvatar").src = profile.avatar_url;
     }
