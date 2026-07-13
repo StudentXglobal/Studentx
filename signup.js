@@ -59,9 +59,9 @@ signupBtn.addEventListener("click", async (e) => {
         ]);
 
     if (profileError) {
-        alert(profileError.message);
-        console.log(profileError);
-        return;
+    console.log(profileError);
+    alert(JSON.stringify(profileError));
+    return;
     }
 
     alert("Account created successfully!");
