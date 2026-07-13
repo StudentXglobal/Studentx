@@ -1,3 +1,4 @@
+alert("HOME.JS LOADED");
 document.addEventListener("DOMContentLoaded", async () => {
   // Duba ko user ya login
   const {
