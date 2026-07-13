@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .single();
 
   if (profileError) {
+    alert(profileError.message);
     console.error(profileError);
     return;
   }
