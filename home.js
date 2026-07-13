@@ -16,6 +16,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     .select("*")
     .eq("id", user.id)
     .single();
+  console.log("USER ID:", user.id);
+console.log("PROFILE:", profile);
+console.log("PROFILE ERROR:", profileError);
+
+alert("User ID: " + user.id);
+
+if (profile) {
+    alert("Profile Found");
+} else {
+    alert("Profile Not Found");
+}
 
   if (profileError) {
     alert(profileError.message);
