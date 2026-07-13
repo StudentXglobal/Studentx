@@ -29,9 +29,17 @@ signupBtn.addEventListener("click", async (e) => {
 
     // Create account
     const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password
-    });
+    email: email,
+    password: password,
+    options: {
+        emailRedirectTo: "https://studentx-ew9e.vercel.app",
+        data: {
+            full_name: fullName,
+            username: username,
+            university: university
+        }
+    }
+});
 
     if (error) {
         alert(error.message);
