@@ -4,25 +4,107 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>StudentX Profile</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link rel="preconnect"
-href="https://fonts.gstatic.com"
-crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
+<link rel="stylesheet" href="profile.css">
 
+</head>
+
+<body>
+
+<header class="profile-header">
+
+<img
+id="coverPhoto"
+class="cover-photo"
+src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200"
+alt="Cover">
+
+<div class="header-overlay"></div>
+
+<button class="menu-btn" onclick="openMenu()">
+<i class="fas fa-ellipsis-h"></i>
+</button>
+
+<img
+id="profileAvatar"
+class="profile-avatar"
+src="https://ui-avatars.com/api/?name=StudentX"
+alt="Profile">
+
+</header>
+
+<section class="profile-card">
+
+<h2 id="fullName">
+Loading...
+</h2>
+
+<p id="username">
+@loading...
+</p>
+
+<p id="bio">
+No bio yet.
+</p>
+
+<div class="joined">
+
+<i class="far fa-calendar"></i>
+
+<span id="joinedDate">
+Joined July 2026
+</span>
+
+</div>
+
+<div class="profile-stats">
+
+<div class="stat-box">
+
+<h3 id="postsCount">0</h3>
+
+<span>Posts</span>
+
+</div>
+
+<div class="stat-box">
+
+<h3 id="followersCount">0</h3>
+
+<span>Followers</span>
+
+</div>
+
+<div class="stat-box">
+
+<h3 id="followingCount">0</h3>
+
+<span>Following</span>
+
+</div>
+
+<div class="stat-box">
+
+<h3 id="likesCount">0</h3>
+
+<span>Likes</span>
+
+</div>
+
+</div>
+
+</section>
 *{
 margin:0;
 padding:0;
@@ -31,460 +113,226 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-
 background:#0b0b12;
-
-color:white;
-
-padding-bottom:90px;
-
-}
-
-a{
-
-text-decoration:none;
-
-color:inherit;
-
+color:#fff;
+padding-bottom:100px;
 }
 
 .profile-header{
-
 position:relative;
-
+height:230px;
 width:100%;
-
-height:220px;
-
 overflow:hidden;
-
 }
 
 .cover-photo{
-
 width:100%;
-
-height:100%;
-
+height:170px;
 object-fit:cover;
-
-background:#222;
-
+background:#1f2937;
 }
 
-.profile-photo{
-
+.header-overlay{
 position:absolute;
-
-left:25px;
-
-bottom:-55px;
-
-width:110px;
-
-height:110px;
-
-border-radius:50%;
-
-border:5px solid #0b0b12;
-
-object-fit:cover;
-
-background:#222;
-
+top:0;
+left:0;
+width:100%;
+height:170px;
+background:linear-gradient(to bottom,
+rgba(0,0,0,.15),
+rgba(0,0,0,.55));
 }
 
 .menu-btn{
-
 position:absolute;
-
 top:18px;
-
 right:18px;
-
 width:42px;
-
 height:42px;
-
+border:none;
 border-radius:50%;
-
-background:rgba(0,0,0,.45);
-
-display:flex;
-
-align-items:center;
-
-justify-content:center;
-
-font-size:18px;
-
+background:rgba(255,255,255,.15);
 backdrop-filter:blur(10px);
-
+color:#fff;
+font-size:18px;
 cursor:pointer;
-
 }
 
-.profile-info{
-
-margin-top:70px;
-
-padding:20px;
-
+.profile-avatar{
+position:absolute;
+left:24px;
+top:105px;
+width:110px;
+height:110px;
+border-radius:50%;
+border:5px solid #0b0b12;
+object-fit:cover;
+background:#222;
 }
 
-.profile-name{
+.profile-card{
+padding:62px 20px 20px;
+}
 
-font-size:24px;
-
+.profile-card h2{
+font-size:26px;
 font-weight:700;
-
 }
 
-.profile-username{
-
-margin-top:3px;
-
-font-size:15px;
-
+#username{
+margin-top:4px;
 color:#9ca3af;
-
+font-size:15px;
 }
 
-.profile-bio{
-
+#bio{
 margin-top:16px;
-
 line-height:1.7;
-
-font-size:14px;
-
+font-size:15px;
+color:#e5e7eb;
 }
 
 .joined{
-
-margin-top:14px;
-
-font-size:13px;
-
-color:#8b8b95;
-
+margin-top:15px;
 display:flex;
-
 align-items:center;
-
 gap:8px;
-
-}
-
-.stats{
-
-margin-top:25px;
-
-display:flex;
-
-justify-content:space-between;
-
-text-align:center;
-
-}
-
-.stat h3{
-
-font-size:20px;
-
-}
-
-.stat p{
-
 font-size:13px;
-
 color:#9ca3af;
-
-margin-top:3px;
-
 }
 
-</style>
-
-</head>
-
-<body>
-
-<div class="profile-header">
-
-<img id="coverPhoto"
-
-class="cover-photo"
-
-src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200"
-
-alt="Cover">
-
-<img
-
-id="profilePhoto"
-
-class="profile-photo"
-
-src="https://ui-avatars.com/api/?name=StudentX"
-
-alt="Profile">
-
-<div
-
-class="menu-btn"
-
-onclick="openMenu()">
-
-<i class="fas fa-ellipsis-h"></i>
-
-</div>
-
-</div>
-
-<div class="profile-info">
-
-<h2
-
-id="fullName"
-
-class="profile-name">
-
-Loading...
-
-</h2>
-
-<div
-
-id="username"
-
-class="profile-username">
-
-@loading...
-
-</div>
-
-<div
-
-id="bio"
-
-class="profile-bio">
-
-No bio yet.
-
-</div>
-
-<div class="joined">
-
-<i class="far fa-calendar"></i>
-
-<span id="joinedDate">
-
-Joined July 2026
-
-</span>
-
-</div>
-
-<div class="stats">
-
-<div class="stat">
-
-<h3 id="postsCount">0</h3>
-
-<p>Posts</p>
-
-</div>
-
-<div class="stat">
-
-<h3 id="followersCount">0</h3>
-
-<p>Followers</p>
-
-</div>
-
-<div class="stat">
-
-<h3 id="followingCount">0</h3>
-
-<p>Following</p>
-
-</div>
-
-<div class="stat">
-
-<h3 id="likesCount">0</h3>
-
-<p>Likes</p>
-
-</div>
-
-</div>
-<div class="profile-tabs">
-
-<button class="tab active">
-Posts
-</button>
-
-<button class="tab">
-Media
-</button>
-
-<button class="tab">
-Replies
-</button>
-
-</div>
-
-<div id="postsContainer">
-
-<div class="empty-posts">
-
-<i class="fas fa-newspaper"></i>
-
-<h3>No Posts Yet</h3>
-
-<p>
-Posts will appear here.
-</p>
-
-</div>
-
-</div>
-
-<div id="bottomMenu"
-class="bottom-menu">
-
-<div class="menu-sheet">
-
-<div class="drag-line"></div>
-
-<div class="menu-item"
-onclick="editProfile()">
-
-<i class="fas fa-user-edit"></i>
-
-<span>Edit Profile</span>
-
-</div>
-
-<div class="menu-item"
-onclick="changeProfilePhoto()">
-
-<i class="fas fa-camera"></i>
-
-<span>Change Profile Picture</span>
-
-</div>
-
-<div class="menu-item"
-onclick="changeCoverPhoto()">
-
-<i class="fas fa-image"></i>
-
-<span>Change Cover Photo</span>
-
-</div>
-
-<div class="menu-item"
-onclick="editBio()">
-
-<i class="fas fa-pen"></i>
-
-<span>Edit Bio</span>
-
-</div>
-
-<div class="menu-item"
-onclick="openPrivacy()">
-
-<i class="fas fa-lock"></i>
-
-<span>Privacy</span>
-
-</div>
-
-<div class="menu-item"
-onclick="requestVerification()">
-
-<i class="fas fa-check-circle"></i>
-
-<span>Request Verification</span>
-
-</div>
-
-<div class="menu-item"
-onclick="openPremium()">
-
-<i class="fas fa-crown"></i>
-
-<span>StudentX Premium</span>
-
-</div>
-
-<div class="menu-item"
-onclick="openSettings()">
-
-<i class="fas fa-cog"></i>
-
-<span>Settings</span>
-
-</div>
-
-</div>
-
-</div>
-<script>
-
-function openMenu(){
-document.getElementById("bottomMenu").style.display="block";
+.profile-stats{
+margin-top:28px;
+display:flex;
+justify-content:space-between;
+text-align:center;
 }
 
-window.onclick=function(e){
-const menu=document.getElementById("bottomMenu");
-if(e.target===menu){
-menu.style.display="none";
+.stat-box{
+flex:1;
+}
+
+.stat-box h3{
+font-size:21px;
+font-weight:700;
+}
+
+.stat-box span{
+display:block;
+margin-top:5px;
+font-size:13px;
+color:#9ca3af;
+}
+    .profile-tabs{
+display:flex;
+margin-top:30px;
+padding:0 20px;
+gap:10px;
+}
+
+.profile-tabs button{
+flex:1;
+height:45px;
+border:none;
+border-radius:14px;
+background:#18181f;
+color:#9ca3af;
+font-size:14px;
+font-weight:600;
+cursor:pointer;
+transition:.25s;
+}
+
+.profile-tabs button.active{
+background:#7c3aed;
+color:#fff;
+}
+
+#postsContainer{
+padding:20px;
+}
+
+.empty-posts{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+padding:70px 20px;
+background:#14141b;
+border-radius:18px;
+border:1px solid rgba(255,255,255,.05);
+text-align:center;
+}
+
+.empty-posts i{
+font-size:55px;
+color:#7c3aed;
+margin-bottom:18px;
+}
+
+.empty-posts h3{
+font-size:20px;
+margin-bottom:8px;
+}
+
+.empty-posts p{
+font-size:14px;
+color:#9ca3af;
+}
+
+.bottom-menu{
+display:none;
+position:fixed;
+left:0;
+right:0;
+top:0;
+bottom:0;
+background:rgba(0,0,0,.45);
+backdrop-filter:blur(6px);
+z-index:999;
+}
+
+.menu-sheet{
+position:absolute;
+left:0;
+right:0;
+bottom:0;
+background:#111827;
+border-radius:24px 24px 0 0;
+padding:15px 0 35px;
+animation:menuUp .25s ease;
+}
+
+@keyframes menuUp{
+from{
+transform:translateY(100%);
+}
+to{
+transform:translateY(0);
 }
 }
 
-function editProfile(){
-alert("Edit Profile - Coming Soon");
+.drag-line{
+width:55px;
+height:5px;
+background:#4b5563;
+border-radius:999px;
+margin:0 auto 18px;
 }
 
-function changeProfilePhoto(){
-alert("Change Profile Picture - Coming Soon");
+.menu-item{
+display:flex;
+align-items:center;
+gap:16px;
+padding:16px 22px;
+font-size:15px;
+cursor:pointer;
+transition:.2s;
 }
 
-function changeCoverPhoto(){
-alert("Change Cover Photo - Coming Soon");
+.menu-item:hover{
+background:#1f2937;
 }
 
-function editBio(){
-alert("Edit Bio - Coming Soon");
-}
-
-function openPrivacy(){
-alert("Privacy - Coming Soon");
-}
-
-function requestVerification(){
-alert("Verification Request - Coming Soon");
-}
-
-function openPremium(){
-alert("StudentX Premium - Coming Soon");
-}
-
-function openSettings(){
-alert("Settings - Coming Soon");
-}
-
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script src="profile.js"></script>
-
-</body>
-    </html>
+.menu-item i{
+width:
