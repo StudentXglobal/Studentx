@@ -1,308 +1,490 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
-<title>StudentX - Profile</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>StudentX Profile</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+href="https://fonts.gstatic.com"
+crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;padding-bottom:70px}
-.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
-.hdr-title{font-size:18px;font-weight:800}
-.hdr-edit{width:32px;height:26px;border-radius:6px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;gap:4px;cursor:pointer;transition:background .15s}
-.hdr-edit:hover{background:rgba(124,58,237,.2)}
-.hdr-edit span{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.6)}
 
-.cover{height:150px;position:relative;overflow:hidden;cursor:pointer}
-.cover-img{width:100%;height:100%;object-fit:cover}
-.cover-default{width:100%;height:100%;background:linear-gradient(90deg,#008751 33.33%,#fff 33.33%,#fff 66.66%,#008751 66.66%);display:flex;align-items:center;justify-content:center}
-.cover-default span{font-size:28px;font-weight:900;color:#008751;text-shadow:0 2px 8px rgba(255,255,255,.4);letter-spacing:2px}
-.cover-ov{position:absolute;inset:0;background:rgba(0,0,0,.3);display:none;align-items:center;justify-content:center;gap:12px}
-.cover:hover .cover-ov{display:flex}
-.cover-opt{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;cursor:pointer;transition:background .15s}
-.cover-opt:hover{background:rgba(255,255,255,.3)}
-.av-wrap{position:absolute;bottom:-38px;left:20px;z-index:10;cursor:pointer}
-.av{width:80px;height:80px;border-radius:50%;border:4px solid #0a0a0f;object-fit:cover;background:#1a1a35;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;color:#a855f7}
-.av-opts{position:absolute;top:44px;left:0;background:rgba(20,20,45,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:4px 0;min-width:160px;z-index:20;display:none;box-shadow:0 8px 24px rgba(0,0,0,.4);animation:avUp .2s ease}
-.av-opts.show{display:block}
-@keyframes avUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.av-opt{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
-.av-opt:hover{background:rgba(124,58,237,.1);color:#fff}
-.av-opt i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.35)}
-.info{padding:50px 20px 0}
-.nm-row{display:flex;align-items:center;justify-content:space-between}
-.nm{font-size:20px;font-weight:800;display:flex;align-items:center;gap:5px}
-.nm .vd{color:#a855f7;font-size:14px}
-.share-btn{padding:7px 16px;border-radius:10px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.6);font-size:12px;font-weight:600;display:flex;align-items:center;gap:5px;transition:all .15s}
-.share-btn:hover{border-color:rgba(124,58,237,.4);color:#a855f7}
-.handle{font-size:12px;color:rgba(255,255,255,.35);margin-top:2px}
-.course-label{display:inline-flex;align-items:center;gap:5px;margin-top:6px;padding:5px 12px;border-radius:20px;background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.2);font-size:11px;font-weight:600;color:#a855f7}
-.course-label i{font-size:10px}
-.bio{font-size:13px;color:rgba(255,255,255,.65);margin-top:10px;line-height:1.5}
-.stats{display:flex;margin-top:16px;padding:14px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
-.stat{flex:1;text-align:center}
-.stat:not(:last-child){border-right:1px solid rgba(255,255,255,.05)}
-.stat-num{font-size:16px;font-weight:800}
-.stat-label{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;text-transform:uppercase;letter-spacing:.5px}
-.btns{display:flex;gap:10px;margin-top:14px}
-.btn{flex:1;padding:10px;border-radius:12px;font-size:13px;font-weight:700;text-align:center;transition:all .15s;cursor:pointer}
-.btn-primary{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
-.btn-primary:hover{filter:brightness(1.1)}
-.tabs{display:flex;margin-top:16px;border-bottom:1px solid rgba(255,255,255,.05)}
-.tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:rgba(255,255,255,.3);border-bottom:2px solid transparent;transition:all .2s;cursor:pointer}
-.tab.on{color:#a855f7;border-color:#a855f7}
-.posts{padding:16px 14px}
-.pin-label{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:rgba(255,255,255,.35);margin-bottom:10px;padding:0 2px}
-.pin-label i{color:#a855f7;font-size:10px}
-.post{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:14px;margin-bottom:12px;overflow:hidden}
-.p-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px}
-.p-av{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1a1a35;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#a855f7}
-.p-inf{flex:1;min-width:0}
-.p-nm{font-size:13px;font-weight:700;display:flex;align-items:center;gap:4px}
-.p-nm .vd{color:#a855f7;font-size:10px}
-.p-meta{font-size:10px;color:rgba(255,255,255,.25);margin-top:1px}
-.p-more{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.25);font-size:14px}
-.p-body{padding:0 14px 12px;font-size:13px;line-height:1.6;color:rgba(255,255,255,.65)}
-.p-acts{display:flex;align-items:center;padding:4px 8px 10px;gap:2px}
-.p-a{display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:20px;font-size:11px;color:rgba(255,255,255,.35);font-weight:600;transition:all .15s}
-.p-a:hover{background:rgba(124,58,237,.1);color:#a855f7}
-.p-a.lk.on{color:#ef4444}
-.p-a.lk.on i{animation:lp .3s ease}
-@keyframes lp{50%{transform:scale(1.3)}}
-.p-a-r{margin-left:auto}
-.saved-empty{text-align:center;padding:50px 20px;color:rgba(255,255,255,.15)}
-.saved-empty i{font-size:36px;margin-bottom:10px;display:block}
-.saved-empty p{font-size:13px}
-.view-ov{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85)}
-.view-ov.show{display:flex}
-.view-ov img{max-width:92%;max-height:85vh;border-radius:16px;object-fit:contain}
-.view-close{position:absolute;top:16px;right:16px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;cursor:pointer}
-.em-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
-.em-ov.show{display:flex}
-.em-bg{position:fixed;inset:0;background:rgba(0,0,0,.5)}
-.em-sheet{position:relative;z-index:1;width:100%;max-width:430px;background:rgba(20,20,45,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:12px 0 24px;animation:su .25s ease}
-@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.em-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:0 auto 12px}
-.em-item{display:flex;align-items:center;gap:12px;padding:13px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
-.em-item:hover{background:rgba(124,58,237,.1);color:#fff}
-.em-item i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.35)}
-.em-item.dng{color:#ef4444}.em-item.dng i{color:#ef4444}
-.em-div{height:1px;background:rgba(255,255,255,.06);margin:4px 0}
-.sh-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
-.sh-ov.show{display:flex}
-.sh-bg{position:fixed;inset:0;background:rgba(0,0,0,.5)}
-.sh-sheet{position:relative;z-index:1;width:100%;max-width:430px;max-height:80vh;background:rgba(15,15,30,.95);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;display:flex;flex-direction:column;animation:su .25s ease}
-.sh-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:12px auto 0;flex-shrink:0}
-.sh-head{padding:16px 20px 12px;font-size:16px;font-weight:700;flex-shrink:0}
-.sh-opts{padding:0 20px 12px;flex-shrink:0}
-.sh-opt{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
-.sh-opt:active{opacity:.6}
-.sh-opt-ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.sh-opt-nm{font-size:14px;font-weight:600}
-.sh-opt-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:1px}
-.sh-search{margin:0 20px 12px;padding:10px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);display:none;flex-shrink:0}
-.sh-search input{width:100%;border:none;background:none;color:#fff;font-size:13px;outline:none}
-.sh-search input::placeholder{color:rgba(255,255,255,.25)}
-.sh-search.show{display:block}
-.sh-list{flex:1;overflow-y:auto;padding:0 20px 20px;display:none}
-.sh-list.show{display:block}
-.sh-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer}
-.sh-item:active{background:rgba(124,58,237,.08);margin:0 -20px;padding:11px 20px;border-radius:10px}
-.sh-item img{width:42px;height:42px;border-radius:50%;object-fit:cover}
-.sh-item .sh-inf{flex:1;min-width:0}
-.sh-item .sh-nm{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sh-item .sh-sub{font-size:11px;color:rgba(255,255,255,.3);margin-top:1px}
-.sh-item .sh-chk{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:11px;color:transparent;flex-shrink:0;transition:all .15s}
-.sh-item.sel .sh-chk{background:linear-gradient(135deg,#7c3aed,#a855f7);border-color:transparent;color:#fff}
-.sh-sel-bar{display:none;align-items:center;justify-content:space-between;padding:12px 20px;border-top:1px solid rgba(255,255,255,.06);flex-shrink:0}
-.sh-sel-bar.show{display:flex}
-.sh-sel-count{font-size:13px;font-weight:600;color:rgba(255,255,255,.5)}
-.sh-sel-btn{padding:9px 24px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:13px;font-weight:700}
-.no-res{text-align:center;padding:30px 20px;color:rgba(255,255,255,.15);font-size:13px}
-.pm-ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center}
-.pm-ov.show{display:flex}
-.pm-bg{position:fixed;inset:0;background:rgba(0,0,0,.5)}
-.pm-sheet{position:relative;z-index:1;width:100%;max-width:430px;background:rgba(20,20,45,.92);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:12px 0 24px;animation:su .25s ease}
-.pm-handle{width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:0 auto 12px}
-.pm-item{display:flex;align-items:center;gap:12px;padding:13px 20px;font-size:13px;font-weight:500;color:rgba(255,255,255,.7);cursor:pointer;transition:all .12s}
-.pm-item:hover{background:rgba(124,58,237,.1);color:#fff}
-.pm-item i{width:18px;text-align:center;font-size:14px;color:rgba(255,255,255,.35)}
-.pm-item.dng{color:#ef4444}.pm-item.dng i{color:#ef4444}
-.pm-div{height:1px;background:rgba(255,255,255,.06);margin:4px 0}
-.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:60px;display:flex;align-items:center;justify-content:space-around;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.06);z-index:200}
-.nb{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;font-weight:500;color:rgba(255,255,255,.3);transition:color .2s}
-.nb i{font-size:19px}
-.nb.on{color:#a855f7}
-.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
-@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:#0b0b12;
+
+color:white;
+
+padding-bottom:90px;
+
+}
+
+a{
+
+text-decoration:none;
+
+color:inherit;
+
+}
+
+.profile-header{
+
+position:relative;
+
+width:100%;
+
+height:220px;
+
+overflow:hidden;
+
+}
+
+.cover-photo{
+
+width:100%;
+
+height:100%;
+
+object-fit:cover;
+
+background:#222;
+
+}
+
+.profile-photo{
+
+position:absolute;
+
+left:25px;
+
+bottom:-55px;
+
+width:110px;
+
+height:110px;
+
+border-radius:50%;
+
+border:5px solid #0b0b12;
+
+object-fit:cover;
+
+background:#222;
+
+}
+
+.menu-btn{
+
+position:absolute;
+
+top:18px;
+
+right:18px;
+
+width:42px;
+
+height:42px;
+
+border-radius:50%;
+
+background:rgba(0,0,0,.45);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:18px;
+
+backdrop-filter:blur(10px);
+
+cursor:pointer;
+
+}
+
+.profile-info{
+
+margin-top:70px;
+
+padding:20px;
+
+}
+
+.profile-name{
+
+font-size:24px;
+
+font-weight:700;
+
+}
+
+.profile-username{
+
+margin-top:3px;
+
+font-size:15px;
+
+color:#9ca3af;
+
+}
+
+.profile-bio{
+
+margin-top:16px;
+
+line-height:1.7;
+
+font-size:14px;
+
+}
+
+.joined{
+
+margin-top:14px;
+
+font-size:13px;
+
+color:#8b8b95;
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+}
+
+.stats{
+
+margin-top:25px;
+
+display:flex;
+
+justify-content:space-between;
+
+text-align:center;
+
+}
+
+.stat h3{
+
+font-size:20px;
+
+}
+
+.stat p{
+
+font-size:13px;
+
+color:#9ca3af;
+
+margin-top:3px;
+
+}
+
 </style>
+
 </head>
+
 <body>
-<header class="hdr">
-<div class="hdr-title">Profile</div>
-<div class="hdr-edit" onclick="openEditMenu()"><span></span><span></span><span></span></div>
-</header>
 
-<div class="cover" id="coverEl" onclick="toggleCoverOpts()">
-<div id="coverDisplay"><div class="cover-default"><span>Nigeria</span></div></div>
-<div class="cover-ov" id="coverOv">
-<div class="cover-opt" onclick="event.stopPropagation();viewCover()"><i class="fas fa-eye"></i></div>
-<div class="cover-opt" onclick="event.stopPropagation();changeCover()"><i class="fas fa-camera"></i></div>
-</div>
-<div class="av-wrap" id="avWrap" onclick="event.stopPropagation();toggleAvOpts()">
-<div id="avDisplay"><div class="av">YG</div></div>
-<div class="av-opts" id="avOpts">
-<div class="av-opt" onclick="event.stopPropagation();viewPic()"><i class="fas fa-eye"></i> View Picture</div>
-<div class="av-opt" onclick="event.stopPropagation();changePic()"><i class="fas fa-camera"></i> Change Picture</div>
-</div>
-</div>
+<div class="profile-header">
+
+<img id="coverPhoto"
+
+class="cover-photo"
+
+src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200"
+
+alt="Cover">
+
+<img
+
+id="profilePhoto"
+
+class="profile-photo"
+
+src="https://ui-avatars.com/api/?name=StudentX"
+
+alt="Profile">
+
+<div
+
+class="menu-btn"
+
+onclick="openMenu()">
+
+<i class="fas fa-ellipsis-h"></i>
+
 </div>
 
-<div class="info">
-<div class="nm-row">
-<div class="nm">Yusuf Alhaji Garba <i class="fas fa-check-circle vd"></i></div>
-<div class="share-btn" onclick="openShare()"><i class="fas fa-share-alt"></i> Share</div>
 </div>
-<div class="handle">@yusuftsm</div>
-<div class="course-label"><i class="fas fa-code"></i> Software Engineering</div>
-<div class="bio">Federal University Dutse<br>Build my future one step at a time 🚀</div>
+
+<div class="profile-info">
+
+<h2
+
+id="fullName"
+
+class="profile-name">
+
+Loading...
+
+</h2>
+
+<div
+
+id="username"
+
+class="profile-username">
+
+@loading...
+
+</div>
+
+<div
+
+id="bio"
+
+class="profile-bio">
+
+No bio yet.
+
+</div>
+
+<div class="joined">
+
+<i class="far fa-calendar"></i>
+
+<span id="joinedDate">
+
+Joined July 2026
+
+</span>
+
+</div>
+
 <div class="stats">
-<div class="stat"><div class="stat-num">24</div><div class="stat-label">Posts</div></div>
-<div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">Followers</div></div>
-<div class="stat"><div class="stat-num">320</div><div class="stat-label">Following</div></div>
-<div class="stat"><div class="stat-num">18</div><div class="stat-label">Communities</div></div>
-</div>
-<div class="btns"><div class="btn btn-primary" onclick="window.location.href='edit-profile.html'">Edit Profile</div></div>
-<div class="tabs">
-<div class="tab on" onclick="switchTab('posts',this)">Posts</div>
-<div class="tab" onclick="switchTab('saved',this)">Saved</div>
-</div>
+
+<div class="stat">
+
+<h3 id="postsCount">0</h3>
+
+<p>Posts</p>
+
 </div>
 
-<div class="posts" id="postsView"></div>
-<div class="saved-empty" id="savedView" style="display:none"><i class="far fa-bookmark"></i><p>No saved posts yet</p></div>
+<div class="stat">
 
-<div class="view-ov" id="viewOv" onclick="closeView()"><div class="view-close"><i class="fas fa-times"></i></div><img id="viewImg" src="" alt=""></div>
+<h3 id="followersCount">0</h3>
 
-<div class="em-ov" id="emOv">
-<div class="em-bg" onclick="closeEditMenu()"></div>
-<div class="em-sheet">
-<div class="em-handle"></div>
-<div class="em-item" onclick="closeEditMenu();changePic()"><i class="fas fa-user-circle"></i> Edit Profile Picture</div>
-<div class="em-item" onclick="closeEditMenu();changeCover()"><i class="fas fa-image"></i> Edit Cover Photo</div>
-<div class="em-item" onclick="closeEditMenu();window.location.href='edit-username.html'"><i class="fas fa-at"></i> Edit Username</div>
-<div class="em-div"></div>
-<div class="em-item" onclick="closeEditMenu();toggleLock()"><i class="fas fa-lock" id="lockIcon"></i> <span id="lockText">Lock Profile</span></div>
-</div>
+<p>Followers</p>
+
 </div>
 
-<div class="sh-ov" id="shOv">
-<div class="sh-bg" onclick="closeShare()"></div>
-<div class="sh-sheet">
-<div class="sh-handle"></div>
-<div class="sh-head" id="shHead">Share Profile</div>
-<div class="sh-opts" id="shOpts"></div>
-<div class="sh-search" id="shSearch"><input type="text" id="shInput" placeholder="Search..." oninput="searchSh(this.value)"></div>
-<div class="sh-list" id="shList"></div>
-<div class="sh-sel-bar" id="shBar"><div class="sh-sel-count" id="shCount">0 selected</div><div class="sh-sel-btn" onclick="doShare()">Share</div></div>
-</div>
+<div class="stat">
+
+<h3 id="followingCount">0</h3>
+
+<p>Following</p>
+
 </div>
 
-<div class="pm-ov" id="pmOv">
-<div class="pm-bg" onclick="closePm()"></div>
-<div class="pm-sheet"><div class="pm-handle"></div><div id="pmItems"></div></div>
+<div class="stat">
+
+<h3 id="likesCount">0</h3>
+
+<p>Likes</p>
+
 </div>
 
-<input type="file" id="picInput" accept="image/*" style="display:none" onchange="handlePic(this)">
-<input type="file" id="coverInput" accept="image/*" style="display:none" onchange="handleCover(this)">
+</div>
+<div class="profile-tabs">
 
-<nav class="bnav">
-<div class="nb" onclick="window.location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div>
-<div class="nb" onclick="window.location.href='explore.html'"><i class="fas fa-compass"></i><span>Explore</span></div>
-<div class="nb" onclick="window.location.href='chat.html'"><i class="fas fa-comment-dots"></i><span>Chat</span></div>
-<div class="nb" onclick="window.location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div>
-<div class="nb on" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div>
-</nav>
+<button class="tab active">
+Posts
+</button>
 
+<button class="tab">
+Media
+</button>
+
+<button class="tab">
+Replies
+</button>
+
+</div>
+
+<div id="postsContainer">
+
+<div class="empty-posts">
+
+<i class="fas fa-newspaper"></i>
+
+<h3>No Posts Yet</h3>
+
+<p>
+Posts will appear here.
+</p>
+
+</div>
+
+</div>
+
+<div id="bottomMenu"
+class="bottom-menu">
+
+<div class="menu-sheet">
+
+<div class="drag-line"></div>
+
+<div class="menu-item"
+onclick="editProfile()">
+
+<i class="fas fa-user-edit"></i>
+
+<span>Edit Profile</span>
+
+</div>
+
+<div class="menu-item"
+onclick="changeProfilePhoto()">
+
+<i class="fas fa-camera"></i>
+
+<span>Change Profile Picture</span>
+
+</div>
+
+<div class="menu-item"
+onclick="changeCoverPhoto()">
+
+<i class="fas fa-image"></i>
+
+<span>Change Cover Photo</span>
+
+</div>
+
+<div class="menu-item"
+onclick="editBio()">
+
+<i class="fas fa-pen"></i>
+
+<span>Edit Bio</span>
+
+</div>
+
+<div class="menu-item"
+onclick="openPrivacy()">
+
+<i class="fas fa-lock"></i>
+
+<span>Privacy</span>
+
+</div>
+
+<div class="menu-item"
+onclick="requestVerification()">
+
+<i class="fas fa-check-circle"></i>
+
+<span>Request Verification</span>
+
+</div>
+
+<div class="menu-item"
+onclick="openPremium()">
+
+<i class="fas fa-crown"></i>
+
+<span>StudentX Premium</span>
+
+</div>
+
+<div class="menu-item"
+onclick="openSettings()">
+
+<i class="fas fa-cog"></i>
+
+<span>Settings</span>
+
+</div>
+
+</div>
+
+</div>
 <script>
-    var myPosts=[
-  {id:2,text:'Shared my Data Structures assignment solution. Let me know if you have questions!',likes:32,comments:8,shares:3,liked:false,saved:false,time:Date.now()-86400000,views:456,pinned:false},
-  {id:1,text:'Just finished a great session on Machine Learning basics. Here are some key notes for everyone. Hope it helps!',likes:45,comments:12,shares:8,liked:false,saved:false,time:Date.now()-7200000,views:892,pinned:true},
-  {id:3,text:'Exam tip: Use the Feynman technique. Try explaining the concept to someone who knows nothing about it.',likes:128,comments:34,shares:67,liked:false,saved:false,time:Date.now()-172800000,views:2340,pinned:false}
-];
-var friends=[
-  {id:2,name:'Fatima Muhammad',av:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop'},
-  {id:3,name:'David Okafor',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop'},
-  {id:4,name:'Aisha Bello',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop'},
-  {id:5,name:'Emeka Nwankwo',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop'},
-  {id:6,name:'Halima Yusuf',av:'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'},
-  {id:7,name:'Ibrahim Kano',av:'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop'},
-  {id:8,name:'Maryam Ibrahim',av:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop'},
-  {id:9,name:'Khalid Ali',av:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop'}
-];
-var groups=[
-  {id:1,name:'Study Group CS300',members:48,av:'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100&h=100&fit=crop'},
-  {id:2,name:'Software Engineering Hub',members:120,av:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop'},
-  {id:3,name:'Med Students Forum',members:89,av:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=100&h=100&fit=crop'},
-  {id:4,name:'Engineering Hub',members:67,av:'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop'},
-  {id:5,name:'Law Students',members:54,av:'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=100&h=100&fit=crop'}
-];
-var curPicSrc=null,isCustomPic=false,curCoverSrc=null,isCustomCover=false,shMode='',shSelected=[],curPmId=null,isLocked=false;
 
-function ta(t){var s=Math.floor((Date.now()-t)/1000);if(s<60)return'Just now';if(s<3600)return Math.floor(s/60)+'h ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago'}
-function fmtV(v){if(v>=1000)return(v/1000).toFixed(1)+'K';return v.toString()}
-function avH(){if(isCustomPic&&curPicSrc)return'<img class="av" src="'+curPicSrc+'">';return'<div class="av">YG</div>'}
-function pAvH(){if(isCustomPic&&curPicSrc)return'<img class="p-av" src="'+curPicSrc+'">';return'<div class="p-av">YG</div>'}
-
-function renderPosts(){
-  var pinned=myPosts.filter(function(p){return p.pinned});
-  var unpinned=myPosts.filter(function(p){return !p.pinned});
-  var h='';
-  if(pinned.length){h+='<div class="pin-label"><i class="fas fa-thumbtack"></i> Pinned</div>';pinned.forEach(function(p){h+=postH(p)})}
-  unpinned.forEach(function(p){h+=postH(p)});
-  document.getElementById('postsView').innerHTML=h;
+function openMenu(){
+document.getElementById("bottomMenu").style.display="block";
 }
-function postH(p){
-  return'<div class="post"><div class="p-hdr">'+pAvH()+'<div class="p-inf"><div class="p-nm">Yusuf Alhaji Garba <i class="fas fa-check-circle vd"></i></div><div class="p-meta">@yusuftsm · '+ta(p.time)+'</div></div><div class="p-more" onclick="openPm('+p.id+')"><i class="fas fa-ellipsis-h"></i></div></div><div class="p-body">'+p.text+'</div><div class="p-acts"><div class="p-a lk '+(p.liked?'on':'')+'" onclick="toggleLike('+p.id+')"><i class="'+(p.liked?'fas':'far')+' fa-heart"></i> '+p.likes+'</div><div class="p-a" onclick="window.location.href=\'comment.html?post='+p.id+'\'"><i class="far fa-comment"></i> '+p.comments+'</div><div class="p-a" onclick="showMsg(\'Shared!\')"><i class="fas fa-retweet"></i> '+p.shares+'</div><div class="p-a p-a-r" onclick="showMsg(\'Views: '+p.views+'\')"><i class="fas fa-chart-bar"></i> '+fmtV(p.views)+'</div></div></div>';
+
+window.onclick=function(e){
+const menu=document.getElementById("bottomMenu");
+if(e.target===menu){
+menu.style.display="none";
 }
-function toggleLike(id){var p=myPosts.find(function(x){return x.id===id});if(p){p.liked=!p.liked;p.likes+=p.liked?1:-1;renderPosts()}}
-function switchTab(t,el){document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});el.classList.add('on');document.getElementById('postsView').style.display=t==='posts'?'block':'none';document.getElementById('savedView').style.display=t==='saved'?'block':'none'}
+}
 
-function toggleCoverOpts(){var o=document.getElementById('coverOv');o.style.display=o.style.display==='flex'?'none':'flex'}
-function viewCover(){document.getElementById('coverOv').style.display='none';if(!isCustomCover){showMsg('This is the default cover');return}document.getElementById('viewImg').src=curCoverSrc;document.getElementById('viewOv').classList.add('show')}
-function changeCover(){document.getElementById('coverOv').style.display='none';document.getElementById('coverInput').click()}
-function handleCover(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){curCoverSrc=e.target.result;isCustomCover=true;document.getElementById('coverDisplay').innerHTML='<img class="cover-img" src="'+curCoverSrc+'">';showMsg('Cover photo updated!')};r.readAsDataURL(f);inp.value=''}
-function closeView(){document.getElementById('viewOv').classList.remove('show')}
+function editProfile(){
+alert("Edit Profile - Coming Soon");
+}
 
-function toggleAvOpts(){var o=document.getElementById('avOpts');o.classList.toggle('show');setTimeout(function(){document.addEventListener('click',function c(){o.classList.remove('show');document.removeEventListener('click',c)},{once:true})},10)}
-function viewPic(){document.getElementById('avOpts').classList.remove('show');if(!isCustomPic){showMsg('No custom picture yet');return}document.getElementById('viewImg').src=curPicSrc;document.getElementById('viewOv').classList.add('show')}
-function changePic(){document.getElementById('avOpts').classList.remove('show');document.getElementById('picInput').click()}
-function handlePic(inp){var f=inp.files[0];if(!f)return;var r=new FileReader();r.onload=function(e){curPicSrc=e.target.result;isCustomPic=true;document.getElementById('avDisplay').innerHTML=avH();renderPosts();showMsg('Profile picture updated!')};r.readAsDataURL(f);inp.value=''}
+function changeProfilePhoto(){
+alert("Change Profile Picture - Coming Soon");
+}
 
-function openEditMenu(){document.getElementById('emOv').classList.add('show')}
-function closeEditMenu(){document.getElementById('emOv').classList.remove('show')}
-function toggleLock(){isLocked=!isLocked;document.getElementById('lockIcon').className=isLocked?'fas fa-lock-open':'fas fa-lock';document.getElementById('lockText').textContent=isLocked?'Unlock Profile':'Lock Profile';showMsg(isLocked?'Profile locked':'Profile unlocked')}
+function changeCoverPhoto(){
+alert("Change Cover Photo - Coming Soon");
+}
 
-function openShare(){shMode='';shSelected=[];document.getElementById('shHead').textContent='Share Profile';document.getElementById('shOpts').innerHTML='<div class="sh-opt" onclick="startSG()"><div class="sh-opt-ic" style="background:rgba(124,58,237,.12);color:#a855f7"><i class="fas fa-users"></i></div><div><div class="sh-opt-nm">Share to Group</div><div class="sh-opt-sub">Share your profile link in a group</div></div></div><div class="sh-opt" onclick="startSF()"><div class="sh-opt-ic" style="background:rgba(16,185,129,.12);color:#10b981"><i class="fas fa-user-friends"></i></div><div><div class="sh-opt-nm">Share to Friend</div><div class="sh-opt-sub">Send your profile link to a friend</div></div></div><div class="sh-opt" onclick="copyPL()"><div class="sh-opt-ic" style="background:rgba(59,130,246,.12);color:#3b82f6"><i class="fas fa-link"></i></div><div><div class="sh-opt-nm">Copy Link</div><div class="sh-opt-sub">Copy your profile link to clipboard</div></div></div>';document.getElementById('shOpts').style.display='';document.getElementById('shSearch').classList.remove('show');document.getElementById('shList').classList.remove('show');document.getElementById('shBar').classList.remove('show');document.getElementById('shOv').classList.add('show')}
-function closeShare(){document.getElementById('shOv').classList.remove('show')}
-function startSG(){shMode='group';shSelected=[];document.getElementById('shHead').textContent='Share to Group';document.getElementById('shOpts').style.display='none';document.getElementById('shSearch').classList.add('show');document.getElementById('shInput').placeholder='Search groups...';document.getElementById('shInput').value='';document.getElementById('shList').classList.add('show');renderSL(groups);updateSB()}
-function startSF(){shMode='friend';shSelected=[];document.getElementById('shHead').textContent='Share to Friend';document.getElementById('shOpts').style.display='none';document.getElementById('shSearch').classList.add('show');document.getElementById('shInput').placeholder='Search friends...';document.getElementById('shInput').value='';document.getElementById('shList').classList.add('show');renderSL(friends);updateSB()}
-function renderSL(list){var el=document.getElementById('shList');if(!list.length){el.innerHTML='<div class="no-res">No results found</div>';return}el.innerHTML=list.map(function(i){var s=shSelected.indexOf(i.id)!==-1;return'<div class="sh-item '+(s?'sel':'')+'" onclick="toggleSS('+i.id+')"><img src="'+i.av+'"><div class="sh-inf"><div class="sh-nm">'+i.name+'</div>'+(shMode==='group'?'<div class="sh-sub">'+i.members+' members</div>':'')+'</div><div class="sh-chk"><i class="fas fa-check"></i></div></div>'}).join('')}
-function searchSh(v){var l=shMode==='group'?groups:friends;if(v.length<1){renderSL(l);return}var q=v.toLowerCase();renderSL(l.filter(function(i){return i.name.toLowerCase().indexOf(q)!==-1}))}
-function toggleSS(id){var i=shSelected.indexOf(id);if(i===-1)shSelected.push(id);else shSelected.splice(i,1);var l=shMode==='group'?groups:friends;var v=document.getElementById('shInput').value;if(v.length>=1){var q=v.toLowerCase();l=l.filter(function(i){return i.name.toLowerCase().indexOf(q)!==-1})}renderSL(l);updateSB()}
-function updateSB(){var b=document.getElementById('shBar');if(shSelected.length>0){b.classList.add('show');document.getElementById('shCount').textContent=shSelected.length+' selected'}else{b.classList.remove('show')}}
-function doShare(){if(!shSelected.length)return;var t=shMode==='group'?'group'+(shSelected.length>1?'s':''):'friend'+(shSelected.length>1?'s':'');closeShare();showMsg('Profile shared to '+shSelected.length+' '+t+'!');shSelected=[]}
-function copyPL(){closeShare();if(navigator.clipboard)navigator.clipboard.writeText(window.location.href);showMsg('Profile link copied!')}
+function editBio(){
+alert("Edit Bio - Coming Soon");
+}
 
-function openPm(id){curPmId=id;var p=myPosts.find(function(x){return x.id===id});document.getElementById('pmItems').innerHTML='<div class="pm-item" onclick="closePm();pinP('+id+')"><i class="fas fa-thumbtack"></i> '+(p.pinned?'Unpin Post':'Pin Post to Profile')+'</div><div class="pm-item" onclick="closePm();showMsg(\'Viewing post analysis\')"><i class="fas fa-chart-line"></i> View Post Analysis</div><div class="pm-item" onclick="closePm();showMsg(\'Commenting turned off\')"><i class="fas fa-comment-slash"></i> Turn Off Commenting</div><div class="pm-div"></div><div class="pm-item dng" onclick="closePm();delP('+id+')"><i class="fas fa-trash"></i> Delete Post</div>';document.getElementById('pmOv').classList.add('show')}
-function closePm(){document.getElementById('pmOv').classList.remove('show')}
-function pinP(id){var p=myPosts.find(function(x){return x.id===id});if(p){p.pinned=!p.pinned;renderPosts();showMsg(p.pinned?'Post pinned':'Post unpinned')}}
-function delP(id){myPosts=myPosts.filter(function(x){return x.id!==id});renderPosts();showMsg('Post deleted')}
+function openPrivacy(){
+alert("Privacy - Coming Soon");
+}
 
-function showMsg(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2500)}
-renderPosts();
+function requestVerification(){
+alert("Verification Request - Coming Soon");
+}
+
+function openPremium(){
+alert("StudentX Premium - Coming Soon");
+}
+
+function openSettings(){
+alert("Settings - Coming Soon");
+}
+
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="profile.js"></script>
+
 </body>
-</html>
+    </html>
