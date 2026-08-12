@@ -1,162 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu - StudentX</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background-color: #121212; /* Launin baya na app */
-            color: #fff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        /* Sashin Sama (Header) */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #2c2c2c;
-            position: sticky;
-            top: 0;
-            background-color: #121212;
-            z-index: 100;
-        }
-        .back-btn {
-            color: #fff;
-            text-decoration: none;
-            font-size: 24px;
-            margin-right: 15px;
-            line-height: 1;
-        }
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        /* Sashin Bayanin Mai Amfani (Profile Summary) */
-        .menu-profile {
-            display: flex;
-            align-items: center;
-            padding: 20px 15px;
-            border-bottom: 8px solid #1e1e1e; /* Layin da ya raba shi da sauran menu */
-        }
-        .menu-profile img {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 15px;
-            border: 2px solid #8A2BE2; /* Launin Purple */
-        }
-        .menu-profile-info h3 {
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        .menu-profile-info p {
-            color: #b0b3b8;
-            font-size: 13px;
-        }
-
-        /* Jerin Zaɓuɓɓuka (Menu List) */
-        .menu-list {
-            padding: 0 15px;
-        }
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 10px;
-            text-decoration: none;
-            color: #fff;
-            border-bottom: 1px solid #2c2c2c;
-            transition: background-color 0.2s;
-        }
-        .menu-item:active {
-            background-color: #1e1e1e; /* Yana duhu idan aka danna shi */
-        }
-        .menu-icon {
-            font-size: 20px;
-            margin-right: 15px;
-            width: 25px;
-            text-align: center;
-        }
-        .menu-text {
-            flex-grow: 1;
-            font-size: 16px;
-        }
-        .menu-arrow {
-            color: #b0b3b8;
-            font-size: 18px;
-        }
-        
-        /* Zaɓin Fitawa (Logout) */
-        .logout {
-            color: #ff4b4b; /* Launin Jan saboda fita */
-        }
-        .logout .menu-arrow {
-            color: #ff4b4b;
-        }
-    </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentX Menu</title>
+<style>
+:root {
+  --bg: #FFFFFF; --text: #0F1419; --border: #EFF3F4; --accent: #8B5CF6;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0F0F1A; --text: #FFFFFF; --border: #2E2E42; --accent: #A78BFA; }
+}
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; }
+.menu { padding: 20px; }
+.profile { display: flex; align-items: center; gap: 12px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.profile img { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+.profile h3 { margin: 0; font-size: 16px; font-weight: 600; }
+.profile p { margin: 0; color: #8B98A5; font-size: 14px; }
+.menu-list { margin-top: 12px; }
+.menu-item { display: flex; align-items: center; gap: 16px; padding: 14px 12px; text-decoration: none; color: var(--text); border-radius: 8px; font-weight: 500; }
+.menu-item:hover { background: rgba(139, 92, 246, 0.1); }
+.menu-item svg { width: 22px; height: 22px; stroke: var(--text); flex-shrink: 0; }
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+.logout { color: #EF4444; }
+.logout svg { stroke: #EF4444; }
+</style>
 </head>
 <body>
-
-    <!-- Sashin Sama (Header) -->
-    <div class="header">
-        <a href="home.html" class="back-btn">&larr;</a>
-        <div class="header-title">Menu</div>
+<div class="menu">
+  
+  <div class="profile">
+    <img id="profile-pic" src="default-avatar.png" alt="Profile">
+    <div>
+      <h3 id="profile-name">Loading...</h3>
+      <p id="profile-username">@loading</p>
     </div>
+  </div>
 
-    <!-- Bayanin Mai Amfani a Sama -->
-    <a href="profile.html" class="menu-item" style="border-bottom: none;">
-        <div class="menu-profile">
-            <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100&h=100&fit=crop" alt="Yusuf">
-            <div class="menu-profile-info">
-                <h3>Yusuf Alhaji Garba</h3>
-                <p>Software Engineering<br>Federal University Dutse</p>
-            </div>
-        </div>
-    </a>
+  <div class="menu-list">
+    <a href="dashboard.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg> Dashboard</a>
+    
+    <a href="premium.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2z"/></svg> Premium</a>
 
-    <!-- Jerin Menu -->
-    <div class="menu-list">
-        <a href="studyhub.html" class="menu-item">
-            <span class="menu-icon">📚</span>
-            <span class="menu-text">StudyHub</span>
-            <span class="menu-arrow">&rsaquo;</span>
-        </a>
-        <a href="saved.html" class="menu-item">
-            <span class="menu-icon">🔖</span>
-            <span class="menu-text">Saved Posts</span>
-            <span class="menu-arrow">&rsaquo;</span>
-        </a>
-        <a href="communities.html" class="menu-item">
-            <span class="menu-icon">👥</span>
-            <span class="menu-text">My Communities</span>
-            <span class="menu-arrow">&rsaquo;</span>
-        </a>
-        <a href="settings.html" class="menu-item">
-            <span class="menu-icon">⚙️</span>
-            <span class="menu-text">Settings & Privacy</span>
-            <span class="menu-arrow">&rsaquo;</span>
-        </a>
-        <a href="help.html" class="menu-item">
-            <span class="menu-icon">❓</span>
-            <span class="menu-text">Help & Support</span>
-            <span class="menu-arrow">&rsaquo;</span>
-        </a>
-        
-        <!-- Maɓallin Fitawa -->
-        <a href="logout.html" class="menu-item logout">
-            <span class="menu-icon">🚪</span>
-            <span class="menu-text">Logout</span>
-        </a>
-    </div>
+    <a href="events.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Events</a>
 
+    <a href="marketplace.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 01-8 0"/></svg> E-Market</a>
+
+    <a href="scholarship.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg> Scholarship</a>
+
+    <a href="jobs.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg> Jobs</a>
+
+    <a href="ads.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M2 3h6a4 4 0 010 8H2zM2 13h6a4 4 0 010 8H2zM16 3h2a4 4 0 010 8h-2zM16 13h2a4 4 0 010 8h-2z"/></svg> Ads</a>
+
+    <a href="modem-ai.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v8M8 12h8"/></svg> Modem AI</a>
+
+    <div class="divider"></div>
+
+    <a href="settings.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Settings</a>
+
+    <a href="privacy.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Privacy Policy</a>
+
+    <a href="help.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"/></svg> Help Center</a>
+
+    <a href="about.html" class="menu-item"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> About</a>
+
+    <div class="divider"></div>
+    
+    <a href="logout.php" class="menu-item logout"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg> Logout</a>
+  </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'YOUR_SUPABASE_URL' // saka naka nan
+  const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY' // saka naka nan
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+  async function loadProfile() {
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (user) {
+      const { data: profile } = await supabase
+        .from('profiles') // suna table dinka
+        .select('full_name, username, avatar_url')
+        .eq('id', user.id)
+        .single()
+
+      if(profile) {
+        document.getElementById('profile-name').innerText = profile.full_name
+        document.getElementById('profile-username').innerText = '@' + profile.username
+        document.getElementById('profile-pic').src = profile.avatar_url || 'default-avatar.png'
+      }
+    }
+  }
+  loadProfile()
+</script>
 </body>
 </html>
