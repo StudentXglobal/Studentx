@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0,
+      maximum-scale=1.0,user-scalable=no">
+
+<title>StudentX Video</title>
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+body{
+    background:#08080d;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+/* =========================
+   VIDEO PAGE
+========================= */
+
+.video-page{
+    position:relative;
+    width:100%;
+    height:100vh;
+    background:#08080d;
+    overflow:hidden;
+}
+
+/* =========================
+   TOP HEADER
+========================= */
+
+.video-header{
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    height:64px;
+    z-index:20;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 16px;
+
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.75),
+        rgba(0,0,0,0)
+    );
+}
+
+.video-brand{
+    font-size:21px;
+    font-weight:800;
+    letter-spacing:-.5px;
+}
+
+.video-brand span{
+    color:#8b5cf6;
+}
+
+.video-actions{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+.video-action-btn{
+    width:38px;
+    height:38px;
+    border:0;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.10);
+    color:#fff;
+
+    font-size:17px;
+}
+
+/* =========================
+   VIDEO TABS
+========================= */
+
+.video-tabs{
+    position:absolute;
+    top:62px;
+    left:0;
+    right:0;
+
+    z-index:20;
+
+    display:flex;
+    justify-content:center;
+    gap:24px;
+}
+
+.video-tab{
+    position:relative;
+
+    border:0;
+    background:none;
+    color:rgba(255,255,255,.65);
+
+    font-size:14px;
+    font-weight:600;
+
+    padding:8px 0;
+}
+
+.video-tab.active{
+    color:#fff;
+}
+
+.video-tab.active::after{
+    content:"";
+
+    position:absolute;
+    left:50%;
+    bottom:0;
+
+    width:22px;
+    height:3px;
+
+    transform:translateX(-50%);
+
+    border-radius:10px;
+
+    background:#8b5cf6;
+}
+
+/* =========================
+   CREATE BUTTON
+========================= */
+
+.create-button{
+    position:absolute;
+
+    right:16px;
+    bottom:92px;
+
+    width:54px;
+    height:54px;
+
+    z-index:30;
+
+    border:0;
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#8b5cf6;
+    color:#fff;
+
+    font-size:22px;
+
+    box-shadow:
+        0 8px 25px rgba(0,0,0,.45),
+        0 0 0 4px rgba(139,92,246,.15);
+}
+
+.create-button:active{
+    transform:scale(.94);
+}
+
+/* =========================
+   VIDEO PLACEHOLDER
+========================= */
+
+.video-content{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    padding-bottom:70px;
+}
+
+.video-placeholder{
+    width:100%;
+    height:100%;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle at center,
+            rgba(139,92,246,.12),
+            transparent 45%
+        );
+}
+
+.video-placeholder i{
+    font-size:52px;
+    color:#8b5cf6;
+    margin-bottom:18px;
+}
+
+.video-placeholder h2{
+    font-size:21px;
+    margin-bottom:8px;
+}
+
+.video-placeholder p{
+    font-size:13px;
+    color:rgba(255,255,255,.55);
+}
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bnav{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:68px;
+
+    z-index:50;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+
+    background:rgba(8,8,13,.94);
+
+    border-top:1px solid rgba(255,255,255,.06);
+
+    backdrop-filter:blur(14px);
+}
+
+.nb{
+    width:20%;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    gap:5px;
+
+    color:rgba(255,255,255,.50);
+
+    font-size:10px;
+    font-weight:600;
+
+    cursor:pointer;
+}
+
+.nb i{
+    font-size:19px;
+}
+
+.nb.on{
+    color:#8b5cf6;
+}
+
+.nb:active{
+    transform:scale(.94);
+}
+
+/* =========================
+   CREATE MENU
+========================= */
+
+.create-menu{
+    position:absolute;
+
+    right:16px;
+    bottom:158px;
+
+    width:230px;
+
+    z-index:40;
+
+    display:none;
+
+    padding:10px;
+
+    border-radius:20px;
+
+    background:rgba(20,20,30,.97);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.55);
+
+    backdrop-filter:blur(20px);
+}
+
+.create-menu.show{
+    display:block;
+}
+
+.create-title{
+    padding:10px 12px 12px;
+
+    font-size:15px;
+    font-weight:700;
+
+    border-bottom:1px solid rgba(255,255,255,.07);
+
+    margin-bottom:5px;
+}
+
+.create-item{
+    width:100%;
+
+    display:flex;
+    align-items:center;
+
+    gap:13px;
+
+    padding:13px 12px;
+
+    border:0;
+    border-radius:12px;
+
+    background:none;
+
+    color:#fff;
+
+    font-size:14px;
+    font-weight:600;
+
+    text-align:left;
+}
+
+.create-item i{
+    width:22px;
+    color:#a78bfa;
+    font-size:17px;
+}
+
+.create-item:active{
+    background:rgba(139,92,246,.15);
+}
+
+/* =========================
+   DESKTOP SAFETY
+========================= */
+
+@media(min-width:700px){
+
+    .video-page{
+        max-width:480px;
+        margin:auto;
+    }
+
+    body{
+        background:#020204;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="video-page">
+
+    <!-- HEADER -->
+
+    <header class="video-header">
+
+        <div class="video-brand">
+            Student<span>X</span>
+        </div>
+
+        <div class="video-actions">
+
+            <button class="video-action-btn"
+                    aria-label="Search">
+                <i class="fas fa-search"></i>
+            </button>
+
+            <button class="video-action-btn"
+                    aria-label="Notifications">
+                <i class="fas fa-bell"></i>
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- TABS -->
+
+    <div class="video-tabs">
+
+        <button class="video-tab active">
+            For You
+        </button>
+
+        <button class="video-tab">
+            Following
+        </button>
+
+        <button class="video-tab">
+            LIVE
+        </button>
+
+        <button class="video-tab">
+            Voice
+        </button>
+
+    </div>
+
+
+    <!-- VIDEO CONTENT -->
+
+    <main class="video-content">
+
+        <div class="video-placeholder">
+
+            <i class="fas fa-video"></i>
+
+            <h2>StudentX Video</h2>
+
+            <p>
+                Videos, LIVE, Voice Rooms and more
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- CREATE BUTTON -->
+
+    <button class="create-button"
+            id="createButton"
+            aria-label="Create">
+
+        <i class="fas fa-plus"></i>
+
+    </button>
+
+
+    <!-- CREATE MENU -->
+
+    <div class="create-menu"
+         id="createMenu">
+
+        <div class="create-title">
+            Create
+        </div>
+
+        <button class="create-item"
+                onclick="location.href='upload-video.html'">
+
+            <i class="fas fa-video"></i>
+
+            <span>Upload Video</span>
+
+        </button>
+
+        <button class="create-item"
+                onclick="location.href='go-live.html'">
+
+            <i class="fas fa-tower-broadcast"></i>
+
+            <span>Go LIVE</span>
+
+        </button>
+
+        <button class="create-item"
+                onclick="location.href='voice-room.html'">
+
+            <i class="fas fa-microphone"></i>
+
+            <span>Voice Room</span>
+
+        </button>
+
+        <button class="create-item"
+                onclick="location.href='pk.html'">
+
+            <i class="fas fa-bolt"></i>
+
+            <span>Start PK</span>
+
+        </button>
+
+        <button class="create-item"
+                onclick="location.href='game-live.html'">
+
+            <i class="fas fa-gamepad"></i>
+
+            <span>Game LIVE</span>
+
+        </button>
+
+        <button class="create-item"
+                onclick="location.href='games.html'">
+
+            <i class="fas fa-gamepad"></i>
+
+            <span>Games</span>
+
+        </button>
+
+    </div>
+
+
+    <!-- BOTTOM NAVIGATION -->
+
+    <nav class="bnav">
+
+        <div class="nb"
+             onclick="location.href='home.html'">
+
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+
+        </div>
+
+        <div class="nb on">
+
+            <i class="fas fa-video"></i>
+            <span>Video</span>
+
+        </div>
+
+        <div class="nb"
+             onclick="location.href='chat.html'">
+
+            <i class="fas fa-comment-dots"></i>
+            <span>Chat</span>
+
+        </div>
+
+        <div class="nb"
+             onclick="location.href='studyhub.html'">
+
+            <i class="fas fa-book-open"></i>
+            <span>StudyHub</span>
+
+        </div>
+
+        <div class="nb"
+             onclick="location.href='profile.html'">
+
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+
+        </div>
+
+    </nav>
+
+</div>
+
+
+<script>
+
+const createButton =
+    document.getElementById("createButton");
+
+const createMenu =
+    document.getElementById("createMenu");
+
+createButton.addEventListener("click", function(){
+
+    createMenu.classList.toggle("show");
+
+});
+
+document.addEventListener("click", function(event){
+
+    if(
+        !createButton.contains(event.target) &&
+        !createMenu.contains(event.target)
+    ){
+
+        createMenu.classList.remove("show");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
