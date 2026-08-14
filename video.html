@@ -442,6 +442,451 @@ body{
     <!-- VIDEO CONTENT -->
 
     <main class="video-content">
+<div class="video-feed" id="videoFeed">
+
+    <!-- VIDEO 1 -->
+    <section class="video-card">
+
+        <video
+            class="feed-video"
+            src=""
+            poster=""
+            loop
+            muted
+            playsinline
+            preload="metadata">
+        </video>
+
+        <div class="video-overlay">
+
+            <div class="creator-info">
+
+                <div class="creator-row">
+
+                    <div class="creator-avatar">
+                        <img src="default-avatar.png" alt="Creator">
+                    </div>
+
+                    <div>
+                        <div class="creator-name">
+                            Yusuf Garba
+                        </div>
+
+                        <div class="creator-username">
+                            @yusufgarba
+                        </div>
+                    </div>
+
+                    <button class="follow-btn">
+                        Follow
+                    </button>
+
+                </div>
+
+                <div class="video-caption">
+                    Welcome to StudentX Video.
+                    Connect, learn and share.
+                </div>
+
+                <div class="video-tags">
+                    #StudentX #ConnectLearnShare
+                </div>
+
+            </div>
+
+
+            <!-- RIGHT ACTIONS -->
+
+            <div class="video-side-actions">
+
+                <button class="side-action">
+                    <i class="fas fa-heart"></i>
+                    <span>0</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-comment"></i>
+                    <span>0</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-share"></i>
+                    <span>Share</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Save</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-ellipsis"></i>
+                </button>
+
+            </div>
+
+
+            <!-- SOUND -->
+
+            <button class="sound-button">
+
+                <i class="fas fa-volume-xmark"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- VIDEO 2 -->
+
+    <section class="video-card">
+
+        <video
+            class="feed-video"
+            src=""
+            poster=""
+            loop
+            muted
+            playsinline
+            preload="metadata">
+        </video>
+
+        <div class="video-overlay">
+
+            <div class="creator-info">
+
+                <div class="creator-row">
+
+                    <div class="creator-avatar">
+                        <img src="default-avatar.png" alt="Creator">
+                    </div>
+
+                    <div>
+                        <div class="creator-name">
+                            StudentX Creator
+                        </div>
+
+                        <div class="creator-username">
+                            @studentx
+                        </div>
+                    </div>
+
+                    <button class="follow-btn">
+                        Follow
+                    </button>
+
+                </div>
+
+                <div class="video-caption">
+                    Learn something new every day.
+                </div>
+
+                <div class="video-tags">
+                    #StudentX #Learning
+                </div>
+
+            </div>
+
+
+            <div class="video-side-actions">
+
+                <button class="side-action">
+                    <i class="fas fa-heart"></i>
+                    <span>0</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-comment"></i>
+                    <span>0</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-share"></i>
+                    <span>Share</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-bookmark"></i>
+                    <span>Save</span>
+                </button>
+
+                <button class="side-action">
+                    <i class="fas fa-ellipsis"></i>
+                </button>
+
+            </div>
+
+
+            <button class="sound-button">
+
+                <i class="fas fa-volume-xmark"></i>
+
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+/* =========================
+   VERTICAL VIDEO FEED
+========================= */
+
+.video-feed{
+    position:absolute;
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    overflow-y:auto;
+    overflow-x:hidden;
+
+    scroll-snap-type:y mandatory;
+
+    scrollbar-width:none;
+}
+
+.video-feed::-webkit-scrollbar{
+    display:none;
+}
+
+.video-card{
+    position:relative;
+
+    width:100%;
+    height:100vh;
+
+    flex-shrink:0;
+
+    scroll-snap-align:start;
+
+    background:#050509;
+
+    overflow:hidden;
+}
+
+.feed-video{
+    position:absolute;
+
+    inset:0;
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    background:#050509;
+}
+
+.video-overlay{
+    position:absolute;
+
+    inset:0;
+
+    pointer-events:none;
+
+    background:
+        linear-gradient(
+            to top,
+            rgba(0,0,0,.82),
+            transparent 42%
+        );
+}
+
+.creator-info{
+    position:absolute;
+
+    left:16px;
+    right:80px;
+    bottom:92px;
+}
+
+.creator-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+}
+
+.creator-avatar{
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    border:2px solid #fff;
+
+    flex-shrink:0;
+}
+
+.creator-avatar img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.creator-name{
+    font-size:14px;
+    font-weight:700;
+}
+
+.creator-username{
+    margin-top:2px;
+
+    font-size:11px;
+
+    color:rgba(255,255,255,.65);
+}
+
+.follow-btn{
+    margin-left:4px;
+
+    padding:6px 11px;
+
+    border:1px solid rgba(255,255,255,.7);
+
+    border-radius:8px;
+
+    background:transparent;
+
+    color:#fff;
+
+    font-size:11px;
+    font-weight:700;
+}
+
+.video-caption{
+    margin-top:12px;
+
+    font-size:14px;
+    line-height:1.4;
+
+    color:#fff;
+}
+
+.video-tags{
+    margin-top:6px;
+
+    font-size:12px;
+
+    color:rgba(255,255,255,.75);
+}
+
+.video-side-actions{
+    position:absolute;
+
+    right:12px;
+    bottom:105px;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:18px;
+}
+
+.side-action{
+    pointer-events:auto;
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+
+    gap:4px;
+
+    border:0;
+
+    background:none;
+
+    color:#fff;
+
+    font-size:11px;
+
+    text-shadow:0 2px 5px rgba(0,0,0,.7);
+}
+
+.side-action i{
+    font-size:24px;
+}
+
+.side-action:active{
+    transform:scale(.9);
+}
+
+.sound-button{
+    pointer-events:auto;
+
+    position:absolute;
+
+    right:16px;
+    top:108px;
+
+    width:38px;
+    height:38px;
+
+    border:0;
+    border-radius:50%;
+
+    background:rgba(0,0,0,.4);
+
+    color:#fff;
+
+    font-size:15px;
+}
+
+@media(min-width:700px){
+
+    .video-feed{
+        max-width:480px;
+        margin:auto;
+    }
+
+}
+<script>
+const videoFeed = document.getElementById("videoFeed");
+
+const feedVideos =
+    document.querySelectorAll(".feed-video");
+
+const videoObserver =
+    new IntersectionObserver(
+        (entries) => {
+
+            entries.forEach(entry => {
+
+                const video = entry.target;
+
+                if(entry.isIntersecting){
+
+                    video.play().catch(() => {});
+
+                }else{
+
+                    video.pause();
+
+                }
+
+            });
+
+        },
+        {
+            threshold:0.65
+        }
+    );
+
+feedVideos.forEach(video => {
+
+    videoObserver.observe(video);
+
+});
+</script>
 
         <div class="video-placeholder">
 
