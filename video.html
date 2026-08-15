@@ -32,7 +32,7 @@
             position: relative;
         }
 
-        /* --- SASHIN SAMA (TOP BAR) - Yanzu ya zama FIXED --- */
+        /* --- SASHIN SAMA (TOP BAR) --- */
         .top-bar {
             position: absolute;
             top: 0;
@@ -42,14 +42,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 40px 15px 15px;
-            z-index: 100; /* Yana saman dukkan abubuwan */
+            z-index: 100;
             background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-            pointer-events: none; /* Don bari mutum ya taba screen dinsa ya je bayansa */
+            pointer-events: none;
         }
         .top-tabs {
             display: flex;
             gap: 20px;
-            pointer-events: auto; /* Amma tabs din zasu iya danna */
+            pointer-events: auto;
         }
         .tab {
             color: #ccc;
@@ -96,7 +96,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 12px;
-            background-color: #8A2BE2; /* Launin Purple */
+            background-color: #8A2BE2;
             border-radius: 50%;
             padding: 2px 3px;
             border: 1px solid #fff;
@@ -104,12 +104,12 @@
 
         /* --- WURI ƊIN DA AKE SCROLL (FEED CONTAINER) --- */
         .feed-container {
-            flex-grow: 1;
+            flex-grow: 1; /* Wannan zai sa ya dauko sauran wuri baya tare barin nav bar kaga */
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scrollbar-width: none;
             position: relative;
-            height: calc(100vh - 60px); /* Tsayinsa ya rage da nav bar din kasa */
+            /* An cire height: calc(100vh - 60px); saboda yana sa nav bar ya fita waje */
         }
         .feed-container::-webkit-scrollbar {
             display: none;
@@ -284,8 +284,9 @@
             background-color: #000;
             border-top: 1px solid #222;
             padding: 10px 0 15px;
-            z-index: 100;
+            z-index: 200; /* An kara shi domin ya kasance a sama */
             flex-shrink: 0;
+            text-decoration: none;
         }
         .nb {
             display: flex;
@@ -294,6 +295,7 @@
             color: #888;
             cursor: pointer;
             gap: 3px;
+            text-decoration: none;
         }
         .nb.on {
             color: #fff;
@@ -312,7 +314,7 @@
 
     <div class="app-container">
         
-        <!-- TOP BAR (Yanzu ya kasance a wajen feed-container, ba zai scroll ba) -->
+        <!-- TOP BAR (Ba zai scroll ba) -->
         <div class="top-bar">
             <div class="top-tabs">
                 <a href="following.html" class="tab">Following</a>
@@ -325,7 +327,7 @@
             </a>
         </div>
 
-        <!-- Wurin da yake ɗauko dukkan video din (ZAI KASANCE A TSAKIYA KAWAI) -->
+        <!-- Wurin da yake ɗauko dukkan video din -->
         <div class="feed-container" id="feedContainer">
 
             <!-- VIDEO NA FARKO -->
@@ -353,7 +355,7 @@
                         <span class="action-count">1,200</span>
                     </a>
                     
-                    <!-- SABON VIEWS ICON (SVG MAI KYAU DA BRAND DESIGN) -->
+                    <!-- VIEWS ICON (SVG) -->
                     <div class="action-item">
                         <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -400,7 +402,7 @@
                         <span class="action-count">340</span>
                     </a>
                     
-                    <!-- SABON VIEWS ICON -->
+                    <!-- VIEWS ICON -->
                     <div class="action-item">
                         <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -426,28 +428,28 @@
 
         </div>
 
-        <!-- Navigation Bar (Ba zai taba scroll ba) -->
+        <!-- Navigation Bar (An canza div zuwa a tags domin tabbatar suna aiki) -->
         <nav class="bnav">
-            <div class="nb on" onclick="window.location.href='home.html'">
+            <a href="home.html" class="nb on">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
-            </div>
-            <div class="nb" onclick="window.location.href='video.html'">
+            </a>
+            <a href="video.html" class="nb">
                 <i class="fas fa-video"></i>
                 <span>Video</span>
-            </div>
-            <div class="nb" onclick="window.location.href='chat.html'">
+            </a>
+            <a href="chat.html" class="nb">
                 <i class="fas fa-comment-dots"></i>
                 <span>Chat</span>
-            </div>
-            <div class="nb" onclick="window.location.href='studyhub.html'">
+            </a>
+            <a href="studyhub.html" class="nb">
                 <i class="fas fa-book-open"></i>
                 <span>StudyHub</span>
-            </div>
-            <div class="nb" onclick="window.location.href='profile.html'">
+            </a>
+            <a href="profile.html" class="nb">
                 <i class="fas fa-user"></i>
                 <span>Profile</span>
-            </div>
+            </a>
         </nav>
 
     </div>
