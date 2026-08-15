@@ -19,30 +19,22 @@
         html, body {
             background-color: #000;
             color: #fff;
-            height: 100vh;
-            width: 100vw;
+            height: 100%;
+            width: 100%;
             overflow: hidden;
         }
 
-        /* --- SASHIN TSARIYA (LAYOUT) --- */
-        .app-container {
-            position: relative;
-            height: 100vh;
-            width: 100vw;
-            background-color: #000;
-        }
-
         /* --- WURI ƊIN DA AKE SCROLL (FEED CONTAINER) --- */
-        /* An sa shi ya bar wuri 60px domin Nav Bar ya nuna */
         .feed-container {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: calc(100% - 60px); /* Wannan shine ke sa nav bar ya nuna */
+            bottom: 60px; /* Ya bar wuri 60px domin Nav Bar */
             overflow-y: scroll;
             scroll-snap-type: y mandatory;
             scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
         }
         .feed-container::-webkit-scrollbar {
             display: none;
@@ -51,7 +43,7 @@
         /* Kowane Video Ɗaya-ɗaya */
         .video-item {
             width: 100%;
-            height: 100%; /* Yanzu zai dauko tsayin da aka bari (100% - 60px) */
+            height: 100%;
             scroll-snap-align: start;
             scroll-snap-stop: always;
             position: relative;
@@ -73,9 +65,9 @@
             z-index: 1;
         }
 
-        /* --- SASHIN SAMA (TOP BAR) --- */
+        /* --- SASHIN SAMA (TOP BAR) - FIXED --- */
         .top-bar {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -83,7 +75,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 40px 15px 15px;
-            z-index: 100;
+            z-index: 1001; /* Mafi girma don ya kasance a kowanne lokaci */
             background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
             pointer-events: none;
         }
@@ -116,7 +108,7 @@
             border-radius: 2px;
         }
         
-        /* Alamar Upload (+ a tsakiyar Camera) */
+        /* Alamar Upload */
         .upload-btn {
             color: #fff;
             text-decoration: none;
@@ -243,6 +235,9 @@
         }
         .user-username {
             font-size: 14px;
+            div: not(.bnav) {
+                pointer-events: none;
+            }
             color: #ddd;
             margin-bottom: 8px;
             text-shadow: 0 1px 3px rgba(0,0,0,0.5);
@@ -279,10 +274,10 @@
             100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
         }
 
-        /* --- SASHIN NAVIGATION ƊIN ƘASA (BOTTOM NAV BAR) --- */
-        /* Yanzu yana da wajen da aka kebe masa, zai nuna koyaushe */
+        /* --- SASHIN NAVIGATION ƊIN ƘASA (BOTTOM NAV BAR) - FIXED --- */
+        /* An sa shi da tsarin da ka so (div da onclick) */
         .bnav {
-            position: absolute;
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
@@ -292,7 +287,7 @@
             align-items: center;
             background-color: #000;
             border-top: 1px solid #222;
-            z-index: 200;
+            z-index: 2000; /* An ɗaukaka shi sosai domin ya nuna koyaushe */
         }
         .nb {
             display: flex;
@@ -318,150 +313,144 @@
 </head>
 <body>
 
-    <div class="app-container">
-        
-        <!-- TOP BAR -->
-        <div class="top-bar">
-            <div class="top-tabs">
-                <a href="following.html" class="tab">Following</a>
-                <a href="video.html" class="tab active">For You</a>
-                <a href="live.html" class="tab">Live</a>
-            </div>
-            <a href="upload.html" class="upload-btn">
-                <i class="fas fa-camera"></i>
-                <i class="fas fa-plus"></i>
-            </a>
+    <!-- TOP BAR (Fixed) -->
+    <div class="top-bar">
+        <div class="top-tabs">
+            <a href="following.html" class="tab">Following</a>
+            <a href="video.html" class="tab active">For You</a>
+            <a href="live.html" class="tab">Live</a>
         </div>
+        <a href="upload.html" class="upload-btn">
+            <i class="fas fa-camera"></i>
+            <i class="fas fa-plus"></i>
+        </a>
+    </div>
 
-        <!-- Wurin da yake ɗauko dukkan video din -->
-        <div class="feed-container" id="feedContainer">
+    <!-- Wurin da yake ɗauko dukkan video din -->
+    <div class="feed-container" id="feedContainer">
 
-            <!-- VIDEO NA FARKO -->
-            <div class="video-item" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=1400&fit=crop');" data-video="1">
+        <!-- VIDEO NA FARKO -->
+        <div class="video-item" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=1400&fit=crop');" data-video="1">
+            
+            <!-- Heart Animation -->
+            <div class="heart-animation">
+                <i class="fas fa-heart"></i>
+            </div>
+
+            <!-- Right Bar -->
+            <div class="right-bar">
+                <div class="profile-wrapper">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" class="profile-avatar" alt="User">
+                    <button class="follow-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <button class="action-item like-btn">
+                    <i class="fas fa-heart"></i>
+                    <span class="action-color">45.2K</span>
+                </button>
+                <a href="comment.html" class="action-item">
+                    <i class="fas fa-comment-dots"></i>
+                    <span class="action-count">1,200</span>
+                </a>
                 
-                <!-- Heart Animation -->
-                <div class="heart-animation">
-                    <i class="fas fa-heart"></i>
+                <!-- VIEWS ICON (SVG) -->
+                <div class="action-item">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span class="action-count">15.4K</span>
                 </div>
 
-                <!-- Right Bar -->
-                <div class="right-bar">
-                    <div class="profile-wrapper">
-                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" class="profile-avatar" alt="User">
-                        <button class="follow-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <button class="action-item like-btn">
-                        <i class="fas fa-heart"></i>
-                        <span class="action-count">45.2K</span>
-                    </button>
-                    <a href="comment.html" class="action-item">
-                        <i class="fas fa-comment-dots"></i>
-                        <span class="action-count">1,200</span>
-                    </a>
-                    
-                    <!-- VIEWS ICON (SVG) -->
-                    <div class="action-item">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        <span class="action-count">15.4K</span>
-                    </div>
-
-                    <button class="action-item save-btn">
-                        <i class="fas fa-bookmark"></i>
-                        <span class="action-count">892</span>
-                    </button>
-                    <a href="more.html" class="action-item">
-                        <i class="fas fa-ellipsis-vertical"></i>
-                    </a>
-                </div>
-
-                <!-- Bottom Info -->
-                <div class="bottom-info">
-                    <h3 class="user-fullname">Fatima Muhammad</h3>
-                    <p class="user-username">@fatima_m</p>
-                    <p class="video-caption">Just finished my ML basics course! Sharing key notes in the PDF. #StudentX</p>
-                </div>
+                <button class="action-item save-btn">
+                    <i class="fas fa-bookmark"></i>
+                    <span class="action-count">892</span>
+                </button>
+                <a href="more.html" class="action-item">
+                    <i class="fas fa-ellipsis-vertical"></i>
+                </a>
             </div>
 
-            <!-- VIDEO NA BIUU -->
-            <div class="video-item" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1400&fit=crop');" data-video="2">
-                <div class="heart-animation">
-                    <i class="fas fa-heart"></i>
-                </div>
-                <div class="right-bar">
-                    <div class="profile-wrapper">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" class="profile-avatar" alt="User">
-                        <button class="follow-btn">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <button class="action-item like-btn">
-                        <i class="fas fa-heart"></i>
-                        <span class="action-count">12.5K</span>
-                    </button>
-                    <a href="comment.html" class="action-item">
-                        <i class="fas fa-comment-dots"></i>
-                        <span class="action-count">340</span>
-                    </a>
-                    
-                    <!-- VIEWS ICON -->
-                    <div class="action-item">
-                        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                            <circle cx="12" cy="12" r="3"></circle>
-                        </svg>
-                        <span class="action-count">8.2K</span>
-                    </div>
-
-                    <button class="action-item save-btn">
-                        <i class="fas fa-bookmark"></i>
-                        <span class="action-count">120</span>
-                    </button>
-                    <a href="more.html" class="action-item">
-                        <i class="fas fa-ellipsis-vertical"></i>
-                    </a>
-                </div>
-                <div class="bottom-info">
-                    <h3 class="user-fullname">David Okafor</h3>
-                    <p class="user-username">@david_ok</p>
-                    <p class="video-caption">Can someone explain the 2nd law of thermodynamics? #Physics</p>
-                </div>
+            <!-- Bottom Info -->
+            <div class="bottom-info">
+                <h3 class="user-fullname">Fatima Muhammad</h3>
+                <p class="user-username">@fatima_m</p>
+                <p class="video-caption">Just finished my ML basics course! Sharing key notes in the CSS Files. #StudentX</p>
             </div>
-
         </div>
 
-        <!-- Navigation Bar (Yanzu zai nuna tabbas) -->
-        <nav class="bnav">
-            <a href="home.html" class="nb on">
-                <i class="fas fa-home"></i>
-                <span>Home</span>
-            </a>
-            <a href="video.html" class="nb">
-                <i class="fas fa-video"></i>
-                <span>Video</span>
-            </a>
-            <a href="chat.html" class="nb">
-                <i class="fas fa-comment-dots"></i>
-                <span>Chat</span>
-            </a>
-            <a href="studyhub.html" class="nb">
-                <i class="fas fa-book-open"></i>
-                <span>StudyHub</span>
-            </a>
-            <a href="profile.html" class="nb">
-                <i class="fas fa-user"></i>
-                <span>Profile</span>
-            </a>
-        </nav>
+        <!-- VIDEO NA BIUU -->
+        <div class="video-item" name="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1400&fit=crop');" data-video="2">
+            <div class="heart-animation">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="right-bar">
+                <div class="profile-wrapper">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fill" alt="User">
+                    <button class="follow-btn">
+                        <div class="fas fa-plus"></div>
+                    </button>
+                </div>
+                <button class="action-item like-btn">
+                    <i class="fas fa-heart"></i>
+                    <span class="action-count">12.5K</span>
+                </item>
+                <a href="comment.html" class="action-item">
+                    <i class="fas fa-comment-dots"></i>
+                    <span class="action-count">340</span>
+                </a>
+                
+                <!-- VIEWS ICON -->
+                <div class="action-item">
+                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-1-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <span class="action-count">8.2K</span>
+                </div>
+
+                <button class="action-item save-btn">
+                    <i class="fas fa-bookmark"></i>
+                    <span class="action-count">120</span>
+                </button>
+                <a href="more.html" class="icon-click more.html" "fas fa-ellipsis-vertical"></i>
+                </a>
+            </div>
+            <div class="bottom-info">
+                <h3 class="user-fullname">David Okafor</h3>
+                 <p class="user-username">@david_ok</p>
+                <p class="video-caption">Can someone explain the 2nd law of thermodynamics? #Physics</p>
+            </div>
+        </div>
 
     </div>
 
+    <!-- Navigation Bar (Ainihin tsarin da ka so) -->
+    <nav class="bnav">
+        <div class="nb on" onclick="window.location.href='home.html'">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nb" onclick="window.location.href='video.html'">
+            <i class="fas fa-video"></i>
+            <span>Video</span>
+        </div>
+        <div class="nb" onclick="window.location.href='chat.html'">
+            <i class="fas fa-comment-dots"></i>
+            <span>Chat</span>
+        </div>
+        <div class="nb" onclick="window.location.href='studyhub.html'">
+            <i class="brand-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></i>
+            <span>StudyHub</span>
+        </div>
+        <div class="nb" onclick="window.location.href='profile.html'">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
     <script>
-        // 1. Aikin Follow, Like, Save, da Double Tap
         const feedContainer = document.getElementById('feedContainer');
 
         feedContainer.addEventListener('click', function(event) {
@@ -479,7 +468,7 @@
                     countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.2K" : "12.5K";
                 } else {
                     btn.classList.add('liked');
-                    countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.3K" : "12.6K";
+                    count-countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.3K" : "12.6K";
                 }
             }
 
