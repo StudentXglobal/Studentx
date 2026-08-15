@@ -1,32 +1,483 @@
-<!-- VIDEO -->
-<video id="video" autoplay playsinline muted></video>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Video - StudentX</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        body {
+            background-color: #000;
+            color: #fff;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
 
-<!-- CATEGORY TABS -->
-<div class="category-tabs">
-  <button class="active">Video</button>
-  <button>LIVE</button>
-  <button>PK</button>
-  <button>Voice Room</button>
-  <button>Game</button>
-</div>
+        /* Wurin da yake ɗauko dukkan video din (Scroll Snap) */
+        .feed-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
+        }
+        .feed-container::-webkit-scrollbar {
+            display: none;
+        }
 
-<!-- 1. HOST CIRCLE A KASA GUDA - SABO -->
-<div class="host-circle">
-  <img src="https://i.pravatar.cc/100" id="hostAvatar">
-  <div class="username">@Dr_Amina</div>
-  <button class="follow-btn" onclick="follow()">+ Follow</button>
-</div>
+        /* Kowane Video Ɗaya-ɗaya */
+        .video-item {
+            width: 100vw;
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            position: relative;
+            background-color: #111;
+            background-size: cover;
+            background-position: center;
+        }
+        .video-item::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 45%;
+            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+            pointer-events: none;
+        }
 
-<!-- 2. RIGHT BUTTONS - YANZU SUN TASHI SAMA DAN HOST -->
-<div class="right-buttons">
-  <div class="btn" onclick="like()"><div class="icon">❤️</div><div class="text" id="likeCount">24.1k</div></div>
-  <div class="btn"><div class="icon">💬</div><div class="text">1.2k</div></div>
-  <div class="btn"><div class="icon">📤</div><div class="text">Share</div></div>
-  <div class="btn"><div class="icon">🔖</div><div class="text">Save</div></div>
-  <div class="btn"><div class="icon">🎁</div><div class="text">Gift</div></div>
-</div>
+        /* Sashin Sama (Top Bar) */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 40px 15px 15px;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+        }
+        .top-tabs {
+            display: flex;
+            gap: 20px;
+        }
+        .tab {
+            color: #ccc;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+        }
+        .tab.active {
+            color: #fff;
+            font-weight: bold;
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #fff;
+            border-radius: 2px;
+        }
+        .upload-btn {
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .upload-btn svg {
+            width: 28px;
+            height: 28px;
+        }
 
-<!-- 3. DESCRIPTION A HAGU KASA -->
-<div class="video-desc">
-  📚 Math Class: Quadratic Equations #learn #studentx
-</div>
+        /* Sashin Dama (Right Action Bar) */
+        .right-bar {
+            position: absolute;
+            right: 10px;
+            bottom: 90px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            z-index: 10;
+        }
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .action-item svg {
+            width: 34px;
+            height: 34px;
+            fill: #fff;
+            transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        .action-item:active svg {
+            transform: scale(1.2);
+        }
+        .action-count {
+            font-size: 12px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* Profile da Follow Button */
+        .profile-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+        .profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+        .follow-btn {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background-color: #8A2BE2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #000;
+            cursor: pointer;
+        }
+        .follow-btn svg {
+            width: 12px;
+            height: 12px;
+            fill: #fff;
+        }
+        .follow-btn.followed {
+            display: none;
+        }
+
+        .like-btn.liked svg {
+            fill: #ff4b4b;
+            animation: pop 0.3s;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .save-btn.saved svg {
+            fill: #fbbf24;
+        }
+
+        /* Sashin Kasa-Hagu (Bottom Info) */
+        .bottom-info {
+            position: absolute;
+            bottom: 70px;
+            left: 15px;
+            right: 80px;
+            z-index: 10;
+        }
+        .user-fullname {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: #fff;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .user-username {
+            font-size: 14px;
+            color: #ddd;
+            margin-bottom: 8px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .video-caption {
+            font-size: 14px;
+            color: #eee;
+            line-height: 1.4;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* Tsarin Double Tap Like */
+        .heart-animation {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            color: #ff4b4b;
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0;
+        }
+        .heart-animation svg {
+            width: 100px;
+            height: 100px;
+            fill: #ff4b4b;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
+        }
+        .heart-animation.animate {
+            animation: heartPop 0.8s ease;
+        }
+        @keyframes heartPop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            15% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            30% { transform: translate(-50%, -50%) scale(1); }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
+        }
+
+        /* Sashin Navigation ɗin Ƙasa (Bottom Nav Bar) - Daidai kamar na StudentX */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background-color: #000;
+            border-top: 1px solid #222;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            padding-bottom: 10px;
+        }
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            text-decoration: none;
+            gap: 3px;
+        }
+        .nav-link.active {
+            color: #fff;
+        }
+        .nav-link svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+        .nav-text {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Wurin da yake ɗauko dukkan video din -->
+    <div class="feed-container" id="feedContainer">
+
+        <!-- VIDEO NA FARKO -->
+        <div class="video-item" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=1400&fit=crop');" data-video="1">
+            
+            <div class="heart-animation">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+
+            <div class="top-bar">
+                <div class="top-tabs">
+                    <span class="tab">Following</span>
+                    <span class="tab active">For You</span>
+                    <span class="tab">Live</span>
+                </div>
+                <!-- An canza shi zuwa Camera/Upload Icon -->
+                <a href="upload.html" class="upload-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                </a>
+            </div>
+
+            <div class="right-bar">
+                <div class="profile-wrapper">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" class="profile-avatar" alt="User">
+                    <button class="follow-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </button>
+                </div>
+                <button class="action-item like-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="action-count">45.2K</span>
+                </button>
+                <a href="comment.html" class="action-item">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span class="action-count">1,200</span>
+                </a>
+                <!-- SABON ICON NA VIEWS (Mai Kyau) -->
+                <div class="action-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    <span class="action-count">15.4K</span>
+                </div>
+                <button class="action-item save-btn">
+                    <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                    <span class="action-count">892</span>
+                </button>
+                <a href="more.html" class="action-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="18" r="2"/></svg>
+                </a>
+            </div>
+
+            <div class="bottom-info">
+                <h3 class="user-fullname">Fatima Muhammad</h3>
+                <p class="user-username">@fatima_m</p>
+                <p class="video-caption">Just finished my ML basics course! Sharing key notes in the PDF. #StudentX #MachineLearning</p>
+            </div>
+        </div>
+
+        <!-- VIDEO NA BIUU -->
+        <div class="video-item" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1400&fit=crop');" data-video="2">
+            <div class="heart-animation">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+            <div class="top-bar">
+                <div class="top-tabs">
+                    <span class="tab">Following</span>
+                    <span class="tab active">For You</span>
+                    <span class="tab">Live</span>
+                </div>
+                <a href="upload.html" class="upload-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                </a>
+            </div>
+            <div class="right-bar">
+                <div class="profile-wrapper">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" class="profile-avatar" alt="User">
+                    <button class="follow-btn">
+                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    </button>
+                </div>
+                <button class="action-item like-btn">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="action-count">12.5K</span>
+                </button>
+                <a href="comment.html" class="action-item">
+                    <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    <span class="action-count">340</span>
+                </a>
+                <!-- SABON ICON NA VIEWS (Mai Kyau) -->
+                <div class="action-item">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    <span class="action-count">8.2K</span>
+                </div>
+                <button class="action-item save-btn">
+                    <svg viewBox="0 0 24 24"><path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z"/></svg>
+                    <span class="action-count">120</span>
+                </button>
+                <a href="more.html" class="action-item">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="18" r="2"/></svg>
+                </a>
+            </div>
+            <div class="bottom-info">
+                <h3 class="user-fullname">David Okafor</h3>
+                <p class="user-username">@david_ok</p>
+                <p class="video-caption">Can someone explain the 2nd law of thermodynamics? #Physics #StudentX</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sashin Navigation ɗin Ƙasa (Bottom Nav Bar) -->
+    <div class="bottom-nav">
+        <a href="home.html" class="nav-link">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span class="nav-text">Home</span>
+        </a>
+        <a href="video.html" class="nav-link active">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span class="nav-text">Video</span>
+        </a>
+        <a href="chat.html" class="nav-link">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+            <span class="nav-text">Chat</span>
+        </a>
+        <a href="studyhub.html" class="nav-link">
+            <svg viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.91V17h2V9M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+            <span class="nav-text">StudyHub</span>
+        </a>
+        <a href="profile.html" class="nav-link">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span class="nav-text">Profile</span>
+        </a>
+    </div>
+
+    <script>
+        // 1. Aikin Follow, Like, Save, da Double Tap
+        const feedContainer = document.getElementById('feedContainer');
+
+        feedContainer.addEventListener('click', function(event) {
+            // Follow Button
+            if (event.target.closest('.follow-btn')) {
+                event.target.closest('.follow-btn').classList.add('followed');
+            }
+
+            // Like Button
+            if (event.target.closest('.like-btn')) {
+                const btn = event.target.closest('.like-btn');
+                const countSpan = btn.querySelector('.action-count');
+                if (btn.classList.contains('liked')) {
+                    btn.classList.remove('liked');
+                    countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.2K" : "12.5K";
+                } else {
+                    btn.classList.add('liked');
+                    countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.3K" : "12.6K";
+                }
+            }
+
+            // Save Button
+            if (event.target.closest('.save-btn')) {
+                event.target.closest('.save-btn').classList.toggle('saved');
+            }
+
+            // Double Tap Like
+            const videoItem = event.target.closest('.video-item');
+            if (videoItem && !event.target.closest('.right-bar') && !event.target.closest('.bottom-nav')) {
+                const heart = videoItem.querySelector('.heart-animation');
+                const currentTime = new Date().getTime();
+                
+                if (videoItem.lastTap && (currentTime - videoItem.lastTap < 300)) {
+                    const likeBtn = videoItem.querySelector('.like-btn');
+                    if (!likeBtn.classList.contains('liked')) {
+                        likeBtn.classList.add('liked');
+                        const countSpan = likeBtn.querySelector('.action-count');
+                        countSpan.innerText = "45.3K";
+                    }
+                    heart.classList.remove('animate');
+                    void heart.offsetWidth;
+                    heart.classList.add('animate');
+                }
+                videoItem.lastTap = currentTime;
+            }
+        });
+
+        // 2. Canja Tabs (For You, Following, Live)
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
