@@ -3639,6 +3639,118 @@ document.addEventListener(
     }
 );
 
+<script>
+/* =========================================================
+   STUDENTX — SAFE NAVIGATION PATCH
+   Wannan baya canza UI ko Supabase code.
+========================================================= */
+
+(function () {
+
+    /* -----------------------------------------
+       PAGE NAVIGATION
+    ----------------------------------------- */
+
+    window.goHome = function () {
+        window.location.href = "home.html";
+    };
+
+    window.goVideo = function () {
+        window.location.href = "video.html";
+    };
+
+    window.goChat = function () {
+        window.location.href = "chat.html";
+    };
+
+    window.goStudyHub = function () {
+        window.location.href = "studyhub.html";
+    };
+
+    window.goProfile = function () {
+        window.location.href = "profile.html";
+    };
+
+
+    /* -----------------------------------------
+       EDIT PROFILE
+       Ba ya canza UI.
+       Yana amfani da modal ɗin Part 5.
+    ----------------------------------------- */
+
+    window.openStudentXEditProfile = function () {
+
+        if (
+            typeof window.openEditProfile ===
+            "function"
+        ) {
+
+            window.openEditProfile();
+
+        } else {
+
+            console.warn(
+                "StudentX: Edit Profile function not found."
+            );
+
+        }
+    };
+
+
+    /* -----------------------------------------
+       EDIT PROFILE BUTTON
+    ----------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "#editProfileBtn"
+                );
+
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
+
+            window.openStudentXEditProfile();
+
+        },
+        true
+    );
+
+
+    /* -----------------------------------------
+       PROFILE MENU → EDIT PROFILE
+    ----------------------------------------- */
+
+    document.addEventListener(
+        "click",
+        function (event) {
+
+            const button =
+                event.target.closest(
+                    "#menuEditProfile"
+                );
+
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
+
+            window.openStudentXEditProfile();
+
+        },
+        true
+    );
+
+
+})();
+</script>
 
 /* =========================================================
    END OF PART 5
