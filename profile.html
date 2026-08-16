@@ -3613,17 +3613,14 @@ document.addEventListener(
                 "profileMenu"
             );
 
-
         if (!menu) {
             return;
         }
-
 
         const button =
             document.getElementById(
                 "profileMenuBtn"
             );
-
 
         if (
             !menu.contains(
@@ -3639,120 +3636,56 @@ document.addEventListener(
     }
 );
 
-<script>
+
 /* =========================================================
-   STUDENTX — SAFE NAVIGATION PATCH
-   Wannan baya canza UI ko Supabase code.
+   STUDENTX PAGE NAVIGATION
 ========================================================= */
 
-(function () {
+window.goHome = function() {
 
-    /* -----------------------------------------
-       PAGE NAVIGATION
-    ----------------------------------------- */
+    window.location.href =
+        "home.html";
 
-    window.goHome = function () {
-        window.location.href = "home.html";
-    };
-
-    window.goVideo = function () {
-        window.location.href = "video.html";
-    };
-
-    window.goChat = function () {
-        window.location.href = "chat.html";
-    };
-
-    window.goStudyHub = function () {
-        window.location.href = "studyhub.html";
-    };
-
-    window.goProfile = function () {
-        window.location.href = "profile.html";
-    };
+};
 
 
-    /* -----------------------------------------
-       EDIT PROFILE
-       Ba ya canza UI.
-       Yana amfani da modal ɗin Part 5.
-    ----------------------------------------- */
+window.goVideo = function() {
 
-    window.openStudentXEditProfile = function () {
+    window.location.href =
+        "video.html";
 
-        if (
-            typeof window.openEditProfile ===
-            "function"
-        ) {
-
-            window.openEditProfile();
-
-        } else {
-
-            console.warn(
-                "StudentX: Edit Profile function not found."
-            );
-
-        }
-    };
+};
 
 
-    /* -----------------------------------------
-       EDIT PROFILE BUTTON
-    ----------------------------------------- */
+window.goChat = function() {
 
-    document.addEventListener(
-        "click",
-        function (event) {
+    window.location.href =
+        "chat.html";
 
-            const button =
-                event.target.closest(
-                    "#editProfileBtn"
-                );
-
-            if (!button) {
-                return;
-            }
-
-            event.preventDefault();
-
-            window.openStudentXEditProfile();
-
-        },
-        true
-    );
+};
 
 
-    /* -----------------------------------------
-       PROFILE MENU → EDIT PROFILE
-    ----------------------------------------- */
+window.goStudyHub = function() {
 
-    document.addEventListener(
-        "click",
-        function (event) {
+    window.location.href =
+        "studyhub.html";
 
-            const button =
-                event.target.closest(
-                    "#menuEditProfile"
-                );
-
-            if (!button) {
-                return;
-            }
-
-            event.preventDefault();
-
-            window.openStudentXEditProfile();
-
-        },
-        true
-    );
+};
 
 
-})();
-</script>
+window.goProfile = function() {
+
+    window.location.href =
+        "profile.html";
+
+};
+
 
 /* =========================================================
    END OF PART 5
 ========================================================= */
-  
+
+</script>
+
+</body>
+</html>
