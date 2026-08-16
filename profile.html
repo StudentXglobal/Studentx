@@ -7,7 +7,7 @@
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
 >
 
 <title>StudentX - Profile</title>
@@ -24,11 +24,6 @@
 
 <style>
 
-/* ========================================
-   STUDENTX PROFILE
-   PART 1/5
-======================================== */
-
 *{
     margin:0;
     padding:0;
@@ -36,68 +31,170 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html{
+html,
+body{
     width:100%;
     min-height:100%;
 }
 
 body{
-    width:100%;
-    min-height:100vh;
-
-    margin:0;
-
-    font-family:
-        Poppins,
-        Arial,
-        sans-serif;
-
+    font-family:Poppins,sans-serif;
     background:#0a0a0f;
-
-    color:#ffffff;
-
-    padding-bottom:78px;
-
-    overflow-x:hidden;
-}
-
-button,
-input{
-    font-family:inherit;
+    color:#fff;
+    padding-bottom:70px;
 }
 
 
-/* ========================================
-   APP CONTAINER
-======================================== */
+/* =========================
+   HEADER
+========================= */
 
-.profile-app{
+.header{
+
+    position:sticky;
+    top:0;
+    z-index:100;
+
+    height:70px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    background:rgba(10,10,15,.96);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+}
+
+.header-title{
+
+    font-size:24px;
+    font-weight:800;
+}
+
+.menu-btn{
+
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.08);
+
+    color:#aaa;
+
+    font-size:18px;
+}
+
+
+/* =========================
+   COVER
+========================= */
+
+.cover{
 
     width:100%;
+    height:150px;
 
-    max-width:430px;
+    background:
+        linear-gradient(
+            90deg,
+            #008751 33.33%,
+            #ffffff 33.33%,
+            #ffffff 66.66%,
+            #008751 66.66%
+        );
 
-    min-height:100vh;
-
-    margin:0 auto;
-
-    background:#0a0a0f;
-
-    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
     overflow:hidden;
 }
 
+.cover span{
 
-/* ========================================
-   TOP HEADER
-======================================== */
+    color:#008751;
 
-.profile-header{
+    font-size:30px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+}
+
+
+/* =========================
+   PROFILE AREA
+========================= */
+
+.profile-info{
+
+    padding:55px 20px 0;
+
+    position:relative;
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+
+.avatar-box{
+
+    position:absolute;
+
+    top:-42px;
+    left:20px;
+
+    width:84px;
+    height:84px;
+
+    border-radius:50%;
+
+    border:4px solid #0a0a0f;
+
+    background:#181832;
+
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.avatar-box img{
 
     width:100%;
+    height:100%;
 
-    height:64px;
+    object-fit:cover;
+}
+
+.avatar-initials{
+
+    color:#a855f7;
+
+    font-size:28px;
+
+    font-weight:800;
+}
+
+
+/* =========================
+   PROFILE NAME
+========================= */
+
+.name-row{
 
     display:flex;
 
@@ -105,237 +202,122 @@ input{
 
     justify-content:space-between;
 
-    padding:
-        0 17px;
-
-    position:sticky;
-
-    top:0;
-
-    z-index:100;
-
-    background:
-        rgba(10,10,15,.94);
-
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
-
-    border-bottom:
-        1px solid
-        rgba(255,255,255,.06);
+    gap:10px;
 }
 
-.profile-header-title{
+.profile-name{
 
-    font-size:22px;
+    font-size:20px;
 
     font-weight:800;
 
-    letter-spacing:-.3px;
+    word-break:break-word;
 }
 
-.profile-menu-btn{
+.verified{
 
-    width:40px;
+    color:#a855f7;
 
-    height:40px;
+    font-size:14px;
+}
+
+
+/* =========================
+   USERNAME
+========================= */
+
+.profile-username{
+
+    margin-top:3px;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:13px;
+}
+
+
+/* =========================
+   BIO
+========================= */
+
+.profile-bio{
+
+    margin-top:12px;
+
+    color:rgba(255,255,255,.65);
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+
+    display:flex;
+
+    margin-top:20px;
+
+    padding:15px 0;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+}
+
+.stat{
+
+    flex:1;
+
+    text-align:center;
+}
+
+.stat:not(:last-child){
+
+    border-right:
+        1px solid rgba(255,255,255,.06);
+}
+
+.stat-number{
+
+    font-size:17px;
+
+    font-weight:800;
+}
+
+.stat-label{
+
+    margin-top:2px;
+
+    font-size:10px;
+
+    color:rgba(255,255,255,.35);
+
+    text-transform:uppercase;
+}
+
+
+/* =========================
+   EDIT BUTTON
+========================= */
+
+.edit-btn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:13px;
 
     border:none;
 
-    border-radius:12px;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:
-        rgba(255,255,255,.07);
-
-    color:
-        rgba(255,255,255,.75);
-
-    font-size:18px;
-
-    cursor:pointer;
-}
-
-
-/* ========================================
-   COVER PHOTO
-======================================== */
-
-.profile-cover{
-
-    width:100%;
-
-    height:155px;
-
-    position:relative;
-
-    overflow:hidden;
-
-    background:
-        linear-gradient(
-            135deg,
-            #15152b,
-            #24143d,
-            #0d0d18
-        );
-}
-
-.profile-cover img{
-
-    width:100%;
-
-    height:100%;
-
-    display:block;
-
-    object-fit:cover;
-}
-
-.profile-cover-default{
-
-    width:100%;
-
-    height:100%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #a855f7,
-            #4c1d95
-        );
-
-    position:relative;
-
-    overflow:hidden;
-}
-
-.profile-cover-default::before{
-
-    content:"";
-
-    position:absolute;
-
-    width:220px;
-
-    height:220px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,255,255,.08);
-
-    top:-100px;
-
-    right:-70px;
-}
-
-.profile-cover-default::after{
-
-    content:"";
-
-    position:absolute;
-
-    width:180px;
-
-    height:180px;
-
-    border-radius:50%;
-
-    background:
-        rgba(255,255,255,.05);
-
-    bottom:-100px;
-
-    left:-50px;
-}
-
-.profile-cover-default span{
-
-    position:relative;
-
-    z-index:2;
-
-    font-size:25px;
-
-    font-weight:800;
-
-    letter-spacing:2px;
-
-    color:#fff;
-
-    opacity:.9;
-}
-
-
-/* ========================================
-   PROFILE CONTENT
-======================================== */
-
-.profile-content{
-
-    position:relative;
-
-    padding:
-        0 18px
-        20px;
-}
-
-
-/* ========================================
-   AVATAR
-======================================== */
-
-.profile-avatar-wrapper{
-
-    width:88px;
-
-    height:88px;
-
-    position:absolute;
-
-    top:-44px;
-
-    left:18px;
-
-    border-radius:50%;
-
-    border:
-        4px solid
-        #0a0a0f;
-
-    background:#18182b;
-
-    overflow:hidden;
-
-    z-index:10;
-}
-
-.profile-avatar{
-
-    width:100%;
-
-    height:100%;
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
+    border-radius:13px;
 
     background:
         linear-gradient(
@@ -346,1036 +328,795 @@ input{
 
     color:#fff;
 
-    font-size:27px;
+    font-family:Poppins,sans-serif;
 
-    font-weight:800;
+    font-size:14px;
+
+    font-weight:700;
 }
 
-.profile-avatar img{
 
-    width:100%;
+/* =========================
+   TABS
+========================= */
 
-    height:100%;
+.tabs{
 
-    object-fit:cover;
+    display:flex;
+
+    margin-top:18px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+}
+
+.tab{
+
+    flex:1;
+
+    padding:13px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.tab.active{
+
+    color:#a855f7;
+
+    border-bottom:
+        2px solid #a855f7;
+}
+
+
+/* =========================
+   POSTS
+========================= */
+
+.posts-container{
+
+    padding:16px;
+}
+
+.loading{
+
+    padding:40px 20px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:13px;
+}
+
+.empty-posts{
+
+    padding:50px 20px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.3);
+}
+
+.empty-posts i{
 
     display:block;
+
+    margin-bottom:10px;
+
+    font-size:35px;
 }
 
 
-/* ========================================
-   PROFILE MAIN INFO
-======================================== */
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
 
-.profile-main-info{
+.bnav{
 
-    padding-top:58px;
-}
+    position:fixed;
 
-.profile-name-row{
+    bottom:0;
+    left:0;
 
     width:100%;
+
+    height:64px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-around;
+
+    background:rgba(10,10,15,.97);
+
+    backdrop-filter:blur(18px);
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    z-index:200;
+}
+
+.nb{
+
+    min-width:55px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:9px;
+
+    font-weight:500;
+}
+
+.nb i{
+
+    font-size:19px;
+}
+
+.nb.on{
+
+    color:#a855f7;
+}
+
+
+/* =========================
+   POST UI
+========================= */
+
+.post{
+
+    margin-bottom:16px;
+
+    padding:14px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    border-radius:16px;
+
+    overflow:hidden;
+}
+
+.p-hdr{
 
     display:flex;
 
     align-items:center;
 
-    gap:6px;
-
-    min-height:28px;
+    gap:10px;
 }
 
-.profile-name{
+.p-av{
 
-    font-size:21px;
+    width:42px;
+    height:42px;
 
-    font-weight:800;
+    flex:none;
 
-    line-height:1.25;
+    border-radius:50%;
 
-    word-break:break-word;
-}
+    background:#181832;
 
-.profile-verified{
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
 
     color:#a855f7;
-
-    font-size:15px;
-
-    flex-shrink:0;
-}
-
-.profile-username{
-
-    margin-top:3px;
 
     font-size:13px;
 
-    color:
-        rgba(255,255,255,.42);
-
-    word-break:break-word;
+    font-weight:800;
 }
 
-.profile-course{
+.p-av img{
 
-    margin-top:9px;
+    width:100%;
+    height:100%;
 
-    display:none;
-
-    align-items:center;
-
-    gap:6px;
-
-    color:
-        rgba(255,255,255,.55);
-
-    font-size:12px;
+    object-fit:cover;
 }
 
-.profile-course i{
+.p-inf{
 
-    color:#a855f7;
+    min-width:0;
 }
 
-.profile-bio{
+.p-nm{
 
-    margin-top:11px;
+    font-size:13px;
 
-    color:
-        rgba(255,255,255,.68);
+    font-weight:700;
+}
+
+.p-meta{
+
+    margin-top:2px;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:10px;
+}
+
+.p-body{
+
+    margin-top:12px;
+
+    color:rgba(255,255,255,.8);
 
     font-size:13px;
 
     line-height:1.6;
 
+    white-space:pre-wrap;
+
     word-break:break-word;
 }
 
+.p-acts{
 
-/* ========================================
-   LOADING PROFILE
-======================================== */
+    display:flex;
+
+    align-items:center;
+
+    margin-top:12px;
+
+    padding-top:10px;
+
+    border-top:
+        1px solid rgba(255,255,255,.05);
+}
+
+.p-a{
+
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:5px;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:11px;
+}
+
+.p-a i{
+
+    font-size:15px;
+}
 
 .profile-loading{
 
-    color:
-        rgba(255,255,255,.45);
-
-    font-size:13px;
-
-    padding:20px 0;
-
-    text-align:center;
-}
-
-
-/* ========================================
-   EMPTY / ERROR
-======================================== */
-
-.profile-error{
-
-    padding:30px 15px;
+    padding:40px 20px;
 
     text-align:center;
 
-    color:
-        rgba(255,255,255,.5);
+    color:rgba(255,255,255,.4);
 
     font-size:13px;
 }
 
-.profile-error i{
 
-    display:block;
+/* =========================
+   IMAGE VIEW
+========================= */
 
-    font-size:30px;
+.view-ov{
 
-    margin-bottom:10px;
+    position:fixed;
 
-    color:#a855f7;
+    inset:0;
+
+    z-index:500;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(0,0,0,.95);
+
+    padding:20px;
+}
+
+.view-ov.show{
+
+    display:flex;
+}
+
+.view-ov img{
+
+    max-width:100%;
+    max-height:90vh;
+
+    object-fit:contain;
+
+    border-radius:10px;
+}
+
+.view-close{
+
+    position:absolute;
+
+    top:20px;
+    right:20px;
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.1);
+
+    color:#fff;
+
+    z-index:2;
 }
 
 
-/* ========================================
+/* =========================
    RESPONSIVE
-======================================== */
+========================= */
 
-@media (min-width:431px){
+@media(min-width:600px){
 
     body{
 
-        background:#050507;
+        max-width:430px;
+
+        margin:auto;
+
+        border-left:
+            1px solid rgba(255,255,255,.05);
+
+        border-right:
+            1px solid rgba(255,255,255,.05);
     }
 
-    .profile-app{
+    .bnav{
 
-        box-shadow:
-            0 0 50px
-            rgba(0,0,0,.35);
+        max-width:430px;
+
+        left:50%;
+
+        transform:
+            translateX(-50%);
     }
+
 }
 
 </style>
-
-
-<!-- ========================================
-     PROFILE BODY
-======================================== -->
-
 </head>
 
 <body>
 
-<div class="profile-app">
-
-
-    <!-- ====================================
-         TOP HEADER
-    ===================================== -->
-
-    <header class="profile-header">
-
-        <div class="profile-header-title">
-            Profile
-        </div>
-
-        <button
-            class="profile-menu-btn"
-            id="profileMenuBtn"
-            type="button"
-        >
-            <i class="fas fa-ellipsis-h"></i>
-        </button>
-
-    </header>
-
-
-    <!-- ====================================
-         COVER PHOTO
-    ===================================== -->
-
-    <section
-        class="profile-cover"
-        id="coverDisplay"
-    >
-
-        <div class="profile-cover-default">
-
-            <span>StudentX</span>
-
-        </div>
-
-    </section>
-
-
-    <!-- ====================================
-         PROFILE CONTENT
-    ===================================== -->
-
-    <main class="profile-content">
-
-
-        <!-- AVATAR -->
-
-        <div
-            class="profile-avatar-wrapper"
-            id="avatarBox"
-        >
-
-            <div
-                class="profile-avatar"
-                id="avatarDisplay"
-            >
-                --
-            </div>
-
-        </div>
-
-
-        <!-- MAIN INFORMATION -->
-
-        <div class="profile-main-info">
-
-
-            <!-- NAME -->
-
-            <div class="profile-name-row">
-
-                <div
-                    class="profile-name"
-                    id="profileName"
-                >
-                    Loading...
-                </div>
-
-                <i
-                    class="fas fa-check-circle profile-verified"
-                    id="verifiedIcon"
-                ></i>
-
-            </div>
-
-
-            <!-- USERNAME -->
-
-            <div
-                class="profile-username"
-                id="profileUsername"
-            >
-                Loading...
-            </div>
-
-
-            <!-- COURSE -->
-
-            <div
-                class="profile-course"
-                id="profileCourse"
-            >
-
-                <i class="fas fa-graduation-cap"></i>
-
-                <span id="courseText"></span>
-
-            </div>
-
-
-            <!-- BIO -->
-
-            <div
-                class="profile-bio"
-                id="profileBio"
-            >
-                Loading...
-            </div>
-
-
-        </div>
-
-
-        <!-- =================================
-             REAL PROFILE STATS
-        ================================== -->
-
-        <div class="stats">
-
-            <!-- POSTS -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="postsCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Posts
-                </div>
-
-            </div>
-
-
-            <!-- FOLLOWERS -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="followersCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Followers
-                </div>
-
-            </div>
-
-
-            <!-- FOLLOWING -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="followingCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Following
-                </div>
-
-            </div>
-
-
-            <!-- LIKES -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="likesCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Likes
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================
-             EDIT PROFILE
-        ================================== -->
-
-        <button
-            class="edit-btn"
-            id="editProfileBtn"
-            type="button"
-        >
-
-            <i class="fas fa-pen"></i>
-
-            Edit Profile
-
-        </button>
-
-
-        <!-- =================================
-             PROFILE TABS
-        ================================== -->
-
-        <div class="tabs">
-
-            <button
-                class="tab active"
-                id="postsTab"
-                type="button"
-            >
-
-                <i class="fas fa-th-large"></i>
-
-                Posts
-
-            </button>
-
-
-            <button
-                class="tab"
-                id="savedTab"
-                type="button"
-            >
-
-                <i class="far fa-bookmark"></i>
-
-                Saved
-
-            </button>
-
-        </div>
-
-
-        <!-- =================================
-             POSTS
-        ================================== -->
-
-        <section
-            class="posts-container"
-            id="postsView"
-        >
-
-            <div class="profile-loading">
-
-                Loading posts...
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================
-             SAVED POSTS
-        ================================== -->
-
-        <section
-            class="posts-container"
-            id="savedView"
-            style="display:none;"
-        >
-
-            <div class="empty-posts">
-
-                <i class="far fa-bookmark"></i>
-
-                <div>
-                    No saved posts
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- ====================================
-         IMAGE VIEWER
-    ===================================== -->
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="header-title">
+        Profile
+    </div>
 
     <div
-        class="view-ov"
-        id="viewOv"
-        onclick="closeView()"
+        class="menu-btn"
+        id="profileMenuBtn"
+    >
+        <i class="fas fa-ellipsis-h"></i>
+    </div>
+
+</header>
+
+
+<!-- =========================
+     COVER PHOTO
+========================= -->
+
+<div
+    class="cover"
+    id="coverDisplay"
+>
+
+    <span id="coverText">
+        Nigeria
+    </span>
+
+</div>
+
+
+<!-- =========================
+     PROFILE INFORMATION
+========================= -->
+
+<section class="profile-info">
+
+
+    <!-- AVATAR -->
+
+    <div
+        class="avatar-box"
+        id="avatarBox"
     >
 
-        <div class="view-close">
-
-            <i class="fas fa-times"></i>
-
-        </div>
-
-        <img
-            id="viewImg"
-            src=""
-            alt="Profile image"
+        <div
+            class="avatar-initials"
+            id="avatarInitials"
         >
+            --
+        </div>
 
     </div>
 
 
-    <!-- ====================================
-         BOTTOM NAVIGATION
-    ===================================== -->
+    <!-- NAME -->
 
-    <nav class="bnav">
-
-        <!-- HOME -->
+    <div class="name-row">
 
         <div
-            class="nb"
-            onclick="window.location.href='home.html'"
+            class="profile-name"
+            id="profileName"
         >
-
-            <i class="fas fa-home"></i>
-
-            <span>
-                Home
-            </span>
-
+            Loading...
         </div>
-
-
-        <!-- VIDEO -->
-
-        <div
-            class="nb"
-            onclick="window.location.href='video.html'"
-        >
-
-            <i class="fas fa-video"></i>
-
-            <span>
-                Video
-            </span>
-
-        </div>
-
-
-        <!-- CHAT -->
-
-        <div
-            class="nb"
-            onclick="window.location.href='chat.html'"
-        >
-
-            <i class="fas fa-comment-dots"></i>
-
-            <span>
-                Chat
-            </span>
-
-        </div>
-
-
-        <!-- STUDYHUB -->
-
-        <div
-            class="nb"
-            onclick="window.location.href='studyhub.html'"
-        >
-
-            <i class="fas fa-book-open"></i>
-
-            <span>
-                StudyHub
-            </span>
-
-        </div>
-
-
-        <!-- PROFILE -->
-
-        <div
-            class="nb on"
-            onclick="window.location.href='profile.html'"
-        >
-
-            <i class="fas fa-user"></i>
-
-            <span>
-                Profile
-            </span>
-
-        </div>
-
-    </nav>
-
-
-</div>
-</style>
-
-
-<!-- ========================================
-     PROFILE BODY
-======================================== -->
-
-</head>
-
-<body>
-
-<div class="profile-app">
-
-
-    <!-- ====================================
-         TOP HEADER
-    ===================================== -->
-
-    <header class="profile-header">
-
-        <div class="profile-header-title">
-            Profile
-        </div>
-
-        <button
-            class="profile-menu-btn"
-            id="profileMenuBtn"
-            type="button"
-        >
-            <i class="fas fa-ellipsis-h"></i>
-        </button>
-
-    </header>
-
-
-    <!-- ====================================
-         COVER PHOTO
-    ===================================== -->
-
-    <section
-        class="profile-cover"
-        id="coverDisplay"
-    >
-
-        <div class="profile-cover-default">
-
-            <span>StudentX</span>
-
-        </div>
-
-    </section>
-
-
-    <!-- ====================================
-         PROFILE CONTENT
-    ===================================== -->
-
-    <main class="profile-content">
-
-
-        <!-- AVATAR -->
-
-        <div
-            class="profile-avatar-wrapper"
-            id="avatarBox"
-        >
-
-            <div
-                class="profile-avatar"
-                id="avatarDisplay"
-            >
-                --
-            </div>
-
-        </div>
-
-
-        <!-- MAIN INFORMATION -->
-
-        <div class="profile-main-info">
-
-
-            <!-- NAME -->
-
-            <div class="profile-name-row">
-
-                <div
-                    class="profile-name"
-                    id="profileName"
-                >
-                    Loading...
-                </div>
-
-                <i
-                    class="fas fa-check-circle profile-verified"
-                    id="verifiedIcon"
-                ></i>
-
-            </div>
-
-
-            <!-- USERNAME -->
-
-            <div
-                class="profile-username"
-                id="profileUsername"
-            >
-                Loading...
-            </div>
-
-
-            <!-- COURSE -->
-
-            <div
-                class="profile-course"
-                id="profileCourse"
-            >
-
-                <i class="fas fa-graduation-cap"></i>
-
-                <span id="courseText"></span>
-
-            </div>
-
-
-            <!-- BIO -->
-
-            <div
-                class="profile-bio"
-                id="profileBio"
-            >
-                Loading...
-            </div>
-
-
-        </div>
-
-
-        <!-- =================================
-             REAL PROFILE STATS
-        ================================== -->
-
-        <div class="stats">
-
-            <!-- POSTS -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="postsCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Posts
-                </div>
-
-            </div>
-
-
-            <!-- FOLLOWERS -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="followersCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Followers
-                </div>
-
-            </div>
-
-
-            <!-- FOLLOWING -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="followingCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Following
-                </div>
-
-            </div>
-
-
-            <!-- LIKES -->
-
-            <div class="stat">
-
-                <div
-                    class="stat-number"
-                    id="likesCount"
-                >
-                    0
-                </div>
-
-                <div class="stat-label">
-                    Likes
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================
-             EDIT PROFILE
-        ================================== -->
-
-        <button
-            class="edit-btn"
-            id="editProfileBtn"
-            type="button"
-        >
-
-            <i class="fas fa-pen"></i>
-
-            Edit Profile
-
-        </button>
-
-
-        <!-- =================================
-             PROFILE TABS
-        ================================== -->
-
-        <div class="tabs">
-
-            <button
-                class="tab active"
-                id="postsTab"
-                type="button"
-            >
-
-                <i class="fas fa-th-large"></i>
-
-                Posts
-
-            </button>
-
-
-            <button
-                class="tab"
-                id="savedTab"
-                type="button"
-            >
-
-                <i class="far fa-bookmark"></i>
-
-                Saved
-
-            </button>
-
-        </div>
-
-
-        <!-- =================================
-             POSTS
-        ================================== -->
-
-        <section
-            class="posts-container"
-            id="postsView"
-        >
-
-            <div class="profile-loading">
-
-                Loading posts...
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================
-             SAVED POSTS
-        ================================== -->
-
-        <section
-            class="posts-container"
-            id="savedView"
-            style="display:none;"
-        >
-
-            <div class="empty-posts">
-
-                <i class="far fa-bookmark"></i>
-
-                <div>
-                    No saved posts
-                </div>
-
-            </div>
-
-        </section>
-
-
-    </main>
-
-
-    <!-- ====================================
-         IMAGE VIEWER
-    ===================================== -->
-
-    <div
-        class="view-ov"
-        id="viewOv"
-        onclick="closeView()"
-    >
-
-        <div class="view-close">
-
-            <i class="fas fa-times"></i>
-
-        </div>
-
-        <img
-            id="viewImg"
-            src=""
-            alt="Profile image"
-        >
 
     </div>
 
 
-    <!-- ====================================
-         BOTTOM NAVIGATION
-    ===================================== -->
+    <!-- USERNAME -->
 
-    <nav class="bnav">
-
-        <!-- HOME -->
-
-        <div
-            class="nb"
-            onclick="window.location.href='home.html'"
-        >
-
-            <i class="fas fa-home"></i>
-
-            <span>
-                Home
-            </span>
-
-        </div>
+    <div
+        class="profile-username"
+        id="profileUsername"
+    >
+        Loading...
+    </div>
 
 
-        <!-- VIDEO -->
+    <!-- BIO -->
 
-        <div
-            class="nb"
-            onclick="window.location.href='video.html'"
-        >
-
-            <i class="fas fa-video"></i>
-
-            <span>
-                Video
-            </span>
-
-        </div>
+    <div
+        class="profile-bio"
+        id="profileBio"
+    >
+        Loading...
+    </div>
 
 
-        <!-- CHAT -->
+    <!-- =========================
+         REAL SUPABASE STATS
+    ========================= -->
 
-        <div
-            class="nb"
-            onclick="window.location.href='chat.html'"
-        >
+    <div class="stats">
 
-            <i class="fas fa-comment-dots"></i>
+        <!-- POSTS -->
 
-            <span>
-                Chat
-            </span>
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="postsCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Posts
+            </div>
 
         </div>
 
 
-        <!-- STUDYHUB -->
+        <!-- FOLLOWERS -->
 
-        <div
-            class="nb"
-            onclick="window.location.href='studyhub.html'"
-        >
+        <div class="stat">
 
-            <i class="fas fa-book-open"></i>
+            <div
+                class="stat-number"
+                id="followersCount"
+            >
+                0
+            </div>
 
-            <span>
-                StudyHub
-            </span>
+            <div class="stat-label">
+                Followers
+            </div>
+
+        </div>
+
+
+        <!-- FOLLOWING -->
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="followingCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Following
+            </div>
 
         </div>
 
 
-        <!-- PROFILE -->
+        <!-- LIKES -->
 
-        <div
-            class="nb on"
-            onclick="window.location.href='profile.html'"
-        >
+        <div class="stat">
 
-            <i class="fas fa-user"></i>
+            <div
+                class="stat-number"
+                id="likesCount"
+            >
+                0
+            </div>
 
-            <span>
-                Profile
-            </span>
+            <div class="stat-label">
+                Likes
+            </div>
 
         </div>
 
-    </nav>
+    </div>
 
+
+    <!-- =========================
+         EDIT PROFILE
+    ========================= -->
+
+    <button
+        class="edit-btn"
+        id="editProfileBtn"
+    >
+        Edit Profile
+    </button>
+
+
+    <!-- =========================
+         TABS
+    ========================= -->
+
+    <div class="tabs">
+
+        <div
+            class="tab active"
+            id="postsTab"
+        >
+            Posts
+        </div>
+
+        <div
+            class="tab"
+            id="savedTab"
+        >
+            Saved
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     POSTS
+========================= -->
+
+<div
+    class="posts-container"
+    id="postsView"
+>
+
+    <div class="loading">
+        Loading posts...
+    </div>
 
 </div>
-<!-- ========================================
-     STUDENTX SUPABASE
-======================================== -->
+
+
+<!-- =========================
+     SAVED POSTS
+========================= -->
+
+<div
+    class="posts-container"
+    id="savedView"
+    style="display:none;"
+>
+
+    <div class="empty-posts">
+
+        <i class="far fa-bookmark"></i>
+
+        <div>
+            No saved posts
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     IMAGE VIEWER
+========================= -->
+
+<div
+    class="view-ov"
+    id="viewOv"
+    onclick="closeView()"
+>
+
+    <div class="view-close">
+
+        <i class="fas fa-times"></i>
+
+    </div>
+
+    <img
+        id="viewImg"
+        src=""
+        alt="Profile photo"
+    >
+
+</div>
+
+
+<!-- =========================
+     PROFILE IMAGE INPUT
+========================= -->
+
+<input
+    type="file"
+    id="picInput"
+    accept="image/*"
+    style="display:none"
+>
+
+
+<!-- =========================
+     COVER IMAGE INPUT
+========================= -->
+
+<input
+    type="file"
+    id="coverInput"
+    accept="image/*"
+    style="display:none"
+>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<nav class="bnav">
+
+
+    <!-- HOME -->
+
+    <div
+        class="nb"
+        onclick="goHome()"
+    >
+
+        <i class="fas fa-home"></i>
+
+        <span>
+            Home
+        </span>
+
+    </div>
+
+
+    <!-- VIDEO -->
+
+    <div
+        class="nb"
+        onclick="goVideo()"
+    >
+
+        <i class="fas fa-video"></i>
+
+        <span>
+            Video
+        </span>
+
+    </div>
+
+
+    <!-- CHAT -->
+
+    <div
+        class="nb"
+        onclick="goChat()"
+    >
+
+        <i class="fas fa-comment-dots"></i>
+
+        <span>
+            Chat
+        </span>
+
+    </div>
+
+
+    <!-- STUDYHUB -->
+
+    <div
+        class="nb"
+        onclick="goStudyHub()"
+    >
+
+        <i class="fas fa-book-open"></i>
+
+        <span>
+            StudyHub
+        </span>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <div
+        class="nb on"
+        onclick="goProfile()"
+    >
+
+        <i class="fas fa-user"></i>
+
+        <span>
+            Profile
+        </span>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     SUPABASE LIBRARY
+========================= -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- =========================
+     SUPABASE CONNECTION
+========================= -->
 
 <script>
 
@@ -1392,98 +1133,126 @@ const supabaseClient =
         SUPABASE_ANON_KEY
     );
 
+</script>
+<script>
 
-/* ========================================
-   GLOBAL VARIABLES
-======================================== */
+/* =========================================================
+   STUDENTX PROFILE — PART 3
+   LOAD CURRENT USER PROFILE
+========================================================= */
 
 let currentUser = null;
 let currentProfile = null;
 
 
-/* ========================================
+/* =========================================================
    GET CURRENT USER
-======================================== */
+========================================================= */
 
-async function getCurrentUser(){
+async function getCurrentUser() {
 
-    const {
-        data,
-        error
-    } =
-    await supabaseClient.auth.getUser();
+    try {
 
+        const {
+            data: {
+                user
+            },
+            error
+        } = await supabaseClient.auth.getUser();
 
-    if(error){
+        if (error) {
+            console.error("Auth error:", error);
+            return null;
+        }
+
+        if (!user) {
+            console.log("No logged-in user");
+            return null;
+        }
+
+        currentUser = user;
+
+        return user;
+
+    } catch (error) {
 
         console.error(
-            "Auth error:",
+            "Failed to get current user:",
             error
         );
 
         return null;
     }
-
-
-    const user =
-        data?.user;
-
-
-    if(!user){
-
-        window.location.href =
-            "login.html";
-
-        return null;
-    }
-
-
-    currentUser =
-        user;
-
-
-    return user;
 }
 
 
-/* ========================================
+/* =========================================================
    LOAD PROFILE FROM SUPABASE
-======================================== */
+========================================================= */
 
-async function loadProfile(){
+async function loadProfile() {
 
-    try{
+    try {
 
-        const user =
-            await getCurrentUser();
+        const user = await getCurrentUser();
 
+        if (!user) {
 
-        if(!user)
+            setProfileLoadingState(
+                "Please login first"
+            );
+
             return;
+        }
 
+
+        /* -----------------------------------------
+           GET PROFILE
+        ----------------------------------------- */
 
         const {
-            data: profile,
+            data,
             error
-        } =
-        await supabaseClient
+        } = await supabaseClient
             .from("profiles")
-            .select("*")
-            .eq(
-                "id",
-                user.id
-            )
+            .select(`
+                id,
+                username,
+                avatar_url,
+                full_name,
+                bio,
+                university,
+                department,
+                verified,
+                created_at,
+                email,
+                account_type,
+                country,
+                state,
+                city,
+                profile_visibility,
+                premium_plan,
+                cover_url,
+                faculty,
+                level,
+                graduation_year
+            `)
+            .eq("id", user.id)
             .maybeSingle();
 
 
-        if(error){
+        /* -----------------------------------------
+           ERROR
+        ----------------------------------------- */
+
+        if (error) {
 
             console.error(
-                "Profile error:",
+                "Profile loading error:",
                 error
             );
 
-            showProfileError(
+            setProfileLoadingState(
                 "Unable to load profile"
             );
 
@@ -1491,13 +1260,17 @@ async function loadProfile(){
         }
 
 
-        if(!profile){
+        /* -----------------------------------------
+           PROFILE NOT FOUND
+        ----------------------------------------- */
 
-            console.error(
-                "Profile bai samu ba"
+        if (!data) {
+
+            console.log(
+                "Profile does not exist for this user."
             );
 
-            showProfileError(
+            setProfileLoadingState(
                 "Profile not found"
             );
 
@@ -1505,950 +1278,358 @@ async function loadProfile(){
         }
 
 
-        currentProfile =
-            profile;
+        /* -----------------------------------------
+           SAVE PROFILE
+        ----------------------------------------- */
+
+        currentProfile = data;
 
 
-        /* =================================
-           REAL NAME
-        ================================= */
+        /* -----------------------------------------
+           UPDATE PROFILE UI
+        ----------------------------------------- */
 
-        const name =
-            profile.full_name ||
-            user.user_metadata?.full_name ||
-            "StudentX User";
+        updateProfileUI(data);
 
 
-        document.getElementById(
-            "profileName"
-        ).textContent =
-            name;
-
-
-        /* =================================
-           REAL USERNAME
-        ================================= */
-
-        const username =
-            profile.username ||
-            "";
-
-
-        const usernameElement =
-            document.getElementById(
-                "profileUsername"
-            );
-
-
-        if(username){
-
-            usernameElement.textContent =
-                "@" + username;
-
-        }else{
-
-            usernameElement.textContent =
-                "@username";
-
-        }
-
-
-        /* =================================
-           REAL BIO
-        ================================= */
-
-        const bio =
-            document.getElementById(
-                "profileBio"
-            );
-
-
-        if(profile.bio){
-
-            bio.textContent =
-                profile.bio;
-
-        }else{
-
-            bio.textContent =
-                "No bio yet.";
-
-        }
-
-
-        /* =================================
-           REAL COURSE
-        ================================= */
-
-        const courseText =
-            document.getElementById(
-                "courseText"
-            );
-
-
-        if(profile.course){
-
-            courseText.textContent =
-                profile.course;
-
-        }else{
-
-            courseText.textContent =
-                "Student";
-
-        }
-
-
-        /* =================================
-           REAL AVATAR
-        ================================= */
-
-        renderAvatar(
-            profile
+        console.log(
+            "StudentX profile loaded:",
+            data
         );
 
-
-        /* =================================
-           REAL COVER
-        ================================= */
-
-        renderCover(
-            profile
-        );
-
-
-        /* =================================
-           REAL STATS
-        ================================= */
-
-        await loadProfileStats(
-            user.id
-        );
-
-
-        /* =================================
-           REAL POSTS
-        ================================= */
-
-        await loadMyPosts(
-            user.id
-        );
-
-    }
-    catch(error){
+    } catch (error) {
 
         console.error(
-            "Profile loading error:",
+            "Unexpected profile error:",
             error
         );
 
-        showProfileError(
+        setProfileLoadingState(
             "Something went wrong"
         );
     }
 }
 
 
-/* ========================================
-   AVATAR
-======================================== */
+/* =========================================================
+   UPDATE PROFILE UI
+========================================================= */
 
-function renderAvatar(profile){
-
-    const avatar =
-        document.getElementById(
-            "avatarDisplay"
-        );
+function updateProfileUI(profile) {
 
 
-    if(!avatar)
-        return;
+    /* -----------------------------------------
+       FULL NAME
+    ----------------------------------------- */
+
+    const nameElement =
+        document.getElementById("profileName");
+
+    if (nameElement) {
+
+        nameElement.textContent =
+            profile.full_name ||
+            "StudentX User";
+    }
 
 
-    if(profile.avatar_url){
+    /* -----------------------------------------
+       USERNAME
+    ----------------------------------------- */
 
-        avatar.innerHTML = `
+    const usernameElement =
+        document.getElementById("profileUsername");
 
-            <img
-                src="${escapeAttribute(
-                    profile.avatar_url
-                )}"
-                alt="Profile photo"
-            >
+    if (usernameElement) {
 
-        `;
+        if (profile.username) {
 
+            usernameElement.textContent =
+                "@" + profile.username;
+
+        } else {
+
+            usernameElement.textContent =
+                "@username";
+        }
+    }
+
+
+    /* -----------------------------------------
+       BIO
+    ----------------------------------------- */
+
+    const bioElement =
+        document.getElementById("profileBio");
+
+    if (bioElement) {
+
+        bioElement.textContent =
+            profile.bio ||
+            "No bio yet.";
+    }
+
+
+    /* -----------------------------------------
+       AVATAR
+    ----------------------------------------- */
+
+    updateAvatar(profile);
+
+
+    /* -----------------------------------------
+       COVER
+    ----------------------------------------- */
+
+    updateCover(profile);
+
+
+    /* -----------------------------------------
+       VERIFIED
+    ----------------------------------------- */
+
+    updateVerifiedBadge(profile);
+}
+
+
+/* =========================================================
+   UPDATE AVATAR
+========================================================= */
+
+function updateAvatar(profile) {
+
+    const avatarBox =
+        document.getElementById("avatarBox");
+
+    const initials =
+        document.getElementById("avatarInitials");
+
+    if (!avatarBox) {
         return;
     }
 
 
-    avatar.textContent =
-        getInitials(
-            profile.full_name
-        );
-}
+    /* -----------------------------------------
+       IF AVATAR EXISTS
+    ----------------------------------------- */
+
+    if (profile.avatar_url) {
+
+        avatarBox.style.backgroundImage =
+            `url("${profile.avatar_url}")`;
+
+        avatarBox.style.backgroundSize =
+            "cover";
+
+        avatarBox.style.backgroundPosition =
+            "center";
+
+        avatarBox.style.backgroundRepeat =
+            "no-repeat";
 
 
-/* ========================================
-   COVER
-======================================== */
-
-function renderCover(profile){
-
-    const cover =
-        document.getElementById(
-            "coverDisplay"
-        );
-
-
-    if(!cover)
-        return;
-
-
-    if(profile.cover_url){
-
-        cover.innerHTML = `
-
-            <img
-                class="cover-img"
-                src="${escapeAttribute(
-                    profile.cover_url
-                )}"
-                alt="Cover photo"
-            `;
-
-        cover.innerHTML += `
-
-            <button
-                type="button"
-                class="cover-view-btn"
-                onclick="viewCover()"
-            >
-                <i class="fas fa-expand"></i>
-            </button>
-
-        `;
-
-        return;
-    }
-
-
-    cover.innerHTML = `
-
-        <div class="profile-cover-default">
-
-            <span>
-                StudentX
-            </span>
-
-        </div>
-
-    `;
-}
-
-
-/* ========================================
-   PROFILE STATS
-======================================== */
-
-async function loadProfileStats(userId){
-
-    try{
-
-        /* POSTS */
-
-        const {
-            count: postsCount,
-            error: postsError
-        } =
-        await supabaseClient
-            .from("posts")
-            .select(
-                "id",
-                {
-                    count:"exact",
-                    head:true
-                }
-            )
-            .eq(
-                "user_id",
-                userId
-            );
-
-
-        if(postsError){
-
-            console.error(
-                "Posts count error:",
-                postsError
-            );
-
+        if (initials) {
+            initials.style.display =
+                "none";
         }
 
+    } else {
 
-        /* FOLLOWERS */
+        /* -------------------------------------
+           NO AVATAR → INITIALS
+        ------------------------------------- */
 
-        const {
-            count: followersCount,
-            error: followersError
-        } =
-        await supabaseClient
-            .from("followers")
-            .select(
-                "id",
-                {
-                    count:"exact",
-                    head:true
-                }
-            )
-            .eq(
-                "following_id",
-                userId
-            );
+        avatarBox.style.backgroundImage =
+            "none";
 
+        if (initials) {
 
-        if(followersError){
+            initials.style.display =
+                "flex";
 
-            console.error(
-                "Followers count error:",
-                followersError
-            );
-
+            initials.textContent =
+                getInitials(
+                    profile.full_name
+                );
         }
-
-
-        /* FOLLOWING */
-
-        const {
-            count: followingCount,
-            error: followingError
-        } =
-        await supabaseClient
-            .from("followers")
-            .select(
-                "id",
-                {
-                    count:"exact",
-                    head:true
-                }
-            )
-            .eq(
-                "follower_id",
-                userId
-            );
-
-
-        if(followingError){
-
-            console.error(
-                "Following count error:",
-                followingError
-            );
-
-        }
-
-
-        /* LIKES */
-
-        const {
-            count: likesCount,
-            error: likesError
-        } =
-        await supabaseClient
-            .from("post_likes")
-            .select(
-                "id",
-                {
-                    count:"exact",
-                    head:true
-                }
-            )
-            .eq(
-                "user_id",
-                userId
-            );
-
-
-        if(likesError){
-
-            console.error(
-                "Likes count error:",
-                likesError
-            );
-
-        }
-
-
-        /* =================================
-           DISPLAY REAL NUMBERS
-        ================================= */
-
-        document.getElementById(
-            "postsCount"
-        ).textContent =
-            formatNumber(
-                postsCount || 0
-            );
-
-
-        document.getElementById(
-            "followersCount"
-        ).textContent =
-            formatNumber(
-                followersCount || 0
-            );
-
-
-        document.getElementById(
-            "followingCount"
-        ).textContent =
-            formatNumber(
-                followingCount || 0
-            );
-
-
-        document.getElementById(
-            "likesCount"
-        ).textContent =
-            formatNumber(
-                likesCount || 0
-            );
-
-    }
-    catch(error){
-
-        console.error(
-            "Stats error:",
-            error
-        );
     }
 }
 
 
-/* ========================================
-   LOAD USER POSTS
-======================================== */
+/* =========================================================
+   GET USER INITIALS
+========================================================= */
 
-async function loadMyPosts(userId){
+function getInitials(name) {
 
-    const postsView =
-        document.getElementById(
-            "postsView"
-        );
-
-
-    if(!postsView)
-        return;
-
-
-    postsView.innerHTML = `
-
-        <div class="profile-loading">
-
-            Loading posts...
-
-        </div>
-
-    `;
-
-
-    try{
-
-        const {
-            data: posts,
-            error
-        } =
-        await supabaseClient
-            .from("posts")
-            .select("*")
-            .eq(
-                "user_id",
-                userId
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:false
-                }
-            );
-
-
-        if(error){
-
-            console.error(
-                "Posts error:",
-                error
-            );
-
-            postsView.innerHTML = `
-
-                <div class="profile-loading">
-
-                    Unable to load posts.
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        if(!posts || posts.length === 0){
-
-            postsView.innerHTML = `
-
-                <div class="empty-posts">
-
-                    <i class="far fa-file-alt"></i>
-
-                    <div>
-                        No posts yet
-                    </div>
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        renderPosts(
-            posts
-        );
-
-    }
-    catch(error){
-
-        console.error(
-            "Load posts error:",
-            error
-        );
-
-        postsView.innerHTML = `
-
-            <div class="profile-loading">
-
-                Something went wrong.
-
-            </div>
-
-        `;
-    }
-}
-
-
-/* ========================================
-   RENDER REAL POSTS
-======================================== */
-
-function renderPosts(posts){
-
-    const postsView =
-        document.getElementById(
-            "postsView"
-        );
-
-
-    if(!postsView)
-        return;
-
-
-    postsView.innerHTML =
-        posts.map(
-            post => {
-
-                const content =
-                    post.content ??
-                    post.text ??
-                    "";
-
-
-                const image =
-                    post.image_url ||
-                    post.media_url ||
-                    "";
-
-
-                return `
-
-                    <article
-                        class="post"
-                        data-post-id="${escapeAttribute(
-                            post.id
-                        )}"
-                    >
-
-                        <div class="p-hdr">
-
-                            ${getPostAvatar()}
-
-                            <div class="p-inf">
-
-                                <div class="p-nm">
-
-                                    ${escapeHTML(
-                                        currentProfile?.full_name ||
-                                        "StudentX User"
-                                    )}
-
-                                </div>
-
-                                <div class="p-meta">
-
-                                    @${escapeHTML(
-                                        currentProfile?.username ||
-                                        ""
-                                    )}
-
-                                    ·
-
-                                    ${formatPostTime(
-                                        post.created_at
-                                    )}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-
-                        ${
-                            content
-                            ?
-                            `
-                            <div class="p-body">
-
-                                ${escapeHTML(
-                                    content
-                                )}
-
-                            </div>
-                            `
-                            :
-                            ""
-                        }
-
-
-                        ${
-                            image
-                            ?
-                            `
-                            <img
-                                src="${escapeAttribute(
-                                    image
-                                )}"
-                                alt="Post image"
-                                style="
-                                    width:100%;
-                                    max-height:430px;
-                                    object-fit:cover;
-                                    display:block;
-                                    border-radius:14px;
-                                    margin-top:8px;
-                                "
-                            >
-                            `
-                            :
-                            ""
-                        }
-
-
-                        <div class="p-acts">
-
-                            <div class="p-a">
-
-                                <i class="far fa-heart"></i>
-
-                                <span>
-                                    ${formatNumber(
-                                        post.likes_count || 0
-                                    )}
-                                </span>
-
-                            </div>
-
-
-                            <div class="p-a">
-
-                                <i class="far fa-comment"></i>
-
-                                <span>
-                                    ${formatNumber(
-                                        post.comments_count || 0
-                                    )}
-                                </span>
-
-                            </div>
-
-
-                            <div class="p-a">
-
-                                <i class="fas fa-retweet"></i>
-
-                                <span>
-                                    ${formatNumber(
-                                        post.shares_count || 0
-                                    )}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    </article>
-
-                `;
-
-            }
-        )
-        .join("");
-}
-
-
-/* ========================================
-   POST AVATAR
-======================================== */
-
-function getPostAvatar(){
-
-    if(
-        currentProfile &&
-        currentProfile.avatar_url
-    ){
-
-        return `
-
-            <img
-                class="p-av"
-                src="${escapeAttribute(
-                    currentProfile.avatar_url
-                )}"
-                alt="Avatar"
-            >
-
-        `;
+    if (!name) {
+        return "--";
     }
 
+    const words =
+        name
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
 
-    return `
+    if (words.length === 1) {
 
-        <div class="p-av">
-
-            ${getInitials(
-                currentProfile?.full_name
-            )}
-
-        </div>
-
-    `;
-}
-
-
-/* ========================================
-   HELPERS
-======================================== */
-
-function getInitials(name){
-
-    if(!name)
-        return "U";
-
-
-    return String(name)
-        .trim()
-        .split(/\s+/)
-        .map(
-            word => word.charAt(0)
-        )
-        .join("")
-        .substring(0,2)
-        .toUpperCase();
-}
-
-
-function formatNumber(number){
-
-    number =
-        Number(number) || 0;
-
-
-    if(number >= 1000000){
-
-        return (
-            number / 1000000
-        ).toFixed(1) + "M";
+        return words[0]
+            .substring(0, 2)
+            .toUpperCase();
     }
-
-
-    if(number >= 1000){
-
-        return (
-            number / 1000
-        ).toFixed(1) + "K";
-    }
-
-
-    return String(number);
-}
-
-
-function formatPostTime(date){
-
-    if(!date)
-        return "";
-
-
-    const time =
-        new Date(date).getTime();
-
-
-    const seconds =
-        Math.floor(
-            (Date.now() - time) / 1000
-        );
-
-
-    if(seconds < 60)
-        return "Just now";
-
-
-    if(seconds < 3600)
-
-        return (
-            Math.floor(
-                seconds / 60
-            ) + "m"
-        );
-
-
-    if(seconds < 86400)
-
-        return (
-            Math.floor(
-                seconds / 3600
-            ) + "h"
-        );
-
 
     return (
-        Math.floor(
-            seconds / 86400
-        ) + "d"
-    );
+        words[0].charAt(0) +
+        words[words.length - 1].charAt(0)
+    ).toUpperCase();
 }
 
 
-function escapeHTML(value){
+/* =========================================================
+   UPDATE COVER
+========================================================= */
 
-    return String(
-        value ?? ""
-    )
-    .replace(
-        /&/g,
-        "&amp;"
-    )
-    .replace(
-        /</g,
-        "&lt;"
-    )
-    .replace(
-        />/g,
-        "&gt;"
-    )
-    .replace(
-        /"/g,
-        "&quot;"
-    )
-    .replace(
-        /'/g,
-        "&#039;"
-    );
+function updateCover(profile) {
+
+    const cover =
+        document.getElementById("coverDisplay");
+
+    const coverText =
+        document.getElementById("coverText");
+
+    if (!cover) {
+        return;
+    }
+
+
+    if (profile.cover_url) {
+
+        cover.style.backgroundImage =
+            `url("${profile.cover_url}")`;
+
+        cover.style.backgroundSize =
+            "cover";
+
+        cover.style.backgroundPosition =
+            "center";
+
+        cover.style.backgroundRepeat =
+            "no-repeat";
+
+
+        if (coverText) {
+            coverText.style.display =
+                "none";
+        }
+
+    } else {
+
+        cover.style.backgroundImage =
+            "none";
+
+        if (coverText) {
+
+            coverText.style.display =
+                "block";
+
+            coverText.textContent =
+                profile.country ||
+                "Nigeria";
+        }
+    }
 }
 
 
-function escapeAttribute(value){
+/* =========================================================
+   VERIFIED BADGE
+========================================================= */
 
-    return escapeHTML(value);
+function updateVerifiedBadge(profile) {
+
+    const nameRow =
+        document.querySelector(".name-row");
+
+    if (!nameRow) {
+        return;
+    }
+
+
+    /* Remove old badge */
+
+    const oldBadge =
+        nameRow.querySelector(
+            ".verified-badge"
+        );
+
+    if (oldBadge) {
+        oldBadge.remove();
+    }
+
+
+    /* Add badge if verified */
+
+    if (
+        profile.verified === true
+    ) {
+
+        const badge =
+            document.createElement("span");
+
+        badge.className =
+            "verified-badge";
+
+        badge.innerHTML =
+            '<i class="fas fa-check"></i>';
+
+        nameRow.appendChild(badge);
+    }
 }
 
 
-function showProfileError(message){
+/* =========================================================
+   LOADING / ERROR STATE
+========================================================= */
+
+function setProfileLoadingState(message) {
 
     const name =
         document.getElementById(
             "profileName"
         );
 
-    if(name){
+    const username =
+        document.getElementById(
+            "profileUsername"
+        );
 
-        name.textContent =
-            message;
+    const bio =
+        document.getElementById(
+            "profileBio"
+        );
 
+
+    if (name) {
+        name.textContent = message;
+    }
+
+    if (username) {
+        username.textContent = "";
+    }
+
+    if (bio) {
+        bio.textContent = "";
     }
 }
 
 
-/* ========================================
-   COVER VIEW
-======================================== */
-
-function viewCover(){
-
-    if(
-        !currentProfile ||
-        !currentProfile.cover_url
-    ){
-
-        return;
-    }
-
-
-    const viewer =
-        document.getElementById(
-            "viewOv"
-        );
-
-
-    const image =
-        document.getElementById(
-            "viewImg"
-        );
-
-
-    image.src =
-        currentProfile.cover_url;
-
-
-    viewer.classList.add(
-        "show"
-    );
-}
-
-
-function closeView(){
-
-    const viewer =
-        document.getElementById(
-            "viewOv"
-        );
-
-
-    viewer.classList.remove(
-        "show"
-    );
-}
-
-
-/* ========================================
-   START
-======================================== */
+/* =========================================================
+   START PROFILE
+========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function(){
+    function() {
 
         loadProfile();
 
@@ -2456,28 +1637,593 @@ document.addEventListener(
 );
 
 </script>
+<!-- =========================================================
+     STUDENTX PROFILE — PART 4
+     POSTS + FOLLOWERS + FOLLOWING + LIKES
+========================================================= -->
+
 <script>
 
-/* ========================================
-   EDIT PROFILE BUTTON
-======================================== */
+/* =========================================================
+   PART 4 CONFIGURATION
+========================================================= */
 
-document
-    .getElementById("editProfileBtn")
-    ?.addEventListener(
-        "click",
-        function(){
+const PROFILE_TABLE = "profiles";
+const POSTS_TABLE = "posts";
+const FOLLOWERS_TABLE = "followers";
+const LIKES_TABLE = "likes";
 
-            window.location.href =
-                "edit-profile.html";
 
+/* =========================================================
+   LOAD PROFILE STATISTICS
+========================================================= */
+
+async function loadProfileStats() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    const userId = currentUser.id;
+
+
+    /* =====================================================
+       POSTS COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(POSTS_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("user_id", userId);
+
+
+        if (!error) {
+
+            const postsCount =
+                document.getElementById(
+                    "postsCount"
+                );
+
+            if (postsCount) {
+
+                postsCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Posts count error:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       FOLLOWERS COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(FOLLOWERS_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("following_id", userId);
+
+
+        if (!error) {
+
+            const followersCount =
+                document.getElementById(
+                    "followersCount"
+                );
+
+            if (followersCount) {
+
+                followersCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Followers count error:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       FOLLOWING COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(FOLLOWERS_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("follower_id", userId);
+
+
+        if (!error) {
+
+            const followingCount =
+                document.getElementById(
+                    "followingCount"
+                );
+
+            if (followingCount) {
+
+                followingCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Following count error:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       LIKES COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(LIKES_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("user_id", userId);
+
+
+        if (!error) {
+
+            const likesCount =
+                document.getElementById(
+                    "likesCount"
+                );
+
+            if (likesCount) {
+
+                likesCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Likes count error:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   LOAD USER POSTS
+========================================================= */
+
+async function loadUserPosts() {
+
+    const postsView =
+        document.getElementById(
+            "postsView"
+        );
+
+    if (!postsView) {
+        return;
+    }
+
+    if (!currentUser) {
+
+        postsView.innerHTML = `
+            <div class="empty-posts">
+                Please login to view posts.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /* Loading */
+
+    postsView.innerHTML = `
+        <div class="loading">
+            Loading posts...
+        </div>
+    `;
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(POSTS_TABLE)
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Posts loading error:",
+                error
+            );
+
+            postsView.innerHTML = `
+                <div class="empty-posts">
+                    Unable to load posts.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* No posts */
+
+        if (!data || data.length === 0) {
+
+            postsView.innerHTML = `
+                <div class="empty-posts">
+
+                    <i class="fas fa-camera"></i>
+
+                    <div>
+                        No posts yet
+                    </div>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        /* Render posts */
+
+        postsView.innerHTML = "";
+
+        data.forEach(
+            function(post) {
+
+                postsView.appendChild(
+                    createProfilePost(post)
+                );
+
+            }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected posts error:",
+            error
+        );
+
+        postsView.innerHTML = `
+            <div class="empty-posts">
+                Something went wrong.
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   CREATE POST ELEMENT
+========================================================= */
+
+function createProfilePost(post) {
+
+    const postElement =
+        document.createElement("article");
+
+    postElement.className =
+        "profile-post";
+
+
+    /* -----------------------------------------------------
+       FIND POSSIBLE CONTENT COLUMNS
+    ----------------------------------------------------- */
+
+    const text =
+        post.content ||
+        post.text ||
+        post.caption ||
+        "";
+
+    const image =
+        post.image_url ||
+        post.media_url ||
+        post.photo_url ||
+        "";
+
+
+    /* -----------------------------------------------------
+       POST HTML
+    ----------------------------------------------------- */
+
+    let html = "";
+
+
+    if (text) {
+
+        html += `
+            <div class="profile-post-text">
+                ${escapeHTML(text)}
+            </div>
+        `;
+    }
+
+
+    if (image) {
+
+        html += `
+            <img
+                class="profile-post-image"
+                src="${escapeAttribute(image)}"
+                alt="Post"
+                loading="lazy"
+                onclick="openPostImage(this.src)"
+            >
+        `;
+    }
+
+
+    html += `
+
+        <div class="profile-post-footer">
+
+            <span>
+                ${formatPostDate(
+                    post.created_at
+                )}
+            </span>
+
+        </div>
+
+    `;
+
+
+    postElement.innerHTML = html;
+
+    return postElement;
+}
+
+
+/* =========================================================
+   OPEN POST IMAGE
+========================================================= */
+
+function openPostImage(url) {
+
+    const viewer =
+        document.getElementById(
+            "viewOv"
+        );
+
+    const image =
+        document.getElementById(
+            "viewImg"
+        );
+
+    if (!viewer || !image) {
+        return;
+    }
+
+    image.src = url;
+
+    viewer.style.display =
+        "flex";
+}
+
+
+/* =========================================================
+   CLOSE IMAGE VIEWER
+========================================================= */
+
+function closeView() {
+
+    const viewer =
+        document.getElementById(
+            "viewOv"
+        );
+
+    const image =
+        document.getElementById(
+            "viewImg"
+        );
+
+    if (viewer) {
+
+        viewer.style.display =
+            "none";
+    }
+
+    if (image) {
+
+        image.src = "";
+    }
+}
+
+
+/* =========================================================
+   NUMBER FORMATTER
+========================================================= */
+
+function formatNumber(number) {
+
+    number =
+        Number(number) || 0;
+
+    if (number >= 1000000000) {
+
+        return (
+            (number / 1000000000)
+                .toFixed(1)
+                .replace(".0", "")
+            + "B"
+        );
+    }
+
+
+    if (number >= 1000000) {
+
+        return (
+            (number / 1000000)
+                .toFixed(1)
+                .replace(".0", "")
+            + "M"
+        );
+    }
+
+
+    if (number >= 1000) {
+
+        return (
+            (number / 1000)
+                .toFixed(1)
+                .replace(".0", "")
+            + "K"
+        );
+    }
+
+
+    return number.toString();
+}
+
+
+/* =========================================================
+   DATE FORMATTER
+========================================================= */
+
+function formatPostDate(date) {
+
+    if (!date) {
+        return "";
+    }
+
+    const d =
+        new Date(date);
+
+    if (isNaN(d.getTime())) {
+        return "";
+    }
+
+
+    return d.toLocaleDateString(
+        "en-NG",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
         }
     );
+}
 
 
-/* ========================================
-   PROFILE TABS
-======================================== */
+/* =========================================================
+   HTML SECURITY
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+/* =========================================================
+   ATTRIBUTE SECURITY
+========================================================= */
+
+function escapeAttribute(value) {
+
+    return String(value)
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        );
+}
+
+
+/* =========================================================
+   POSTS TAB
+========================================================= */
 
 const postsTab =
     document.getElementById(
@@ -2500,207 +2246,1401 @@ const savedView =
     );
 
 
-postsTab?.addEventListener(
-    "click",
-    function(){
+if (postsTab) {
 
-        postsTab.classList.add(
-            "active"
-        );
-
-        savedTab.classList.remove(
-            "active"
-        );
-
-        postsView.style.display =
-            "block";
-
-        savedView.style.display =
-            "none";
-
-    }
-);
-
-
-savedTab?.addEventListener(
-    "click",
-    function(){
-
-        savedTab.classList.add(
-            "active"
-        );
-
-        postsTab.classList.remove(
-            "active"
-        );
-
-        postsView.style.display =
-            "none";
-
-        savedView.style.display =
-            "block";
-
-    }
-);
-
-
-/* ========================================
-   PROFILE MENU
-======================================== */
-
-document
-    .getElementById("profileMenuBtn")
-    ?.addEventListener(
+    postsTab.addEventListener(
         "click",
-        function(){
+        function() {
 
-            if(
-                currentProfile &&
-                currentProfile.username
-            ){
+            postsTab.classList.add(
+                "active"
+            );
 
-                const link =
-                    window.location.origin +
-                    "/profile.html?username=" +
-                    encodeURIComponent(
-                        currentProfile.username
-                    );
+            if (savedTab) {
 
+                savedTab.classList.remove(
+                    "active"
+                );
+            }
 
-                if(
-                    navigator.clipboard &&
-                    navigator.clipboard.writeText
-                ){
+            if (postsView) {
 
-                    navigator.clipboard
-                        .writeText(link)
-                        .then(
-                            function(){
+                postsView.style.display =
+                    "block";
+            }
 
-                                alert(
-                                    "Profile link copied!"
-                                );
+            if (savedView) {
 
-                            }
-                        )
-                        .catch(
-                            function(){
-
-                                alert(
-                                    link
-                                );
-
-                            }
-                        );
-
-                }else{
-
-                    alert(link);
-
-                }
-
+                savedView.style.display =
+                    "none";
             }
 
         }
     );
-
-
-/* ========================================
-   NAVIGATION
-======================================== */
-
-function goHome(){
-
-    window.location.href =
-        "home.html";
-
 }
 
 
-function goVideo(){
+/* =========================================================
+   SAVED TAB
+========================================================= */
 
-    window.location.href =
-        "video.html";
+if (savedTab) {
 
+    savedTab.addEventListener(
+        "click",
+        function() {
+
+            savedTab.classList.add(
+                "active"
+            );
+
+            if (postsTab) {
+
+                postsTab.classList.remove(
+                    "active"
+                );
+            }
+
+            if (postsView) {
+
+                postsView.style.display =
+                    "none";
+            }
+
+            if (savedView) {
+
+                savedView.style.display =
+                    "block";
+            }
+
+        }
+    );
 }
 
 
-function goChat(){
+/* =========================================================
+   START PART 4
+========================================================= */
 
-    window.location.href =
-        "chat.html";
+async function startProfilePart4() {
 
+    if (!currentUser) {
+
+        await getCurrentUser();
+    }
+
+    if (!currentUser) {
+        return;
+    }
+
+    await Promise.all([
+        loadProfileStats(),
+        loadUserPosts()
+    ]);
 }
 
 
-function goStudyHub(){
-
-    window.location.href =
-        "studyhub.html";
-
-}
-
-
-function goProfile(){
-
-    window.location.href =
-        "profile.html";
-
-}
-
-
-/* ========================================
-   PREVENT BROKEN IMAGE
-======================================== */
+/* =========================================================
+   RUN AFTER PROFILE LOAD
+========================================================= */
 
 document.addEventListener(
-    "error",
-    function(event){
+    "DOMContentLoaded",
+    function() {
 
-        const element =
-            event.target;
+        setTimeout(
+            function() {
 
+                startProfilePart4();
 
-        if(
-            element.tagName === "IMG"
-        ){
-
-            element.style.display =
-                "none";
-
-        }
-
-    },
-    true
-);
-
-
-/* ========================================
-   AUTH STATE
-======================================== */
-
-supabaseClient.auth.onAuthStateChange(
-    function(event, session){
-
-        if(
-            event === "SIGNED_OUT"
-        ){
-
-            window.location.href =
-                "login.html";
-
-        }
+            },
+            300
+        );
 
     }
 );
 
 </script>
+<!-- =========================================================
+     STUDENTX PROFILE — PART 5
+     EDIT PROFILE + AVATAR + COVER
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   STORAGE CONFIG
+========================================================= */
+
+const PROFILE_BUCKET = "avatars";
+const COVER_BUCKET = "covers";
 
 
-<!-- ========================================
-     END PROFILE APP
-======================================== -->
+/* =========================================================
+   EDIT PROFILE BUTTON
+========================================================= */
 
-</body>
+const editProfileBtn =
+    document.getElementById(
+        "editProfileBtn"
+    );
 
-</html>
+
+if (editProfileBtn) {
+
+    editProfileBtn.addEventListener(
+        "click",
+        function() {
+
+            openEditProfile();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   OPEN EDIT PROFILE
+========================================================= */
+
+function openEditProfile() {
+
+    if (!currentProfile) {
+
+        alert(
+            "Profile is still loading. Please wait."
+        );
+
+        return;
+    }
+
+
+    /* Prevent duplicate modal */
+
+    const oldModal =
+        document.getElementById(
+            "editProfileModal"
+        );
+
+    if (oldModal) {
+        oldModal.remove();
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+    modal.id =
+        "editProfileModal";
+
+    modal.className =
+        "profile-edit-modal";
+
+
+    modal.innerHTML = `
+
+        <div
+            class="profile-edit-box"
+        >
+
+            <div
+                class="profile-edit-header"
+            >
+
+                <h3>
+                    Edit Profile
+                </h3>
+
+                <button
+                    type="button"
+                    class="profile-edit-close"
+                    id="closeEditProfile"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+
+            </div>
+
+
+            <div
+                class="profile-edit-body"
+            >
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="editFullName"
+                    value="${escapeAttribute(
+                        currentProfile.full_name || ""
+                    )}"
+                    maxlength="80"
+                >
+
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="editUsername"
+                    value="${escapeAttribute(
+                        currentProfile.username || ""
+                    )}"
+                    maxlength="30"
+                >
+
+
+                <label>
+                    Bio
+                </label>
+
+                <textarea
+                    id="editBio"
+                    maxlength="160"
+                    rows="4"
+                >${escapeHTML(
+                    currentProfile.bio || ""
+                )}</textarea>
+
+
+                <label>
+                    University
+                </label>
+
+                <input
+                    type="text"
+                    id="editUniversity"
+                    value="${escapeAttribute(
+                        currentProfile.university || ""
+                    )}"
+                >
+
+
+                <label>
+                    Department
+                </label>
+
+                <input
+                    type="text"
+                    id="editDepartment"
+                    value="${escapeAttribute(
+                        currentProfile.department || ""
+                    )}"
+                >
+
+
+                <label>
+                    Faculty
+                </label>
+
+                <input
+                    type="text"
+                    id="editFaculty"
+                    value="${escapeAttribute(
+                        currentProfile.faculty || ""
+                    )}"
+                >
+
+
+                <label>
+                    Level
+                </label>
+
+                <input
+                    type="text"
+                    id="editLevel"
+                    value="${escapeAttribute(
+                        currentProfile.level || ""
+                    )}"
+                >
+
+
+                <label>
+                    Graduation Year
+                </label>
+
+                <input
+                    type="number"
+                    id="editGraduationYear"
+                    value="${escapeAttribute(
+                        currentProfile.graduation_year || ""
+                    )}"
+                >
+
+
+                <label>
+                    Country
+                </label>
+
+                <input
+                    type="text"
+                    id="editCountry"
+                    value="${escapeAttribute(
+                        currentProfile.country || ""
+                    )}"
+                >
+
+
+                <label>
+                    State
+                </label>
+
+                <input
+                    type="text"
+                    id="editState"
+                    value="${escapeAttribute(
+                        currentProfile.state || ""
+                    )}"
+                >
+
+
+                <label>
+                    City
+                </label>
+
+                <input
+                    type="text"
+                    id="editCity"
+                    value="${escapeAttribute(
+                        currentProfile.city || ""
+                    )}"
+                >
+
+
+                <button
+                    type="button"
+                    class="save-profile-btn"
+                    id="saveProfileBtn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    /* Close */
+
+    const closeBtn =
+        document.getElementById(
+            "closeEditProfile"
+        );
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            "click",
+            function() {
+
+                modal.remove();
+
+            }
+        );
+    }
+
+
+    /* Save */
+
+    const saveBtn =
+        document.getElementById(
+            "saveProfileBtn"
+        );
+
+    if (saveBtn) {
+
+        saveBtn.addEventListener(
+            "click",
+            saveProfileChanges
+        );
+    }
+}
+
+
+/* =========================================================
+   SAVE PROFILE CHANGES
+========================================================= */
+
+async function saveProfileChanges() {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    const saveBtn =
+        document.getElementById(
+            "saveProfileBtn"
+        );
+
+
+    const fullName =
+        document.getElementById(
+            "editFullName"
+        )?.value.trim();
+
+
+    const username =
+        document.getElementById(
+            "editUsername"
+        )?.value.trim();
+
+
+    const bio =
+        document.getElementById(
+            "editBio"
+        )?.value.trim();
+
+
+    const university =
+        document.getElementById(
+            "editUniversity"
+        )?.value.trim();
+
+
+    const department =
+        document.getElementById(
+            "editDepartment"
+        )?.value.trim();
+
+
+    const faculty =
+        document.getElementById(
+            "editFaculty"
+        )?.value.trim();
+
+
+    const level =
+        document.getElementById(
+            "editLevel"
+        )?.value.trim();
+
+
+    const graduationYear =
+        document.getElementById(
+            "editGraduationYear"
+        )?.value;
+
+
+    const country =
+        document.getElementById(
+            "editCountry"
+        )?.value.trim();
+
+
+    const state =
+        document.getElementById(
+            "editState"
+        )?.value.trim();
+
+
+    const city =
+        document.getElementById(
+            "editCity"
+        )?.value.trim();
+
+
+    if (!fullName) {
+
+        alert(
+            "Full name is required."
+        );
+
+        return;
+    }
+
+
+    if (saveBtn) {
+
+        saveBtn.disabled =
+            true;
+
+        saveBtn.textContent =
+            "Saving...";
+    }
+
+
+    try {
+
+        const updateData = {
+
+            full_name:
+                fullName,
+
+            username:
+                username || null,
+
+            bio:
+                bio || null,
+
+            university:
+                university || null,
+
+            department:
+                department || null,
+
+            faculty:
+                faculty || null,
+
+            level:
+                level || null,
+
+            graduation_year:
+                graduationYear
+                    ? Number(graduationYear)
+                    : null,
+
+            country:
+                country || null,
+
+            state:
+                state || null,
+
+            city:
+                city || null
+
+        };
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(PROFILE_TABLE)
+            .update(updateData)
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Profile update error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to update profile."
+            );
+
+            return;
+        }
+
+
+        currentProfile =
+            data;
+
+
+        updateProfileUI(
+            data
+        );
+
+
+        const modal =
+            document.getElementById(
+                "editProfileModal"
+            );
+
+        if (modal) {
+            modal.remove();
+        }
+
+
+        alert(
+            "Profile updated successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Save profile error:",
+            error
+        );
+
+        alert(
+            "Something went wrong."
+        );
+
+    } finally {
+
+        if (saveBtn) {
+
+            saveBtn.disabled =
+                false;
+
+            saveBtn.textContent =
+                "Save Changes";
+        }
+    }
+}
+
+
+/* =========================================================
+   PROFILE IMAGE INPUT
+========================================================= */
+
+const picInput =
+    document.getElementById(
+        "picInput"
+    );
+
+
+const avatarBox =
+    document.getElementById(
+        "avatarBox"
+    );
+
+
+if (avatarBox) {
+
+    avatarBox.addEventListener(
+        "click",
+        function() {
+
+            if (picInput) {
+                picInput.click();
+            }
+
+        }
+    );
+}
+
+
+if (picInput) {
+
+    picInput.addEventListener(
+        "change",
+        async function(event) {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await uploadAvatar(
+                file
+            );
+
+            picInput.value = "";
+
+        }
+    );
+}
+
+
+/* =========================================================
+   COVER INPUT
+========================================================= */
+
+const coverDisplay =
+    document.getElementById(
+        "coverDisplay"
+    );
+
+
+const coverInput =
+    document.getElementById(
+        "coverInput"
+    );
+
+
+if (coverDisplay) {
+
+    coverDisplay.addEventListener(
+        "dblclick",
+        function() {
+
+            if (coverInput) {
+                coverInput.click();
+            }
+
+        }
+    );
+}
+
+
+if (coverInput) {
+
+    coverInput.addEventListener(
+        "change",
+        async function(event) {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await uploadCover(
+                file
+            );
+
+            coverInput.value = "";
+
+        }
+    );
+}
+
+
+/* =========================================================
+   VALIDATE IMAGE
+========================================================= */
+
+function validateImage(
+    file
+) {
+
+    if (!file) {
+        return false;
+    }
+
+
+    if (!file.type.startsWith(
+        "image/"
+    )) {
+
+        alert(
+            "Please select an image."
+        );
+
+        return false;
+    }
+
+
+    const maxSize =
+        5 * 1024 * 1024;
+
+
+    if (
+        file.size >
+        maxSize
+    ) {
+
+        alert(
+            "Image must be less than 5MB."
+        );
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =========================================================
+   UPLOAD AVATAR
+========================================================= */
+
+async function uploadAvatar(
+    file
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    if (!validateImage(file)) {
+        return;
+    }
+
+
+    try {
+
+        const extension =
+            getFileExtension(file);
+
+
+        const filePath =
+            `${currentUser.id}/avatar-${Date.now()}.${extension}`;
+
+
+        const {
+            error:
+            uploadError
+        } = await supabaseClient
+            .storage
+            .from(PROFILE_BUCKET)
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true,
+                    contentType:
+                        file.type
+                }
+            );
+
+
+        if (uploadError) {
+
+            console.error(
+                "Avatar upload error:",
+                uploadError
+            );
+
+            alert(
+                uploadError.message
+            );
+
+            return;
+        }
+
+
+        const {
+            data:
+            publicData
+        } = supabaseClient
+            .storage
+            .from(PROFILE_BUCKET)
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const avatarUrl =
+            publicData.publicUrl;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(PROFILE_TABLE)
+            .update({
+                avatar_url:
+                    avatarUrl
+            })
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Avatar database error:",
+                error
+            );
+
+            alert(
+                error.message
+            );
+
+            return;
+        }
+
+
+        currentProfile =
+            data;
+
+
+        updateAvatar(
+            data
+        );
+
+
+        alert(
+            "Profile photo updated."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Avatar error:",
+            error
+        );
+
+        alert(
+            "Unable to upload profile photo."
+        );
+    }
+}
+
+
+/* =========================================================
+   UPLOAD COVER
+========================================================= */
+
+async function uploadCover(
+    file
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    if (!validateImage(file)) {
+        return;
+    }
+
+
+    try {
+
+        const extension =
+            getFileExtension(file);
+
+
+        const filePath =
+            `${currentUser.id}/cover-${Date.now()}.${extension}`;
+
+
+        const {
+            error:
+            uploadError
+        } = await supabaseClient
+            .storage
+            .from(COVER_BUCKET)
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true,
+                    contentType:
+                        file.type
+                }
+            );
+
+
+        if (uploadError) {
+
+            console.error(
+                "Cover upload error:",
+                uploadError
+            );
+
+            alert(
+                uploadError.message
+            );
+
+            return;
+        }
+
+
+        const {
+            data:
+            publicData
+        } = supabaseClient
+            .storage
+            .from(COVER_BUCKET)
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const coverUrl =
+            publicData.publicUrl;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(PROFILE_TABLE)
+            .update({
+                cover_url:
+                    coverUrl
+            })
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Cover database error:",
+                error
+            );
+
+            alert(
+                error.message
+            );
+
+            return;
+        }
+
+
+        currentProfile =
+            data;
+
+
+        updateCover(
+            data
+        );
+
+
+        alert(
+            "Cover photo updated."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Cover error:",
+            error
+        );
+
+        alert(
+            "Unable to upload cover photo."
+        );
+    }
+}
+
+
+/* =========================================================
+   FILE EXTENSION
+========================================================= */
+
+function getFileExtension(
+    file
+) {
+
+    const parts =
+        file.name.split(".");
+
+    return (
+        parts[
+            parts.length - 1
+        ] || "jpg"
+    )
+        .toLowerCase();
+}
+
+
+/* =========================================================
+   PROFILE MENU
+========================================================= */
+
+const profileMenuBtn =
+    document.getElementById(
+        "profileMenuBtn"
+    );
+
+
+if (profileMenuBtn) {
+
+    profileMenuBtn.addEventListener(
+        "click",
+        function() {
+
+            openProfileMenu();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   OPEN PROFILE MENU
+========================================================= */
+
+function openProfileMenu() {
+
+    const oldMenu =
+        document.getElementById(
+            "profileMenu"
+        );
+
+    if (oldMenu) {
+
+        oldMenu.remove();
+
+        return;
+    }
+
+
+    const menu =
+        document.createElement(
+            "div"
+        );
+
+
+    menu.id =
+        "profileMenu";
+
+
+    menu.className =
+        "profile-menu";
+
+
+    menu.innerHTML = `
+
+        <button
+            type="button"
+            id="menuEditProfile"
+        >
+            <i class="fas fa-user-edit"></i>
+            Edit Profile
+        </button>
+
+        <button
+            type="button"
+            id="menuAvatar"
+        >
+            <i class="fas fa-camera"></i>
+            Change Profile Photo
+        </button>
+
+        <button
+            type="button"
+            id="menuCover"
+        >
+            <i class="fas fa-image"></i>
+            Change Cover Photo
+        </button>
+
+        <button
+            type="button"
+            id="menuLogout"
+        >
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+
+    `;
+
+
+    document.body.appendChild(
+        menu
+    );
+
+
+    /* =====================================================
+       EDIT PROFILE
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuEditProfile"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                menu.remove();
+
+                openEditProfile();
+
+            }
+        );
+
+
+    /* =====================================================
+       CHANGE AVATAR
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuAvatar"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                menu.remove();
+
+                const input =
+                    document.getElementById(
+                        "picInput"
+                    );
+
+                if (input) {
+                    input.click();
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       CHANGE COVER
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuCover"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                menu.remove();
+
+                const input =
+                    document.getElementById(
+                        "coverInput"
+                    );
+
+                if (input) {
+                    input.click();
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuLogout"
+        )
+        ?.addEventListener(
+            "click",
+            async function() {
+
+                menu.remove();
+
+                await logoutUser();
+
+            }
+        );
+}
+
+
+/* =========================================================
+   LOGOUT USER
+========================================================= */
+
+async function logoutUser() {
+
+    try {
+
+        const {
+            error
+        } = await supabaseClient
+            .auth
+            .signOut();
+
+
+        if (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to logout."
+            );
+
+            return;
+        }
+
+
+        currentUser = null;
+
+        currentProfile = null;
+
+
+        window.location.href =
+            "login.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        alert(
+            "Unable to logout."
+        );
+    }
+}
+
+
+/* =========================================================
+   CLOSE PROFILE MENU WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const menu =
+            document.getElementById(
+                "profileMenu"
+            );
+
+
+        if (!menu) {
+            return;
+        }
+
+
+        const button =
+            document.getElementById(
+                "profileMenuBtn"
+            );
+
+
+        if (
+            !menu.contains(
+                event.target
+            ) &&
+            !button?.contains(
+                event.target
+            )
+        ) {
+
+            menu.remove();
+        }
+    }
+);
+
+
+/* =========================================================
+   END OF PART 5
+========================================================= */
+  
