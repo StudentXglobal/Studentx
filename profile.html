@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+>
 
 <title>StudentX - Profile</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+>
 
 <style>
 
@@ -20,621 +31,509 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
     -webkit-tap-highlight-color:transparent;
 }
 
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
 body{
     font-family:Poppins,sans-serif;
     background:#0a0a0f;
     color:#fff;
-    min-height:100vh;
     padding-bottom:70px;
 }
 
-/* HEADER */
 
-.hdr{
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
     position:sticky;
     top:0;
     z-index:100;
+
+    height:70px;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:10px 14px;
-    background:rgba(10,10,15,.95);
-    backdrop-filter:blur(16px);
-    -webkit-backdrop-filter:blur(16px);
-    border-bottom:1px solid rgba(255,255,255,.06);
+
+    padding:0 18px;
+
+    background:rgba(10,10,15,.96);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
 }
 
-.hdr-title{
-    font-size:18px;
+.header-title{
+
+    font-size:24px;
     font-weight:800;
 }
 
-.hdr-edit{
-    width:32px;
-    height:26px;
-    border-radius:6px;
-    background:rgba(255,255,255,.1);
+.menu-btn{
+
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    gap:4px;
-    cursor:pointer;
+
+    background:rgba(255,255,255,.08);
+
+    color:#aaa;
+
+    font-size:18px;
 }
 
-.hdr-edit span{
-    width:4px;
-    height:4px;
-    border-radius:50%;
-    background:rgba(255,255,255,.6);
-}
 
-/* COVER */
+/* =========================
+   COVER
+========================= */
 
 .cover{
+
+    width:100%;
     height:150px;
-    position:relative;
-    overflow:hidden;
-    cursor:pointer;
-}
 
-.cover-img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-.cover-default{
-    width:100%;
-    height:100%;
     background:
-    linear-gradient(
-        90deg,
-        #008751 33.33%,
-        #fff 33.33%,
-        #fff 66.66%,
-        #008751 66.66%
-    );
+        linear-gradient(
+            90deg,
+            #008751 33.33%,
+            #ffffff 33.33%,
+            #ffffff 66.66%,
+            #008751 66.66%
+        );
 
     display:flex;
     align-items:center;
     justify-content:center;
+
+    overflow:hidden;
 }
 
-.cover-default span{
-    font-size:28px;
-    font-weight:900;
+.cover span{
+
     color:#008751;
-    text-shadow:0 2px 8px rgba(255,255,255,.4);
+
+    font-size:30px;
+
+    font-weight:800;
+
     letter-spacing:2px;
 }
 
-.cover-ov{
+
+/* =========================
+   PROFILE AREA
+========================= */
+
+.profile-info{
+
+    padding:55px 20px 0;
+
+    position:relative;
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+
+.avatar-box{
+
     position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.3);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-}
 
-.cover:hover .cover-ov{
-    display:flex;
-}
-
-.cover-opt{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:rgba(255,255,255,.15);
-    backdrop-filter:blur(8px);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:15px;
-    color:#fff;
-    cursor:pointer;
-}
-
-/* AVATAR */
-
-.av-wrap{
-    position:absolute;
-    bottom:-38px;
+    top:-42px;
     left:20px;
-    z-index:10;
-    cursor:pointer;
-}
 
-.av{
-    width:80px;
-    height:80px;
+    width:84px;
+    height:84px;
+
     border-radius:50%;
+
     border:4px solid #0a0a0f;
-    object-fit:cover;
-    background:#1a1a35;
+
+    background:#181832;
+
+    overflow:hidden;
+
     display:flex;
     align-items:center;
     justify-content:center;
-    font-size:30px;
-    font-weight:800;
+}
+
+.avatar-box img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.avatar-initials{
+
     color:#a855f7;
+
+    font-size:28px;
+
+    font-weight:800;
 }
 
-.av-opts{
-    position:absolute;
-    top:44px;
-    left:0;
-    background:rgba(20,20,45,.92);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.08);
-    border-radius:12px;
-    padding:4px 0;
-    min-width:160px;
-    z-index:20;
-    display:none;
-    box-shadow:0 8px 24px rgba(0,0,0,.4);
-}
 
-.av-opts.show{
-    display:block;
-}
+/* =========================
+   PROFILE NAME
+========================= */
 
-.av-opt{
+.name-row{
+
     display:flex;
+
     align-items:center;
-    gap:10px;
-    padding:10px 16px;
-    font-size:13px;
-    font-weight:500;
-    color:rgba(255,255,255,.7);
-    cursor:pointer;
-}
 
-.av-opt i{
-    width:18px;
-    text-align:center;
-    font-size:14px;
-    color:rgba(255,255,255,.35);
-}
-
-/* PROFILE INFO */
-
-.info{
-    padding:50px 20px 0;
-}
-
-.nm-row{
-    display:flex;
-    align-items:center;
     justify-content:space-between;
+
+    gap:10px;
 }
 
-.nm{
+.profile-name{
+
     font-size:20px;
+
     font-weight:800;
-    display:flex;
-    align-items:center;
-    gap:5px;
+
+    word-break:break-word;
 }
 
-.nm .vd{
+.verified{
+
     color:#a855f7;
+
     font-size:14px;
 }
 
-.share-btn{
-    padding:7px 16px;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,.1);
-    color:rgba(255,255,255,.6);
-    font-size:12px;
-    font-weight:600;
-    display:flex;
-    align-items:center;
-    gap:5px;
-    cursor:pointer;
-}
 
-.handle{
-    font-size:12px;
-    color:rgba(255,255,255,.35);
-    margin-top:2px;
-}
+/* =========================
+   USERNAME
+========================= */
 
-.course-label{
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    margin-top:6px;
-    padding:5px 12px;
-    border-radius:20px;
-    background:rgba(124,58,237,.1);
-    border:1px solid rgba(124,58,237,.2);
-    font-size:11px;
-    font-weight:600;
-    color:#a855f7;
-}
+.profile-username{
 
-.bio{
+    margin-top:3px;
+
+    color:rgba(255,255,255,.4);
+
     font-size:13px;
-    color:rgba(255,255,255,.65);
-    margin-top:10px;
-    line-height:1.5;
 }
 
-/* STATS */
+
+/* =========================
+   BIO
+========================= */
+
+.profile-bio{
+
+    margin-top:12px;
+
+    color:rgba(255,255,255,.65);
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================
+   STATS
+========================= */
 
 .stats{
+
     display:flex;
-    margin-top:16px;
-    padding:14px 0;
-    border-top:1px solid rgba(255,255,255,.05);
-    border-bottom:1px solid rgba(255,255,255,.05);
+
+    margin-top:20px;
+
+    padding:15px 0;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
 }
 
 .stat{
+
     flex:1;
+
     text-align:center;
 }
 
 .stat:not(:last-child){
-    border-right:1px solid rgba(255,255,255,.05);
+
+    border-right:
+        1px solid rgba(255,255,255,.06);
 }
 
-.stat-num{
-    font-size:16px;
+.stat-number{
+
+    font-size:17px;
+
     font-weight:800;
 }
 
 .stat-label{
-    font-size:10px;
-    color:rgba(255,255,255,.3);
+
     margin-top:2px;
+
+    font-size:10px;
+
+    color:rgba(255,255,255,.35);
+
     text-transform:uppercase;
-    letter-spacing:.5px;
 }
 
-/* BUTTON */
 
-.btns{
-    display:flex;
-    gap:10px;
-    margin-top:14px;
-}
+/* =========================
+   EDIT BUTTON
+========================= */
 
-.btn{
-    flex:1;
-    padding:10px;
-    border-radius:12px;
-    font-size:13px;
-    font-weight:700;
-    text-align:center;
-    cursor:pointer;
-}
+.edit-btn{
 
-.btn-primary{
-    background:linear-gradient(135deg,#7c3aed,#a855f7);
+    width:100%;
+
+    margin-top:15px;
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #a855f7
+        );
+
     color:#fff;
+
+    font-family:Poppins,sans-serif;
+
+    font-size:14px;
+
+    font-weight:700;
 }
 
-/* TABS */
+
+/* =========================
+   TABS
+========================= */
 
 .tabs{
+
     display:flex;
-    margin-top:16px;
-    border-bottom:1px solid rgba(255,255,255,.05);
+
+    margin-top:18px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
 }
 
 .tab{
+
     flex:1;
-    padding:12px;
+
+    padding:13px;
+
     text-align:center;
-    font-size:13px;
-    font-weight:600;
-    color:rgba(255,255,255,.3);
-    border-bottom:2px solid transparent;
-    cursor:pointer;
-}
 
-.tab.on{
-    color:#a855f7;
-    border-color:#a855f7;
-}
-
-/* POSTS */
-
-.posts{
-    padding:16px 14px;
-}
-
-.pin-label{
-    display:flex;
-    align-items:center;
-    gap:6px;
-    font-size:11px;
-    font-weight:700;
     color:rgba(255,255,255,.35);
-    margin-bottom:10px;
-    padding:0 2px;
-}
 
-.pin-label i{
-    color:#a855f7;
-}
-
-.post{
-    background:rgba(255,255,255,.03);
-    border:1px solid rgba(255,255,255,.05);
-    border-radius:14px;
-    margin-bottom:12px;
-    overflow:hidden;
-}
-
-.p-hdr{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    padding:12px 14px;
-}
-
-.p-av{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#1a1a35;
-    display:flex;
-    align-items:center;
-    justify-content:center;
     font-size:13px;
-    font-weight:800;
-    color:#a855f7;
-}
 
-.p-inf{
-    flex:1;
-    min-width:0;
-}
-
-.p-nm{
-    font-size:13px;
-    font-weight:700;
-}
-
-.p-nm .vd{
-    color:#a855f7;
-    font-size:10px;
-}
-
-.p-meta{
-    font-size:10px;
-    color:rgba(255,255,255,.25);
-    margin-top:1px;
-}
-
-.p-more{
-    width:30px;
-    height:30px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    color:rgba(255,255,255,.25);
-    font-size:14px;
-}
-
-.p-body{
-    padding:0 14px 12px;
-    font-size:13px;
-    line-height:1.6;
-    color:rgba(255,255,255,.65);
-}
-
-.p-acts{
-    display:flex;
-    align-items:center;
-    padding:4px 8px 10px;
-    gap:2px;
-}
-
-.p-a{
-    display:flex;
-    align-items:center;
-    gap:5px;
-    padding:7px 10px;
-    border-radius:20px;
-    font-size:11px;
-    color:rgba(255,255,255,.35);
     font-weight:600;
 }
 
-.p-a.lk.on{
-    color:#ef4444;
+.tab.active{
+
+    color:#a855f7;
+
+    border-bottom:
+        2px solid #a855f7;
 }
 
-.p-a-r{
-    margin-left:auto;
+
+/* =========================
+   POSTS
+========================= */
+
+.posts-container{
+
+    padding:16px;
 }
 
-/* SAVED */
+.loading{
 
-.saved-empty{
+    padding:40px 20px;
+
     text-align:center;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:13px;
+}
+
+.empty-posts{
+
     padding:50px 20px;
-    color:rgba(255,255,255,.15);
+
+    text-align:center;
+
+    color:rgba(255,255,255,.3);
 }
 
-.saved-empty i{
-    font-size:36px;
-    margin-bottom:10px;
+.empty-posts i{
+
     display:block;
+
+    margin-bottom:10px;
+
+    font-size:35px;
 }
 
-.saved-empty p{
-    font-size:13px;
-}
 
-/* BOTTOM NAV */
+/* =========================
+   BOTTOM NAV
+========================= */
 
-.bnav{
+.bottom-nav{
+
     position:fixed;
+
     bottom:0;
     left:50%;
+
     transform:translateX(-50%);
+
     width:100%;
     max-width:430px;
-    height:60px;
+
+    height:62px;
+
     display:flex;
+
     align-items:center;
+
     justify-content:space-around;
-    background:rgba(10,10,15,.95);
-    backdrop-filter:blur(16px);
-    border-top:1px solid rgba(255,255,255,.06);
+
+    background:rgba(10,10,15,.97);
+
+    backdrop-filter:blur(18px);
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
     z-index:200;
 }
 
-.nb{
+.nav-item{
+
     display:flex;
+
     flex-direction:column;
+
     align-items:center;
-    gap:2px;
-    font-size:9px;
-    font-weight:500;
+
+    gap:3px;
+
     color:rgba(255,255,255,.3);
+
+    font-size:9px;
+
+    font-weight:500;
 }
 
-.nb i{
+.nav-item i{
+
     font-size:19px;
 }
 
-.nb.on{
+.nav-item.active{
+
     color:#a855f7;
 }
 
 </style>
+
 </head>
+
+
 <body>
 
-<!-- HEADER -->
 
-<header class="hdr">
+<header class="header">
 
-    <div class="hdr-title">
+    <div class="header-title">
         Profile
     </div>
 
-    <div class="hdr-edit" onclick="openEditMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
+    <div class="menu-btn">
+        <i class="fas fa-ellipsis-h"></i>
     </div>
 
 </header>
 
 
-<!-- COVER PHOTO -->
+<!-- COVER -->
 
-<div class="cover"
-     id="coverEl"
-     onclick="toggleCoverOpts()">
+<div class="cover">
 
-    <div id="coverDisplay">
-
-        <div class="cover-default">
-            <span>Nigeria</span>
-        </div>
-
-    </div>
-
-
-    <div class="cover-ov" id="coverOv">
-
-        <div class="cover-opt"
-             onclick="event.stopPropagation();viewCover()">
-
-            <i class="fas fa-eye"></i>
-
-        </div>
-
-
-        <div class="cover-opt"
-             onclick="event.stopPropagation();changeCover()">
-
-            <i class="fas fa-camera"></i>
-
-        </div>
-
-    </div>
-
-
-    <!-- PROFILE PICTURE -->
-
-    <div class="av-wrap"
-         id="avWrap"
-         onclick="event.stopPropagation();toggleAvOpts()">
-
-        <div id="avDisplay">
-
-            <div class="av">
-                YG
-            </div>
-
-        </div>
-
-
-        <!-- AVATAR MENU -->
-
-        <div class="av-opts"
-             id="avOpts">
-
-            <div class="av-opt"
-                 onclick="event.stopPropagation();viewPic()">
-
-                <i class="fas fa-eye"></i>
-
-                View Picture
-
-            </div>
-
-
-            <div class="av-opt"
-                 onclick="event.stopPropagation();changePic()">
-
-                <i class="fas fa-camera"></i>
-
-                Change Picture
-
-            </div>
-
-        </div>
-
-    </div>
+    <span>
+        Nigeria
+    </span>
 
 </div>
 
 
-<!-- PROFILE INFORMATION -->
+<!-- PROFILE -->
 
-<div class="info">
+<section class="profile-info">
 
-    <div class="nm-row">
 
-        <div class="nm">
+    <!-- AVATAR -->
 
-            Yusuf Alhaji Garba
+    <div class="avatar-box" id="avatarBox">
 
-            <i class="fas fa-check-circle vd"></i>
-
+        <div
+            class="avatar-initials"
+            id="avatarInitials"
+        >
+            --
         </div>
 
+    </div>
 
-        <div class="share-btn"
-             onclick="openShare()">
 
-            <i class="fas fa-share-alt"></i>
+    <!-- NAME -->
 
-            Share
+    <div class="name-row">
 
+        <div
+            class="profile-name"
+            id="profileName"
+        >
+            Loading...
         </div>
 
     </div>
@@ -642,43 +541,35 @@ body{
 
     <!-- USERNAME -->
 
-    <div class="handle">
-        @yusuftsm
-    </div>
-
-
-    <!-- COURSE -->
-
-    <div class="course-label">
-
-        <i class="fas fa-code"></i>
-
-        Software Engineering
-
+    <div
+        class="profile-username"
+        id="profileUsername"
+    >
+        Loading...
     </div>
 
 
     <!-- BIO -->
 
-    <div class="bio">
-
-        Federal University Dutse
-
-        <br>
-
-        Build my future one step at a time 🚀
-
+    <div
+        class="profile-bio"
+        id="profileBio"
+    >
+        Loading...
     </div>
 
 
-    <!-- PROFILE STATS -->
+    <!-- REAL STATS WILL COME FROM SUPABASE -->
 
     <div class="stats">
 
         <div class="stat">
 
-            <div class="stat-num">
-                24
+            <div
+                class="stat-number"
+                id="postsCount"
+            >
+                0
             </div>
 
             <div class="stat-label">
@@ -690,8 +581,11 @@ body{
 
         <div class="stat">
 
-            <div class="stat-num">
-                1.2K
+            <div
+                class="stat-number"
+                id="followersCount"
+            >
+                0
             </div>
 
             <div class="stat-label">
@@ -703,8 +597,11 @@ body{
 
         <div class="stat">
 
-            <div class="stat-num">
-                320
+            <div
+                class="stat-number"
+                id="followingCount"
+            >
+                0
             </div>
 
             <div class="stat-label">
@@ -716,12 +613,15 @@ body{
 
         <div class="stat">
 
-            <div class="stat-num">
-                18
+            <div
+                class="stat-number"
+                id="likesCount"
+            >
+                0
             </div>
 
             <div class="stat-label">
-                Communities
+                Likes
             </div>
 
         </div>
@@ -729,725 +629,1559 @@ body{
     </div>
 
 
-    <!-- EDIT PROFILE BUTTON -->
-
-    <div class="btns">
-
-        <div class="btn btn-primary"
-             onclick="window.location.href='edit-profile.html'">
-
-            Edit Profile
-
-        </div>
-
-    </div>
+    <button
+        class="edit-btn"
+        onclick="window.location.href='edit-profile.html'"
+    >
+        Edit Profile
+    </button>
 
 
-    <!-- PROFILE TABS -->
+    <!-- TABS -->
 
     <div class="tabs">
 
-        <div class="tab on"
-             onclick="switchTab('posts',this)">
-
+        <div class="tab active">
             Posts
-
         </div>
 
-
-        <div class="tab"
-             onclick="switchTab('saved',this)">
-
+        <div class="tab">
             Saved
-
         </div>
 
     </div>
 
-</div>
+</section>
 
 
 <!-- POSTS -->
 
-<div class="posts"
-     id="postsView">
+<div
+    class="posts-container"
+    id="postsContainer"
+>
 
-</div>
-
-
-<!-- SAVED POSTS -->
-
-<div class="saved-empty"
-     id="savedView"
-     style="display:none">
-
-    <i class="far fa-bookmark"></i>
-
-    <p>
-        No saved posts yet
-    </p>
-
-</div>
-
-
-<!-- IMAGE VIEWER -->
-
-<div class="view-ov"
-     id="viewOv"
-     onclick="closeView()">
-
-    <div class="view-close">
-
-        <i class="fas fa-times"></i>
-
+    <div class="loading">
+        Loading posts...
     </div>
 
+</div>
+<!-- PROFILE MODALS -->
 
-    <img id="viewImg"
-         src=""
-         alt="">
-
+<div class="view-ov" id="viewOv" onclick="closeView()">
+    <div class="view-close">
+        <i class="fas fa-times"></i>
+    </div>
+    <img id="viewImg" src="" alt="Profile photo">
 </div>
 
 
 <!-- EDIT PROFILE MENU -->
 
-<div class="em-ov"
-     id="emOv">
+<div class="em-ov" id="emOv">
 
-    <div class="em-bg"
-         onclick="closeEditMenu()">
-    </div>
-
+    <div class="em-bg" onclick="closeEditMenu()"></div>
 
     <div class="em-sheet">
 
-        <div class="em-handle">
-        </div>
-
+        <div class="em-handle"></div>
 
         <div class="em-item"
-             onclick="closeEditMenu();changePic()">
-
+             onclick="closeEditMenu(); changePic()">
             <i class="fas fa-user-circle"></i>
-
             Edit Profile Picture
-<script>
+        </div>
 
-var myPosts = [
-    {
-        id:2,
-        text:"Shared my Data Structures assignment solution. Let me know if you have questions!",
-        likes:32,
-        comments:8,
-        shares:3,
-        liked:false,
-        saved:false,
-        time:Date.now()-86400000,
-        views:456,
-        pinned:false
-    },
-    {
-        id:1,
-        text:"Just finished a great session on Machine Learning basics. Here are some key notes for everyone. Hope it helps!",
-        likes:45,
-        comments:12,
-        shares:8,
-        liked:false,
-        saved:false,
-        time:Date.now()-7200000,
-        views:892,
-        pinned:true
-    },
-    {
-        id:3,
-        text:"Exam tip: Use the Feynman technique. Try explaining the concept to someone who knows nothing about it.",
-        likes:128,
-        comments:34,
-        shares:67,
-        liked:false,
-        saved:false,
-        time:Date.now()-172800000,
-        views:2340,
-        pinned:false
-    }
-];
+        <div class="em-item"
+             onclick="closeEditMenu(); changeCover()">
+            <i class="fas fa-image"></i>
+            Edit Cover Photo
+        </div>
 
+        <div class="em-item"
+             onclick="closeEditMenu(); window.location.href='edit-username.html'">
+            <i class="fas fa-at"></i>
+            Edit Username
+        </div>
 
-var friends = [
-    {
-        id:2,
-        name:"Fatima Muhammad",
-        av:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop"
-    },
-    {
-        id:3,
-        name:"David Okafor",
-        av:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
-    },
-    {
-        id:4,
-        name:"Aisha Bello",
-        av:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop"
-    },
-    {
-        id:5,
-        name:"Emeka Nwankwo",
-        av:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
-    },
-    {
-        id:6,
-        name:"Halima Yusuf",
-        av:"https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop"
-    },
-    {
-        id:7,
-        name:"Ibrahim Kano",
-        av:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop"
-    }
-];
+        <div class="em-div"></div>
 
+        <div class="em-item"
+             onclick="closeEditMenu(); toggleLock()">
 
-var groups = [
-    {
-        id:1,
-        name:"Study Group CS300",
-        members:48,
-        av:"https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=100&h=100&fit=crop"
-    },
-    {
-        id:2,
-        name:"Software Engineering Hub",
-        members:120,
-        av:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop"
-    },
-    {
-        id:3,
-        name:"Med Students Forum",
-        members:89,
-        av:"https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=100&h=100&fit=crop"
-    },
-    {
-        id:4,
-        name:"Engineering Hub",
-        members:67,
-        av:"https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=100&h=100&fit=crop"
-    }
-];
+            <i class="fas fa-lock" id="lockIcon"></i>
 
-
-var curPicSrc = null;
-var isCustomPic = false;
-
-var curCoverSrc = null;
-var isCustomCover = false;
-
-var shMode = "";
-var shSelected = [];
-
-var curPmId = null;
-
-var isLocked = false;
-
-
-/* TIME */
-
-function ta(t){
-
-    var s = Math.floor(
-        (Date.now()-t)/1000
-    );
-
-    if(s < 60)
-        return "Just now";
-
-    if(s < 3600)
-        return Math.floor(s/60)+"m ago";
-
-    if(s < 86400)
-        return Math.floor(s/3600)+"h ago";
-
-    return Math.floor(s/86400)+"d ago";
-}
-
-
-/* VIEW FORMAT */
-
-function fmtV(v){
-
-    if(v >= 1000)
-        return (v/1000).toFixed(1)+"K";
-
-    return v.toString();
-}
-
-
-/* AVATAR */
-
-function avH(){
-
-    if(isCustomPic && curPicSrc){
-
-        return '<img class="av" src="'+curPicSrc+'" alt="Profile">';
-
-    }
-
-    return '<div class="av">YG</div>';
-}
-
-
-function pAvH(){
-
-    if(isCustomPic && curPicSrc){
-
-        return '<img class="p-av" src="'+curPicSrc+'" alt="Profile">';
-
-    }
-
-    return '<div class="p-av">YG</div>';
-}
-
-
-/* POSTS */
-
-function renderPosts(){
-
-    var pinned =
-        myPosts.filter(function(p){
-            return p.pinned;
-        });
-
-    var unpinned =
-        myPosts.filter(function(p){
-            return !p.pinned;
-        });
-
-
-    var h = "";
-
-
-    if(pinned.length){
-
-        h +=
-        '<div class="pin-label">'+
-        '<i class="fas fa-thumbtack"></i>'+
-        ' Pinned'+
-        '</div>';
-
-        pinned.forEach(function(p){
-
-            h += postH(p);
-
-        });
-
-    }
-
-
-    unpinned.forEach(function(p){
-
-        h += postH(p);
-
-    });
-
-
-    document.getElementById(
-        "postsView"
-    ).innerHTML = h;
-}
-
-
-/* POST HTML */
-
-function postH(p){
-
-    return `
-    <div class="post">
-
-        <div class="p-hdr">
-
-            ${pAvH()}
-
-            <div class="p-inf">
-
-                <div class="p-nm">
-
-                    Yusuf Alhaji Garba
-
-                    <i class="fas fa-check-circle vd"></i>
-
-                </div>
-
-                <div class="p-meta">
-
-                    @yusuftsm · ${ta(p.time)}
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="p-more"
-                onclick="openPm(${p.id})"
-            >
-
-                <i class="fas fa-ellipsis-h"></i>
-
-            </div>
+            <span id="lockText">
+                Lock Profile
+            </span>
 
         </div>
 
+    </div>
 
-        <div class="p-body">
+</div>
 
-            ${p.text}
+
+<!-- SHARE PROFILE -->
+
+<div class="sh-ov" id="shOv">
+
+    <div class="sh-bg" onclick="closeShare()"></div>
+
+    <div class="sh-sheet">
+
+        <div class="sh-handle"></div>
+
+        <div class="sh-head" id="shHead">
+            Share Profile
+        </div>
+
+        <div class="sh-opts" id="shOpts"></div>
+
+        <div class="sh-search" id="shSearch">
+
+            <input
+                type="text"
+                id="shInput"
+                placeholder="Search..."
+                oninput="searchSh(this.value)"
+            >
 
         </div>
 
+        <div class="sh-list" id="shList"></div>
 
-        <div class="p-acts">
+        <div class="sh-sel-bar" id="shBar">
 
-            <div
-                class="p-a lk ${p.liked ? "on" : ""}"
-                onclick="toggleLike(${p.id})"
-            >
-
-                <i class="${p.liked ? "fas" : "far"} fa-heart"></i>
-
-                ${p.likes}
-
+            <div class="sh-sel-count" id="shCount">
+                0 selected
             </div>
 
-
-            <div
-                class="p-a"
-                onclick="window.location.href='comment.html?post=${p.id}'"
-            >
-
-                <i class="far fa-comment"></i>
-
-                ${p.comments}
-
-            </div>
-
-
-            <div
-                class="p-a"
-                onclick="showMsg('Shared!')"
-            >
-
-                <i class="fas fa-retweet"></i>
-
-                ${p.shares}
-
-            </div>
-
-
-            <div
-                class="p-a p-a-r"
-                onclick="showMsg('Views: ${p.views}')"
-            >
-
-                <i class="fas fa-chart-bar"></i>
-
-                ${fmtV(p.views)}
-
+            <div class="sh-sel-btn" onclick="doShare()">
+                Share
             </div>
 
         </div>
 
     </div>
+
+</div>
+
+
+<!-- POST MENU -->
+
+<div class="pm-ov" id="pmOv">
+
+    <div class="pm-bg" onclick="closePm()"></div>
+
+    <div class="pm-sheet">
+
+        <div class="pm-handle"></div>
+
+        <div id="pmItems"></div>
+
+    </div>
+
+</div>
+
+
+<!-- IMAGE INPUTS -->
+
+<input
+    type="file"
+    id="picInput"
+    accept="image/*"
+    style="display:none"
+    onchange="handlePic(this)"
+>
+
+<input
+    type="file"
+    id="coverInput"
+    accept="image/*"
+    style="display:none"
+    onchange="handleCover(this)"
+>
+
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bnav">
+
+    <div
+        class="nb"
+        onclick="window.location.href='home.html'"
+    >
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+    </div>
+
+
+    <div
+        class="nb"
+        onclick="window.location.href='video.html'"
+    >
+        <i class="fas fa-video"></i>
+        <span>Video</span>
+    </div>
+
+
+    <div
+        class="nb"
+        onclick="window.location.href='chat.html'"
+    >
+        <i class="fas fa-comment-dots"></i>
+        <span>Chat</span>
+    </div>
+
+
+    <div
+        class="nb"
+        onclick="window.location.href='studyhub.html'"
+    >
+        <i class="fas fa-book-open"></i>
+        <span>StudyHub</span>
+    </div>
+
+
+    <div
+        class="nb on"
+        onclick="window.location.href='profile.html'"
+    >
+        <i class="fas fa-user"></i>
+        <span>Profile</span>
+    </div>
+
+</nav>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+    "https://acragelglvdnqhvbjcgx.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+</script>
+<script>
+/* ================================
+   STUDENTX PROFILE
+   REAL SUPABASE DATA
+================================ */
+
+let currentUser = null;
+let currentProfile = null;
+let currentPostId = null;
+
+
+/* ================================
+   GET LOGGED-IN USER
+================================ */
+
+async function getCurrentUser() {
+
+    const {
+        data: { user },
+        error
+    } = await supabaseClient.auth.getUser();
+
+    if (error) {
+        console.error("Auth error:", error);
+        return null;
+    }
+
+    if (!user) {
+        window.location.href = "login.html";
+        return null;
+    }
+
+    currentUser = user;
+
+    return user;
+}
+
+
+/* ================================
+   LOAD PROFILE
+================================ */
+
+async function loadMyProfile() {
+
+    try {
+
+        const user = await getCurrentUser();
+
+        if (!user) return;
+
+
+        const {
+            data: profile,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Profile error:",
+                error
+            );
+
+            return;
+        }
+
+
+        if (!profile) {
+
+            console.log(
+                "Profile bai samu ba"
+            );
+
+            return;
+        }
+
+
+        currentProfile = profile;
+
+
+        /* NAME */
+
+        const nameElement =
+            document.querySelector(".nm");
+
+        if (nameElement) {
+
+            nameElement.innerHTML = `
+                ${escapeHTML(
+                    profile.full_name ||
+                    "StudentX User"
+                )}
+
+                <i class="fas fa-check-circle vd"></i>
+            `;
+        }
+
+
+        /* USERNAME */
+
+        const handleElement =
+            document.querySelector(".handle");
+
+        if (handleElement) {
+
+            handleElement.textContent =
+                "@" +
+                (
+                    profile.username ||
+                    "username"
+                );
+        }
+
+
+        /* AVATAR */
+
+        const avatarContainer =
+            document.getElementById(
+                "avDisplay"
+            );
+
+        if (avatarContainer) {
+
+            if (profile.avatar_url) {
+
+                avatarContainer.innerHTML = `
+                    <img
+                        class="av"
+                        src="${escapeAttribute(
+                            profile.avatar_url
+                        )}"
+                        alt="Profile"
+                    >
+                `;
+
+            } else {
+
+                const initials =
+                    getInitials(
+                        profile.full_name
+                    );
+
+                avatarContainer.innerHTML = `
+                    <div class="av">
+                        ${initials}
+                    </div>
+                `;
+            }
+        }
+
+
+        /* COURSE */
+
+        const course =
+            document.querySelector(
+                ".course-label"
+            );
+
+        if (
+            course &&
+            profile.course
+        ) {
+
+            course.innerHTML = `
+                <i class="fas fa-code"></i>
+                ${escapeHTML(profile.course)}
+            `;
+        }
+
+
+        /* BIO */
+
+        const bio =
+            document.querySelector(".bio");
+
+        if (
+            bio &&
+            profile.bio
+        ) {
+
+            bio.textContent =
+                profile.bio;
+        }
+
+
+        /* COVER PHOTO */
+
+        const coverDisplay =
+            document.getElementById(
+                "coverDisplay"
+            );
+
+        if (
+            coverDisplay &&
+            profile.cover_url
+        ) {
+
+            coverDisplay.innerHTML = `
+                <img
+                    class="cover-img"
+                    src="${escapeAttribute(
+                        profile.cover_url
+                    )}"
+                    alt="Cover"
+                >
+            `;
+        }
+
+
+        console.log(
+            "Real profile loaded:",
+            profile
+        );
+
+
+        /* LOAD REAL STATS */
+
+        await loadProfileStats(
+            user.id
+        );
+
+
+        /* LOAD REAL POSTS */
+
+        await loadMyPosts(
+            user.id
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Profile loading error:",
+            error
+        );
+    }
+}
+
+
+/* ================================
+   PROFILE STATS
+================================ */
+
+async function loadProfileStats(
+    userId
+) {
+
+    try {
+
+        /* POSTS */
+
+        const {
+            count: postsCount,
+            error: postsError
+        } = await supabaseClient
+            .from("posts")
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+            .eq(
+                "user_id",
+                userId
+            );
+
+
+        if (postsError) {
+
+            console.log(
+                "Posts count:",
+                postsError.message
+            );
+        }
+
+
+        /* FOLLOWERS */
+
+        const {
+            count: followersCount,
+            error: followersError
+        } = await supabaseClient
+            .from("followers")
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+            .eq(
+                "following_id",
+                userId
+            );
+
+
+        if (followersError) {
+
+            console.log(
+                "Followers count:",
+                followersError.message
+            );
+        }
+
+
+        /* FOLLOWING */
+
+        const {
+            count: followingCount,
+            error: followingError
+        } = await supabaseClient
+            .from("followers")
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+            .eq(
+                "follower_id",
+                userId
+            );
+
+
+        if (followingError) {
+
+            console.log(
+                "Following count:",
+                followingError.message
+            );
+        }
+
+
+        const stats =
+            document.querySelectorAll(
+                ".stat-num"
+            );
+
+
+        if (stats[0]) {
+
+            stats[0].textContent =
+                postsCount || 0;
+        }
+
+
+        if (stats[1]) {
+
+            stats[1].textContent =
+                formatNumber(
+                    followersCount || 0
+                );
+        }
+
+
+        if (stats[2]) {
+
+            stats[2].textContent =
+                formatNumber(
+                    followingCount || 0
+                );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Stats error:",
+            error
+        );
+    }
+}
+
+
+/* ================================
+   LOAD REAL POSTS
+================================ */
+
+async function loadMyPosts(
+    userId
+) {
+
+    const postsView =
+        document.getElementById(
+            "postsView"
+        );
+
+    if (!postsView) return;
+
+
+    postsView.innerHTML = `
+        <div class="loading">
+            Loading posts...
+        </div>
+    `;
+
+
+    try {
+
+        const {
+            data: posts,
+            error
+        } = await supabaseClient
+            .from("posts")
+            .select("*")
+            .eq(
+                "user_id",
+                userId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Posts error:",
+                error
+            );
+
+            postsView.innerHTML = `
+                <div class="loading">
+                    Unable to load posts.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        if (!posts || posts.length === 0) {
+
+            postsView.innerHTML = `
+                <div class="saved-empty">
+                    <i class="far fa-file-alt"></i>
+                    <p>No posts yet</p>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        renderRealPosts(
+            posts
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Load posts error:",
+            error
+        );
+
+        postsView.innerHTML = `
+            <div class="loading">
+                Something went wrong.
+            </div>
+        `;
+    }
+}
+
+
+/* ================================
+   RENDER REAL POSTS
+================================ */
+
+function renderRealPosts(
+    posts
+) {
+
+    const postsView =
+        document.getElementById(
+            "postsView"
+        );
+
+    if (!postsView) return;
+
+
+    postsView.innerHTML =
+        posts.map(
+            function(post) {
+
+                return `
+                    <div
+                        class="post"
+                        data-post-id="${escapeAttribute(
+                            post.id
+                        )}"
+                    >
+
+                        <div class="p-hdr">
+
+                            ${
+                                getPostAvatar()
+                            }
+
+                            <div class="p-inf">
+
+                                <div class="p-nm">
+
+                                    ${escapeHTML(
+                                        currentProfile?.full_name ||
+                                        "StudentX User"
+                                    )}
+
+                                    <i
+                                        class="fas fa-check-circle vd"
+                                    ></i>
+
+                                </div>
+
+                                <div class="p-meta">
+
+                                    @${escapeHTML(
+                                        currentProfile?.username ||
+                                        "username"
+                                    )}
+
+                                    ·
+
+                                    ${formatPostTime(
+                                        post.created_at
+                                    )}
+
+                                </div>
+
+                            </div>
+
+                            <div
+                                class="p-more"
+                                onclick="openPostMenu('${escapeAttribute(
+                                    post.id
+                                )}')"
+                            >
+                                <i class="fas fa-ellipsis-h"></i>
+                            </div>
+
+                        </div>
+
+
+                        <div class="p-body">
+
+                            ${escapeHTML(
+                                post.content ||
+                                post.text ||
+                                ""
+                            )}
+
+                        </div>
+
+
+                        ${
+                            post.image_url
+                            ?
+                            `
+                            <img
+                                src="${escapeAttribute(
+                                    post.image_url
+                                )}"
+                                style="
+                                    width:100%;
+                                    max-height:400px;
+                                    object-fit:cover;
+                                    display:block;
+                                "
+                                alt="Post image"
+                            >
+                            `
+                            :
+                            ""
+                        }
+
+
+                        <div class="p-acts">
+
+                            <div
+                                class="p-a"
+                                onclick="likePost('${escapeAttribute(
+                                    post.id
+                                )}')"
+                            >
+                                <i class="far fa-heart"></i>
+
+                                <span>
+                                    ${post.likes_count || 0}
+                                </span>
+                            </div>
+
+
+                            <div
+                                class="p-a"
+                                onclick="openComments('${escapeAttribute(
+                                    post.id
+                                )}')"
+                            >
+                                <i class="far fa-comment"></i>
+
+                                <span>
+                                    ${post.comments_count || 0}
+                                </span>
+                            </div>
+
+
+                            <div
+                                class="p-a"
+                                onclick="sharePost('${escapeAttribute(
+                                    post.id
+                                )}')"
+                            >
+                                <i class="fas fa-retweet"></i>
+
+                                <span>
+                                    ${post.shares_count || 0}
+                                </span>
+                            </div>
+
+
+                            <div class="p-a p-a-r">
+
+                                <i class="fas fa-chart-bar"></i>
+
+                                <span>
+                                    ${formatNumber(
+                                        post.views_count || 0
+                                    )}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        )
+        .join("");
+}
+
+
+/* ================================
+   POST AVATAR
+================================ */
+
+function getPostAvatar() {
+
+    if (
+        currentProfile &&
+        currentProfile.avatar_url
+    ) {
+
+        return `
+            <img
+                class="p-av"
+                src="${escapeAttribute(
+                    currentProfile.avatar_url
+                )}"
+                alt="Avatar"
+            >
+        `;
+
+    }
+
+
+    return `
+        <div class="p-av">
+            ${getInitials(
+                currentProfile?.full_name
+            )}
+        </div>
     `;
 }
 
 
-/* LIKE */
+/* ================================
+   LIKE POST
+================================ */
 
-function toggleLike(id){
+async function likePost(
+    postId
+) {
 
-    var p =
-        myPosts.find(function(x){
-            return x.id === id;
-        });
+    if (!currentUser) return;
 
 
-    if(p){
+    try {
 
-        p.liked = !p.liked;
+        const {
+            data: existing,
+            error: checkError
+        } = await supabaseClient
+            .from("post_likes")
+            .select("id")
+            .eq(
+                "post_id",
+                postId
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
 
-        p.likes += p.liked ? 1 : -1;
 
-        renderPosts();
+        if (checkError) {
 
+            console.error(
+                checkError
+            );
+
+            return;
+        }
+
+
+        if (existing) {
+
+            await supabaseClient
+                .from("post_likes")
+                .delete()
+                .eq(
+                    "id",
+                    existing.id
+                );
+
+        } else {
+
+            await supabaseClient
+                .from("post_likes")
+                .insert({
+
+                    post_id: postId,
+
+                    user_id:
+                        currentUser.id
+
+                });
+        }
+
+
+        await loadMyPosts(
+            currentUser.id
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Like error:",
+            error
+        );
     }
 }
 
 
-/* TABS */
+/* ================================
+   COMMENTS
+================================ */
 
-function switchTab(t,el){
+function openComments(
+    postId
+) {
 
-    document
-        .querySelectorAll(".tab")
-        .forEach(function(x){
-
-            x.classList.remove("on");
-
-        });
-
-
-    el.classList.add("on");
-
-
-    document.getElementById(
-        "postsView"
-    ).style.display =
-        t === "posts" ? "block" : "none";
-
-
-    document.getElementById(
-        "savedView"
-    ).style.display =
-        t === "saved" ? "block" : "none";
+    window.location.href =
+        "comment.html?post=" +
+        encodeURIComponent(
+            postId
+        );
 }
 
 
-/* COVER */
+/* ================================
+   SHARE POST
+================================ */
 
-function toggleCoverOpts(){
+function sharePost(
+    postId
+) {
 
-    var o =
-        document.getElementById("coverOv");
-
-
-    o.style.display =
-        o.style.display === "flex"
-        ? "none"
-        : "flex";
-}
-
-
-function viewCover(){
-
-    document.getElementById(
-        "coverOv"
-    ).style.display = "none";
+    const url =
+        window.location.origin +
+        "/post.html?id=" +
+        encodeURIComponent(
+            postId
+        );
 
 
-    if(!isCustomCover){
+    if (
+        navigator.clipboard
+    ) {
 
-        showMsg("This is the default cover");
+        navigator.clipboard
+            .writeText(url)
+            .then(
+                function() {
 
-        return;
+                    showMsg(
+                        "Post link copied!"
+                    );
+                }
+            );
+
+    } else {
+
+        showMsg(
+            "Post link ready"
+        );
     }
-
-
-    document.getElementById(
-        "viewImg"
-    ).src = curCoverSrc;
-
-
-    document.getElementById(
-        "viewOv"
-    ).classList.add("show");
 }
 
 
-function changeCover(){
+/* ================================
+   POST MENU
+================================ */
 
-    document.getElementById(
-        "coverOv"
-    ).style.display = "none";
+function openPostMenu(
+    postId
+) {
 
-
-    document.getElementById(
-        "coverInput"
-    ).click();
-}
-
-
-function handleCover(inp){
-
-    var f = inp.files[0];
-
-    if(!f)
-        return;
+    currentPostId =
+        postId;
 
 
-    var r = new FileReader();
-
-
-    r.onload = function(e){
-
-        curCoverSrc = e.target.result;
-
-        isCustomCover = true;
-
-
+    const pm =
         document.getElementById(
-            "coverDisplay"
-        ).innerHTML =
-        '<img class="cover-img" src="'+
-        curCoverSrc+
-        '">';
-
-
-        showMsg(
-            "Cover photo updated!"
+            "pmOv"
         );
 
-    };
+    if (pm) {
 
-
-    r.readAsDataURL(f);
-
-    inp.value = "";
-}
-
-
-/* VIEW IMAGE */
-
-function closeView(){
-
-    document.getElementById(
-        "viewOv"
-    ).classList.remove("show");
-}
-
-
-/* AVATAR MENU */
-
-function toggleAvOpts(){
-
-    var o =
-        document.getElementById("avOpts");
-
-
-    o.classList.toggle("show");
-
-}
-
-
-function viewPic(){
-
-    document.getElementById(
-        "avOpts"
-    ).classList.remove("show");
-
-
-    if(!isCustomPic){
-
-        showMsg(
-            "No custom picture yet"
+        pm.classList.add(
+            "show"
         );
-
-        return;
     }
-
-
-    document.getElementById(
-        "viewImg"
-    ).src = curPicSrc;
-
-
-    document.getElementById(
-        "viewOv"
-    ).classList.add("show");
 }
 
 
-function changePic(){
+function closePm() {
 
-    document.getElementById(
-        "avOpts"
-    ).classList.remove("show");
+    const pm =
+        document.getElementById(
+            "pmOv"
+        );
 
+    if (pm) {
 
-    document.getElementById(
-        "picInput"
-    ).click();
+        pm.classList.remove(
+            "show"
+        );
+    }
 }
 
 
-function handlePic(inp){
+/* ================================
+   EDIT MENU
+================================ */
 
-    var f = inp.files[0];
+function openEditMenu() {
 
-    if(!f)
+    const menu =
+        document.getElementById(
+            "emOv"
+        );
+
+    if (menu) {
+
+        menu.classList.add(
+            "show"
+        );
+    }
+}
+
+
+function closeEditMenu() {
+
+    const menu =
+        document.getElementById(
+            "emOv"
+        );
+
+    if (menu) {
+
+        menu.classList.remove(
+            "show"
+        );
+    }
+}
+
+
+/* ================================
+   PROFILE PICTURE
+================================ */
+
+function changePic() {
+
+    const input =
+        document.getElementById(
+            "picInput"
+        );
+
+    if (input) {
+
+        input.click();
+    }
+}
+
+
+async function handlePic(
+    input
+) {
+
+    const file =
+        input.files[0];
+
+    if (!file || !currentUser)
         return;
 
 
-    var r = new FileReader();
+    try {
+
+        showMsg(
+            "Uploading picture..."
+        );
 
 
-    r.onload = function(e){
+        const extension =
+            file.name
+                .split(".")
+                .pop();
 
-        curPicSrc = e.target.result;
 
-        isCustomPic = true;
+        const filePath =
+            currentUser.id +
+            "/avatar." +
+            extension;
+
+
+        const {
+            error: uploadError
+        } = await supabaseClient
+            .storage
+            .from("avatars")
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true
+                }
+            );
+
+
+        if (uploadError) {
+
+            throw uploadError;
+        }
+
+
+        const {
+            data: publicData
+        } =
+            supabaseClient
+                .storage
+                .from("avatars")
+                .getPublicUrl(
+                    filePath
+                );
+
+
+        const avatarUrl =
+            publicData.publicUrl;
+
+
+        const {
+            error: updateError
+        } = await supabaseClient
+            .from("profiles")
+            .update({
+
+                avatar_url:
+                    avatarUrl
+
+            })
+            .eq(
+                "id",
+                currentUser.id
+            );
+
+
+        if (updateError) {
+
+            throw updateError;
+        }
+
+
+        currentProfile.avatar_url =
+            avatarUrl;
 
 
         document.getElementById(
             "avDisplay"
-        ).innerHTML = avH();
+        ).innerHTML = `
+            <img
+                class="av"
+                src="${escapeAttribute(
+                    avatarUrl
+                )}"
+                alt="Profile"
+            >
+        `;
 
 
-        renderPosts();
+        await loadMyPosts(
+            currentUser.id
+        );
 
 
         showMsg(
             "Profile picture updated!"
         );
 
-    };
+
+    } catch (error) {
+
+        console.error(
+            "Avatar upload error:",
+            error
+        );
+
+        showMsg(
+            "Unable to update picture"
+        );
+    }
 
 
-    r.readAsDataURL(f);
-
-    inp.value = "";
+    input.value = "";
 }
 
 
-/* EDIT MENU */
+/* ================================
+   COVER PHOTO
+================================ */
 
-function openEditMenu(){
+function changeCover() {
+
+    const input =
+        document.getElementById("coverInput");
+
+    if (input) {
+        input.click();
+    }
+}
+
+
+async function handleCover(input) {
+
+    const file = input.files[0];
+
+    if (!file || !currentUser) return;
+
+    try {
+
+        showMsg("Uploading cover...");
+
+        const extension =
+            file.name.split(".").pop();
+
+        const filePath =
+            currentUser.id +
+            "/cover." +
+            extension;
+
+        const {
+            error: uploadError
+        } = await supabaseClient
+            .storage
+            .from("covers")
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true
+                }
+            );
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        const {
+            data: publicData
+        } = supabaseClient
+            .storage
+            .from("covers")
+            .getPublicUrl(filePath);
+
+        const coverUrl =
+            publicData.publicUrl;
+
+        const {
+            error: updateError
+        } = await supabaseClient
+            .from("profiles")
+            .update({
+                cover_url: coverUrl
+            })
+            .eq(
+                "id",
+                currentUser.id
+            );
+
+        if (updateError) {
+            throw updateError;
+        }
+
+        document.getElementById(
+            "coverDisplay"
+        ).innerHTML = `
+            <img
+                class="cover-img"
+                src="${escapeAttribute(coverUrl)}"
+                alt="Cover"
+            >
+        `;
+
+        showMsg(
+            "Cover photo updated!"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Cover upload error:",
+            error
+        );
+
+        showMsg(
+            "Unable to update cover"
+        );
+    }
+
+    input.value = "";
+}
+
+
+/* ================================
+   VIEW COVER
+================================ */
+
+function viewCover() {
+
+    const img =
+        currentProfile &&
+        currentProfile.cover_url;
+
+    if (!img) {
+
+        showMsg(
+            "No cover photo"
+        );
+
+        return;
+    }
 
     document.getElementById(
-        "emOv"
+        "viewImg"
+    ).src = img;
+
+    document.getElementById(
+        "viewOv"
     ).classList.add("show");
 }
 
 
-function closeEditMenu(){
+/* ================================
+   CLOSE IMAGE VIEW
+================================ */
+
+function closeView() {
 
     document.getElementById(
-        "emOv"
+        "viewOv"
     ).classList.remove("show");
 }
 
 
-/* LOCK PROFILE */
+/* ================================
+   COVER OPTIONS
+================================ */
 
-function toggleLock(){
+function toggleCoverOpts() {
 
-    isLocked = !isLocked;
+    const overlay =
+        document.getElementById(
+            "coverOv"
+        );
+
+    if (!overlay) return;
+
+    overlay.style.display =
+        overlay.style.display === "flex"
+        ? "none"
+        : "flex";
+}
 
 
-    document.getElementById(
-        "lockIcon"
-    ).className =
-        isLocked
-        ? "fas fa-lock-open"
-        : "fas fa-lock";
+/* ================================
+   PROFILE PICTURE OPTIONS
+================================ */
+
+function toggleAvOpts() {
+
+    const options =
+        document.getElementById(
+            "avOpts"
+        );
+
+    if (options) {
+
+        options.classList.toggle(
+            "show"
+        );
+    }
+}
 
 
-    document.getElementById(
-        "lockText"
-    ).textContent =
-        isLocked
-        ? "Unlock Profile"
-        : "Lock Profile";
+/* ================================
+   EDIT PROFILE MENU
+================================ */
 
+function openEditMenu() {
+
+    const menu =
+        document.getElementById(
+            "emOv"
+        );
+
+    if (menu) {
+
+        menu.classList.add(
+            "show"
+        );
+    }
+}
+
+
+function closeEditMenu() {
+
+    const menu =
+        document.getElementById(
+            "emOv"
+        );
+
+    if (menu) {
+
+        menu.classList.remove(
+            "show"
+        );
+    }
+}
+
+
+/* ================================
+   LOCK PROFILE
+================================ */
+
+let isLocked = false;
+
+
+function toggleLock() {
+
+    isLocked =
+        !isLocked;
+
+    const icon =
+        document.getElementById(
+            "lockIcon"
+        );
+
+    const text =
+        document.getElementById(
+            "lockText"
+        );
+
+    if (icon) {
+
+        icon.className =
+            isLocked
+            ? "fas fa-lock-open"
+            : "fas fa-lock";
+    }
+
+    if (text) {
+
+        text.textContent =
+            isLocked
+            ? "Unlock Profile"
+            : "Lock Profile";
+    }
 
     showMsg(
         isLocked
@@ -1457,93 +2191,42 @@ function toggleLock(){
 }
 
 
-/* SHARE */
+/* ================================
+   SHARE PROFILE
+================================ */
 
-function openShare(){
+function openShare() {
 
-    shMode = "";
+    const overlay =
+        document.getElementById(
+            "shOv"
+        );
 
-    shSelected = [];
-
+    if (!overlay) return;
 
     document.getElementById(
         "shHead"
     ).textContent =
         "Share Profile";
 
-
     document.getElementById(
         "shOpts"
     ).innerHTML = `
 
-        <div class="sh-opt"
-             onclick="startSG()">
+        <div
+            class="sh-opt"
+            onclick="copyProfileLink()"
+        >
 
             <div
                 class="sh-opt-ic"
-                style="background:rgba(124,58,237,.12);color:#a855f7"
+                style="
+                    background:rgba(59,130,246,.12);
+                    color:#3b82f6;
+                "
             >
-
-                <i class="fas fa-users"></i>
-
-            </div>
-
-
-            <div>
-
-                <div class="sh-opt-nm">
-                    Share to Group
-                </div>
-
-                <div class="sh-opt-sub">
-                    Share your profile link in a group
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="sh-opt"
-             onclick="startSF()">
-
-            <div
-                class="sh-opt-ic"
-                style="background:rgba(16,185,129,.12);color:#10b981"
-            >
-
-                <i class="fas fa-user-friends"></i>
-
-            </div>
-
-
-            <div>
-
-                <div class="sh-opt-nm">
-                    Share to Friend
-                </div>
-
-                <div class="sh-opt-sub">
-                    Send your profile link to a friend
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="sh-opt"
-             onclick="copyPL()">
-
-            <div
-                class="sh-opt-ic"
-                style="background:rgba(59,130,246,.12);color:#3b82f6"
-            >
-
                 <i class="fas fa-link"></i>
-
             </div>
-
 
             <div>
 
@@ -1558,763 +2241,248 @@ function openShare(){
             </div>
 
         </div>
-    `;
 
+    `;
 
     document.getElementById(
         "shOpts"
     ).style.display = "";
 
-
-    document.getElementById(
-        "shSearch"
-    ).classList.remove("show");
-
-
-    document.getElementById(
-        "shList"
-    ).classList.remove("show");
+    overlay.classList.add(
+        "show"
+    );
+}
 
 
-    document.getElementById(
-        "shBar"
-    ).classList.remove("show");
-
+function closeShare() {
 
     document.getElementById(
         "shOv"
-    ).classList.add("show");
-}
-
-
-function closeShare(){
-
-    document.getElementById(
-        "shOv"
-    ).classList.remove("show");
-}
-
-
-/* SHARE GROUP */
-
-function startSG(){
-
-    shMode = "group";
-
-    shSelected = [];
-
-
-    document.getElementById(
-        "shHead"
-    ).textContent =
-        "Share to Group";
-
-
-    document.getElementById(
-        "shOpts"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "shSearch"
-    ).classList.add("show");
-
-
-    document.getElementById(
-        "shInput"
-    ).placeholder =
-        "Search groups...";
-
-
-    document.getElementById(
-        "shInput"
-    ).value = "";
-
-
-    document.getElementById(
-        "shList"
-    ).classList.add("show");
-
-
-    renderSL(groups);
-
-    updateSB();
-}
-
-
-/* SHARE FRIEND */
-
-function startSF(){
-
-    shMode = "friend";
-
-    shSelected = [];
-
-
-    document.getElementById(
-        "shHead"
-    ).textContent =
-        "Share to Friend";
-
-
-    document.getElementById(
-        "shOpts"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "shSearch"
-    ).classList.add("show");
-
-
-    document.getElementById(
-        "shInput"
-    ).placeholder =
-        "Search friends...";
-
-
-    document.getElementById(
-        "shInput"
-    ).value = "";
-
-
-    document.getElementById(
-        "shList"
-    ).classList.add("show");
-
-
-    renderSL(friends);
-
-    updateSB();
-}
-
-
-/* SHARE LIST */
-
-function renderSL(list){
-
-    var el =
-        document.getElementById(
-            "shList"
-        );
-
-
-    if(!list.length){
-
-        el.innerHTML =
-            '<div class="no-res">No results found</div>';
-
-        return;
-    }
-
-
-    el.innerHTML =
-        list.map(function(i){
-
-            var s =
-                shSelected.indexOf(i.id) !== -1;
-
-
-            return `
-                <div
-                    class="sh-item ${s ? "sel" : ""}"
-                    onclick="toggleSS(${i.id})"
-                >
-
-                    <img
-                        src="${i.av}"
-                        alt=""
-                    >
-
-                    <div class="sh-inf">
-
-                        <div class="sh-nm">
-                            ${i.name}
-                        </div>
-
-                        ${
-                            shMode === "group"
-                            ?
-                            `<div class="sh-sub">
-                                ${i.members} members
-                            </div>`
-                            :
-                            ""
-                        }
-
-                    </div>
-
-
-                    <div class="sh-chk">
-
-                        <i class="fas fa-check"></i>
-
-                    </div>
-
-                </div>
-            `;
-
-        }).join("");
-}
-
-
-/* SEARCH SHARE */
-
-function searchSh(v){
-
-    var l =
-        shMode === "group"
-        ? groups
-        : friends;
-
-
-    if(v.length < 1){
-
-        renderSL(l);
-
-        return;
-    }
-
-
-    var q =
-        v.toLowerCase();
-
-
-    renderSL(
-        l.filter(function(i){
-
-            return i.name
-                .toLowerCase()
-                .indexOf(q) !== -1;
-
-        })
+    ).classList.remove(
+        "show"
     );
 }
 
 
-/* SELECT SHARE */
+async function copyProfileLink() {
 
-function toggleSS(id){
+    const username =
+        currentProfile?.username;
 
-    var i =
-        shSelected.indexOf(id);
-
-
-    if(i === -1)
-        shSelected.push(id);
-
-    else
-        shSelected.splice(i,1);
-
-
-    var l =
-        shMode === "group"
-        ? groups
-        : friends;
-
-
-    var v =
-        document.getElementById(
-            "shInput"
-        ).value;
-
-
-    if(v.length >= 1){
-
-        var q =
-            v.toLowerCase();
-
-
-        l =
-            l.filter(function(i){
-
-                return i.name
-                    .toLowerCase()
-                    .indexOf(q) !== -1;
-
-            });
-    }
-
-
-    renderSL(l);
-
-    updateSB();
-}
-
-
-/* SHARE BAR */
-
-function updateSB(){
-
-    var b =
-        document.getElementById(
-            "shBar"
+    const link =
+        window.location.origin +
+        "/profile.html?username=" +
+        encodeURIComponent(
+            username || ""
         );
 
+    try {
 
-    if(shSelected.length > 0){
+        await navigator.clipboard
+            .writeText(link);
 
-        b.classList.add("show");
-
-
-        document.getElementById(
-            "shCount"
-        ).textContent =
-            shSelected.length +
-            " selected";
-
-    }else{
-
-        b.classList.remove("show");
-
-    }
-}
-
-
-/* DO SHARE */
-
-function doShare(){
-
-    if(!shSelected.length)
-        return;
-
-
-    var t =
-        shMode === "group"
-        ? "group"
-        : "friend";
-
-
-    closeShare();
-
-
-    showMsg(
-        "Profile shared to " +
-        shSelected.length +
-        " " + t +
-        (shSelected.length > 1 ? "s" : "") +
-        "!"
-    );
-
-
-    shSelected = [];
-}
-
-
-/* COPY PROFILE LINK */
-
-function copyPL(){
-
-    closeShare();
-
-
-    if(navigator.clipboard){
-
-        navigator.clipboard.writeText(
-            window.location.href
-        );
-
-    }
-
-
-    showMsg(
-        "Profile link copied!"
-    );
-}
-
-
-/* POST MENU */
-
-function openPm(id){
-
-    curPmId = id;
-
-
-    var p =
-        myPosts.find(function(x){
-            return x.id === id;
-        });
-
-
-    document.getElementById(
-        "pmItems"
-    ).innerHTML = `
-
-        <div class="pm-item"
-             onclick="closePm();pinP(${id})">
-
-            <i class="fas fa-thumbtack"></i>
-
-            ${p.pinned
-                ? "Unpin Post"
-                : "Pin Post to Profile"}
-
-        </div>
-
-
-        <div class="pm-item"
-             onclick="closePm();showMsg('Viewing post analysis')">
-
-            <i class="fas fa-chart-line"></i>
-
-            View Post Analysis
-
-        </div>
-
-
-        <div class="pm-item"
-             onclick="closePm();showMsg('Commenting turned off')">
-
-            <i class="fas fa-comment-slash"></i>
-
-            Turn Off Commenting
-
-        </div>
-
-
-        <div class="pm-div"></div>
-
-
-        <div class="pm-item dng"
-             onclick="closePm();delP(${id})">
-
-            <i class="fas fa-trash"></i>
-
-            Delete Post
-
-        </div>
-    `;
-
-
-    document.getElementById(
-        "pmOv"
-    ).classList.add("show");
-}
-
-
-function closePm(){
-
-    document.getElementById(
-        "pmOv"
-    ).classList.remove("show");
-}
-
-
-/* PIN POST */
-
-function pinP(id){
-
-    var p =
-        myPosts.find(function(x){
-            return x.id === id;
-        });
-
-
-    if(p){
-
-        p.pinned = !p.pinned;
-
-        renderPosts();
-
+        closeShare();
 
         showMsg(
-            p.pinned
-            ? "Post pinned"
-            : "Post unpinned"
+            "Profile link copied!"
+        );
+
+    } catch (error) {
+
+        showMsg(
+            "Unable to copy link"
         );
     }
 }
 
 
-/* DELETE POST */
+/* ================================
+   TAB SWITCH
+================================ */
 
-function delP(id){
+function switchTab(
+    tab,
+    element
+) {
 
-    myPosts =
-        myPosts.filter(function(x){
-            return x.id !== id;
-        });
+    document
+        .querySelectorAll(".tab")
+        .forEach(
+            function(item) {
 
+                item.classList.remove(
+                    "on"
+                );
 
-    renderPosts();
+            }
+        );
 
-    showMsg(
-        "Post deleted"
+    element.classList.add(
+        "on"
     );
+
+    const posts =
+        document.getElementById(
+            "postsView"
+        );
+
+    const saved =
+        document.getElementById(
+            "savedView"
+        );
+
+    if (tab === "posts") {
+
+        posts.style.display =
+            "block";
+
+        saved.style.display =
+            "none";
+
+    } else {
+
+        posts.style.display =
+            "none";
+
+        saved.style.display =
+            "block";
+    }
 }
 
 
-/* TOAST */
+/* ================================
+   HELPERS
+================================ */
 
-function showMsg(t){
+function getInitials(name) {
 
-    var d =
-        document.createElement("div");
+    if (!name) return "U";
 
-
-    d.className = "toast";
-
-    d.textContent = t;
-
-
-    document.body.appendChild(d);
-
-
-    setTimeout(function(){
-
-        d.remove();
-
-    },2500);
+    return name
+        .trim()
+        .split(/\s+/)
+        .map(function(word) {
+            return word[0];
+        })
+        .join("")
+        .substring(0, 2)
+        .toUpperCase();
 }
 
 
-/* INITIAL POSTS */
+function formatNumber(number) {
 
-renderPosts();
+    number =
+        Number(number) || 0;
 
+    if (number >= 1000000) {
 
-/* ============================
-   SUPABASE
-============================ */
-
-
-/* LOAD SUPABASE LIBRARY */
-
-</script>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-
-<script>
-
-const SUPABASE_URL =
-    "https://acragelglvdnqhvbjcgx.supabase.co";
-
-
-const SUPABASE_ANON_KEY =
-    "sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
-
-
-const supabaseClient =
-    supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-    );
-
-
-/* LOAD CURRENT USER PROFILE */
-
-async function loadMyProfile(){
-
-    try{
-
-        const {
-            data:{user},
-            error:authError
-        } =
-        await supabaseClient
-        .auth
-        .getUser();
-
-
-        if(authError)
-            throw authError;
-
-
-        /* USER BAI SHIGA BA */
-
-        if(!user){
-
-            window.location.href =
-                "login.html";
-
-            return;
-        }
-
-
-        /* GET PROFILE */
-
-        const {
-            data:profile,
-            error
-        } =
-        await supabaseClient
-        .from("profiles")
-        .select("*")
-        .eq("id",user.id)
-        .single();
-
-
-        if(error)
-            throw error;
-
-
-        if(!profile){
-
-            console.log(
-                "Profile bai samu ba"
-            );
-
-                }
-
-        // Sunan profile
-        const nameElement = document.querySelector(".nm");
-
-        if (nameElement) {
-            nameElement.innerHTML = `
-                ${profile.full_name || "StudentX User"}
-                <i class="fas fa-check-circle vd"></i>
-            `;
-        }
-        // Username
-        const handleElement = document.querySelector(".handle");
-
-        if (handleElement) {
-            handleElement.textContent =
-                "@" + (profile.username || "username");
-        }
-        // Avatar
-        const avatarContainer =
-            document.getElementById("avDisplay");
-
-        if (avatarContainer) {
-            if (profile.avatar_url) {
-                avatarContainer.innerHTML = `
-                    <img
-                        class="av"
-                        src="${profile.avatar_url}"
-                        alt="Profile"
-                    >
-                `;
-            } else {
-                const initials =
-                    (profile.full_name || "User")
-                    .split(" ")
-                    .map(x => x[0])
-                    .join("")
-                    .substring(0, 2)
-                    .toUpperCase();
-
-                avatarContainer.innerHTML = `
-                    <div class="av">${initials}</div>
-                `;
-            }
-        }
-            return;
-        }
-
-
-        // =========================
-        // PROFILE NAME
-        // =========================
-
-        const nameElement =
-            document.querySelector(".nm");
-
-        if(nameElement){
-
-            nameElement.innerHTML = `
-                ${profile.full_name || "StudentX User"}
-
-                <i class="fas fa-check-circle vd"></i>
-            `;
-
-        }
-
-
-        // =========================
-        // USERNAME
-        // =========================
-
-        const handleElement =
-            document.querySelector(".handle");
-
-        if(handleElement){
-
-            handleElement.textContent =
-                "@" +
-                (profile.username || "username");
-
-        }
-
-
-        // =========================
-        // PROFILE PICTURE
-        // =========================
-
-        const avatarContainer =
-            document.getElementById("avDisplay");
-
-        if(avatarContainer){
-
-            if(profile.avatar_url){
-
-                avatarContainer.innerHTML = `
-
-                    <img
-                        class="av"
-                        src="${profile.avatar_url}"
-                        alt="Profile"
-                    >
-
-                `;
-
-            }else{
-
-                const initials =
-                    (profile.full_name || "User")
-                    .split(" ")
-                    .map(function(x){
-
-                        return x[0];
-
-                    })
-                    .join("")
-                    .substring(0,2)
-                    .toUpperCase();
-
-
-                avatarContainer.innerHTML = `
-
-                    <div class="av">
-                        ${initials}
-                    </div>
-
-                `;
-
-            }
-
-        }
-
-
-        // =========================
-        // PROFILE LOADED
-        // =========================
-
-        console.log(
-            "Profile loaded:",
-            profile
-        );
-
-
-    }catch(error){
-
-        console.error(
-            "Profile loading error:",
-            error
-        );
-
+        return (
+            number / 1000000
+        ).toFixed(1) + "M";
     }
 
+    if (number >= 1000) {
+
+        return (
+            number / 1000
+        ).toFixed(1) + "K";
+    }
+
+    return number.toString();
 }
 
 
-// =========================
-// LOAD PROFILE
-// =========================
+function formatPostTime(date) {
 
-loadMyProfile();
+    if (!date) return "";
+
+    const time =
+        new Date(date).getTime();
+
+    const seconds =
+        Math.floor(
+            (Date.now() - time) / 1000
+        );
+
+    if (seconds < 60)
+        return "Just now";
+
+    if (seconds < 3600)
+        return Math.floor(
+            seconds / 60
+        ) + "m ago";
+
+    if (seconds < 86400)
+        return Math.floor(
+            seconds / 3600
+        ) + "h ago";
+
+    return Math.floor(
+        seconds / 86400
+    ) + "d ago";
+}
+
+
+function escapeHTML(value) {
+
+    return String(
+        value ?? ""
+    )
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHTML(value);
+}
+
+
+function showMsg(message) {
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+    toast.className =
+        "toast";
+
+    toast.textContent =
+        message;
+
+    document.body.appendChild(
+        toast
+    );
+
+    setTimeout(
+        function() {
+            toast.remove();
+        },
+        2500
+    );
+}
+
+
+/* ================================
+   START PROFILE
+================================ */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadMyProfile();
+
+    }
+);
+
 </script>
+
 </body>
 </html>
