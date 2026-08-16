@@ -305,6 +305,98 @@ function delP(id){myPosts=myPosts.filter(function(x){return x.id!==id});renderPo
 
 function showMsg(t){var d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(function(){d.remove()},2500)}
 renderPosts();
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "https://acragelglvdnqhvbjcgx.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+
+const supabaseClient = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 </script>
+</script>
+async function loadMyProfile() {
+    try {
+        const {
+            data: { user },
+            error: authError
+        } = await supabaseClient.auth.getUser();
+
+        if (authError) throw authError;
+
+        if (!user) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        const { data: profile, error } = await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single();
+
+        if (error) throw error;
+
+        if (!profile) {
+            console.log("Profile bai samu ba");
+            return;
+        }
+
+        // Sunan profile
+        const nameElement = document.querySelector(".nm");
+
+        if (nameElement) {
+            nameElement.innerHTML = `
+                ${profile.full_name || "StudentX User"}
+                <i class="fas fa-check-circle vd"></i>
+            `;
+        }
+
+        // Username
+        const handleElement = document.querySelector(".handle");
+
+        if (handleElement) {
+            handleElement.textContent =
+                "@" + (profile.username || "username");
+        }
+
+        // Avatar
+        const avatarContainer =
+            document.getElementById("avDisplay");
+
+        if (avatarContainer) {
+            if (profile.avatar_url) {
+                avatarContainer.innerHTML = `
+                    <img
+                        class="av"
+                        src="${profile.avatar_url}"
+                        alt="Profile"
+                    >
+                `;
+            } else {
+                const initials =
+                    (profile.full_name || "User")
+                    .split(" ")
+                    .map(x => x[0])
+                    .join("")
+                    .substring(0, 2)
+                    .toUpperCase();
+
+                avatarContainer.innerHTML = `
+                    <div class="av">${initials}</div>
+                `;
+            }
+        }
+
+        console.log("Profile loaded:", profile);
+
+    } catch (error) {
+        console.error("Profile loading error:", error);
+    }
+}
+
+loadMyProfile();
 </body>
 </html>
