@@ -1,22 +1,27 @@
 {
-  "name": "StudentX",
+  "name": "StudentX - Connect Learn Share",
   "short_name": "StudentX",
-  "description": "Connect, Learn and Share with StudentX",
+  "description": "StudentX is a student platform to connect, learn, share, chat and discover study resources.",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0a0a0f",
   "theme_color": "#7c3aed",
+  "lang": "en",
+  "categories": [
+    "education",
+    "social"
+  ],
   "icons": [
     {
-      "src": "/icon-192.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/icon-512.png",
+      "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
