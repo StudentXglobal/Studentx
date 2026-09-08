@@ -1976,9 +1976,12 @@ function createProfilePost(post) {
     postElement.className =
         "post";
 
+    postElement.dataset.postId =
+        post.id;
+
 
     /* =====================================================
-       PROFILE DATA FROM SUPABASE
+       PROFILE DATA
     ===================================================== */
 
     const profile =
@@ -2001,7 +2004,7 @@ function createProfilePost(post) {
 
 
     /* =====================================================
-       POST DATA FROM SUPABASE
+       POST DATA
     ===================================================== */
 
     const text =
@@ -2009,9 +2012,6 @@ function createProfilePost(post) {
 
     const image =
         post.image_url || "";
-
-    const likes =
-        Number(post.Like) || 0;
 
     const postDate =
         formatPostDate(
@@ -2031,6 +2031,12 @@ function createProfilePost(post) {
             <img
                 src="${escapeAttribute(avatar)}"
                 alt="Profile"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                "
             >
         `;
 
@@ -2046,7 +2052,7 @@ function createProfilePost(post) {
 
 
     /* =====================================================
-       VERIFIED BADGE
+       VERIFIED
     ===================================================== */
 
     const verifiedHTML =
@@ -2055,25 +2061,24 @@ function createProfilePost(post) {
                 <span
                     style="
                         color:#a855f7;
-                        margin-left:3px;
                         font-size:10px;
                     "
                 >
                     <i class="fas fa-check-circle"></i>
                 </span>
-              `
+            `
             : "";
 
 
     /* =====================================================
-       POST BODY
+       CONTENT
     ===================================================== */
 
     let bodyHTML = "";
 
     if (text) {
 
-        bodyHTML += `
+        bodyHTML = `
             <div class="p-body">
                 ${escapeHTML(text)}
             </div>
@@ -2082,7 +2087,7 @@ function createProfilePost(post) {
 
 
     /* =====================================================
-       POST IMAGE
+       IMAGE
     ===================================================== */
 
     if (image) {
@@ -2090,7 +2095,7 @@ function createProfilePost(post) {
         bodyHTML += `
             <img
                 src="${escapeAttribute(image)}"
-                alt="Post image"
+                alt="Post"
                 loading="lazy"
                 onclick="openPostImage(this.src)"
                 style="
@@ -2098,8 +2103,6 @@ function createProfilePost(post) {
                     width:100%;
                     max-height:500px;
                     object-fit:cover;
-                    border-radius:12px;
-                    margin-top:10px;
                     cursor:pointer;
                 "
             >
@@ -2108,19 +2111,15 @@ function createProfilePost(post) {
 
 
     /* =====================================================
-       COMPLETE STUDENTX POST CARD
+       POST CARD
     ===================================================== */
 
     postElement.innerHTML = `
 
-        <!-- POST HEADER -->
-
         <div class="p-hdr">
 
             <div class="p-av">
-
                 ${avatarHTML}
-
             </div>
 
 
@@ -2146,36 +2145,52 @@ function createProfilePost(post) {
             </div>
 
 
-            <div class="p-more">
-
+            <!-- MENU -->
+            <div
+                class="p-more"
+                onclick="openProfilePostMenu('${post.id}')"
+            >
                 <i class="fas fa-ellipsis-h"></i>
-
             </div>
 
         </div>
 
 
-        <!-- POST CONTENT -->
-
         ${bodyHTML}
 
 
-        <!-- POST ACTIONS -->
+        <!-- ACTIONS -->
 
         <div class="p-acts">
 
-            <div class="p-a">
+            <!-- LIKE -->
 
-                <i class="far fa-heart"></i>
+            <div
+                class="p-a like-action"
+                id="like-${post.id}"
+                onclick="toggleProfileLike('${post.id}')"
+            >
 
-                <span>
-                    ${formatNumber(likes)}
+                <i
+                    class="far fa-heart"
+                    id="like-icon-${post.id}"
+                ></i>
+
+                <span
+                    id="like-count-${post.id}"
+                >
+                    0
                 </span>
 
             </div>
 
 
-            <div class="p-a">
+            <!-- COMMENT -->
+
+            <div
+                class="p-a"
+                onclick="openProfileComments('${post.id}')"
+            >
 
                 <i class="far fa-comment"></i>
 
@@ -2186,7 +2201,12 @@ function createProfilePost(post) {
             </div>
 
 
-            <div class="p-a">
+            <!-- REPOST -->
+
+            <div
+                class="p-a"
+                onclick="repostProfilePost('${post.id}')"
+            >
 
                 <i class="fas fa-retweet"></i>
 
@@ -2197,7 +2217,9 @@ function createProfilePost(post) {
             </div>
 
 
-            <div class="p-a">
+            <!-- BOOKMARK -->
+
+            <div class="p-a p-a-r">
 
                 <i class="far fa-bookmark"></i>
 
@@ -2208,9 +2230,351 @@ function createProfilePost(post) {
     `;
 
 
+    /* =====================================================
+       LOAD REAL LIKE DATA
+    ===================================================== */
+
+    loadProfilePostLikes(
+        post.id
+    );
+
+
     return postElement;
 }
+    async function loadProfilePostLikes(postId) {
 
+    try {
+
+        const {
+            data: {
+                user
+            }
+        } = await supabaseClient.auth.getUser();
+
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from("likes")
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("post_id", postId);
+
+
+        if (error) {
+
+            console.error(
+                "Like count error:",
+                error
+            );
+
+            return;
+        }
+
+
+        const countElement =
+            document.getElementById(
+                "like-count-" + postId
+            );
+
+        if (countElement) {
+
+            countElement.textContent =
+                formatNumber(count || 0);
+        }
+
+
+        /* -----------------------------------------
+           CHECK WHETHER CURRENT USER LIKED
+        ----------------------------------------- */
+
+        if (!user) {
+            return;
+        }
+
+
+        const {
+            data: myLike,
+            error: myLikeError
+        } = await supabaseClient
+            .from("likes")
+            .select("id")
+            .eq("post_id", postId)
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+
+        if (myLikeError) {
+
+            console.error(
+                "My like check error:",
+                myLikeError
+            );
+
+            return;
+        }
+
+
+        if (myLike) {
+
+            setProfilePostLiked(
+                postId,
+                true
+            );
+
+        } else {
+
+            setProfilePostLiked(
+                postId,
+                false
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Load likes error:",
+            error
+        );
+    }
+    }
+    function setProfilePostLiked(
+    postId,
+    liked
+) {
+
+    const action =
+        document.getElementById(
+            "like-" + postId
+        );
+
+    const icon =
+        document.getElementById(
+            "like-icon-" + postId
+        );
+
+    if (!action || !icon) {
+        return;
+    }
+
+
+    if (liked) {
+
+        icon.className =
+            "fas fa-heart";
+
+        action.style.color =
+            "#a855f7";
+
+    } else {
+
+        icon.className =
+            "far fa-heart";
+
+        action.style.color =
+            "";
+    }
+    }
+    async function toggleProfileLike(
+    postId
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    const action =
+        document.getElementById(
+            "like-" + postId
+        );
+
+    const countElement =
+        document.getElementById(
+            "like-count-" + postId
+        );
+
+    if (!action || !countElement) {
+        return;
+    }
+
+
+    action.style.pointerEvents =
+        "none";
+
+
+    try {
+
+        /* -----------------------------------------
+           CHECK EXISTING LIKE
+        ----------------------------------------- */
+
+        const {
+            data: existingLike,
+            error: checkError
+        } = await supabaseClient
+            .from("likes")
+            .select("id")
+            .eq(
+                "post_id",
+                postId
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+
+        if (checkError) {
+
+            console.error(
+                "Check like error:",
+                checkError
+            );
+
+            alert(
+                checkError.message
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           REMOVE LIKE
+        ----------------------------------------- */
+
+        if (existingLike) {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("likes")
+                .delete()
+                .eq(
+                    "id",
+                    existingLike.id
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Unlike error:",
+                    error
+                );
+
+                alert(
+                    error.message
+                );
+
+                return;
+            }
+
+
+            setProfilePostLiked(
+                postId,
+                false
+            );
+
+
+        }
+
+        /* -----------------------------------------
+           ADD LIKE
+        ----------------------------------------- */
+
+        else {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("likes")
+                .insert({
+
+                    post_id:
+                        postId,
+
+                    user_id:
+                        currentUser.id
+
+                });
+
+
+            if (error) {
+
+                console.error(
+                    "Like error:",
+                    error
+                );
+
+                alert(
+                    error.message
+                );
+
+                return;
+            }
+
+
+            setProfilePostLiked(
+                postId,
+                true
+            );
+        }
+
+
+        /* -----------------------------------------
+           REFRESH COUNT
+        ----------------------------------------- */
+
+        const {
+            count,
+            error: countError
+        } = await supabaseClient
+            .from("likes")
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "post_id",
+                postId
+            );
+
+
+        if (!countError) {
+
+            countElement.textContent =
+                formatNumber(count || 0);
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Toggle like error:",
+            error
+        );
+
+        alert(
+            "Unable to update like."
+        );
+
+    } finally {
+
+        action.style.pointerEvents =
+            "";
+    }
+    }
 
 /* =========================================================
    OPEN POST IMAGE
