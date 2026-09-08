@@ -8,9 +8,9 @@ export default async function handler(req, res) {
             // Karbar API Key daga Vercel
             const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-            // AN CANJA SUNAN MODEL ZUWA gemini-2.0-flash
+            // AN CANJA SUNAN MODEL ZUWA gemini-3.6-flash KAMAR YADDA GOOGLE SUKA CE
             const response = await ai.models.generateContent({
-                model: 'gemini-2.0-flash', 
+                model: 'gemini-3.6-flash', 
                 contents: text,
             });
 
