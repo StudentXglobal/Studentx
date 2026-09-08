@@ -331,16 +331,14 @@
 
                 const data = await response.json();
 
-                // 4. Karantar amsar Gemini daidai
+                // 4. Karatar amsar Gemini daidai (Yanzu tana cikin data.reply)
                 const typingBubble = document.getElementById(typingId).querySelector('.bubble');
-                if (data.candidates && data.candidates.length > 0) {
-                    const aiReply = data.candidates[0].content.parts[0].text;
-                    typingBubble.innerText = aiReply;
+                if (data.reply) {
+                    typingBubble.innerText = data.reply;
                 } else if (data.error) {
-                    // Idan akwai kuskure, zai nuna maka ainihin abin da Gemini ta fada
-                    typingBubble.innerText = "Gemini Error: " + (data.error.message || JSON.stringify(data.error));
+                    typingBubble.innerText = "Gemini Error: " + data.error;
                 } else {
-                    typingBubble.innerText = "Unexpected response from server: " + JSON.stringify(data);
+                    typingBubble.innerText = "Unexpected response: " + JSON.stringify(data);
                 }
                 
                 chatContainer.scrollTop = chatContainer.scrollHeight;
