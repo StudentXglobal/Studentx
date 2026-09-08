@@ -322,7 +322,7 @@
             chatContainer.scrollTop = chatContainer.scrollHeight;
 
             try {
-                // 3. Tura tambayar zuwa ga Server ɗinka (api/chat.js) wanda ke da API Key a asirice
+                // 3. Tura tambayar zuwa ga Vercel Server (api/chat.js)
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -331,14 +331,14 @@
 
                 const data = await response.json();
 
-                // 4. Nuna amsar AI (Ko nuna ainihin kuskuren idan bai yi aiki ba)
+                // 4. Karantar amsar Gemini daidai
                 const typingBubble = document.getElementById(typingId).querySelector('.bubble');
-                if (data.choices && data.choices.length > 0) {
-                    const aiReply = data.choices[0].message.content;
+                if (data.candidates && data.candidates.length > 0) {
+                    const aiReply = data.candidates[0].content.parts[0].text;
                     typingBubble.innerText = aiReply;
                 } else if (data.error) {
-                    // Wannan zai nuna maka ainihin abin da Z.ai ke fada!
-                    typingBubble.innerText = "Z.ai Error: " + (data.error.message || JSON.stringify(data.error));
+                    // Idan akwai kuskure, zai nuna maka ainihin abin da Gemini ta fada
+                    typingBubble.innerText = "Gemini Error: " + (data.error.message || JSON.stringify(data.error));
                 } else {
                     typingBubble.innerText = "Unexpected response from server: " + JSON.stringify(data);
                 }
