@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudentX AI - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #121212;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #121212;
+            padding: 35px 15px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #2c2c2c;
+            z-index: 100;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        /* 1. Alamar Kibiya (Back Arrow) da ke kaiwa menu.html */
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ai-title {
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .model-badge {
+            background-color: #2c1a40;
+            color: #c29dff;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            border: 1px solid #8A2BE2;
+        }
+        
+        /* 2. An ƙankanta girman Menu Icon */
+        .menu-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px; /* An rage girman shi */
+            width: 32px;      /* An rage girman shi */
+            height: 32px;     /* An rage girman shi */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-radius: 6px;
+        }
+
+        /* --- CHAT AREA --- */
+        .chat-container {
+            padding: 90px 15px 160px; /* 90px header, 160px kasa domin tools da input */
+            overflow-y: auto;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            max-width: 85%;
+        }
+        .message.ai { align-self: flex-start; }
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .msg-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #2c2c2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .message.ai .bubble {
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-top-left-radius: 4px;
+        }
+        .message.user .bubble {
+            background-color: #8A2BE2;
+            border-top-right-radius: 4px;
+        }
+
+        /* --- BOTTOM WRAPPER (Tools + Input) --- */
+        .bottom-wrapper {
+            position: fixed;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 95%;
+            max-width: 600px;
+            z-index: 100;
+        }
+
+        /* 3. Kayan Aiki Uku a Saman Input */
+        .tools-scroll {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 0 5px 10px;
+        }
+        .tools-scroll::-webkit-scrollbar { display: none; }
+        
+        .tool-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            color: #ccc;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+            cursor: pointer;
+            text-decoration: none;
+            flex-shrink: 0;
+            transition: 0.2s;
+        }
+        .tool-chip i { color: #8A2BE2; }
+        .tool-chip:active {
+            background-color: #2c1a40;
+            border-color: #8A2BE2;
+        }
+
+        /* --- INPUT AREA --- */
+        .input-area {
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-radius: 25px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .plus-btn {
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+        .plus-btn:hover { background-color: #2c2c2c; }
+
+        .input-area input {
+            flex-grow: 1;
+            background-color: transparent;
+            border: none;
+            padding: 14px 5px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .send-btn {
+            background-color: #8A2BE2;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-right: 5px;
+        }
+
+        /* Akwatin da ke fitowa idan aka danna Plus (+) */
+        .upload-popup {
+            display: none;
+            position: absolute;
+            bottom: 55px;
+            left: 0;
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-radius: 12px;
+            padding: 10px;
+            flex-direction: column;
+            gap: 5px;
+            width: 180px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            z-index: 200;
+        }
+        .upload-popup.active { display: flex; }
+        
+        .upload-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+        .upload-item:active { background-color: #2c2c2c; }
+        .upload-item i { color: #8A2BE2; width: 20px; text-align: center; }
+
+    </style>
+</head>
+<body>
+
+    <!-- HEADER (Menu yana saman dama, Kibiya na hagu) -->
+    <div class="header">
+        <div class="header-left">
+            <!-- ALAMAR KIBIYA WACCE KE KAIWA MENU.HTML -->
+            <a href="menu.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="ai-title">
+                StudentX AI <span class="model-badge">v1.1</span>
+            </div>
+        </div>
+        <!-- AN ƘANKANTA ALAMAR MENU -->
+        <a href="studentxaimenu.html" class="menu-btn"><i class="fas fa-bars"></i></a>
+    </div>
+
+    <!-- CHAT AREA -->
+    <div class="chat-container" id="chatContainer">
+        <div class="message ai">
+            <div class="msg-avatar"><i class="fas fa-robot"></i></div>
+            <div class="bubble">
+                Hello Yusuf! I am StudentX AI. How can I assist you today? You can attach files using the (+) button.
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM WRAPPER (Tools + Input) -->
+    <div class="bottom-wrapper">
+        
+        <!-- KAYAN AIKI UCU KAMAR YADDA KA SO -->
+        <div class="tools-scroll">
+            <a href="create-image.html" class="tool-chip"><i class="fas fa-wand-magic-sparkles"></i> Create Image</a>
+            <a href="edit-image.html" class="tool-chip"><i class="fas fa-pen-fancy"></i> Edit Image</a>
+            <a href="img-to-pdf.html" class="tool-chip"><i class="fas fa-file-pdf"></i> Image to PDF</a>
+        </div>
+
+        <div class="input-area">
+            <!-- ALAMAR PLUS (+) -->
+            <button class="plus-btn" onclick="toggleUploadPopup()">
+                <i class="fas fa-plus"></i>
+                
+                <!-- AKWATIN DA KE FITO IDAN AN DANNA + -->
+                <div class="upload-popup" id="uploadPopup">
+                    <a href="#" class="upload-item"><i class="fas fa-camera"></i> Camera</a>
+                    <a href="#" class="upload-item"><i class="fas fa-image"></i> Upload Image</a>
+                    <a href="#" class="upload-item"><i class="fas fa-folder-open"></i> Upload File</a>
+                </div>
+            </button>
+
+            <input type="text" id="messageInput" placeholder="Message StudentX AI...">
+            
+            <button class="send-btn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const uploadPopup = document.getElementById('uploadPopup');
+
+        function sendMessage() {
+            const text = messageInput.value.trim();
+            if (text !== '') {
+                const userMsg = `
+                    <div class="message user">
+                        <div class="msg-avatar"><i class="fas fa-user"></i></div>
+                        <div class="bubble">${text}</div>
+                    </div>
+                `;
+                chatContainer.insertAdjacentHTML('beforeend', userMsg);
+                messageInput.value = '';
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+
+                setTimeout(() => {
+                    const aiMsg = `
+                        <div class="message ai">
+                            <div class="msg-avatar"><i class="fas fa-robot"></i></div>
+                            <div class="bubble">I'm processing your request: "${text}".</div>
+                        </div>
+                    `;
+                    chatContainer.insertAdjacentHTML('beforeend', aiMsg);
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 1000);
+            }
+        }
+
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        function toggleUploadPopup() {
+            uploadPopup.classList.toggle('active');
+        }
+
+        // Idan aka danna ko ina a wajen plus, sai akwatin ya buye
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.plus-btn') && !e.target.closest('.upload-popup')) {
+                uploadPopup.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
