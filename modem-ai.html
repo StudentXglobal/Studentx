@@ -331,13 +331,16 @@
 
                 const data = await response.json();
 
-                // 4. Nuna amsar AI
+                // 4. Nuna amsar AI (Ko nuna ainihin kuskuren idan bai yi aiki ba)
                 const typingBubble = document.getElementById(typingId).querySelector('.bubble');
                 if (data.choices && data.choices.length > 0) {
                     const aiReply = data.choices[0].message.content;
                     typingBubble.innerText = aiReply;
+                } else if (data.error) {
+                    // Wannan zai nuna maka ainihin abin da Z.ai ke fada!
+                    typingBubble.innerText = "Z.ai Error: " + (data.error.message || JSON.stringify(data.error));
                 } else {
-                    typingBubble.innerText = "Sorry, I couldn't get a response. Please check your API Key or quota.";
+                    typingBubble.innerText = "Unexpected response from server: " + JSON.stringify(data);
                 }
                 
                 chatContainer.scrollTop = chatContainer.scrollHeight;
