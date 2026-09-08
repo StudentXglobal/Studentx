@@ -1644,10 +1644,6 @@ document.addEventListener(
 
 <script>
 
-/* =========================================================
-   PART 4 CONFIGURATION
-========================================================= */
-
 const PROFILE_TABLE = "profiles";
 const POSTS_TABLE = "posts";
 const FOLLOWERS_TABLE = "followers";
@@ -1658,102 +1654,11 @@ const LIKES_TABLE = "likes";
    LOAD PROFILE STATISTICS
 ========================================================= */
 
-async function loadUserPosts() {
-
-    const postsView =
-        document.getElementById("postsView");
-
-    if (!postsView) {
-        return;
-    }
+async function loadProfileStats() {
 
     if (!currentUser) {
-
-        postsView.innerHTML = `
-            <div class="empty-posts">
-                Please login to view posts.
-            </div>
-        `;
-
         return;
     }
-
-    postsView.innerHTML = `
-        <div class="loading">
-            Loading posts...
-        </div>
-    `;
-
-    try {
-
-        const {
-            data,
-            error
-        } = await supabaseClient
-            .from(POSTS_TABLE)
-            .select("*")
-            .eq("User_id", currentUser.id)
-            .order("Create_at", {
-                ascending: false
-            });
-
-        if (error) {
-
-            console.error(
-                "Posts loading error:",
-                error
-            );
-
-            postsView.innerHTML = `
-                <div class="empty-posts">
-                    Unable to load posts.
-                </div>
-            `;
-
-            return;
-        }
-
-        if (!data || data.length === 0) {
-
-            postsView.innerHTML = `
-                <div class="empty-posts">
-
-                    <i class="fas fa-camera"></i>
-
-                    <div>
-                        No posts yet
-                    </div>
-
-                </div>
-            `;
-
-            return;
-        }
-
-        postsView.innerHTML = "";
-
-        data.forEach(function(post) {
-
-            postsView.appendChild(
-                createProfilePost(post)
-            );
-
-        });
-
-    } catch (error) {
-
-        console.error(
-            "Unexpected posts error:",
-            error
-        );
-
-        postsView.innerHTML = `
-            <div class="empty-posts">
-                Something went wrong.
-            </div>
-        `;
-    }
-}
 
     const userId = currentUser.id;
 
@@ -1773,10 +1678,17 @@ async function loadUserPosts() {
                 count: "exact",
                 head: true
             })
-            .eq("user_id", userId);
+            .eq("User_id", userId);
 
 
-        if (!error) {
+        if (error) {
+
+            console.error(
+                "Posts count error:",
+                error
+            );
+
+        } else {
 
             const postsCount =
                 document.getElementById(
@@ -1814,7 +1726,10 @@ async function loadUserPosts() {
                 count: "exact",
                 head: true
             })
-            .eq("following_id", userId);
+            .eq(
+                "following_id",
+                userId
+            );
 
 
         if (!error) {
@@ -1855,7 +1770,10 @@ async function loadUserPosts() {
                 count: "exact",
                 head: true
             })
-            .eq("follower_id", userId);
+            .eq(
+                "follower_id",
+                userId
+            );
 
 
         if (!error) {
@@ -1896,7 +1814,10 @@ async function loadUserPosts() {
                 count: "exact",
                 head: true
             })
-            .eq("user_id", userId);
+            .eq(
+                "user_id",
+                userId
+            );
 
 
         if (!error) {
@@ -1938,6 +1859,7 @@ async function loadUserPosts() {
         return;
     }
 
+
     if (!currentUser) {
 
         postsView.innerHTML = `
@@ -1949,8 +1871,6 @@ async function loadUserPosts() {
         return;
     }
 
-
-    /* Loading */
 
     postsView.innerHTML = `
         <div class="loading">
@@ -1966,10 +1886,15 @@ async function loadUserPosts() {
             error
         } = await supabaseClient
             .from(POSTS_TABLE)
-            .select("*")
-            .eq("user_id", currentUser.id)
+            .select(
+                "id, User_id, content, image_url, Like, Create_at"
+            )
+            .eq(
+                "User_id",
+                currentUser.id
+            )
             .order(
-                "created_at",
+                "Create_at",
                 {
                     ascending: false
                 }
@@ -1993,8 +1918,6 @@ async function loadUserPosts() {
         }
 
 
-        /* No posts */
-
         if (!data || data.length === 0) {
 
             postsView.innerHTML = `
@@ -2013,19 +1936,17 @@ async function loadUserPosts() {
         }
 
 
-        /* Render posts */
-
         postsView.innerHTML = "";
 
-        data.forEach(
-            function(post) {
 
-                postsView.appendChild(
-                    createProfilePost(post)
-                );
+        data.forEach(function(post) {
 
-            }
-        );
+            postsView.appendChild(
+                createProfilePost(post)
+            );
+
+        });
+
 
     } catch (error) {
 
@@ -2044,38 +1965,27 @@ async function loadUserPosts() {
 
 
 /* =========================================================
-   CREATE POST ELEMENT
+   CREATE PROFILE POST
 ========================================================= */
 
 function createProfilePost(post) {
 
     const postElement =
-        document.createElement("article");
+        document.createElement(
+            "article"
+        );
 
     postElement.className =
         "profile-post";
 
 
-    /* -----------------------------------------------------
-       FIND POSSIBLE CONTENT COLUMNS
-    ----------------------------------------------------- */
-
     const text =
-        post.content ||
-        post.text ||
-        post.caption ||
-        "";
+        post.content || "";
+
 
     const image =
-        post.image_url ||
-        post.media_url ||
-        post.photo_url ||
-        "";
+        post.image_url || "";
 
-
-    /* -----------------------------------------------------
-       POST HTML
-    ----------------------------------------------------- */
 
     let html = "";
 
@@ -2110,7 +2020,7 @@ function createProfilePost(post) {
 
             <span>
                 ${formatPostDate(
-                    post.created_at
+                    post.Create_at
                 )}
             </span>
 
@@ -2119,7 +2029,9 @@ function createProfilePost(post) {
     `;
 
 
-    postElement.innerHTML = html;
+    postElement.innerHTML =
+        html;
+
 
     return postElement;
 }
@@ -2145,6 +2057,7 @@ function openPostImage(url) {
         return;
     }
 
+
     image.src = url;
 
     viewer.style.display =
@@ -2168,11 +2081,13 @@ function closeView() {
             "viewImg"
         );
 
+
     if (viewer) {
 
         viewer.style.display =
             "none";
     }
+
 
     if (image) {
 
@@ -2189,6 +2104,7 @@ function formatNumber(number) {
 
     number =
         Number(number) || 0;
+
 
     if (number >= 1000000000) {
 
@@ -2237,8 +2153,10 @@ function formatPostDate(date) {
         return "";
     }
 
+
     const d =
         new Date(date);
+
 
     if (isNaN(d.getTime())) {
         return "";
@@ -2365,7 +2283,6 @@ if (postsTab) {
                 savedView.style.display =
                     "none";
             }
-
         }
     );
 }
@@ -2403,7 +2320,6 @@ if (savedTab) {
                 savedView.style.display =
                     "block";
             }
-
         }
     );
 }
@@ -2420,9 +2336,11 @@ async function startProfilePart4() {
         await getCurrentUser();
     }
 
+
     if (!currentUser) {
         return;
     }
+
 
     await Promise.all([
         loadProfileStats(),
@@ -2451,7 +2369,7 @@ document.addEventListener(
     }
 );
 
-</script>
+                </script>
 <!-- =========================================================
      STUDENTX PROFILE — PART 5
      EDIT PROFILE + AVATAR + COVER
