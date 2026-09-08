@@ -1658,11 +1658,102 @@ const LIKES_TABLE = "likes";
    LOAD PROFILE STATISTICS
 ========================================================= */
 
-async function loadProfileStats() {
+async function loadUserPosts() {
 
-    if (!currentUser) {
+    const postsView =
+        document.getElementById("postsView");
+
+    if (!postsView) {
         return;
     }
+
+    if (!currentUser) {
+
+        postsView.innerHTML = `
+            <div class="empty-posts">
+                Please login to view posts.
+            </div>
+        `;
+
+        return;
+    }
+
+    postsView.innerHTML = `
+        <div class="loading">
+            Loading posts...
+        </div>
+    `;
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(POSTS_TABLE)
+            .select("*")
+            .eq("User_id", currentUser.id)
+            .order("Create_at", {
+                ascending: false
+            });
+
+        if (error) {
+
+            console.error(
+                "Posts loading error:",
+                error
+            );
+
+            postsView.innerHTML = `
+                <div class="empty-posts">
+                    Unable to load posts.
+                </div>
+            `;
+
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            postsView.innerHTML = `
+                <div class="empty-posts">
+
+                    <i class="fas fa-camera"></i>
+
+                    <div>
+                        No posts yet
+                    </div>
+
+                </div>
+            `;
+
+            return;
+        }
+
+        postsView.innerHTML = "";
+
+        data.forEach(function(post) {
+
+            postsView.appendChild(
+                createProfilePost(post)
+            );
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected posts error:",
+            error
+        );
+
+        postsView.innerHTML = `
+            <div class="empty-posts">
+                Something went wrong.
+            </div>
+        `;
+    }
+}
 
     const userId = currentUser.id;
 
