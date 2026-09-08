@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Jobs - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #121212;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            padding: 40px 15px 10px;
+            z-index: 100;
+            border-bottom: 1px solid #2c2c2c;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .post-job-btn {
+            background-color: #8A2BE2;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Search Bar */
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-radius: 12px;
+            padding: 10px 15px;
+            gap: 10px;
+        }
+        .search-bar i {
+            color: #888;
+            font-size: 16px;
+        }
+        .search-bar input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 14px;
+            width: 100%;
+        }
+        .search-bar input::placeholder {
+            color: #888;
+        }
+
+        /* --- CATEGORIES --- */
+        .categories {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+        .category-chip {
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            color: #ccc;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+        .category-chip.active {
+            background-color: #8A2BE2;
+            border-color: #8A2BE2;
+            color: #fff;
+        }
+
+        /* --- JOB LIST --- */
+        .job-list {
+            padding: 5px 15px 80px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .job-card {
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid #2c2c2c;
+            text-decoration: none;
+            color: #fff;
+            transition: transform 0.2s;
+        }
+        .job-card:active {
+            transform: scale(0.98);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .company-logo {
+            width: 50px;
+            height: 50px;
+            background-color: #2c2c3e;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A2BE2;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .job-info h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+        .job-info p {
+            font-size: 13px;
+            color: #b0b3b8;
+        }
+
+        .job-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #ddd;
+            background-color: #121212;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+        .tag i {
+            color: #8A2BE2;
+            font-size: 12px;
+        }
+        .tag.salary {
+            color: #4caf50;
+        }
+        .tag.salary i {
+            color: #4caf50;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid #2c2c2c;
+            padding-top: 15px;
+        }
+        .job-time {
+            font-size: 12px;
+            color: #888;
+        }
+        .apply-btn {
+            background-color: #8A2BE2;
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        /* --- BOTTOM NAV BAR --- */
+        .bnav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #000;
+            border-top: 1px solid #222;
+            z-index: 2000;
+        }
+        .nb {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            cursor: pointer;
+            gap: 3px;
+            text-decoration: none;
+        }
+        .nb.on {
+            color: #fff;
+        }
+        .nb i {
+            font-size: 20px;
+        }
+        .nb span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-top">
+            <a href="home.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="header-title">Jobs</div>
+            <a href="post-job.html" class="post-job-btn">
+                <i class="fas fa-plus"></i>
+                Post
+            </a>
+        </div>
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search jobs, internships...">
+        </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="categories">
+        <div class="category-chip active">All</div>
+        <div class="category-chip">Full-time</div>
+        <div class="category-chip">Part-time</div>
+        <div class="category-chip">Internship</div>
+        <div class="category-chip">Remote</div>
+        <div class="category-chip">Contract</div>
+    </div>
+
+    <!-- JOB LIST -->
+    <div class="job-list">
+        
+        <!-- Job 1 -->
+        <a href="job-details.html?id=1" class="job-card">
+            <div class="card-top">
+                <div class="company-logo"><i class="fas fa-code"></i></div>
+                <div class="job-info">
+                    <h3>Junior Frontend Developer</h3>
+                    <p>Tech Innovations Ltd</p>
+                </div>
+            </div>
+            <div class="job-tags">
+                <div class="tag"><i class="fas fa-location-dot"></i> Remote</div>
+                <div class="tag"><i class="fas fa-briefcase"></i> Full-time</div>
+                <div class="tag salary"><i class="fas fa-money-bill-wave"></i> ₦150,000 - ₦200,000</div>
+            </div>
+            <div class="card-footer">
+                <span class="job-time">Posted 2 days ago</span>
+                <a href="job-details.html?id=1" class="apply-btn">Apply Now</a>
+            </div>
+        </a>
+
+        <!-- Job 2 -->
+        <a href="job-details.html?id=2" class="job-card">
+            <div class="card-top">
+                <div class="company-logo"><i class="fas fa-chart-line"></i></div>
+                <div class="job-info">
+                    <h3>Data Analyst Intern</h3>
+                    <p>FinTech Africa</p>
+                </div>
+            </div>
+            <div class="job-tags">
+                <div class="tag"><i class="fas fa-location-dot"></i> Lagos, NG</div>
+                <div class="tag"><i class="fas fa-clock"></i> Internship</div>
+                <div class="tag salary"><i class="fas fa-money-bill-wave"></i> ₦50,000 / mo</div>
+            </div>
+            <div class="card-footer">
+                <span class="job-time">Posted 5 days ago</span>
+                <a href="job-details.html?id=2" class="apply-btn">Apply Now</a>
+            </div>
+        </a>
+
+        <!-- Job 3 -->
+        <a href="job-details.html?id=3" class="job-card">
+            <div class="card-top">
+                <div class="company-logo"><i class="fas fa-pen-nib"></i></div>
+                <div class="job-info">
+                    <h3>UI/UX Design Trainee</h3>
+                    <p>Creative Hub NG</p>
+                </div>
+            </div>
+            <div class="job-tags">
+                <div class="tag"><i class="fas fa-location-dot"></i> Abuja, NG</div>
+                <div class="tag"><i class="fas fa-briefcase"></i> Part-time</div>
+                <div class="tag salary"><i class="fas fa-money-bill-wave"></i> ₦80,000</div>
+            </div>
+            <div class="card-footer">
+                <span class="job-time">Posted 1 week ago</span>
+                <a href="job-details.html?id=3" class="apply-btn">Apply Now</a>
+            </div>
+        </a>
+
+        <!-- Job 4 -->
+        <a href="job-details.html?id=4" class="job-card">
+            <div class="card-top">
+                <div class="company-logo"><i class="fas fa-users"></i></div>
+                <div class="job-info">
+                    <h3>Campus Ambassador</h3>
+                    <p>StudentX Inc.</p>
+                </div>
+            </div>
+            <div class="job-tags">
+                <div class="tag"><i class="fas fa-location-dot"></i> Federal University Dutse</div>
+                <div class="tag"><i class="fas fa-briefcase"></i> Part-time</div>
+                <div class="tag salary"><i class="fas fa-money-bill-wave"></i> ₦40,000 + Incentives</div>
+            </div>
+            <div class="card-footer">
+                <span class="job-time">Posted today</span>
+                <a href="job-details.html?id=4" class="apply-btn">Apply Now</a>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bnav">
+        <div class="nb" onclick="window.location.href='home.html'">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nb" onclick="window.location.href='video.html'">
+            <i class="fas fa-video"></i>
+            <span>Video</span>
+        </div>
+        <div class="nb" onclick="window.location.href='chat.html'">
+            <i class="fas fa-comment-dots"></i>
+            <span>Chat</span>
+        </div>
+        <div class="nb on" onclick="window.location.href='studyhub.html'">
+            <i class="fas fa-book-open"></i>
+            <span>StudyHub</span>
+        </div>
+        <div class="nb" onclick="window.location.href='profile.html'">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <script>
+        // Canja Categories
+        const chips = document.querySelectorAll('.category-chip');
+        chips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                chips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
