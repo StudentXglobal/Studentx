@@ -143,13 +143,43 @@ function removeFile() {
   document.getElementById('previewArea').innerHTML = '';
 }
 
-function publishPost() {
+async function publishPost() {
   var text = document.getElementById('postText').value.trim();
+
   if (!text && !hasFile) {
     showMsg('Write something or add a file');
     return;
   }
+
+  var result = await supabaseClient.auth.getUser();
+  var user = result.data.user;
+  var authError = result.error;
+
+  if (authError || !user) {
+    showMsg('You must be logged in');
+    console.log('Auth error:', authError);
+    return;
+  }
+
+  var postData = {
+    User_id: user.id,
+    content: text || null,
+    image_url: null
+  };
+
+  var insertResult = await supabaseClient
+    .from('posts')
+    .insert(postData);
+
+  if (insertResult.error) {
+    showMsg('Failed to publish post');
+    console.log('Post insert error:', insertResult.error);
+    alert(insertResult.error.message);
+    return;
+  }
+
   showMsg('Post published!');
+
   setTimeout(function() {
     window.location.href = 'home.html';
   }, 800);
