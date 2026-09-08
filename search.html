@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Search - StudentX</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    background:#f7f7fb;
+    color:#222;
+    min-height:100vh;
+}
+
+.header{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:#fff;
+    padding:14px 15px 10px;
+    border-bottom:1px solid #eee;
+}
+
+.search-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#f1f1f6;
+    border-radius:14px;
+    padding:11px 14px;
+}
+
+.search-box span{
+    font-size:20px;
+}
+
+.search-box input{
+    width:100%;
+    border:0;
+    outline:none;
+    background:transparent;
+    font-size:16px;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-top:12px;
+    overflow-x:auto;
+}
+
+.tab{
+    border:0;
+    background:#f0f0f5;
+    padding:9px 17px;
+    border-radius:20px;
+    font-size:14px;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:#6c3df4;
+    color:#fff;
+}
+
+.main{
+    padding:16px 14px 90px;
+}
+
+.section-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:13px;
+}
+
+.users{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.user-card{
+    display:flex;
+    align-items:center;
+    gap:11px;
+    background:#fff;
+    padding:12px;
+    border-radius:16px;
+    box-shadow:0 2px 8px rgba(0,0,0,.04);
+}
+
+.avatar{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#ddd;
+    flex-shrink:0;
+}
+
+.user-info{
+    flex:1;
+    min-width:0;
+}
+
+.name-row{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.name{
+    font-size:15px;
+    font-weight:700;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.verified{
+    color:#6c3df4;
+    font-size:14px;
+}
+
+.username{
+    color:#777;
+    font-size:13px;
+    margin-top:3px;
+}
+
+.school{
+    color:#888;
+    font-size:12px;
+    margin-top:3px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.follow-btn{
+    border:0;
+    background:#6c3df4;
+    color:#fff;
+    padding:8px 13px;
+    border-radius:18px;
+    font-size:13px;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.follow-btn.following{
+    background:#eee;
+    color:#333;
+}
+
+.empty{
+    text-align:center;
+    color:#888;
+    padding:40px 10px;
+    font-size:14px;
+}
+
+.bottom-nav{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    height:64px;
+    background:#fff;
+    border-top:1px solid #eee;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    z-index:30;
+}
+
+.nav-item{
+    text-decoration:none;
+    color:#777;
+    font-size:11px;
+    text-align:center;
+}
+
+.nav-icon{
+    display:block;
+    font-size:21px;
+    margin-bottom:3px;
+}
+
+.nav-item.active{
+    color:#6c3df4;
+}
+
+@media(min-width:700px){
+    .main,
+    .header{
+        max-width:700px;
+        margin:auto;
+    }
+
+    .bottom-nav{
+        max-width:700px;
+        margin:auto;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="search-box">
+        <span>🔍</span>
+        <input
+            type="search"
+            id="searchInput"
+            placeholder="Search StudentX"
+            autocomplete="off"
+        >
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="all">All</button>
+        <button class="tab" data-tab="people">People</button>
+        <button class="tab" data-tab="schools">Schools</button>
+    </div>
+
+</header>
+
+<main class="main">
+
+    <div id="results"></div>
+
+</main>
+
+<nav class="bottom-nav">
+
+    <a href="home.html" class="nav-item">
+        <span class="nav-icon">⌂</span>
+        Home
+    </a>
+
+    <a href="chat.html" class="nav-item">
+        <span class="nav-icon">💬</span>
+        Chat
+    </a>
+
+    <a href="studyhub.html" class="nav-item">
+        <span class="nav-icon">📚</span>
+        Studyhub
+    </a>
+
+    <a href="search.html" class="nav-item active">
+        <span class="nav-icon">🔍</span>
+        Search
+    </a>
+
+    <a href="profile.html" class="nav-item">
+        <span class="nav-icon">👤</span>
+        Profile
+    </a>
+
+</nav>
+
+<script>
+const SUPABASE_URL =
+    "https://acragelglvdnqhvbjcgx.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+let currentUser = null;
+let followingIds = new Set();
+let currentTab = "all";
+
+
+async function initSearch(){
+
+    const result =
+        await supabaseClient.auth.getUser();
+
+    currentUser =
+        result.data.user || null;
+
+    await loadFollowing();
+
+    await showSuggestions();
+}
+
+
+async function loadFollowing(){
+
+    followingIds = new Set();
+
+    if(!currentUser){
+        return;
+    }
+
+    const { data, error } =
+        await supabaseClient
+        .from("followers")
+        .select("following_id")
+        .eq("follower_id", currentUser.id);
+
+    if(error){
+        console.log("Following error:", error);
+        return;
+    }
+
+    (data || []).forEach(row => {
+        followingIds.add(row.following_id);
+    });
+}
+
+
+async function showSuggestions(){
+
+    const results =
+        document.getElementById("results");
+
+    results.innerHTML = `
+        <div class="section-title">
+            People to follow
+        </div>
+
+        <div class="users" id="userList"></div>
+    `;
+
+    const list =
+        document.getElementById("userList");
+
+    let query =
+        supabaseClient
+        .from("profiles")
+        .select(`
+            id,
+            full_name,
+            username,
+            avatar_url,
+            university,
+            verified
+        `)
+        .limit(50);
+
+    if(currentUser){
+        query =
+            query.neq("id", currentUser.id);
+    }
+
+    const { data, error } =
+        await query;
+
+    if(error){
+
+        console.log("Suggestion error:", error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Unable to load users.
+            </div>`;
+
+        return;
+    }
+
+    const users =
+        (data || [])
+        .filter(user =>
+            !followingIds.has(user.id)
+        )
+        .slice(0,10);
+
+    if(!users.length){
+
+        list.innerHTML =
+            `<div class="empty">
+                No suggestions available.
+            </div>`;
+
+        return;
+    }
+
+    users.forEach(user => {
+        list.insertAdjacentHTML(
+            "beforeend",
+            createUserCard(user)
+        );
+    });
+}
+
+
+function createUserCard(user){
+
+    const avatar =
+        user.avatar_url ||
+        "https://via.placeholder.com/100";
+
+    const verified =
+        user.verified
+        ? `<span class="verified">✓</span>`
+        : "";
+
+    const username =
+        user.username
+        ? "@" + user.username
+        : "";
+
+    const school =
+        user.university || "";
+
+    const isFollowing =
+        followingIds.has(user.id);
+
+    return `
+        <div class="user-card">
+
+            <img
+                class="avatar"
+                src="${escapeHTML(avatar)}"
+                alt=""
+            >
+
+            <div class="user-info">
+
+                <div class="name-row">
+
+                    <div class="name">
+                        ${escapeHTML(
+                            user.full_name || "Student"
+                        )}
+                    </div>
+
+                    ${verified}
+
+                </div>
+
+                <div class="username">
+                    ${escapeHTML(username)}
+                </div>
+
+                ${
+                    school
+                    ? `<div class="school">
+                        ${escapeHTML(school)}
+                    </div>`
+                    : ""
+                }
+
+            </div>
+
+            <button
+                class="follow-btn ${isFollowing ? "following" : ""}"
+                onclick="toggleFollow('${user.id}', this)"
+            >
+                ${isFollowing ? "Following" : "Follow"}
+            </button>
+
+        </div>
+    `;
+}
+
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+  async function toggleFollow(userId, button){
+
+    if(!currentUser){
+
+        alert("Please login first.");
+        return;
+    }
+
+    const isFollowing =
+        followingIds.has(userId);
+
+    button.disabled = true;
+
+    if(isFollowing){
+
+        const { error } =
+            await supabaseClient
+            .from("followers")
+            .delete()
+            .eq("follower_id", currentUser.id)
+            .eq("following_id", userId);
+
+        if(error){
+
+            console.log("Unfollow error:", error);
+
+            alert("Unable to unfollow user.");
+
+            button.disabled = false;
+            return;
+        }
+
+        followingIds.delete(userId);
+
+        button.textContent = "Follow";
+        button.classList.remove("following");
+
+    }else{
+
+        const { error } =
+            await supabaseClient
+            .from("followers")
+            .insert({
+                follower_id: currentUser.id,
+                following_id: userId
+            });
+
+        if(error){
+
+            console.log("Follow error:", error);
+
+            alert("Unable to follow user.");
+
+            button.disabled = false;
+            return;
+        }
+
+        followingIds.add(userId);
+
+        button.textContent = "Following";
+        button.classList.add("following");
+    }
+
+    button.disabled = false;
+}
+
+
+async function searchUsers(query){
+
+    const results =
+        document.getElementById("results");
+
+    if(!query.trim()){
+
+        await showSuggestions();
+        return;
+    }
+
+    results.innerHTML = `
+        <div class="section-title">
+            Search results
+        </div>
+
+        <div class="users" id="userList"></div>
+    `;
+
+    const list =
+        document.getElementById("userList");
+
+    let request =
+        supabaseClient
+        .from("profiles")
+        .select(`
+            id,
+            full_name,
+            username,
+            avatar_url,
+            university,
+            verified
+        `)
+        .or(
+            `full_name.ilike.%${query}%,username.ilike.%${query}%,university.ilike.%${query}%`
+        )
+        .limit(30);
+
+    if(currentUser){
+
+        request =
+            request.neq(
+                "id",
+                currentUser.id
+            );
+    }
+
+    const { data, error } =
+        await request;
+
+    if(error){
+
+        console.log("Search error:", error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Search failed.
+            </div>`;
+
+        return;
+    }
+
+    if(!data || !data.length){
+
+        list.innerHTML =
+            `<div class="empty">
+                No results found.
+            </div>`;
+
+        return;
+    }
+
+    data.forEach(user => {
+
+        list.insertAdjacentHTML(
+            "beforeend",
+            createUserCard(user)
+        );
+
+    });
+}
+
+
+async function loadSchools(query = ""){
+
+    const results =
+        document.getElementById("results");
+
+    results.innerHTML = `
+        <div class="section-title">
+            Schools
+        </div>
+
+        <div class="users" id="schoolList"></div>
+    `;
+
+    const list =
+        document.getElementById("schoolList");
+
+    let request =
+        supabaseClient
+        .from("profiles")
+        .select("university")
+        .not("university","is",null)
+        .limit(100);
+
+    const { data, error } =
+        await request;
+
+    if(error){
+
+        console.log("School error:", error);
+
+        list.innerHTML =
+            `<div class="empty">
+                Unable to load schools.
+            </div>`;
+
+        return;
+    }
+
+    const schools = [];
+
+    (data || []).forEach(row => {
+
+        const school =
+            String(row.university || "").trim();
+
+        if(!school){
+            return;
+        }
+
+        const exists =
+            schools.some(
+                item =>
+                item.toLowerCase() ===
+                school.toLowerCase()
+            );
+
+        if(!exists){
+            schools.push(school);
+        }
+
+    });
+
+    const filtered =
+        query.trim()
+        ? schools.filter(school =>
+            school.toLowerCase()
+            .includes(query.toLowerCase())
+          )
+        : schools;
+
+    if(!filtered.length){
+
+        list.innerHTML =
+            `<div class="empty">
+                No schools found.
+            </div>`;
+
+        return;
+    }
+
+    filtered.forEach(school => {
+
+        list.insertAdjacentHTML(
+            "beforeend",
+            `
+            <div class="user-card">
+
+                <div class="avatar"
+                     style="
+                     display:flex;
+                     align-items:center;
+                     justify-content:center;
+                     font-size:24px;
+                     ">
+                    🎓
+                </div>
+
+                <div class="user-info">
+
+                    <div class="name">
+                        ${escapeHTML(school)}
+                    </div>
+
+                    <div class="username">
+                        StudentX School
+                    </div>
+
+                </div>
+
+            </div>
+            `
+        );
+
+    });
+}
+
+
+document
+.getElementById("searchInput")
+.addEventListener(
+    "input",
+    function(){
+
+        const query =
+            this.value.trim();
+
+        if(currentTab === "schools"){
+
+            loadSchools(query);
+
+        }else{
+
+            searchUsers(query);
+
+        }
+
+    }
+);
+
+
+document
+.querySelectorAll(".tab")
+.forEach(tab => {
+
+    tab.addEventListener(
+        "click",
+        async function(){
+
+            document
+            .querySelectorAll(".tab")
+            .forEach(item =>
+                item.classList.remove("active")
+            );
+
+            this.classList.add("active");
+
+            currentTab =
+                this.dataset.tab;
+
+            const input =
+                document.getElementById(
+                    "searchInput"
+                );
+
+            const query =
+                input.value.trim();
+
+            if(currentTab === "schools"){
+
+                await loadSchools(query);
+
+            }else if(query){
+
+                await searchUsers(query);
+
+            }else{
+
+                await showSuggestions();
+
+            }
+
+        }
+    );
+
+});
+
+
+initSearch();
+
+</script>
+
+<script src="theme.js"></script></body>
+</body>
+</html>
