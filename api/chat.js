@@ -1,23 +1,26 @@
+import { GoogleGenAI } from '@google/genai';
+
 export default async function handler(req, res) {
     if (req.method === 'POST') {
         const { text } = req.body;
 
         try {
-            const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+            // Karbar API Key daga Vercel
+            const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-            // AN CANJA SUNAN MODEL ZUWA gemini-pro
-            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: text }] }]
-                })
+            // Tura tambayar zuwa Gemini
+            const response = await ai.models.generateContent({
+                model: 'gemini-1.5-flash', 
+                contents: text,
             });
 
-            const data = await response.json();
-            res.status(200).json(data);
+            // Karbar amsar
+            const aiReply = response.text;
+
+            res.status(200).json({ reply: aiReply });
         } catch (error) {
-            res.status(500).json({ error: 'Server Error' });
+            console.error("Server Error:", error);
+            res.status(500).json({ error: error.message });
         }
     } else {
         res.status(405).json({ error: 'Method Not Allowed' });
