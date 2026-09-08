@@ -1971,66 +1971,241 @@ async function loadUserPosts() {
 function createProfilePost(post) {
 
     const postElement =
-        document.createElement(
-            "article"
-        );
+        document.createElement("article");
 
     postElement.className =
-        "profile-post";
+        "post";
 
+
+    /* =====================================================
+       PROFILE DATA FROM SUPABASE
+    ===================================================== */
+
+    const profile =
+        currentProfile || {};
+
+    const fullName =
+        profile.full_name ||
+        "StudentX User";
+
+    const username =
+        profile.username
+            ? "@" + profile.username
+            : "@username";
+
+    const avatar =
+        profile.avatar_url || "";
+
+    const verified =
+        profile.verified === true;
+
+
+    /* =====================================================
+       POST DATA FROM SUPABASE
+    ===================================================== */
 
     const text =
         post.content || "";
 
-
     const image =
         post.image_url || "";
 
+    const likes =
+        Number(post.Like) || 0;
 
-    let html = "";
+    const postDate =
+        formatPostDate(
+            post.Create_at
+        );
 
+
+    /* =====================================================
+       AVATAR
+    ===================================================== */
+
+    let avatarHTML = "";
+
+    if (avatar) {
+
+        avatarHTML = `
+            <img
+                src="${escapeAttribute(avatar)}"
+                alt="Profile"
+            >
+        `;
+
+    } else {
+
+        avatarHTML =
+            escapeHTML(
+                fullName
+                    .charAt(0)
+                    .toUpperCase()
+            );
+    }
+
+
+    /* =====================================================
+       VERIFIED BADGE
+    ===================================================== */
+
+    const verifiedHTML =
+        verified
+            ? `
+                <span
+                    style="
+                        color:#a855f7;
+                        margin-left:3px;
+                        font-size:10px;
+                    "
+                >
+                    <i class="fas fa-check-circle"></i>
+                </span>
+              `
+            : "";
+
+
+    /* =====================================================
+       POST BODY
+    ===================================================== */
+
+    let bodyHTML = "";
 
     if (text) {
 
-        html += `
-            <div class="profile-post-text">
+        bodyHTML += `
+            <div class="p-body">
                 ${escapeHTML(text)}
             </div>
         `;
     }
 
 
+    /* =====================================================
+       POST IMAGE
+    ===================================================== */
+
     if (image) {
 
-        html += `
+        bodyHTML += `
             <img
-                class="profile-post-image"
                 src="${escapeAttribute(image)}"
-                alt="Post"
+                alt="Post image"
                 loading="lazy"
                 onclick="openPostImage(this.src)"
+                style="
+                    display:block;
+                    width:100%;
+                    max-height:500px;
+                    object-fit:cover;
+                    border-radius:12px;
+                    margin-top:10px;
+                    cursor:pointer;
+                "
             >
         `;
     }
 
 
-    html += `
+    /* =====================================================
+       COMPLETE STUDENTX POST CARD
+    ===================================================== */
 
-        <div class="profile-post-footer">
+    postElement.innerHTML = `
 
-            <span>
-                ${formatPostDate(
-                    post.Create_at
-                )}
-            </span>
+        <!-- POST HEADER -->
+
+        <div class="p-hdr">
+
+            <div class="p-av">
+
+                ${avatarHTML}
+
+            </div>
+
+
+            <div class="p-inf">
+
+                <div class="p-nm">
+
+                    ${escapeHTML(fullName)}
+
+                    ${verifiedHTML}
+
+                </div>
+
+
+                <div class="p-meta">
+
+                    ${escapeHTML(username)}
+                    ·
+                    ${escapeHTML(postDate)}
+
+                </div>
+
+            </div>
+
+
+            <div class="p-more">
+
+                <i class="fas fa-ellipsis-h"></i>
+
+            </div>
+
+        </div>
+
+
+        <!-- POST CONTENT -->
+
+        ${bodyHTML}
+
+
+        <!-- POST ACTIONS -->
+
+        <div class="p-acts">
+
+            <div class="p-a">
+
+                <i class="far fa-heart"></i>
+
+                <span>
+                    ${formatNumber(likes)}
+                </span>
+
+            </div>
+
+
+            <div class="p-a">
+
+                <i class="far fa-comment"></i>
+
+                <span>
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="p-a">
+
+                <i class="fas fa-retweet"></i>
+
+                <span>
+                    0
+                </span>
+
+            </div>
+
+
+            <div class="p-a">
+
+                <i class="far fa-bookmark"></i>
+
+            </div>
 
         </div>
 
     `;
-
-
-    postElement.innerHTML =
-        html;
 
 
     return postElement;
