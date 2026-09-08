@@ -14,7 +14,7 @@ export default async function handler(req, res) {
                     'Authorization': `Bearer ${ZAI_API_KEY}`
                 },
                 body: JSON.stringify({
-                    model: 'glm-4-flash',
+                    model: 'glm-4', // CANJA WANNAN idan bai yi aiki ba, misali glm-3-turbo
                     messages: [{ role: 'user', content: text }]
                 })
             });
