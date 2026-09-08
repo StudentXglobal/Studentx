@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ads Manager - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #121212;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            padding: 40px 15px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #2c2c2c;
+            z-index: 100;
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        /* An cire css na verified-badge saboda muka cire icon din */
+        .create-ad-btn {
+            background-color: #8A2BE2;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .ads-container {
+            padding: 20px 15px 80px;
+        }
+
+        /* Verification Warning (Idan ba a tabbatar da account ba) */
+        .verify-warning {
+            background-color: #2c1a40;
+            border: 1px solid #8A2BE2;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            display: none; /* An ɓoye shi domin ana ganin account ɗin an tabbatar da shi */
+        }
+        .verify-warning.active {
+            display: flex;
+        }
+        .verify-warning i {
+            font-size: 24px;
+            color: #8A2BE2;
+        }
+        .verify-warning p {
+            font-size: 13px;
+            color: #ccc;
+            margin-bottom: 5px;
+        }
+        .verify-warning a {
+            font-size: 13px;
+            color: #8A2BE2;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* Overall Stats Summary */
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .summary-card {
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+        }
+        .summary-value {
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .summary-label {
+            font-size: 11px;
+            color: #888;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Ad Cards */
+        .ad-card {
+            background-color: #1e1e1e;
+            border: 1px solid #2c2c2c;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .ad-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-bottom: 1px solid #2c2c2c;
+        }
+        .ad-thumbnail {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+        .ad-info h3 {
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+        .ad-info p {
+            font-size: 12px;
+            color: #888;
+        }
+        .status-badge {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-active {
+            background-color: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+        .status-paused {
+            background-color: rgba(255, 69, 58, 0.2);
+            color: #ff453a;
+        }
+
+        .ad-metrics {
+            display: flex;
+            justify-content: space-around;
+            padding: 15px 0;
+            border-bottom: 1px solid #2c2c2c;
+        }
+        .metric {
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .metric-label {
+            font-size: 11px;
+            color: #888;
+        }
+        .metric-spent .metric-value {
+            color: #ff4b4b;
+        }
+
+        .ad-actions {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            border: none;
+        }
+        .pause-btn {
+            background-color: #2c2c2c;
+            color: #fff;
+        }
+        .resume-btn {
+            background-color: #4caf50;
+            color: #fff;
+        }
+        .view-btn {
+            background-color: transparent;
+            color: #8A2BE2;
+            border: 1px solid #8A2BE2;
+        }
+
+        /* --- BOTTOM NAV BAR --- */
+        .bnav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #000;
+            border-top: 1px solid #222;
+            z-index: 2000;
+        }
+        .nb {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            cursor: pointer;
+            gap: 3px;
+            text-decoration: none;
+        }
+        .nb.on {
+            color: #fff;
+        }
+        .nb i {
+            font-size: 20px;
+        }
+        .nb span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER (An cire alamar checkmark) -->
+    <div class="header">
+        <div class="header-left">
+            <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="header-title">Ads Manager</div>
+        </div>
+        <a href="create-ad.html" class="create-ad-btn">
+            <i class="fas fa-plus"></i>
+            Create Ad
+        </a>
+    </div>
+
+    <div class="ads-container">
+
+        <!-- Verification Warning (Idan account ba shi da checkmark, zai nuna wannan) -->
+        <div class="verify-warning">
+            <i class="fas fa-shield-halved"></i>
+            <div>
+                <p>Only verified accounts can run ads.</p>
+                <a href="verify-account.html">Verify your account now</a>
+            </div>
+        </div>
+
+        <!-- OVERALL STATS SUMMARY -->
+        <div class="stats-summary">
+            <div class="summary-card">
+                <div class="summary-value">15.4K</div>
+                <div class="summary-label">Total Views</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value">1,200</div>
+                <div class="summary-label">Total Clicks</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-value" style="color: #ff4b4b;">$125.00</div>
+                <div class="summary-label">Total Spent</div>
+            </div>
+        </div>
+
+        <h3 class="section-title">Your Active Ads</h3>
+
+        <!-- AD CARD 1 (Active) -->
+        <div class="ad-card" id="ad1">
+            <div class="ad-header">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100&h=100&fit=crop" class="ad-thumbnail" alt="Ad Thumbnail">
+                <div class="ad-info" style="flex-grow: 1;">
+                    <h3>StudentX Premium Promo</h3>
+                    <p>Started on Nov 01, 2024</p>
+                </div>
+                <span class="status-badge status-active" id="statusBadge1">Active</span>
+            </div>
+            
+            <div class="ad-metrics">
+                <div class="metric">
+                    <div class="metric-value">8,200</div>
+                    <div class="metric-label">Views</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">450</div>
+                    <div class="metric-label">Clicks</div>
+                </div>
+                <div class="metric metric-spent">
+                    <div class="metric-value">$45.00</div>
+                    <div class="metric-label">Spent</div>
+                </div>
+            </div>
+
+            <div class="ad-actions">
+                <button class="action-btn pause-btn" onclick="toggleAd('ad1', 'statusBadge1', this)">
+                    <i class="fas fa-pause"></i> Pause Ad
+                </button>
+                <a href="ad-analytics.html?id=1" class="action-btn view-btn">
+                    View Analytics
+                </a>
+            </div>
+        </div>
+
+        <!-- AD CARD 2 (Paused) -->
+        <div class="ad-card" id="ad2">
+            <div class="ad-header">
+                <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?w=100&h=100&fit=crop" class="ad-thumbnail" alt="Ad Thumbnail">
+                <div class="ad-info" style="flex-grow: 1;">
+                    <h3>Buy & Sell Textbooks</h3>
+                    <p>Started on Oct 15, 2024</p>
+                </div>
+                <span class="status-badge status-paused" id="statusBadge2">Paused</span>
+            </div>
+            
+            <div class="ad-metrics">
+                <div class="metric">
+                    <div class="metric-value">7,200</div>
+                    <div class="metric-label">Views</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value">750</div>
+                    <div class="metric-label">Clicks</div>
+                </div>
+                <div class="metric metric-spent">
+                    <div class="metric-value">$80.00</div>
+                    <div class="metric-label">Spent</div>
+                </div>
+            </div>
+
+            <div class="ad-actions">
+                <button class="action-btn resume-btn" onclick="toggleAd('ad2', 'statusBadge2', this)">
+                    <i class="fas fa-play"></i> Resume Ad
+                </button>
+                <a href="ad-analytics.html?id=2" class="action-btn view-btn">
+                    View Analytics
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bnav">
+        <div class="nb" onclick="window.location.href='home.html'">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </div>
+        <div class="nb" onclick="window.location.href='video.html'">
+            <i class="fas fa-video"></i>
+            <span>Video</span>
+        </div>
+        <div class="nb" onclick="window.location.href='chat.html'">
+            <i class="fas fa-comment-dots"></i>
+            <span>Chat</span>
+        </div>
+        <div class="nb" onclick="window.location.href='studyhub.html'">
+            <i class="fas fa-book-open"></i>
+            <span>StudyHub</span>
+        </div>
+        <div class="nb on" onclick="window.location.href='profile.html'">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </div>
+    </nav>
+
+    <script>
+        // JavaScript don tsaida ad ko ci gaba da ita (Pause / Resume)
+        function toggleAd(adId, badgeId, btn) {
+            const badge = document.getElementById(badgeId);
+            const adCard = document.getElementById(adId);
+
+            if (badge.classList.contains('status-active')) {
+                // Canja zuwa Paused
+                badge.classList.remove('status-active');
+                badge.classList.add('status-paused');
+                badge.innerText = 'Paused';
+                
+                btn.classList.remove('pause-btn');
+                btn.classList.add('resume-btn');
+                btn.innerHTML = '<i class="fas fa-play"></i> Resume Ad';
+            } else {
+                // Canja zuwa Active
+                badge.classList.remove('status-paused');
+                badge.classList.add('status-active');
+                badge.innerText = 'Active';
+                
+                btn.classList.remove('resume-btn');
+                btn.classList.add('pause-btn');
+                btn.innerHTML = '<i class="fas fa-pause"></i> Pause Ad';
+            }
+        }
+    </script>
+</body>
+</html>
