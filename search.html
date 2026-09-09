@@ -1,111 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 <title>Search - StudentX</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
+
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
+    box-sizing:border-box;
 }
 
 body{
-    font-family:Arial, sans-serif;
-    background:#f7f7fb;
-    color:#222;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#ffffff;
+    color:#111;
     min-height:100vh;
 }
 
-.header{
-    position:sticky;
-    top:0;
-    z-index:20;
+/* =========================
+   SEARCH HEADER
+========================= */
+
+.search-header{
+    width:100%;
     background:#fff;
-    padding:14px 15px 10px;
-    border-bottom:1px solid #eee;
+    border-bottom:1px solid #e5e5e5;
+    padding:12px 12px;
 }
 
-.search-box{
+.search-row{
     display:flex;
     align-items:center;
     gap:10px;
-    background:#f1f1f6;
-    border-radius:14px;
-    padding:11px 14px;
-}
-
-.search-box span{
-    font-size:20px;
-}
-
-.search-box input{
     width:100%;
-    border:0;
+}
+
+.back-btn{
+    width:42px;
+    height:42px;
+    border:none;
+    background:transparent;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.back-icon{
+    width:13px;
+    height:13px;
+    border-left:4px solid #555;
+    border-bottom:4px solid #555;
+    transform:rotate(45deg);
+    margin-left:6px;
+}
+
+.search-container{
+    flex:1;
+    height:48px;
+    background:#f0f2f5;
+    border-radius:25px;
+    display:flex;
+    align-items:center;
+    padding:0 15px;
+}
+
+.search-container input{
+    width:100%;
+    border:none;
     outline:none;
     background:transparent;
-    font-size:16px;
+    font-size:17px;
+    color:#111;
 }
 
-.tabs{
+.search-container input::placeholder{
+    color:#65676b;
+}
+
+.search-icon{
+    width:22px;
+    height:22px;
+    border:3px solid #111;
+    border-radius:50%;
+    position:relative;
+    flex-shrink:0;
+}
+
+.search-icon::after{
+    content:"";
+    position:absolute;
+    width:10px;
+    height:3px;
+    background:#111;
+    right:-7px;
+    bottom:-4px;
+    transform:rotate(45deg);
+    border-radius:3px;
+}
+
+/* =========================
+   SEARCH TABS
+========================= */
+
+.search-tabs{
     display:flex;
     gap:8px;
-    margin-top:12px;
+    padding:12px 4px 2px;
     overflow-x:auto;
 }
 
-.tab{
-    border:0;
-    background:#f0f0f5;
-    padding:9px 17px;
-    border-radius:20px;
-    font-size:14px;
-    cursor:pointer;
+.search-tabs::-webkit-scrollbar{
+    display:none;
 }
 
-.tab.active{
+.search-tab{
+    border:none;
+    background:#f0f2f5;
+    color:#111;
+    padding:10px 20px;
+    border-radius:22px;
+    font-size:15px;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.search-tab.active{
     background:#6c3df4;
     color:#fff;
 }
 
+/* =========================
+   MAIN
+========================= */
+
 .main{
-    padding:16px 14px 90px;
+    width:100%;
+    padding:18px 14px 30px;
 }
 
 .section-title{
-    font-size:18px;
+    font-size:20px;
     font-weight:700;
-    margin-bottom:13px;
+    margin-bottom:14px;
 }
 
-.users{
+.results{
     display:flex;
     flex-direction:column;
-    gap:10px;
+    gap:4px;
 }
 
+/* =========================
+   USER RESULT
+========================= */
+
 .user-card{
+    width:100%;
     display:flex;
     align-items:center;
-    gap:11px;
-    background:#fff;
-    padding:12px;
-    border-radius:16px;
-    box-shadow:0 2px 8px rgba(0,0,0,.04);
+    padding:10px 4px;
+    border-radius:12px;
+    gap:12px;
+}
+
+.user-card:active{
+    background:#f2f2f2;
+}
+
+.avatar-wrapper{
+    width:56px;
+    height:56px;
+    flex-shrink:0;
+    border-radius:50%;
+    overflow:hidden;
+    background:#e4e6eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
 .avatar{
-    width:52px;
-    height:52px;
-    border-radius:50%;
+    width:100%;
+    height:100%;
     object-fit:cover;
-    background:#ddd;
-    flex-shrink:0;
+}
+
+.default-avatar{
+    width:100%;
+    height:100%;
+    background:#e4e6eb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.default-avatar svg{
+    width:30px;
+    height:30px;
+    fill:#777;
 }
 
 .user-info{
@@ -117,10 +222,11 @@ body{
     display:flex;
     align-items:center;
     gap:5px;
+    min-width:0;
 }
 
 .name{
-    font-size:15px;
+    font-size:16px;
     font-weight:700;
     white-space:nowrap;
     overflow:hidden;
@@ -128,152 +234,234 @@ body{
 }
 
 .verified{
-    color:#6c3df4;
-    font-size:14px;
+    width:17px;
+    height:17px;
+    background:#1877f2;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:bold;
+    flex-shrink:0;
 }
 
 .username{
-    color:#777;
-    font-size:13px;
-    margin-top:3px;
-}
-
-.school{
-    color:#888;
-    font-size:12px;
+    color:#65676b;
+    font-size:14px;
     margin-top:3px;
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
 }
 
+.school{
+    color:#65676b;
+    font-size:13px;
+    margin-top:3px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+/* =========================
+   FOLLOW BUTTON
+========================= */
+
 .follow-btn{
-    border:0;
+    border:none;
     background:#6c3df4;
     color:#fff;
-    padding:8px 13px;
-    border-radius:18px;
     font-size:13px;
+    font-weight:600;
+    padding:9px 15px;
+    border-radius:20px;
     cursor:pointer;
     flex-shrink:0;
 }
 
 .follow-btn.following{
-    background:#eee;
-    color:#333;
+    background:#eeeeee;
+    color:#222;
 }
+
+.follow-btn:disabled{
+    opacity:.6;
+}
+
+/* =========================
+   EMPTY / LOADING
+========================= */
 
 .empty{
     text-align:center;
-    color:#888;
-    padding:40px 10px;
-    font-size:14px;
-}
-
-.bottom-nav{
-    position:fixed;
-    bottom:0;
-    left:0;
-    right:0;
-    height:64px;
-    background:#fff;
-    border-top:1px solid #eee;
-    display:flex;
-    justify-content:space-around;
-    align-items:center;
-    z-index:30;
-}
-
-.nav-item{
-    text-decoration:none;
     color:#777;
-    font-size:11px;
+    padding:45px 10px;
+    font-size:15px;
+}
+
+.loading{
     text-align:center;
+    color:#777;
+    padding:35px 10px;
+    font-size:15px;
 }
 
-.nav-icon{
-    display:block;
-    font-size:21px;
-    margin-bottom:3px;
+/* =========================
+   SCHOOL CARD
+========================= */
+
+.school-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 5px;
+    border-radius:12px;
 }
 
-.nav-item.active{
-    color:#6c3df4;
+.school-icon{
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:#f0f2f5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
 }
 
-@media(min-width:700px){
-    .main,
-    .header{
+.school-icon svg{
+    width:29px;
+    height:29px;
+    fill:#6c3df4;
+}
+
+.school-info{
+    flex:1;
+    min-width:0;
+}
+
+.school-name{
+    font-size:16px;
+    font-weight:700;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.school-label{
+    font-size:13px;
+    color:#65676b;
+    margin-top:3px;
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width:700px){
+
+    .search-header{
         max-width:700px;
         margin:auto;
     }
 
-    .bottom-nav{
+    .main{
         max-width:700px;
         margin:auto;
     }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<header class="header">
+<!-- =========================
+     SEARCH HEADER
+========================= -->
 
-    <div class="search-box">
-        <span>🔍</span>
-        <input
-            type="search"
-            id="searchInput"
-            placeholder="Search StudentX"
-            autocomplete="off"
+<header class="search-header">
+
+    <div class="search-row">
+
+        <button
+            class="back-btn"
+            id="backButton"
+            aria-label="Back"
         >
+            <span class="back-icon"></span>
+        </button>
+
+        <div class="search-container">
+
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search..."
+                autocomplete="off"
+                spellcheck="false"
+            >
+
+        </div>
+
+        <div
+            class="search-icon"
+            aria-hidden="true"
+        ></div>
+
     </div>
 
-    <div class="tabs">
-        <button class="tab active" data-tab="all">All</button>
-        <button class="tab" data-tab="people">People</button>
-        <button class="tab" data-tab="schools">Schools</button>
+    <div class="search-tabs">
+
+        <button
+            class="search-tab active"
+            data-tab="all"
+        >
+            All
+        </button>
+
+        <button
+            class="search-tab"
+            data-tab="people"
+        >
+            People
+        </button>
+
+        <button
+            class="search-tab"
+            data-tab="schools"
+        >
+            Schools
+        </button>
+
     </div>
 
 </header>
 
+
+<!-- =========================
+     MAIN RESULTS
+========================= -->
+
 <main class="main">
 
-    <div id="results"></div>
+    <div
+        id="results"
+        class="results"
+    ></div>
 
 </main>
 
-<nav class="bottom-nav">
-
-    <a href="home.html" class="nav-item">
-        <span class="nav-icon">⌂</span>
-        Home
-    </a>
-
-    <a href="chat.html" class="nav-item">
-        <span class="nav-icon">💬</span>
-        Chat
-    </a>
-
-    <a href="studyhub.html" class="nav-item">
-        <span class="nav-icon">📚</span>
-        Studyhub
-    </a>
-
-    <a href="search.html" class="nav-item active">
-        <span class="nav-icon">🔍</span>
-        Search
-    </a>
-
-    <a href="profile.html" class="nav-item">
-        <span class="nav-icon">👤</span>
-        Profile
-    </a>
-
-</nav>
 
 <script>
+
+/* =========================
+   SUPABASE
+========================= */
+
 const SUPABASE_URL =
     "https://acragelglvdnqhvbjcgx.supabase.co";
 
@@ -286,10 +474,64 @@ const supabaseClient =
         SUPABASE_ANON_KEY
     );
 
+
+/* =========================
+   VARIABLES
+========================= */
+
 let currentUser = null;
-let followingIds = new Set();
+
+let followingIds =
+    new Set();
+
 let currentTab = "all";
 
+
+/* =========================
+   DEFAULT AVATAR
+========================= */
+
+function defaultAvatar(){
+
+    return `
+        <div class="default-avatar">
+
+            <svg
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+            >
+                <path d="
+                    M12 12c2.76 0 5-2.24 5-5
+                    s-2.24-5-5-5-5 2.24-5 5
+                    2.24 5 5 5zm0 2
+                    c-3.33 0-10 1.67-10 5v3h20v-3
+                    c0-3.33-6.67-5-10-5z
+                "/>
+            </svg>
+
+        </div>
+    `;
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value){
+
+    return String(value || "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+}
+
+
+/* =========================
+   INITIALIZE
+========================= */
 
 async function initSearch(){
 
@@ -305,9 +547,14 @@ async function initSearch(){
 }
 
 
+/* =========================
+   LOAD FOLLOWING
+========================= */
+
 async function loadFollowing(){
 
-    followingIds = new Set();
+    followingIds =
+        new Set();
 
     if(!currentUser){
         return;
@@ -317,18 +564,135 @@ async function loadFollowing(){
         await supabaseClient
         .from("followers")
         .select("following_id")
-        .eq("follower_id", currentUser.id);
+        .eq(
+            "follower_id",
+            currentUser.id
+        );
 
     if(error){
-        console.log("Following error:", error);
+
+        console.log(
+            "Following error:",
+            error
+        );
+
         return;
     }
 
     (data || []).forEach(row => {
-        followingIds.add(row.following_id);
+
+        followingIds.add(
+            row.following_id
+        );
+
     });
 }
+    /* =========================
+   CREATE USER CARD
+========================= */
 
+function createUserCard(user){
+
+    const avatarHTML =
+        user.avatar_url
+        ? `
+            <img
+                class="avatar"
+                src="${escapeHTML(user.avatar_url)}"
+                alt=""
+            >
+          `
+        : defaultAvatar();
+
+    const verifiedHTML =
+        user.verified
+        ? `
+            <span class="verified">
+                ✓
+            </span>
+          `
+        : "";
+
+    const username =
+        user.username
+        ? "@" + user.username
+        : "";
+
+    const university =
+        user.university || "";
+
+    const isFollowing =
+        followingIds.has(user.id);
+
+    return `
+        <div class="user-card">
+
+            <div class="avatar-wrapper">
+                ${avatarHTML}
+            </div>
+
+            <div class="user-info">
+
+                <div class="name-row">
+
+                    <div class="name">
+                        ${escapeHTML(
+                            user.full_name || "Student"
+                        )}
+                    </div>
+
+                    ${verifiedHTML}
+
+                </div>
+
+                ${
+                    username
+                    ? `
+                        <div class="username">
+                            ${escapeHTML(username)}
+                        </div>
+                      `
+                    : ""
+                }
+
+                ${
+                    university
+                    ? `
+                        <div class="school">
+                            ${escapeHTML(university)}
+                        </div>
+                      `
+                    : ""
+                }
+
+            </div>
+
+            <button
+                class="follow-btn ${
+                    isFollowing ? "following" : ""
+                }"
+                onclick="
+                    toggleFollow(
+                        '${user.id}',
+                        this
+                    )
+                "
+            >
+                ${
+                    isFollowing
+                    ? "Following"
+                    : "Follow"
+                }
+            </button>
+
+        </div>
+    `;
+}
+
+
+/* =========================
+   SUGGESTIONS
+========================= */
 
 async function showSuggestions(){
 
@@ -337,16 +701,19 @@ async function showSuggestions(){
 
     results.innerHTML = `
         <div class="section-title">
-            People to follow
+            People you may know
         </div>
 
-        <div class="users" id="userList"></div>
+        <div
+            class="results"
+            id="userList"
+        ></div>
     `;
 
     const list =
         document.getElementById("userList");
 
-    let query =
+    let request =
         supabaseClient
         .from("profiles")
         .select(`
@@ -360,21 +727,29 @@ async function showSuggestions(){
         .limit(50);
 
     if(currentUser){
-        query =
-            query.neq("id", currentUser.id);
+
+        request =
+            request.neq(
+                "id",
+                currentUser.id
+            );
     }
 
     const { data, error } =
-        await query;
+        await request;
 
     if(error){
 
-        console.log("Suggestion error:", error);
+        console.log(
+            "Suggestion error:",
+            error
+        );
 
-        list.innerHTML =
-            `<div class="empty">
-                Unable to load users.
-            </div>`;
+        list.innerHTML = `
+            <div class="empty">
+                Unable to load people.
+            </div>
+        `;
 
         return;
     }
@@ -388,109 +763,39 @@ async function showSuggestions(){
 
     if(!users.length){
 
-        list.innerHTML =
-            `<div class="empty">
-                No suggestions available.
-            </div>`;
+        list.innerHTML = `
+            <div class="empty">
+                No people to show.
+            </div>
+        `;
 
         return;
     }
 
     users.forEach(user => {
+
         list.insertAdjacentHTML(
             "beforeend",
             createUserCard(user)
         );
+
     });
 }
 
 
-function createUserCard(user){
+/* =========================
+   FOLLOW / UNFOLLOW
+========================= */
 
-    const avatar =
-        user.avatar_url ||
-        "https://via.placeholder.com/100";
-
-    const verified =
-        user.verified
-        ? `<span class="verified">✓</span>`
-        : "";
-
-    const username =
-        user.username
-        ? "@" + user.username
-        : "";
-
-    const school =
-        user.university || "";
-
-    const isFollowing =
-        followingIds.has(user.id);
-
-    return `
-        <div class="user-card">
-
-            <img
-                class="avatar"
-                src="${escapeHTML(avatar)}"
-                alt=""
-            >
-
-            <div class="user-info">
-
-                <div class="name-row">
-
-                    <div class="name">
-                        ${escapeHTML(
-                            user.full_name || "Student"
-                        )}
-                    </div>
-
-                    ${verified}
-
-                </div>
-
-                <div class="username">
-                    ${escapeHTML(username)}
-                </div>
-
-                ${
-                    school
-                    ? `<div class="school">
-                        ${escapeHTML(school)}
-                    </div>`
-                    : ""
-                }
-
-            </div>
-
-            <button
-                class="follow-btn ${isFollowing ? "following" : ""}"
-                onclick="toggleFollow('${user.id}', this)"
-            >
-                ${isFollowing ? "Following" : "Follow"}
-            </button>
-
-        </div>
-    `;
-}
-
-
-function escapeHTML(value){
-
-    return String(value || "")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-  async function toggleFollow(userId, button){
+async function toggleFollow(
+    userId,
+    button
+){
 
     if(!currentUser){
 
         alert("Please login first.");
+
         return;
     }
 
@@ -505,23 +810,39 @@ function escapeHTML(value){
             await supabaseClient
             .from("followers")
             .delete()
-            .eq("follower_id", currentUser.id)
-            .eq("following_id", userId);
+            .eq(
+                "follower_id",
+                currentUser.id
+            )
+            .eq(
+                "following_id",
+                userId
+            );
 
         if(error){
 
-            console.log("Unfollow error:", error);
+            console.log(
+                "Unfollow error:",
+                error
+            );
 
-            alert("Unable to unfollow user.");
+            alert(
+                "Unable to unfollow user."
+            );
 
             button.disabled = false;
+
             return;
         }
 
         followingIds.delete(userId);
 
-        button.textContent = "Follow";
-        button.classList.remove("following");
+        button.textContent =
+            "Follow";
+
+        button.classList.remove(
+            "following"
+        );
 
     }else{
 
@@ -529,29 +850,46 @@ function escapeHTML(value){
             await supabaseClient
             .from("followers")
             .insert({
-                follower_id: currentUser.id,
-                following_id: userId
+                follower_id:
+                    currentUser.id,
+
+                following_id:
+                    userId
             });
 
         if(error){
 
-            console.log("Follow error:", error);
+            console.log(
+                "Follow error:",
+                error
+            );
 
-            alert("Unable to follow user.");
+            alert(
+                "Unable to follow user."
+            );
 
             button.disabled = false;
+
             return;
         }
 
         followingIds.add(userId);
 
-        button.textContent = "Following";
-        button.classList.add("following");
+        button.textContent =
+            "Following";
+
+        button.classList.add(
+            "following"
+        );
     }
 
     button.disabled = false;
 }
 
+
+/* =========================
+   SEARCH PEOPLE
+========================= */
 
 async function searchUsers(query){
 
@@ -561,15 +899,19 @@ async function searchUsers(query){
     if(!query.trim()){
 
         await showSuggestions();
+
         return;
     }
 
     results.innerHTML = `
         <div class="section-title">
-            Search results
+            People
         </div>
 
-        <div class="users" id="userList"></div>
+        <div
+            class="results"
+            id="userList"
+        ></div>
     `;
 
     const list =
@@ -605,22 +947,27 @@ async function searchUsers(query){
 
     if(error){
 
-        console.log("Search error:", error);
+        console.log(
+            "Search error:",
+            error
+        );
 
-        list.innerHTML =
-            `<div class="empty">
+        list.innerHTML = `
+            <div class="empty">
                 Search failed.
-            </div>`;
+            </div>
+        `;
 
         return;
     }
 
     if(!data || !data.length){
 
-        list.innerHTML =
-            `<div class="empty">
-                No results found.
-            </div>`;
+        list.innerHTML = `
+            <div class="empty">
+                No people found.
+            </div>
+        `;
 
         return;
     }
@@ -636,6 +983,10 @@ async function searchUsers(query){
 }
 
 
+/* =========================
+   LOAD SCHOOLS
+========================= */
+
 async function loadSchools(query = ""){
 
     const results =
@@ -646,30 +997,38 @@ async function loadSchools(query = ""){
             Schools
         </div>
 
-        <div class="users" id="schoolList"></div>
+        <div
+            class="results"
+            id="schoolList"
+        ></div>
     `;
 
     const list =
         document.getElementById("schoolList");
 
-    let request =
-        supabaseClient
+    const { data, error } =
+        await supabaseClient
         .from("profiles")
         .select("university")
-        .not("university","is",null)
+        .not(
+            "university",
+            "is",
+            null
+        )
         .limit(100);
-
-    const { data, error } =
-        await request;
 
     if(error){
 
-        console.log("School error:", error);
+        console.log(
+            "School error:",
+            error
+        );
 
-        list.innerHTML =
-            `<div class="empty">
+        list.innerHTML = `
+            <div class="empty">
                 Unable to load schools.
-            </div>`;
+            </div>
+        `;
 
         return;
     }
@@ -679,7 +1038,9 @@ async function loadSchools(query = ""){
     (data || []).forEach(row => {
 
         const school =
-            String(row.university || "").trim();
+            String(
+                row.university || ""
+            ).trim();
 
         if(!school){
             return;
@@ -688,12 +1049,14 @@ async function loadSchools(query = ""){
         const exists =
             schools.some(
                 item =>
-                item.toLowerCase() ===
-                school.toLowerCase()
+                    item.toLowerCase() ===
+                    school.toLowerCase()
             );
 
         if(!exists){
+
             schools.push(school);
+
         }
 
     });
@@ -701,17 +1064,21 @@ async function loadSchools(query = ""){
     const filtered =
         query.trim()
         ? schools.filter(school =>
-            school.toLowerCase()
-            .includes(query.toLowerCase())
+            school
+            .toLowerCase()
+            .includes(
+                query.toLowerCase()
+            )
           )
         : schools;
 
     if(!filtered.length){
 
-        list.innerHTML =
-            `<div class="empty">
+        list.innerHTML = `
+            <div class="empty">
                 No schools found.
-            </div>`;
+            </div>
+        `;
 
         return;
     }
@@ -721,26 +1088,35 @@ async function loadSchools(query = ""){
         list.insertAdjacentHTML(
             "beforeend",
             `
-            <div class="user-card">
+            <div class="school-card">
 
-                <div class="avatar"
-                     style="
-                     display:flex;
-                     align-items:center;
-                     justify-content:center;
-                     font-size:24px;
-                     ">
-                    🎓
+                <div class="school-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path d="
+                            M12 3 2 8l10 5
+                            10-5-10-5zm0 7.2L6.2 7.3
+                            12 4.4l5.8 2.9L12 10.2z
+                            M5 10.5v5.8
+                            c0 1.5 3.1 3.7 7 3.7
+                            s7-2.2 7-3.7v-5.8
+                            l-7 3.5-7-3.5z
+                        "/>
+                    </svg>
+
                 </div>
 
-                <div class="user-info">
+                <div class="school-info">
 
-                    <div class="name">
+                    <div class="school-name">
                         ${escapeHTML(school)}
                     </div>
 
-                    <div class="username">
-                        StudentX School
+                    <div class="school-label">
+                        Students on StudentX
                     </div>
 
                 </div>
@@ -752,6 +1128,10 @@ async function loadSchools(query = ""){
     });
 }
 
+
+/* =========================
+   SEARCH INPUT
+========================= */
 
 document
 .getElementById("searchInput")
@@ -776,8 +1156,12 @@ document
 );
 
 
+/* =========================
+   TABS
+========================= */
+
 document
-.querySelectorAll(".tab")
+.querySelectorAll(".search-tab")
 .forEach(tab => {
 
     tab.addEventListener(
@@ -785,12 +1169,18 @@ document
         async function(){
 
             document
-            .querySelectorAll(".tab")
-            .forEach(item =>
-                item.classList.remove("active")
-            );
+            .querySelectorAll(".search-tab")
+            .forEach(item => {
 
-            this.classList.add("active");
+                item.classList.remove(
+                    "active"
+                );
+
+            });
+
+            this.classList.add(
+                "active"
+            );
 
             currentTab =
                 this.dataset.tab;
@@ -803,13 +1193,20 @@ document
             const query =
                 input.value.trim();
 
-            if(currentTab === "schools"){
+            if(
+                currentTab ===
+                "schools"
+            ){
 
-                await loadSchools(query);
+                await loadSchools(
+                    query
+                );
 
             }else if(query){
 
-                await searchUsers(query);
+                await searchUsers(
+                    query
+                );
 
             }else{
 
@@ -822,6 +1219,37 @@ document
 
 });
 
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+document
+.getElementById("backButton")
+.addEventListener(
+    "click",
+    function(){
+
+        if(
+            window.history.length > 1
+        ){
+
+            window.history.back();
+
+        }else{
+
+            window.location.href =
+                "home.html";
+
+        }
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
 
 initSearch();
 
