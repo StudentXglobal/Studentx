@@ -6,8 +6,8 @@
   <title>StudentX - Gaming Arena</title>
   <link href="https://googleapis.com" rel="stylesheet">
   
-  <!-- DAIDAI NAN ZAKA MUSA SCRIPT TAG AD ZONE DIN MONETAG DIN KA ANAN GABA -->
-  <!-- <script src="https://alwingulla.com" data-zone="1234567" data-sdk="show_1234567"></script> -->
+  <!-- 1. LAMBAR TALLAN SOCIAL BAR DINKA TA ADSTERRA -->
+  <script src="https://pl31260924.profitableratecpmnetwork.com/ab/63/91/ab639128c3132bb5f7ac6fc9d7a26b99.js"></script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -42,7 +42,7 @@
 
   <!-- Top Bar Layout -->
   <div class="game-header">
-    <a href="login.html" class="back-btn">⬅ Koma Baya</a>
+    <a href="menu.html" class="back-btn">⬅ Koma Baya</a>
     <div class="logo">Student <b>X</b> Games</div>
     <div style="width: 80px;"></div>
   </div>
@@ -97,14 +97,14 @@
     function spawnCoin() {
       coin.x = Math.random() * (canvas.width - coin.radius * 2) + coin.radius;
       coin.y = -coin.radius;
-      coin.speed = 4 + (score * 0.2); // Sauri yana karuwa idan maki ya karu
+      coin.speed = 4 + (score * 0.25); // Sauri yana karuwa idan maki ya karu
     }
 
     // Touch controls for mobile tracking
-    window.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left; });
+    window.addEventListener('touchstart', (e) => { touchX = e.touches.clientX - canvas.getBoundingClientRect().left; });
     window.addEventListener('touchmove', (e) => {
       if (!gameActive) return;
-      touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+      touchX = e.touches.clientX - canvas.getBoundingClientRect().left;
       basket.x = touchX - basket.width / 2;
       if (basket.x < 0) basket.x = 0;
       if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
@@ -172,29 +172,26 @@
       document.getElementById('gameOverScreen').classList.remove('hidden');
     }
 
-    // Wannan ita ce lambar da ke kula da fitar da tallan Monetag kafin wasan ya sake tashi
+    // Wannan aikin zai kunna tallan Popunder na Adsterra a duk lokacin da mutum ya yi Game Over yake son sake kunnawa
     function handleAdAndRestart() {
       const loadingTxt = document.getElementById('loadingAdTxt');
       loadingTxt.classList.remove('hidden');
 
-      // MAI ZUWA: Muddin ka saka Zone ad script dinka na Monetag a saman head block,
-      // Za ka canza sunan 'show_1234567' ya koma dai-dai na Zone din ka.
-      if (typeof show_1234567 === 'function') {
-        show_1234567().then(() => {
-          loadingTxt.classList.add('hidden');
-          startGame();
-        }).catch((e) => {
-          console.log("Ad failed, loading fallback direct restart.", e);
-          loadingTxt.classList.add('hidden');
-          startGame();
-        });
-      } else {
-        // Fallback idan babu ad network ko an kunna adblocker
-        setTimeout(() => {
-          loadingTxt.classList.add('hidden');
-          startGame();
-        }, 800);
+      // 2. KUNNA TALLAN POPUNDER DINKA ANAN LOKACIN GAME OVER
+      try {
+        const adScript = document.createElement('script');
+        adScript.src = "https://pl31260925.profitableratecpmnetwork.com/5d/62/35/5d62353df6fc417148269e101f787990.js";
+        document.body.appendChild(adScript);
+        console.log("Adsterra Popunder triggered successfully.");
+      } catch (e) {
+        console.log("Ad script execution bypassed.", e);
       }
+
+      // Jira sakan 1 domin tabbatar da an loda talla, sannan wasan ya sake tashi
+      setTimeout(() => {
+        loadingTxt.classList.add('hidden');
+        startGame();
+      }, 1000);
     }
   </script>
 </body>
