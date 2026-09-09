@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ha">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudentX - Gaming Arena</title>
+  <link href="https://googleapis.com" rel="stylesheet">
+  
+  <!-- DAIDAI NAN ZAKA MUSA SCRIPT TAG AD ZONE DIN MONETAG DIN KA ANAN GABA -->
+  <!-- <script src="https://alwingulla.com" data-zone="1234567" data-sdk="show_1234567"></script> -->
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #0a0a0f; color: #fff; overflow: hidden; display: flex; flex-direction: column; align-items: center; height: 100vh; }
+    
+    /* Header Navigation */
+    .game-header { width: 100%; padding: 15px 20px; background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; align-items: center; }
+    .back-btn { background: linear-gradient(135deg, #8b5cf6, #22d3ee); border: none; padding: 8px 16px; color: #fff; border-radius: 8px; font-weight: 600; text-decoration: none; font-size: 13px; cursor: pointer; }
+    .logo { font-size: 20px; font-weight: 900; }
+    .logo b { background: linear-gradient(135deg, #8b5cf6, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+    /* Game Layout Container */
+    .game-container { position: relative; width: 100%; max-width: 400px; height: calc(100vh - 70px); background: #111116; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; background: #0d0d12; }
+
+    /* UI Dashboard */
+    .ui-layer { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; pointer-events: none; }
+    .stat-box { background: rgba(0, 0, 0, 0.6); padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1); font-weight: 800; font-size: 14px; letter-spacing: 0.5px; }
+    .score-ui { color: #22d3ee; }
+    .lives-ui { color: #ff4757; }
+
+    /* Screen Overlays */
+    .screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(10, 10, 15, 0.95); text-align: center; padding: 20px; }
+    .screen h2 { font-size: 32px; font-weight: 900; margin-bottom: 10px; background: linear-gradient(135deg, #ff4757, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .screen p { font-size: 14px; color: rgba(255, 255, 255, 0.6); margin-bottom: 25px; }
+    .btn { background: linear-gradient(135deg, #8b5cf6, #a855f7); border: none; padding: 12px 30px; color: #fff; font-weight: 800; border-radius: 25px; font-size: 15px; cursor: pointer; letter-spacing: 1px; transition: transform 0.2s; text-transform: uppercase; }
+    .btn:active { transform: scale(0.95); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar Layout -->
+  <div class="game-header">
+    <a href="login.html" class="back-btn">⬅ Koma Baya</a>
+    <div class="logo">Student <b>X</b> Games</div>
+    <div style="width: 80px;"></div>
+  </div>
+
+  <!-- Arcade Body Panel -->
+  <div class="game-container">
+    <div class="ui-layer">
+      <div class="stat-box score-ui">🪙 Coins: <span id="scoreVal">0</span></div>
+      <div class="stat-box lives-ui">❤️ Rayuwa: <span id="livesVal">3</span></div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <!-- Start Interface overlay -->
+    <div id="startScreen" class="screen">
+      <h2 style="background: linear-gradient(135deg, #8b5cf6, #22d3ee); -webkit-background-clip: text;">Coin Catcher</h2>
+      <p>Kama tsabar kudi da ke fadowa don samun maki! Guji barin su fadi kasa.</p>
+      <button class="btn" onclick="startGame()">Fara Wasa</button>
+    </div>
+
+    <!-- Game Over Interface overlay -->
+    <div id="gameOverScreen" class="screen hidden">
+      <h2>Wasan Ya Kare!</h2>
+      <p>Kwallon ka ya kubce ko rayuwarka ta kare.</p>
+      <div id="loadingAdTxt" style="font-size: 11px; color: #a855f7; margin-bottom: 15px; font-weight: 600; letter-spacing: 1px;" class="hidden">Ana Neman Talla (Loading Ad)...</div>
+      <button class="btn" onclick="handleAdAndRestart()">Sake Bugawa</button>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    let score = 0, lives = 3, gameActive = false;
+    let basket = { x: 0, width: 70, height: 15, speed: 7 };
+    let coin = { x: 0, y: 0, radius: 10, speed: 4 };
+    let touchX = null;
+
+    function resizeCanvas() {
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+      if(!gameActive) resetPositions();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    setTimeout(resizeCanvas, 100);
+
+    function resetPositions() {
+      basket.x = canvas.width / 2 - basket.width / 2;
+      spawnCoin();
+    }
+
+    function spawnCoin() {
+      coin.x = Math.random() * (canvas.width - coin.radius * 2) + coin.radius;
+      coin.y = -coin.radius;
+      coin.speed = 4 + (score * 0.2); // Sauri yana karuwa idan maki ya karu
+    }
+
+    // Touch controls for mobile tracking
+    window.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left; });
+    window.addEventListener('touchmove', (e) => {
+      if (!gameActive) return;
+      touchX = e.touches[0].clientX - canvas.getBoundingClientRect().left;
+      basket.x = touchX - basket.width / 2;
+      if (basket.x < 0) basket.x = 0;
+      if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
+    });
+
+    function startGame() {
+      document.getElementById('startScreen').classList.add('hidden');
+      document.getElementById('gameOverScreen').classList.add('hidden');
+      score = 0; lives = 3; gameActive = true;
+      document.getElementById('scoreVal').innerText = score;
+      document.getElementById('livesVal').innerText = lives;
+      resetPositions();
+      gameLoop();
+    }
+
+    function gameLoop() {
+      if (!gameActive) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Basket player panel
+      ctx.fillStyle = '#8b5cf6';
+      ctx.beginPath();
+      ctx.roundRect(basket.x, canvas.height - 40, basket.width, basket.height, 8);
+      ctx.fill();
+
+      // Physics of falling elements
+      coin.y += coin.speed;
+
+      // Draw Virtual Coin
+      ctx.fillStyle = '#eab308';
+      ctx.beginPath();
+      ctx.arc(coin.x, coin.y, coin.radius, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Border ring of coin
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Collision engine monitoring
+      if (coin.y + coin.radius >= canvas.height - 40 && coin.y - coin.radius <= canvas.height - 40 + basket.height) {
+        if (coin.x >= basket.x && coin.x <= basket.x + basket.width) {
+          score++;
+          document.getElementById('scoreVal').innerText = score;
+          spawnCoin();
+        }
+      }
+
+      // Check if coin hits baseline bottom bounds
+      if (coin.y > canvas.height) {
+        lives--;
+        document.getElementById('livesVal').innerText = lives;
+        if (lives <= 0) {
+          triggerGameOver();
+        } else {
+          spawnCoin();
+        }
+      }
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    function triggerGameOver() {
+      gameActive = false;
+      document.getElementById('gameOverScreen').classList.remove('hidden');
+    }
+
+    // Wannan ita ce lambar da ke kula da fitar da tallan Monetag kafin wasan ya sake tashi
+    function handleAdAndRestart() {
+      const loadingTxt = document.getElementById('loadingAdTxt');
+      loadingTxt.classList.remove('hidden');
+
+      // MAI ZUWA: Muddin ka saka Zone ad script dinka na Monetag a saman head block,
+      // Za ka canza sunan 'show_1234567' ya koma dai-dai na Zone din ka.
+      if (typeof show_1234567 === 'function') {
+        show_1234567().then(() => {
+          loadingTxt.classList.add('hidden');
+          startGame();
+        }).catch((e) => {
+          console.log("Ad failed, loading fallback direct restart.", e);
+          loadingTxt.classList.add('hidden');
+          startGame();
+        });
+      } else {
+        // Fallback idan babu ad network ko an kunna adblocker
+        setTimeout(() => {
+          loadingTxt.classList.add('hidden');
+          startGame();
+        }, 800);
+      }
+    }
+  </script>
+</body>
+</html>
