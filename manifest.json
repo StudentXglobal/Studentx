@@ -83,6 +83,37 @@
     }
   ],
   "prefer_related_applications": false,
-  "related_applications": [],
-  "iarc_rating_id": "1"
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://studentx-ew9e.vercel.app/manifest.json"
+    }
+  ],
+  "iarc_rating_id": "urn:iarc:00000000-0000-0000-0000-000000000000",
+  "widgets": [
+    {
+      "name": "StudentX Widget",
+      "description": "Quick view for StudentX",
+      "tag": "studentx-widget",
+      "template": "studentx-widget-template",
+      "data": "/home.html",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "note_taking": {
+    "new_note_url": "/home.html"
+  },
+  "scope_extensions": [
+    {
+      "origin": "https://studentx-ew9e.vercel.app"
+    }
+  ]
 }
