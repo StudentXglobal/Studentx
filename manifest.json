@@ -4,10 +4,17 @@
   "short_name": "StudentX",
   "description": "StudentX is a student platform to connect, learn, share, chat and discover study resources.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#4f46e5",
+  "lang": "en",
+  "dir": "ltr",
   "categories": [
     "education",
     "social",
@@ -33,6 +40,46 @@
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Home",
+      "url": "/home.html",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "launch_handler": {
+    "client_mode": "auto"
+  },
+  "share_target": {
+    "action": "/home.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  "file_handlers": [
+    {
+      "action": "/home.html",
+      "accept": {
+        "text/html": [
+          ".html"
+        ]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+studentx",
+      "url": "/home.html?url=%s"
     }
   ],
   "prefer_related_applications": false,
