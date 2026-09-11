@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,user-scalable=no"
+>
+
 <title>StudentX - Notifications</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+>
 
 <style>
+
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent
+  -webkit-tap-highlight-color:transparent;
 }
 
 body{
@@ -21,384 +35,655 @@ body{
   background:#0a0a0f;
   color:#fff;
   min-height:100vh;
-  padding-bottom:70px
+  padding-bottom:70px;
 }
+
+/* =========================
+   HEADER
+========================= */
 
 .hdr{
   position:sticky;
   top:0;
   z-index:100;
+
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   padding:10px 14px;
+
   background:rgba(10,10,15,.95);
+
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(255,255,255,.06)
+
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .hdr-l{
   display:flex;
   align-items:center;
-  gap:12px
+  gap:12px;
 }
 
-.hdr-back{
+.hdr-back,
+.hdr-btn{
+
   width:36px;
   height:36px;
+
   border-radius:10px;
+
   display:flex;
   align-items:center;
   justify-content:center;
+
   color:rgba(255,255,255,.5);
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.hdr-back{
   font-size:17px;
-  cursor:pointer
+}
+
+.hdr-btn{
+  font-size:15px;
+}
+
+.hdr-back:active,
+.hdr-btn:active{
+  background:rgba(124,58,237,.12);
+  color:#a855f7;
 }
 
 .hdr-title{
   font-size:18px;
-  font-weight:800
+  font-weight:800;
 }
 
 .hdr-actions{
   display:flex;
   align-items:center;
-  gap:6px
+  gap:6px;
 }
 
-.hdr-btn{
-  width:36px;
-  height:36px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:rgba(255,255,255,.5);
-  font-size:15px;
-  transition:all .15s;
-  cursor:pointer
-}
-
-.hdr-btn:hover{
-  background:rgba(124,58,237,.1);
-  color:#a855f7
-}
-
-.tabs{
-  display:flex;
-  gap:8px;
-  padding:14px 14px 6px;
-  overflow-x:auto;
-  scrollbar-width:none
-}
-
-.tabs::-webkit-scrollbar{
-  display:none
-}
-
-.tab{
-  padding:7px 16px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:600;
-  color:rgba(255,255,255,.35);
-  white-space:nowrap;
-  border:1px solid rgba(255,255,255,.06);
-  transition:all .2s;
-  cursor:pointer
-}
-
-.tab.on{
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
-  border-color:transparent;
-  color:#fff
-}
-
-.tab .badge{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:18px;
-  height:18px;
-  border-radius:50%;
-  background:#ef4444;
-  font-size:10px;
-  font-weight:700;
-  color:#fff;
-  margin-left:5px;
-  padding:0 4px
-}
-
-.sect{
-  padding:0 14px;
-  margin-bottom:20px
-}
-
-.sect-title{
-  font-size:12px;
-  font-weight:700;
-  color:rgba(255,255,255,.3);
-  text-transform:uppercase;
-  letter-spacing:1px;
-  margin-bottom:10px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between
-}
-
-.notif{
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-  padding:14px 0;
-  border-bottom:1px solid rgba(255,255,255,.04);
-  cursor:pointer;
-  transition:background .12s
-}
-
-.notif:active{
-  background:rgba(124,58,237,.06);
-  margin:0 -14px;
-  padding:14px;
-  border-radius:12px
-}
-
-.notif.unread{
-  background:rgba(124,58,237,.04);
-  margin:0 -14px;
-  padding:14px;
-  border-radius:12px;
-  border-bottom-color:rgba(124,58,237,.08)
-}
-
-.notif-av{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  object-fit:cover;
-  flex-shrink:0
-}
-
-.notif-ic{
-  width:44px;
-  height:44px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:18px;
-  flex-shrink:0
-}
-
-.notif-body{
-  flex:1;
-  min-width:0
-}
-
-.notif-text{
-  font-size:13px;
-  line-height:1.5;
-  color:rgba(255,255,255,.7)
-}
-
-.notif-text strong{
-  color:#fff;
-  font-weight:700
-}
-
-.notif-time{
-  font-size:10px;
-  color:rgba(255,255,255,.25);
-  margin-top:3px
-}
-
-.notif-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#a855f7;
-  flex-shrink:0;
-  margin-top:6px
-}
-
-.notif-act{
-  width:34px;
-  height:34px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:rgba(255,255,255,.3);
-  font-size:14px;
-  flex-shrink:0;
-  transition:all .12s;
-  margin-top:2px
-}
-
-.notif-act:hover{
-  background:rgba(124,58,237,.1);
-  color:#a855f7
-}
-
-.follow-btn{
-  margin-top:8px;
-  padding:7px 18px;
-  border-radius:20px;
-  background:linear-gradient(135deg,#7c3aed,#a855f7);
-  color:#fff;
-  font-size:11px;
-  font-weight:700;
-  border:none;
-  cursor:pointer;
-  transition:transform .15s
-}
-
-.follow-btn:hover{
-  transform:scale(1.03)
-}
-
-.follow-btn.done{
-  background:rgba(255,255,255,.06);
-  color:rgba(255,255,255,.4);
-  border:1px solid rgba(255,255,255,.08)
-}
-
-.empty{
-  text-align:center;
-  padding:60px 20px;
-  color:rgba(255,255,255,.15)
-}
-
-.empty i{
-  font-size:36px;
-  display:block;
-  margin-bottom:12px
-}
-
-.empty p{
-  font-size:13px
-}
-
-.loading{
-  text-align:center;
-  padding:60px 20px;
-  color:rgba(255,255,255,.3)
-}
+/* =========================
+   SEARCH
+========================= */
 
 .search-box{
   display:none;
+
   padding:10px 14px;
-  border-bottom:1px solid rgba(255,255,255,.06)
+
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .search-box.show{
-  display:block
+  display:block;
 }
 
 .search-inner{
-  height:38px;
+
+  height:40px;
+
   display:flex;
   align-items:center;
-  gap:8px;
-  padding:0 12px;
-  border-radius:20px;
-  background:rgba(255,255,255,.06)
+
+  gap:9px;
+
+  padding:0 13px;
+
+  border-radius:22px;
+
+  background:rgba(255,255,255,.06);
+
+  border:1px solid rgba(255,255,255,.05);
 }
 
 .search-inner i{
-  color:rgba(255,255,255,.35)
+  color:rgba(255,255,255,.35);
+  font-size:13px;
 }
 
 .search-inner input{
+
   flex:1;
+
   border:none;
   outline:none;
+
   background:transparent;
+
   color:#fff;
+
   font-family:Poppins,sans-serif;
-  font-size:12px
+
+  font-size:12px;
 }
 
 .search-inner input::placeholder{
-  color:rgba(255,255,255,.25)
+  color:rgba(255,255,255,.25);
 }
 
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+
+  display:flex;
+
+  gap:8px;
+
+  padding:14px 14px 8px;
+
+  overflow-x:auto;
+
+  scrollbar-width:none;
+}
+
+.tabs::-webkit-scrollbar{
+  display:none;
+}
+
+.tab{
+
+  padding:7px 16px;
+
+  border-radius:20px;
+
+  font-size:12px;
+
+  font-weight:600;
+
+  color:rgba(255,255,255,.35);
+
+  white-space:nowrap;
+
+  border:1px solid rgba(255,255,255,.06);
+
+  cursor:pointer;
+
+  transition:.2s;
+}
+
+.tab.on{
+
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #a855f7
+    );
+
+  border-color:transparent;
+
+  color:#fff;
+}
+
+.tab .badge{
+
+  display:inline-flex;
+
+  align-items:center;
+  justify-content:center;
+
+  min-width:18px;
+  height:18px;
+
+  margin-left:5px;
+
+  padding:0 4px;
+
+  border-radius:50%;
+
+  background:#ef4444;
+
+  color:#fff;
+
+  font-size:10px;
+
+  font-weight:700;
+}
+
+/* =========================
+   SECTION
+========================= */
+
+.sect{
+
+  padding:0 14px;
+
+  margin-bottom:20px;
+}
+
+.sect-title{
+
+  display:flex;
+
+  align-items:center;
+  justify-content:space-between;
+
+  margin:14px 0 8px;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  color:rgba(255,255,255,.3);
+
+  text-transform:uppercase;
+
+  letter-spacing:1px;
+}
+
+/* =========================
+   NOTIFICATION
+========================= */
+
+.notif{
+
+  display:flex;
+
+  align-items:flex-start;
+
+  gap:12px;
+
+  padding:14px 0;
+
+  border-bottom:1px solid rgba(255,255,255,.04);
+
+  cursor:pointer;
+
+  transition:.15s;
+}
+
+.notif:active{
+
+  background:rgba(124,58,237,.06);
+
+  margin:0 -14px;
+
+  padding:14px;
+
+  border-radius:12px;
+}
+
+.notif.unread{
+
+  background:rgba(124,58,237,.04);
+
+  margin:0 -14px;
+
+  padding:14px;
+
+  border-radius:12px;
+
+  border-bottom-color:
+    rgba(124,58,237,.08);
+}
+
+/* =========================
+   AVATAR
+========================= */
+
+.notif-avatar{
+
+  position:relative;
+
+  width:44px;
+  height:44px;
+
+  flex-shrink:0;
+}
+
+.notif-avatar img{
+
+  width:44px;
+  height:44px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  background:#20202a;
+}
+
+/* =========================
+   TYPE ICON
+========================= */
+
+.notif-type-icon{
+
+  position:absolute;
+
+  right:-3px;
+  bottom:-3px;
+
+  width:19px;
+  height:19px;
+
+  border-radius:50%;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  border:2px solid #0a0a0f;
+
+  font-size:8px;
+}
+
+.notif-type-icon.like{
+  background:#ef4444;
+}
+
+.notif-type-icon.comment{
+  background:#10b981;
+}
+
+.notif-type-icon.follow{
+  background:#3b82f6;
+}
+
+.notif-type-icon.repost{
+  background:#8b5cf6;
+}
+
+.notif-type-icon.story,
+.notif-type-icon.story_like{
+  background:#ec4899;
+}
+
+.notif-type-icon.system,
+.notif-type-icon.premium{
+  background:#7c3aed;
+}
+
+/* =========================
+   BODY
+========================= */
+
+.notif-body{
+
+  flex:1;
+
+  min-width:0;
+}
+
+.notif-text{
+
+  font-size:13px;
+
+  line-height:1.5;
+
+  color:rgba(255,255,255,.7);
+}
+
+.notif-text strong{
+
+  color:#fff;
+
+  font-weight:700;
+}
+
+.notif-time{
+
+  margin-top:3px;
+
+  font-size:10px;
+
+  color:rgba(255,255,255,.25);
+}
+
+/* =========================
+   UNREAD DOT
+========================= */
+
+.notif-dot{
+
+  width:8px;
+  height:8px;
+
+  border-radius:50%;
+
+  background:#a855f7;
+
+  flex-shrink:0;
+
+  margin-top:6px;
+}
+
+/* =========================
+   FOLLOW BUTTON
+========================= */
+
+.follow-btn{
+
+  margin-top:8px;
+
+  padding:7px 18px;
+
+  border:none;
+
+  border-radius:20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #a855f7
+    );
+
+  color:#fff;
+
+  font-family:Poppins,sans-serif;
+
+  font-size:11px;
+
+  font-weight:700;
+
+  cursor:pointer;
+}
+
+.follow-btn:disabled{
+  opacity:.7;
+}
+
+.follow-btn.done{
+
+  background:rgba(255,255,255,.06);
+
+  color:rgba(255,255,255,.45);
+
+  border:1px solid rgba(255,255,255,.08);
+}
+
+/* =========================
+   EMPTY / LOADING
+========================= */
+
+.empty{
+
+  text-align:center;
+
+  padding:70px 20px;
+
+  color:rgba(255,255,255,.2);
+}
+
+.empty i{
+
+  display:block;
+
+  margin-bottom:14px;
+
+  font-size:38px;
+}
+
+.empty p{
+  font-size:13px;
+}
+
+.loading{
+
+  text-align:center;
+
+  padding:70px 20px;
+
+  color:rgba(255,255,255,.3);
+}
+
+.loading i{
+
+  display:block;
+
+  margin-bottom:12px;
+
+  font-size:24px;
+}
+
+/* =========================
+   BOTTOM NAV
+========================= */
+
 .bnav{
+
   position:fixed;
+
   bottom:0;
   left:50%;
+
   transform:translateX(-50%);
+
   width:100%;
   max-width:430px;
+
   height:60px;
+
   display:flex;
+
   align-items:center;
   justify-content:space-around;
+
   background:rgba(10,10,15,.95);
+
   backdrop-filter:blur(16px);
   -webkit-backdrop-filter:blur(16px);
+
   border-top:1px solid rgba(255,255,255,.06);
-  z-index:200
+
+  z-index:200;
 }
 
 .nb{
+
   display:flex;
+
   flex-direction:column;
+
   align-items:center;
+
   gap:2px;
+
   font-size:9px;
+
   font-weight:500;
+
   color:rgba(255,255,255,.3);
-  transition:color .2s;
-  cursor:pointer
+
+  cursor:pointer;
+
+  transition:.2s;
 }
 
 .nb i{
-  font-size:19px
+  font-size:19px;
 }
 
 .nb.on{
-  color:#a855f7
+  color:#a855f7;
 }
+
+/* =========================
+   TOAST
+========================= */
 
 .toast{
+
   position:fixed;
+
   top:16px;
   left:50%;
+
   transform:translateX(-50%);
+
   z-index:9999;
+
+  max-width:90%;
+
   padding:11px 20px;
-  background:rgba(124,58,237,.92);
+
+  background:rgba(124,58,237,.94);
+
   backdrop-filter:blur(12px);
+
   color:#fff;
+
   border-radius:12px;
+
   font-size:12px;
+
   font-weight:600;
-  box-shadow:0 4px 20px rgba(0,0,0,.3);
-  animation:fi .3s ease
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,.3);
+
+  animation:toastIn .25s ease;
 }
 
-@keyframes fi{
+@keyframes toastIn{
+
   from{
     opacity:0;
-    transform:translateX(-50%) translateY(-10px)
+    transform:
+      translateX(-50%)
+      translateY(-10px);
   }
+
   to{
     opacity:1;
-    transform:translateX(-50%) translateY(0)
+    transform:
+      translateX(-50%)
+      translateY(0);
   }
 }
+
 </style>
+
 </head>
 
 <body>
+
+<!-- =========================
+     HEADER
+========================= -->
 
 <header class="hdr">
 
   <div class="hdr-l">
 
-    <div class="hdr-back" onclick="goBack()">
+    <div
+      class="hdr-back"
+      onclick="goBack()"
+      aria-label="Back"
+    >
       <i class="fas fa-arrow-left"></i>
     </div>
 
@@ -408,13 +693,22 @@ body{
 
   </div>
 
+
   <div class="hdr-actions">
 
-    <div class="hdr-btn" onclick="toggleSearch()">
+    <div
+      class="hdr-btn"
+      onclick="toggleSearch()"
+      aria-label="Search"
+    >
       <i class="fas fa-search"></i>
     </div>
 
-    <div class="hdr-btn" onclick="markAllRead()">
+    <div
+      class="hdr-btn"
+      onclick="markAllRead()"
+      aria-label="Mark all as read"
+    >
       <i class="fas fa-check-double"></i>
     </div>
 
@@ -422,7 +716,15 @@ body{
 
 </header>
 
-<div class="search-box" id="searchBox">
+
+<!-- =========================
+     SEARCH BOX
+========================= -->
+
+<div
+  class="search-box"
+  id="searchBox"
+>
 
   <div class="search-inner">
 
@@ -439,1379 +741,2523 @@ body{
 
 </div>
 
-<div class="tabs" id="tabBar"></div>
+
+<!-- =========================
+     TABS
+========================= -->
+
+<div
+  class="tabs"
+  id="tabBar"
+></div>
+
+
+<!-- =========================
+     NOTIFICATIONS
+========================= -->
 
 <div id="notifList">
+
   <div class="loading">
+
     <i class="fas fa-spinner fa-spin"></i>
-    <p>Loading notifications...</p>
+
+    <p>
+      Loading notifications...
+    </p>
+
   </div>
+
 </div>
+
+
+<!-- =========================
+     BOTTOM NAV
+========================= -->
 
 <nav class="bnav">
 
-  <div class="nb" onclick="window.location.href='home.html'">
+  <div
+    class="nb"
+    onclick="window.location.href='home.html'"
+  >
     <i class="fas fa-home"></i>
     <span>Home</span>
   </div>
 
-  <div class="nb" onclick="window.location.href='explore.html'">
+
+  <div
+    class="nb"
+    onclick="window.location.href='explore.html'"
+  >
     <i class="fas fa-compass"></i>
     <span>Explore</span>
   </div>
 
-  <div class="nb" onclick="window.location.href='chat.html'">
+
+  <div
+    class="nb"
+    onclick="window.location.href='chat.html'"
+  >
     <i class="fas fa-comment-dots"></i>
     <span>Chat</span>
   </div>
 
-  <div class="nb" onclick="window.location.href='studyhub.html'">
+
+  <div
+    class="nb"
+    onclick="window.location.href='studyhub.html'"
+  >
     <i class="fas fa-book-open"></i>
     <span>StudyHub</span>
   </div>
 
-  <div class="nb" onclick="window.location.href='profile.html'">
+
+  <div
+    class="nb"
+    onclick="window.location.href='profile.html'"
+  >
     <i class="fas fa-user"></i>
     <span>Profile</span>
   </div>
 
 </nav>
 
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script src="supabase.js"></script>
 
+
 <script>
+
+/* ==========================================
+   STUDENTX NOTIFICATIONS
+   PART 1
+========================================== */
+
+
+/* =========================
+   GLOBAL VARIABLES
+========================= */
+
 var currentUser = null;
+
 var notifications = [];
+
 var followingIds = new Set();
+
 var currentTab = "all";
+
 var searchQuery = "";
 
+var notificationChannel = null;
+
+
+/* =========================
+   TABS
+========================= */
+
 var tabData = [
-  {k:"all",l:"All",count:0},
-  {k:"likes",l:"Likes",count:0},
-  {k:"comments",l:"Comments",count:0},
-  {k:"follows",l:"Follows",count:0},
-  {k:"system",l:"System",count:0}
+
+  {
+    k:"all",
+    l:"All",
+    count:0
+  },
+
+  {
+    k:"likes",
+    l:"Likes",
+    count:0
+  },
+
+  {
+    k:"comments",
+    l:"Comments",
+    count:0
+  },
+
+  {
+    k:"follows",
+    l:"Follows",
+    count:0
+  },
+
+  {
+    k:"system",
+    l:"System",
+    count:0
+  }
+
 ];
 
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
 function escapeHTML(value){
-  if(value === null || value === undefined) return "";
+
+  if(
+    value === null ||
+    value === undefined
+  ){
+    return "";
+  }
+
   return String(value)
+
     .replace(/&/g,"&amp;")
+
     .replace(/</g,"&lt;")
+
     .replace(/>/g,"&gt;")
+
     .replace(/"/g,"&quot;")
+
     .replace(/'/g,"&#039;");
 }
 
+
+/* =========================
+   DEFAULT AVATAR
+========================= */
+
 function defaultAvatar(){
+
   return "data:image/svg+xml;charset=UTF-8," +
+
     encodeURIComponent(
+
       '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">' +
+
       '<rect width="100" height="100" fill="#20202a"/>' +
+
       '<circle cx="50" cy="38" r="20" fill="#777"/>' +
+
       '<path d="M18 90c4-22 18-32 32-32s28 10 32 32" fill="#777"/>' +
+
       '</svg>'
+
     );
 }
 
+
+/* =========================
+   BACK BUTTON
+========================= */
+
 function goBack(){
-  if(document.referrer){
+
+  if(
+    document.referrer &&
+    document.referrer !==
+    window.location.href
+  ){
+
     window.history.back();
+
   }else{
-    window.location.href="home.html";
+
+    window.location.href =
+      "home.html";
+
   }
+
 }
+
+
+/* =========================
+   SEARCH TOGGLE
+========================= */
 
 function toggleSearch(){
-  var box = document.getElementById("searchBox");
+
+  var box =
+    document.getElementById(
+      "searchBox"
+    );
+
+  if(!box){
+    return;
+  }
+
   box.classList.toggle("show");
 
-  if(box.classList.contains("show")){
+
+  if(
+    box.classList.contains("show")
+  ){
+
     setTimeout(function(){
-      document.getElementById("searchInput").focus();
+
+      var input =
+        document.getElementById(
+          "searchInput"
+        );
+
+      if(input){
+        input.focus();
+      }
+
     },100);
+
   }else{
-    document.getElementById("searchInput").value="";
-    searchQuery="";
+
+    var input =
+      document.getElementById(
+        "searchInput"
+      );
+
+    if(input){
+      input.value = "";
+    }
+
+    searchQuery = "";
+
     renderTabs();
+
     renderNotifications();
+
   }
+
 }
+
+
+/* =========================
+   TIME AGO
+========================= */
 
 function timeAgo(date){
-  var d = new Date(date);
-  var seconds = Math.floor((Date.now() - d.getTime()) / 1000);
 
-  if(seconds < 60) return "Just now";
-  if(seconds < 3600) return Math.floor(seconds/60) + "m ago";
-  if(seconds < 86400) return Math.floor(seconds/3600) + "h ago";
-  if(seconds < 604800) return Math.floor(seconds/86400) + "d ago";
-  if(seconds < 2592000) return Math.floor(seconds/604800) + "w ago";
-  if(seconds < 31536000) return Math.floor(seconds/2592000) + "mo ago";
+  if(!date){
+    return "";
+  }
 
-  return Math.floor(seconds/31536000) + "y ago";
+  var time =
+    new Date(date).getTime();
+
+  if(isNaN(time)){
+    return "";
+  }
+
+  var seconds =
+    Math.floor(
+      (Date.now() - time) / 1000
+    );
+
+
+  if(seconds < 60){
+
+    return "Just now";
+
+  }
+
+
+  if(seconds < 3600){
+
+    return (
+      Math.floor(seconds / 60) +
+      "m ago"
+    );
+
+  }
+
+
+  if(seconds < 86400){
+
+    return (
+      Math.floor(seconds / 3600) +
+      "h ago"
+    );
+
+  }
+
+
+  if(seconds < 604800){
+
+    return (
+      Math.floor(seconds / 86400) +
+      "d ago"
+    );
+
+  }
+
+
+  if(seconds < 2592000){
+
+    return (
+      Math.floor(seconds / 604800) +
+      "w ago"
+    );
+
+  }
+
+
+  if(seconds < 31536000){
+
+    return (
+      Math.floor(seconds / 2592000) +
+      "mo ago"
+    );
+
+  }
+
+
+  return (
+    Math.floor(seconds / 31536000) +
+    "y ago"
+  );
+
 }
 
+
+/* =========================
+   NOTIFICATION CATEGORY
+========================= */
+
 function notificationType(type){
-  if(type === "like") return "likes";
-  if(type === "comment") return "comments";
-  if(type === "follow") return "follows";
-  if(type === "system") return "system";
-  if(type === "story_like") return "likes";
+
+  if(type === "like"){
+    return "likes";
+  }
+
+  if(type === "story_like"){
+    return "likes";
+  }
+
+  if(type === "comment"){
+    return "comments";
+  }
+
+  if(type === "follow"){
+    return "follows";
+  }
+
+  if(type === "system"){
+    return "system";
+  }
+
+  if(type === "premium"){
+    return "system";
+  }
+
+  if(type === "post"){
+    return "system";
+  }
+
+  if(type === "unfollow"){
+    return "follows";
+  }
 
   return "system";
 }
 
+
+/* =========================
+   NOTIFICATION ICON
+========================= */
+
 function getNotificationIcon(type){
+
   if(type === "follow"){
+
     return {
       icon:"fa-user-plus",
       color:"#3b82f6"
     };
+
   }
 
+
   if(type === "like"){
+
     return {
       icon:"fa-heart",
       color:"#ef4444"
     };
+
   }
 
-  if(type === "comment"){
-    return {
-      icon:"fa-comment",
-      color:"#10b981"
-    };
-  }
 
   if(type === "story_like"){
+
     return {
       icon:"fa-heart",
       color:"#ec4899"
     };
+
   }
 
+
+  if(type === "comment"){
+
+    return {
+      icon:"fa-comment",
+      color:"#10b981"
+    };
+
+  }
+
+
+  if(type === "repost"){
+
+    return {
+      icon:"fa-retweet",
+      color:"#8b5cf6"
+    };
+
+  }
+
+
   if(type === "post"){
+
     return {
       icon:"fa-file-circle-plus",
       color:"#8b5cf6"
     };
+
   }
 
+
   if(type === "unfollow"){
+
     return {
       icon:"fa-user-minus",
       color:"#f59e0b"
     };
+
   }
+
+
+  if(type === "premium"){
+
+    return {
+      icon:"fa-crown",
+      color:"#f59e0b"
+    };
+
+  }
+
 
   return {
-    icon:"fa-bullhorn",
+
+    icon:"fa-bell",
+
     color:"#7c3aed"
+
   };
+
 }
 
-async function initNotifications(){
 
-  try{
+/* =========================
+   NOTIFICATION MESSAGE
+========================= */
 
-    var result = await supabaseClient.auth.getUser();
+function getNotificationMessage(n){
 
-    if(result.error){
-      throw result.error;
-    }
+  if(n && n.message){
 
-    currentUser = result.data.user;
+    return escapeHTML(
+      n.message
+    );
 
-    if(!currentUser){
-      window.location.href="login.html";
-      return;
-    }
-
-    await loadFollowing();
-    await loadNotifications();
-
-    renderTabs();
-    renderNotifications();
-
-    subscribeToNotifications();
-
-  }catch(error){
-
-    console.error("Notification initialization error:",error);
-
-    document.getElementById("notifList").innerHTML =
-      '<div class="empty">' +
-      '<i class="fas fa-triangle-exclamation"></i>' +
-      '<p>Unable to load notifications</p>' +
-      '</div>';
   }
 
+
+  if(!n){
+    return "";
+  }
+
+
+  if(n.type === "follow"){
+
+    return "followed you.";
+
+  }
+
+
+  if(n.type === "like"){
+
+    return "liked your post.";
+
+  }
+
+
+  if(n.type === "story_like"){
+
+    return "liked your story.";
+
+  }
+
+
+  if(n.type === "comment"){
+
+    return "commented on your post.";
+
+  }
+
+
+  if(n.type === "repost"){
+
+    return "reposted your post.";
+
+  }
+
+
+  if(n.type === "unfollow"){
+
+    return "unfollowed you.";
+
+  }
+
+
+  if(n.type === "post"){
+
+    return "created a new post.";
+
+  }
+
+
+  if(n.type === "premium"){
+
+    return "StudentX Premium Plus is available.";
+
+  }
+
+
+  return "sent you a notification.";
+
 }
+
+
+/* =========================
+   GET ACTOR NAME
+========================= */
+
+function getActorName(n){
+
+  if(!n){
+    return "StudentX";
+  }
+
+  if(n.actor){
+
+    return (
+      n.actor.full_name ||
+      n.actor.username ||
+      "StudentX User"
+    );
+
+  }
+
+  return (
+    n.actor_name ||
+    n.user_name ||
+    "StudentX User"
+  );
+
+}
+
+
+/* =========================
+   GET ACTOR AVATAR
+========================= */
+
+function getActorAvatar(n){
+
+  if(!n){
+    return defaultAvatar();
+  }
+
+  if(n.actor){
+
+    return (
+      n.actor.avatar_url ||
+      defaultAvatar()
+    );
+
+  }
+
+  return (
+    n.actor_avatar ||
+    n.avatar_url ||
+    defaultAvatar()
+  );
+
+}
+
+
+/* =========================
+   INITIAL SUPABASE CHECK
+========================= */
+
+async function getCurrentUser(){
+
+  var result =
+    await supabaseClient
+    .auth
+    .getUser();
+
+
+  if(result.error){
+
+    console.error(
+      "Auth error:",
+      result.error
+    );
+
+    return null;
+  }
+
+
+  return result.data.user || null;
+
+}
+
+
+/* =========================
+   LOAD FOLLOWING IDS
+========================= */
 
 async function loadFollowing(){
 
-  if(!currentUser) return;
+  if(!currentUser){
+    return;
+  }
 
-  var result = await supabaseClient
+
+  var result =
+    await supabaseClient
     .from("followers")
     .select("following_id")
-    .eq("follower_id",currentUser.id);
+    .eq(
+      "follower_id",
+      currentUser.id
+    );
+
 
   if(result.error){
-    console.error("Following load error:",result.error);
+
+    console.error(
+      "Following load error:",
+      result.error
+    );
+
     return;
   }
 
-  followingIds = new Set(
-    (result.data || []).map(function(row){
-      return row.following_id;
-    })
-  );
+
+  followingIds =
+    new Set(
+
+      (result.data || [])
+
+      .map(function(row){
+
+        return row.following_id;
+
+      })
+
+    );
+
 }
 
-async function loadNotifications(){
 
-  var result = await supabaseClient
-    .from("notifications")
-    .select("*")
-    .eq("recipient_id",currentUser.id)
-    .order("created_at",{ascending:false});
-
-  if(result.error){
-    console.error("Notifications load error:",result.error);
-    throw result.error;
-  }
-
-  notifications = result.data || [];
-
-  var actorIds = notifications
-    .map(function(n){
-      return n.actor_id;
-    })
-    .filter(Boolean);
-
-  if(!actorIds.length){
-    return;
-  }
-
-  var profilesResult = await supabaseClient
-    .from("profiles")
-    .select("id,full_name,username,avatar_url,verified")
-    .in("id",actorIds);
-
-  if(profilesResult.error){
-    console.error("Actor profiles error:",profilesResult.error);
-    return;
-  }
-
-  var profileMap = {};
-
-  (profilesResult.data || []).forEach(function(profile){
-    profileMap[profile.id] = profile;
-  });
-
-  notifications = notifications.map(function(n){
-
-    var actor = profileMap[n.actor_id] || null;
-
-    n.actor = actor;
-
-    return n;
-  });
-
-}
+/* =========================
+   TAB COUNTS
+========================= */
 
 function countTabs(){
 
-  tabData.forEach(function(tab){
+  tabData.forEach(
+    function(tab){
 
-    if(tab.k === "all"){
+      if(tab.k === "all"){
 
-      tab.count = notifications.filter(function(n){
-        return !n.is_read;
-      }).length;
+        tab.count =
+          notifications.filter(
+            function(n){
 
-    }else{
+              return !n.is_read;
 
-      tab.count = notifications.filter(function(n){
+            }
+          ).length;
 
-        return notificationType(n.type) === tab.k &&
-               !n.is_read;
+      }else{
 
-      }).length;
+        tab.count =
+          notifications.filter(
+            function(n){
+
+              return (
+                notificationType(n.type) ===
+                tab.k
+              ) &&
+              !n.is_read;
+
+            }
+          ).length;
+
+      }
 
     }
-
-  });
+  );
 
 }
+
+
+/* =========================
+   RENDER TABS
+========================= */
 
 function renderTabs(){
 
+  var tabBar =
+    document.getElementById(
+      "tabBar"
+    );
+
+  if(!tabBar){
+    return;
+  }
+
+
   countTabs();
 
-  document.getElementById("tabBar").innerHTML =
-    tabData.map(function(tab){
 
-      return '<div class="tab ' +
-        (currentTab === tab.k ? "on" : "") +
-        '" onclick="switchTab(\'' +
-        tab.k +
-        '\')">' +
-        tab.l +
-        (tab.count > 0
-          ? '<span class="badge">' + tab.count + '</span>'
-          : "") +
-        '</div>';
+  tabBar.innerHTML =
+    tabData.map(
+      function(tab){
 
-    }).join("");
+        return (
+
+          '<div class="tab ' +
+
+          (
+            currentTab === tab.k
+              ? "on"
+              : ""
+          ) +
+
+          '" onclick="switchTab(\'' +
+
+          tab.k +
+
+          '\')">' +
+
+          escapeHTML(tab.l) +
+
+          (
+            tab.count > 0
+
+              ? '<span class="badge">' +
+                (
+                  tab.count > 99
+                    ? "99+"
+                    : tab.count
+                ) +
+                '</span>'
+
+              : ""
+          ) +
+
+          '</div>'
+
+        );
+
+      }
+    ).join("");
 
 }
+
+
+/* =========================
+   END OF PART 1
+========================= */
+/* =========================
+   FILTER NOTIFICATIONS
+========================= */
 
 function getFilteredNotifications(){
 
   var list = notifications.slice();
 
+
+  /* TAB FILTER */
+
   if(currentTab !== "all"){
 
-    list = list.filter(function(n){
+    list =
+      list.filter(function(n){
 
-      return notificationType(n.type) === currentTab;
+        return (
+          notificationType(n.type) ===
+          currentTab
+        );
 
-    });
+      });
 
   }
+
+
+  /* SEARCH FILTER */
 
   if(searchQuery){
 
-    var q = searchQuery.toLowerCase();
+    var q =
+      searchQuery.toLowerCase();
 
-    list = list.filter(function(n){
 
-      var actorName = n.actor
-        ? (n.actor.full_name || "") + " " +
-          (n.actor.username || "")
-        : "";
+    list =
+      list.filter(function(n){
 
-      var text = (n.message || "") + " " + actorName;
+        var actorName =
+          getActorName(n);
 
-      return text.toLowerCase().includes(q);
+        var message =
+          n.message || "";
 
-    });
+        var type =
+          n.type || "";
+
+
+        var text =
+          (
+            actorName +
+            " " +
+            message +
+            " " +
+            type
+          ).toLowerCase();
+
+
+        return text.includes(q);
+
+      });
 
   }
+
 
   return list;
 
 }
 
-function getNotificationMessage(n){
 
-  if(n.message){
-    return escapeHTML(n.message);
-  }
+/* =========================
+   SWITCH TAB
+========================= */
 
-  var actorName = n.actor
-    ? (n.actor.full_name || n.actor.username || "Someone")
-    : "StudentX";
+function switchTab(tab){
 
-  if(n.type === "follow"){
-    return "followed you.";
-  }
+  currentTab = tab;
 
-  if(n.type === "like"){
-    return "liked your post.";
-  }
+  renderTabs();
 
-  if(n.type === "story_like"){
-    return "liked your story.";
-  }
-
-  if(n.type === "comment"){
-    return "commented on your post.";
-  }
-
-  if(n.type === "unfollow"){
-    return "unfollowed you.";
-  }
-
-  if(n.type === "post"){
-    return "created a new post.";
-  }
-
-  if(n.type === "premium"){
-    return "StudentX Premium Plus is available.";
-  }
-
-  return "sent you a notification.";
-}
-  /* ==========================================
-   PART 2 — NOTIFICATION FUNCTIONS
-   ========================================== */
-
-function timeAgo(date){
-
-    if(!date) return "";
-
-    var seconds =
-        Math.floor(
-            (Date.now() - new Date(date).getTime()) / 1000
-        );
-
-    if(seconds < 60)
-        return "Just now";
-
-    if(seconds < 3600)
-        return Math.floor(seconds / 60) + "m ago";
-
-    if(seconds < 86400)
-        return Math.floor(seconds / 3600) + "h ago";
-
-    if(seconds < 604800)
-        return Math.floor(seconds / 86400) + "d ago";
-
-    if(seconds < 2592000)
-        return Math.floor(seconds / 604800) + "w ago";
-
-    return Math.floor(seconds / 2592000) + "mo ago";
-}
-
-
-/* ==========================================
-   ICON FOR NOTIFICATION
-   ========================================== */
-
-function notificationIcon(type){
-
-    if(type === "like")
-        return '<i class="fas fa-heart"></i>';
-
-    if(type === "comment")
-        return '<i class="fas fa-comment"></i>';
-
-    if(type === "follow")
-        return '<i class="fas fa-user-plus"></i>';
-
-    if(type === "repost")
-        return '<i class="fas fa-retweet"></i>';
-
-    if(type === "story")
-        return '<i class="fas fa-circle-play"></i>';
-
-    if(type === "system")
-        return '<i class="fas fa-bell"></i>';
-
-    return '<i class="fas fa-bell"></i>';
-}
-
-
-/* ==========================================
-   SEARCH NOTIFICATIONS
-   ========================================== */
-
-var notificationSearch = "";
-
-
-function searchNotifications(){
-
-    var input =
-        document.getElementById("notificationSearch");
-
-    if(!input){
-        return;
-    }
-
-    notificationSearch =
-        input.value.trim().toLowerCase();
-
-    renderNotifications();
-}
-
-
-/* ==========================================
-   FILTER NOTIFICATIONS
-   ========================================== */
-
-function getNotificationList(){
-
-    var list = notifications || [];
-
-    if(!notificationSearch){
-        return list;
-    }
-
-    return list.filter(function(n){
-
-        var text =
-            (
-                (n.actor_name || "") +
-                " " +
-                (n.message || "") +
-                " " +
-                (n.type || "")
-            ).toLowerCase();
-
-        return text.includes(notificationSearch);
-
-    });
-}
-
-
-/* ==========================================
-   RENDER NOTIFICATIONS
-   ========================================== */
-
-function renderNotifications(){
-
-    var container =
-        document.getElementById("notifList");
-
-    if(!container){
-        return;
-    }
-
-    var list =
-        getNotificationList();
-
-    if(!list.length){
-
-        container.innerHTML = `
-            <div style="
-                text-align:center;
-                padding:70px 20px;
-                color:rgba(255,255,255,.3);
-            ">
-
-                <i
-                    class="far fa-bell-slash"
-                    style="
-                        font-size:38px;
-                        margin-bottom:15px;
-                        display:block;
-                    ">
-                </i>
-
-                <div style="
-                    font-size:13px;
-                    font-weight:600;
-                ">
-                    No notifications found
-                </div>
-
-            </div>
-        `;
-
-        return;
-    }
-
-
-    var html = "";
-
-
-    list.forEach(function(n){
-
-        var unread =
-            !n.is_read;
-
-        var actorName =
-            n.actor_name ||
-            n.user_name ||
-            "StudentX User";
-
-        var avatar =
-            n.actor_avatar ||
-            n.avatar_url ||
-            "https://via.placeholder.com/100";
-
-
-        var type =
-            n.type || "system";
-
-
-        var message =
-            n.message || "";
-
-
-        /*
-         * DESTINATION
-         */
-
-        var destination = "#";
-
-
-        if(type === "follow"){
-
-            if(n.actor_id){
-
-                destination =
-                    "profile.html?id=" +
-                    encodeURIComponent(n.actor_id);
-
-            }
-
-        }else if(
-            type === "like" ||
-            type === "comment" ||
-            type === "repost"
-        ){
-
-            if(n.post_id){
-
-                destination =
-                    "home.html?post=" +
-                    encodeURIComponent(n.post_id);
-
-            }
-
-        }else if(type === "story"){
-
-            if(n.story_id){
-
-                destination =
-                    "home.html?story=" +
-                    encodeURIComponent(n.story_id);
-
-            }
-
-        }
-
-
-        html += `
-
-        <div
-            class="notif ${unread ? "unread" : ""}"
-            onclick="openNotification('${n.id}')"
-            data-search="${escapeHTML(actorName + ' ' + message)}"
-        >
-
-            <div
-                class="notif-avatar"
-                onclick="event.stopPropagation();openNotification('${n.id}')"
-            >
-
-                <img
-                    src="${escapeHTML(avatar)}"
-                    onerror="this.src='https://via.placeholder.com/100'"
-                    alt=""
-                >
-
-                <span class="notif-type-icon ${type}">
-                    ${notificationIcon(type)}
-                </span>
-
-            </div>
-
-
-            <div class="notif-body">
-
-                <div class="notif-text">
-
-                    <strong>
-                        ${escapeHTML(actorName)}
-                    </strong>
-
-                    ${escapeHTML(message)}
-
-                </div>
-
-
-                <div class="notif-time">
-
-                    ${timeAgo(n.created_at)}
-
-                </div>
-
-
-                ${
-                    type === "follow"
-                    ?
-                    `
-                    <button
-                        class="follow-btn"
-                        id="followBack-${n.id}"
-                        onclick="
-                            event.stopPropagation();
-                            followBack('${n.id}','${n.actor_id || ""}')
-                        "
-                    >
-                        Follow Back
-                    </button>
-                    `
-                    :
-                    ""
-                }
-
-            </div>
-
-
-            ${
-                unread
-                ?
-                `
-                <div
-                    class="notif-dot"
-                    title="Unread"
-                ></div>
-                `
-                :
-                ""
-            }
-
-        </div>
-
-        `;
-
-    });
-
-
-    container.innerHTML = html;
-}
-
-
-/* ==========================================
-   OPEN NOTIFICATION
-   ========================================== */
-
-async function openNotification(id){
-
-    var n =
-        notifications.find(function(item){
-
-            return String(item.id) === String(id);
-
-        });
-
-
-    if(!n){
-        return;
-    }
-
-
-    /* Mark as seen */
-
-    if(!n.is_read){
-
-        await markNotificationRead(id);
-
-        n.is_read = true;
-    }
-
-
-    /*
-     * FOLLOW
-     * → USER PROFILE
-     */
-
-    if(n.type === "follow"){
-
-        if(n.actor_id){
-
-            window.location.href =
-                "profile.html?id=" +
-                encodeURIComponent(n.actor_id);
-
-            return;
-        }
-    }
-
-
-    /*
-     * LIKE / COMMENT / REPOST
-     * → POST
-     */
-
-    if(
-        n.type === "like" ||
-        n.type === "comment" ||
-        n.type === "repost"
-    ){
-
-        if(n.post_id){
-
-            window.location.href =
-                "home.html?post=" +
-                encodeURIComponent(n.post_id);
-
-            return;
-        }
-    }
-
-
-    /*
-     * STORY
-     */
-
-    if(n.type === "story"){
-
-        if(n.story_id){
-
-            window.location.href =
-                "home.html?story=" +
-                encodeURIComponent(n.story_id);
-
-            return;
-        }
-    }
-
-
-    renderNotifications();
+  renderNotifications();
 
 }
 
 
-/* ==========================================
+/* =========================
    MARK ONE AS READ
-   ========================================== */
+========================= */
 
 async function markNotificationRead(id){
 
-    if(!supabaseClient){
-        return;
-    }
+  if(!currentUser){
+    return false;
+  }
 
 
-    var { error } =
-        await supabaseClient
-        .from("notifications")
-        .update({
-            is_read: true
-        })
-        .eq("id", id);
+  var result =
+    await supabaseClient
+    .from("notifications")
+    .update({
+      is_read:true
+    })
+    .eq(
+      "id",
+      id
+    )
+    .eq(
+      "recipient_id",
+      currentUser.id
+    );
 
 
-    if(error){
+  if(result.error){
 
-        console.log(
-            "Mark notification read error:",
-            error
-        );
+    console.error(
+      "Mark notification read error:",
+      result.error
+    );
 
-    }
+    return false;
+  }
+
+
+  return true;
 
 }
 
 
-/* ==========================================
-   MARK ALL AS SEEN
-   ========================================== */
+/* =========================
+   MARK ALL AS READ
+========================= */
 
-async function markAllAsSeen(){
+async function markAllRead(){
 
-    if(!currentUser){
-
-        showMsg("Please login first");
-
-        return;
-    }
-
-
-    var { error } =
-        await supabaseClient
-        .from("notifications")
-        .update({
-            is_read: true
-        })
-        .eq(
-            "recipient_id",
-            currentUser.id
-        )
-        .eq(
-            "is_read",
-            false
-        );
-
-
-    if(error){
-
-        console.log(
-            "Mark all notifications error:",
-            error
-        );
-
-        showMsg(
-            "Unable to mark notifications as seen"
-        );
-
-        return;
-    }
-
-
-    notifications.forEach(function(n){
-
-        n.is_read = true;
-
-    });
-
-
-    renderNotifications();
-
-    updateNotificationBadge();
+  if(!currentUser){
 
     showMsg(
-        "All notifications marked as seen"
+      "Please login first"
     );
-}
+
+    return;
+  }
 
 
-/* ==========================================
-   FOLLOW BACK
-   ========================================== */
+  var unread =
+    notifications.filter(
+      function(n){
 
-async function followBack(
-    notificationId,
-    userId
-){
+        return !n.is_read;
 
-    if(!currentUser){
-
-        showMsg("Please login first");
-
-        return;
-    }
+      }
+    );
 
 
-    if(!userId){
-
-        showMsg("User not found");
-
-        return;
-    }
-
-
-    if(
-        String(currentUser.id) ===
-        String(userId)
-    ){
-
-        return;
-    }
-
-
-    var button =
-        document.getElementById(
-            "followBack-" + notificationId
-        );
-
-
-    if(button){
-
-        button.disabled = true;
-
-        button.textContent =
-            "Following...";
-    }
-
-
-    var { error } =
-        await supabaseClient
-        .from("followers")
-        .insert({
-
-            follower_id:
-                currentUser.id,
-
-            following_id:
-                userId
-
-        });
-
-
-    /*
-     * If already following,
-     * don't show false error.
-     */
-
-    if(error){
-
-        if(
-            error.code === "23505"
-        ){
-
-            if(button){
-
-                button.textContent =
-                    "Following";
-
-                button.classList.add(
-                    "done"
-                );
-
-            }
-
-            showMsg(
-                "Already following"
-            );
-
-            return;
-        }
-
-
-        console.log(
-            "Follow back error:",
-            error
-        );
-
-
-        if(button){
-
-            button.disabled = false;
-
-            button.textContent =
-                "Follow Back";
-        }
-
-
-        showMsg(
-            "Unable to follow user"
-        );
-
-        return;
-    }
-
-
-    if(button){
-
-        button.disabled = true;
-
-        button.textContent =
-            "Following";
-
-        button.classList.add(
-            "done"
-        );
-    }
-
+  if(!unread.length){
 
     showMsg(
-        "Following " +
-        (
-            notifications.find(
-                function(x){
-                    return String(x.id) ===
-                           String(notificationId);
-                }
-            )?.actor_name ||
-            "user"
-        )
+      "All notifications are already seen"
     );
+
+    return;
+  }
+
+
+  var result =
+    await supabaseClient
+    .from("notifications")
+    .update({
+      is_read:true
+    })
+    .eq(
+      "recipient_id",
+      currentUser.id
+    )
+    .eq(
+      "is_read",
+      false
+    );
+
+
+  if(result.error){
+
+    console.error(
+      "Mark all read error:",
+      result.error
+    );
+
+    showMsg(
+      "Unable to mark notifications as seen"
+    );
+
+    return;
+  }
+
+
+  notifications.forEach(
+    function(n){
+
+      n.is_read = true;
+
+    }
+  );
+
+
+  renderTabs();
+
+  renderNotifications();
+
+  updateNotificationBadge();
+
+
+  showMsg(
+    "All notifications marked as seen"
+  );
+
 }
 
 
-/* ==========================================
-   NOTIFICATION BADGE
-   ========================================== */
+/* =========================
+   SHOW MESSAGE
+========================= */
+
+function showMsg(text){
+
+  var old =
+    document.querySelector(
+      ".toast"
+    );
+
+
+  if(old){
+    old.remove();
+  }
+
+
+  var toast =
+    document.createElement(
+      "div"
+    );
+
+
+  toast.className =
+    "toast";
+
+
+  toast.textContent =
+    text;
+
+
+  document.body.appendChild(
+    toast
+  );
+
+
+  setTimeout(
+    function(){
+
+      if(toast){
+        toast.remove();
+      }
+
+    },
+    2500
+  );
+
+}
+
+
+/* =========================
+   UPDATE NOTIFICATION BADGE
+========================= */
 
 function updateNotificationBadge(){
 
-    var unread =
-        (notifications || []).filter(
-            function(n){
+  var unread =
+    notifications.filter(
+      function(n){
 
-                return !n.is_read;
+        return !n.is_read;
 
-            }
-        ).length;
-
-
-    var badges =
-        document.querySelectorAll(
-            ".notification-badge"
-        );
+      }
+    ).length;
 
 
-    badges.forEach(function(badge){
+  var badges =
+    document.querySelectorAll(
+      ".notification-badge"
+    );
 
-        if(unread > 0){
 
-            badge.textContent =
-                unread > 99
-                ? "99+"
-                : unread;
+  badges.forEach(
+    function(badge){
 
-            badge.style.display =
-                "flex";
+      if(unread > 0){
 
-        }else{
+        badge.textContent =
+          unread > 99
+            ? "99+"
+            : unread;
 
-            badge.style.display =
-                "none";
+        badge.style.display =
+          "flex";
 
-        }
+      }else{
 
-    });
+        badge.style.display =
+          "none";
+
+      }
+
+    }
+  );
+
 }
 
 
-/* ==========================================
-   LOAD NOTIFICATIONS FROM SUPABASE
-   ========================================== */
+/* =========================
+   RENDER NOTIFICATIONS
+========================= */
 
-async function loadNotifications(){
+function renderNotifications(){
 
-    if(!currentUser){
+  var container =
+    document.getElementById(
+      "notifList"
+    );
 
-        console.log(
-            "No logged in user"
-        );
 
-        return;
+  if(!container){
+    return;
+  }
+
+
+  var list =
+    getFilteredNotifications();
+
+
+  if(!list.length){
+
+    container.innerHTML =
+
+      '<div class="empty">' +
+
+        '<i class="far fa-bell-slash"></i>' +
+
+        '<p>No notifications found</p>' +
+
+      '</div>';
+
+    return;
+
+  }
+
+
+  /*
+   * Divide into:
+   * NEW
+   * EARLIER
+   */
+
+  var now =
+    Date.now();
+
+
+  var newList = [];
+
+  var earlierList = [];
+
+
+  list.forEach(
+    function(n){
+
+      var created =
+        new Date(
+          n.created_at
+        ).getTime();
+
+
+      if(
+        !isNaN(created) &&
+        now - created <=
+        86400000
+      ){
+
+        newList.push(n);
+
+      }else{
+
+        earlierList.push(n);
+
+      }
+
+    }
+  );
+
+
+  var html = "";
+
+
+  /* =========================
+     NEW
+  ========================= */
+
+  if(newList.length){
+
+    html +=
+      '<section class="sect">' +
+
+        '<div class="sect-title">' +
+          'New' +
+        '</div>';
+
+
+    newList.forEach(
+      function(n){
+
+        html +=
+          createNotificationHTML(n);
+
+      }
+    );
+
+
+    html +=
+      '</section>';
+
+  }
+
+
+  /* =========================
+     EARLIER
+  ========================= */
+
+  if(earlierList.length){
+
+    html +=
+      '<section class="sect">' +
+
+        '<div class="sect-title">' +
+          'Earlier' +
+        '</div>';
+
+
+    earlierList.forEach(
+      function(n){
+
+        html +=
+          createNotificationHTML(n);
+
+      }
+    );
+
+
+    html +=
+      '</section>';
+
+  }
+
+
+  container.innerHTML =
+    html;
+
+}
+
+
+/* =========================
+   CREATE NOTIFICATION HTML
+========================= */
+
+function createNotificationHTML(n){
+
+  var unread =
+    !n.is_read;
+
+
+  var actorName =
+    getActorName(n);
+
+
+  var avatar =
+    getActorAvatar(n);
+
+
+  var type =
+    n.type || "system";
+
+
+  var icon =
+    getNotificationIcon(type);
+
+
+  var message =
+    getNotificationMessage(n);
+
+
+  var isSystem =
+    (
+      type === "system" ||
+      type === "premium"
+    );
+
+
+  var avatarHTML;
+
+
+  if(isSystem){
+
+    avatarHTML =
+
+      '<div class="notif-type-icon system" ' +
+      'style="' +
+      'width:44px;' +
+      'height:44px;' +
+      'position:relative;' +
+      'right:auto;' +
+      'bottom:auto;' +
+      'border:none;' +
+      'font-size:17px;' +
+      'background:' +
+      icon.color +
+      ';">' +
+
+        '<i class="fas ' +
+        icon.icon +
+        '"></i>' +
+
+      '</div>';
+
+  }else{
+
+    avatarHTML =
+
+      '<div class="notif-avatar">' +
+
+        '<img ' +
+          'src="' +
+          escapeHTML(avatar) +
+          '" ' +
+          'alt="" ' +
+          'onerror="this.src=\'' +
+          defaultAvatar() +
+          '\'"' +
+        '>' +
+
+        '<span class="notif-type-icon ' +
+          escapeHTML(type) +
+          '" ' +
+          'style="background:' +
+          icon.color +
+          ';">' +
+
+          '<i class="fas ' +
+          icon.icon +
+          '"></i>' +
+
+        '</span>' +
+
+      '</div>';
+
+  }
+
+
+  var followHTML = "";
+
+
+  /*
+   * FOLLOW BACK
+   */
+
+  if(
+    type === "follow" &&
+    n.actor_id &&
+    String(n.actor_id) !==
+    String(currentUser ? currentUser.id : "")
+  ){
+
+    var alreadyFollowing =
+      followingIds.has(
+        n.actor_id
+      );
+
+
+    followHTML =
+
+      '<button ' +
+
+        'class="follow-btn ' +
+        (
+          alreadyFollowing
+            ? "done"
+            : ""
+        ) +
+        '" ' +
+
+        'id="followBack-' +
+        escapeHTML(n.id) +
+        '" ' +
+
+        'onclick="' +
+        'event.stopPropagation();' +
+        'followBack(\'' +
+        escapeHTML(n.id) +
+        '\',\'' +
+        escapeHTML(n.actor_id) +
+        '\')"' +
+
+      '>' +
+
+        (
+          alreadyFollowing
+            ? "Following"
+            : "Follow Back"
+        ) +
+
+      '</button>';
+
+  }
+
+
+  /*
+   * SYSTEM NOTIFICATION
+   */
+
+  var textHTML;
+
+
+  if(isSystem){
+
+    textHTML =
+
+      '<div class="notif-text">' +
+
+        message +
+
+      '</div>';
+
+  }else{
+
+    textHTML =
+
+      '<div class="notif-text">' +
+
+        '<strong>' +
+          escapeHTML(actorName) +
+        '</strong> ' +
+
+        message +
+
+      '</div>';
+
+  }
+
+
+  return `
+
+    <div
+      class="notif ${unread ? "unread" : ""}"
+      onclick="openNotification('${escapeHTML(n.id)}')"
+    >
+
+      ${avatarHTML}
+
+
+      <div class="notif-body">
+
+        ${textHTML}
+
+
+        <div class="notif-time">
+
+          ${escapeHTML(
+            timeAgo(n.created_at)
+          )}
+
+        </div>
+
+
+        ${followHTML}
+
+      </div>
+
+
+      ${
+        unread
+
+        ? `
+          <div
+            class="notif-dot"
+            title="Unread"
+          ></div>
+        `
+
+        : ""
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   OPEN NOTIFICATION
+========================= */
+
+async function openNotification(id){
+
+  var n =
+    notifications.find(
+      function(item){
+
+        return String(item.id) ===
+               String(id);
+
+      }
+    );
+
+
+  if(!n){
+    return;
+  }
+
+
+  /*
+   * MARK AS READ
+   */
+
+  if(!n.is_read){
+
+    var success =
+      await markNotificationRead(
+        n.id
+      );
+
+
+    if(success){
+
+      n.is_read = true;
+
     }
 
-
-    var { data, error } =
-        await supabaseClient
-        .from("notifications")
-        .select(`
-            id,
-            recipient_id,
-            actor_id,
-            post_id,
-            story_id,
-            type,
-            message,
-            is_read,
-            created_at
-        `)
-        .eq(
-            "recipient_id",
-            currentUser.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        )
-        .limit(100);
+  }
 
 
-    if(error){
+  renderTabs();
 
-        console.log(
-            "Notification loading error:",
-            error
-        );
-
-        showMsg(
-            "Unable to load notifications"
-        );
-
-        return;
-    }
+  updateNotificationBadge();
 
 
-    notifications = data || [];
+  /*
+   * FOLLOW
+   * → PROFILE
+   */
 
+  if(
+    n.type === "follow" &&
+    n.actor_id
+  ){
 
     /*
-     * Load actor profile information
+     * Save target user.
+     * Profile page can use this
+     * to open the selected user.
      */
 
-    var actorIds =
-        notifications
-        .map(function(n){
-
-            return n.actor_id;
-
-        })
-        .filter(Boolean);
+    localStorage.setItem(
+      "studentx_profile_target",
+      String(n.actor_id)
+    );
 
 
-    actorIds =
-        [...new Set(actorIds)];
+    window.location.href =
+      "profile.html?id=" +
+      encodeURIComponent(
+        n.actor_id
+      );
+
+    return;
+
+  }
 
 
-    if(actorIds.length){
+  /*
+   * LIKE / COMMENT / REPOST
+   * → POST
+   */
 
-        var profileResult =
-            await supabaseClient
-            .from("profiles")
-            .select(`
-                id,
-                full_name,
-                username,
-                avatar_url
-            `)
-            .in(
-                "id",
-                actorIds
-            );
+  if(
+    (
+      n.type === "like" ||
+      n.type === "comment" ||
+      n.type === "repost"
+    ) &&
+    n.post_id
+  ){
 
-
-        if(!profileResult.error){
-
-            var profiles =
-                profileResult.data || [];
+    localStorage.setItem(
+      "studentx_post_target",
+      String(n.post_id)
+    );
 
 
-            notifications.forEach(
-                function(n){
+    window.location.href =
+      "home.html?post=" +
+      encodeURIComponent(
+        n.post_id
+      );
 
-                    var profile =
-                        profiles.find(
-                            function(p){
+    return;
 
-                                return String(p.id) ===
-                                       String(n.actor_id);
-
-                            }
-                        );
+  }
 
 
-                    if(profile){
+  /*
+   * STORY LIKE
+   */
 
-                        n.actor_name =
-                            profile.full_name ||
-                            profile.username ||
-                            "StudentX User";
+  if(
+    n.type === "story_like" &&
+    n.story_id
+  ){
 
-                        n.actor_avatar =
-                            profile.avatar_url ||
-                            "https://via.placeholder.com/100";
-                    }
+    localStorage.setItem(
+      "studentx_story_target",
+      String(n.story_id)
+    );
 
-                }
-            );
 
-        }
+    window.location.href =
+      "home.html?story=" +
+      encodeURIComponent(
+        n.story_id
+      );
+
+    return;
+
+  }
+
+
+  /*
+   * POST NOTIFICATION
+   */
+
+  if(
+    n.type === "post" &&
+    n.post_id
+  ){
+
+    localStorage.setItem(
+      "studentx_post_target",
+      String(n.post_id)
+    );
+
+
+    window.location.href =
+      "home.html?post=" +
+      encodeURIComponent(
+        n.post_id
+      );
+
+    return;
+
+  }
+
+
+  renderNotifications();
+
+}
+
+
+/* =========================
+   FOLLOW BACK
+========================= */
+
+async function followBack(
+  notificationId,
+  userId
+){
+
+  if(!currentUser){
+
+    showMsg(
+      "Please login first"
+    );
+
+    return;
+
+  }
+
+
+  if(!userId){
+
+    showMsg(
+      "User not found"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    String(currentUser.id) ===
+    String(userId)
+  ){
+
+    return;
+
+  }
+
+
+  var button =
+    document.getElementById(
+      "followBack-" +
+      notificationId
+    );
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Following...";
+
+  }
+
+
+  /*
+   * FIRST CHECK
+   * whether already following
+   */
+
+  var check =
+    await supabaseClient
+    .from("followers")
+    .select("id")
+    .eq(
+      "follower_id",
+      currentUser.id
+    )
+    .eq(
+      "following_id",
+      userId
+    )
+    .limit(1);
+
+
+  if(check.error){
+
+    console.error(
+      "Follow check error:",
+      check.error
+    );
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Follow Back";
+
+    }
+
+    showMsg(
+      "Unable to check follow status"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    check.data &&
+    check.data.length > 0
+  ){
+
+    followingIds.add(
+      userId
+    );
+
+
+    if(button){
+
+      button.disabled =
+        true;
+
+      button.textContent =
+        "Following";
+
+      button.classList.add(
+        "done"
+      );
 
     }
 
 
-    renderNotifications();
+    showMsg(
+      "Already following"
+    );
 
-    updateNotificationBadge();
-}
+    return;
+
+  }
 
 
-/* ==========================================
-   REALTIME NOTIFICATIONS
-   ========================================== */
+  /*
+   * INSERT FOLLOW
+   */
 
-function subscribeNotifications(){
+  var result =
+    await supabaseClient
+    .from("followers")
+    .insert({
 
-    if(!currentUser){
-        return;
+      follower_id:
+        currentUser.id,
+
+      following_id:
+        userId
+
+    });
+
+
+  if(result.error){
+
+    console.error(
+      "Follow back error:",
+      result.error
+    );
+
+
+    if(button){
+
+      button.disabled =
+        false;
+
+      button.textContent =
+        "Follow Back";
+
     }
 
 
-    supabaseClient
-    .channel(
-        "studentx-notifications-" +
-        currentUser.id
-    )
-    .on(
-        "postgres_changes",
-        {
-            event:"*",
-            schema:"public",
-            table:"notifications",
-            filter:
-                "recipient_id=eq." +
-                currentUser.id
-        },
-        function(){
+    showMsg(
+      "Unable to follow user"
+    );
 
-            loadNotifications();
+    return;
 
-        }
-    )
-    .subscribe();
+  }
+
+
+  /*
+   * UPDATE LOCAL STATE
+   */
+
+  followingIds.add(
+    userId
+  );
+
+
+  if(button){
+
+    button.disabled =
+      true;
+
+    button.textContent =
+      "Following";
+
+    button.classList.add(
+      "done"
+    );
+
+  }
+
+
+  var notification =
+    notifications.find(
+      function(n){
+
+        return String(n.id) ===
+               String(notificationId);
+
+      }
+    );
+
+
+  var name =
+    notification
+      ? getActorName(notification)
+      : "user";
+
+
+  showMsg(
+    "Following " +
+    name
+  );
+
 }
 
 
-/* ==========================================
+/* =========================
    SEARCH INPUT
-   ========================================== */
+========================= */
 
 document.addEventListener(
-    "input",
-    function(e){
+  "input",
+  function(event){
 
-        if(
-            e.target &&
-            e.target.id ===
-            "notificationSearch"
-        ){
+    if(
+      event.target &&
+      event.target.id ===
+      "searchInput"
+    ){
 
-            searchNotifications();
+      searchQuery =
+        event.target.value
+          .trim()
+          .toLowerCase();
 
-        }
+
+      renderTabs();
+
+      renderNotifications();
 
     }
+
+  }
 );
 
 
-/* ==========================================
-   BACK BUTTON
-   ========================================== */
+/* =========================
+   KEYBOARD SEARCH
+========================= */
 
-function goBack(){
+document.addEventListener(
+  "keydown",
+  function(event){
 
     if(
-        document.referrer &&
-        document.referrer !==
-        window.location.href
+      event.key === "Escape"
     ){
 
-        window.history.back();
+      var box =
+        document.getElementById(
+          "searchBox"
+        );
+
+
+      if(
+        box &&
+        box.classList.contains(
+          "show"
+        )
+      ){
+
+        toggleSearch();
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================
+   END OF PART 2
+========================= */
+/* ==========================================
+   PART 3/3
+   LOAD + REALTIME + INITIALIZATION
+========================================== */
+
+
+/* =========================
+   LOAD NOTIFICATIONS
+========================= */
+
+async function loadNotifications(){
+
+  if(!currentUser){
+
+    console.log(
+      "No logged in user."
+    );
+
+    return;
+
+  }
+
+
+  /*
+   * Get notifications belonging
+   * to the currently logged-in user.
+   */
+
+  var result =
+    await supabaseClient
+    .from("notifications")
+    .select(`
+      id,
+      recipient_id,
+      actor_id,
+      type,
+      post_id,
+      story_id,
+      comment_id,
+      message,
+      is_read,
+      created_at
+    `)
+    .eq(
+      "recipient_id",
+      currentUser.id
+    )
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    )
+    .limit(100);
+
+
+  if(result.error){
+
+    console.error(
+      "Notifications loading error:",
+      result.error
+    );
+
+    throw result.error;
+
+  }
+
+
+  notifications =
+    result.data || [];
+
+
+  /*
+   * Get actor IDs
+   */
+
+  var actorIds =
+    notifications
+
+      .map(function(n){
+
+        return n.actor_id;
+
+      })
+
+      .filter(Boolean);
+
+
+  /*
+   * Remove duplicate IDs
+   */
+
+  actorIds =
+    [...new Set(actorIds)];
+
+
+  /*
+   * Load actor profiles
+   */
+
+  if(actorIds.length){
+
+    var profileResult =
+      await supabaseClient
+      .from("profiles")
+      .select(`
+        id,
+        full_name,
+        username,
+        avatar_url,
+        verified
+      `)
+      .in(
+        "id",
+        actorIds
+      );
+
+
+    if(profileResult.error){
+
+      console.error(
+        "Actor profile loading error:",
+        profileResult.error
+      );
 
     }else{
 
-        window.location.href =
-            "home.html";
-
-    }
-}
+      var profiles =
+        profileResult.data || [];
 
 
-/* ==========================================
-   INITIALIZE
-   ========================================== */
+      /*
+       * Attach actor profile
+       * to each notification.
+       */
 
-async function initNotifications(){
+      notifications =
+        notifications.map(
+          function(n){
 
-    try{
+            var actor =
+              profiles.find(
+                function(profile){
 
-        var sessionResult =
-            await supabaseClient
-            .auth
-            .getSession();
+                  return String(
+                    profile.id
+                  ) === String(
+                    n.actor_id
+                  );
 
-
-        currentUser =
-            sessionResult.data.session
-            ?.user || null;
-
-
-        if(!currentUser){
-
-            showMsg(
-                "Please login first"
-            );
-
-            return;
-        }
+                }
+              );
 
 
-        await loadNotifications();
+            n.actor =
+              actor || null;
 
-        subscribeNotifications();
+
+            /*
+             * Compatibility fields
+             */
+
+            if(actor){
+
+              n.actor_name =
+                actor.full_name ||
+                actor.username ||
+                "StudentX User";
 
 
-    }catch(error){
+              n.actor_avatar =
+                actor.avatar_url ||
+                defaultAvatar();
 
-        console.log(
-            "Notification initialization error:",
-            error
+            }
+
+
+            return n;
+
+          }
         );
 
     }
 
+  }
+
+
+  /*
+   * Render immediately
+   */
+
+  renderTabs();
+
+  renderNotifications();
+
+  updateNotificationBadge();
+
 }
 
 
+/* =========================
+   REALTIME SUBSCRIPTION
+========================= */
+
+function subscribeToNotifications(){
+
+  if(!currentUser){
+
+    return;
+
+  }
+
+
+  /*
+   * Remove old channel if
+   * initialization happened again.
+   */
+
+  if(notificationChannel){
+
+    try{
+
+      supabaseClient.removeChannel(
+        notificationChannel
+      );
+
+    }catch(error){
+
+      console.log(
+        "Old channel remove error:",
+        error
+      );
+
+    }
+
+  }
+
+
+  notificationChannel =
+    supabaseClient
+
+      .channel(
+        "studentx-notifications-" +
+        currentUser.id
+      )
+
+      .on(
+
+        "postgres_changes",
+
+        {
+          event:"INSERT",
+
+          schema:"public",
+
+          table:"notifications",
+
+          filter:
+            "recipient_id=eq." +
+            currentUser.id
+        },
+
+        async function(payload){
+
+          console.log(
+            "New StudentX notification:",
+            payload
+          );
+
+
+          /*
+           * Reload notifications so
+           * actor name + avatar are also loaded.
+           */
+
+          try{
+
+            await loadNotifications();
+
+          }catch(error){
+
+            console.error(
+              "Realtime reload error:",
+              error
+            );
+
+          }
+
+        }
+
+      )
+
+      .subscribe(
+        function(status){
+
+          console.log(
+            "Notification realtime:",
+            status
+          );
+
+        }
+      );
+
+}
+
+
+/* =========================
+   REFRESH WHEN PAGE
+   BECOMES ACTIVE
+========================= */
+
+document.addEventListener(
+  "visibilitychange",
+  async function(){
+
+    if(
+      document.visibilityState ===
+      "visible"
+    ){
+
+      if(currentUser){
+
+        try{
+
+          await loadNotifications();
+
+        }catch(error){
+
+          console.error(
+            "Visibility refresh error:",
+            error
+          );
+
+        }
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================
+   INITIALIZE PAGE
+========================= */
+
+async function initNotifications(){
+
+  var container =
+    document.getElementById(
+      "notifList"
+    );
+
+
+  try{
+
+    /*
+     * Make sure Supabase client
+     * exists.
+     */
+
+    if(
+      typeof supabaseClient ===
+      "undefined" ||
+      !supabaseClient
+    ){
+
+      throw new Error(
+        "Supabase client is not available. Check supabase.js"
+      );
+
+    }
+
+
+    /*
+     * Get logged-in user.
+     */
+
+    var authResult =
+      await supabaseClient
+      .auth
+      .getUser();
+
+
+    if(authResult.error){
+
+      throw authResult.error;
+
+    }
+
+
+    currentUser =
+      authResult.data.user || null;
+
+
+    /*
+     * No logged-in user
+     */
+
+    if(!currentUser){
+
+      if(container){
+
+        container.innerHTML =
+
+          '<div class="empty">' +
+
+            '<i class="fas fa-lock"></i>' +
+
+            '<p>Please login to see your notifications.</p>' +
+
+          '</div>';
+
+      }
+
+
+      setTimeout(
+        function(){
+
+          window.location.href =
+            "login.html";
+
+        },
+        1200
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * Load following status
+     */
+
+    await loadFollowing();
+
+
+    /*
+     * Load notifications
+     */
+
+    await loadNotifications();
+
+
+    /*
+     * Start realtime
+     */
+
+    subscribeToNotifications();
+
+
+  }catch(error){
+
+    console.error(
+      "StudentX notifications error:",
+      error
+    );
+
+
+    if(container){
+
+      container.innerHTML =
+
+        '<div class="empty">' +
+
+          '<i class="fas fa-triangle-exclamation"></i>' +
+
+          '<p>Unable to load notifications.</p>' +
+
+          '<div style="' +
+            'font-size:10px;' +
+            'margin-top:8px;' +
+            'color:rgba(255,255,255,.18);' +
+          '">' +
+
+            escapeHTML(
+              error.message ||
+              "Unknown error"
+            ) +
+
+          '</div>' +
+
+        '</div>';
+
+    }
+
+  }
+
+}
+
+
+/* =========================
+   START
+========================= */
+
 initNotifications();
+
+
+/* =========================
+   CLOSE SCRIPT
+========================= */
+
+</script>
+
+</body>
+</html>  
