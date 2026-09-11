@@ -3,2102 +3,582 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Comments - StudentX</title>
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
-}
-
-body{
-    background:#070914;
-    color:#fff;
-    font-family:Arial,Helvetica,sans-serif;
-    min-height:100vh;
-}
-
-.app{
-    max-width:700px;
-    margin:auto;
-    min-height:100vh;
-    background:#090c19;
-    position:relative;
-}
-
-/* HEADER */
-
-.header{
-    height:62px;
-    display:flex;
-    align-items:center;
-    padding:0 16px;
-    border-bottom:1px solid #202438;
-    position:sticky;
-    top:0;
-    background:#090c19;
-    z-index:20;
-}
-
-.back-btn{
-    width:40px;
-    height:40px;
-    border:0;
-    background:none;
-    color:#fff;
-    font-size:20px;
-    cursor:pointer;
-}
-
-.header-title{
-    font-size:19px;
-    font-weight:700;
-    margin-left:8px;
-}
-
-.header-count{
-    color:#9298ad;
-    font-size:14px;
-    margin-left:7px;
-}
-
-/* POST INFO */
-
-.post-box{
-    padding:15px;
-    border-bottom:1px solid #202438;
-}
-
-.post-user{
-    display:flex;
-    align-items:center;
-}
-
-.post-avatar{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#161a2b;
-}
-
-.post-user-info{
-    margin-left:10px;
-}
-
-.post-name{
-    font-size:15px;
-    font-weight:700;
-}
-
-.post-username{
-    color:#8c92a8;
-    font-size:13px;
-    margin-top:2px;
-}
-
-.post-content{
-    margin-top:12px;
-    line-height:1.5;
-    color:#e9ebf5;
-    white-space:pre-wrap;
-    word-break:break-word;
-}
-
-.post-image{
-    width:100%;
-    max-height:450px;
-    object-fit:cover;
-    border-radius:12px;
-    margin-top:12px;
-}
-
-/* COMMENTS */
-
-.comments-area{
-    padding-bottom:110px;
-}
-
-.loading{
-    text-align:center;
-    padding:35px 15px;
-    color:#8d93a9;
-}
-
-.empty{
-    text-align:center;
-    padding:45px 20px;
-    color:#858ba1;
-}
-
-.empty i{
-    font-size:30px;
-    margin-bottom:12px;
-}
-
-/* COMMENT */
-
-.comment{
-    padding:14px 15px;
-    border-bottom:1px solid #171b2b;
-}
-
-.comment-inner{
-    display:flex;
-    align-items:flex-start;
-}
-
-.comment-avatar{
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    object-fit:cover;
-    flex-shrink:0;
-    background:#161a2b;
-}
-
-.comment-main{
-    margin-left:10px;
-    min-width:0;
-    flex:1;
-}
-
-.comment-head{
-    display:flex;
-    align-items:center;
-    gap:7px;
-}
-
-.comment-name{
-    font-size:14px;
-    font-weight:700;
-}
-
-.comment-username{
-    color:#7f869d;
-    font-size:12px;
-}
-
-.comment-time{
-    color:#6f758b;
-    font-size:11px;
-    margin-left:auto;
-}
-
-.comment-text{
-    color:#e5e7ef;
-    font-size:14px;
-    line-height:1.45;
-    margin-top:5px;
-    word-break:break-word;
-}
-
-.comment-media{
-    margin-top:9px;
-    max-width:260px;
-    max-height:300px;
-    border-radius:10px;
-    object-fit:cover;
-    display:block;
-}
-
-.comment-voice{
-    margin-top:8px;
-    width:100%;
-    max-width:300px;
-    height:38px;
-}
-
-.comment-actions{
-    display:flex;
-    align-items:center;
-    gap:18px;
-    margin-top:9px;
-}
-
-.comment-action{
-    border:0;
-    background:none;
-    color:#858ba1;
-    cursor:pointer;
-    font-size:12px;
-    display:flex;
-    align-items:center;
-    gap:5px;
-}
-
-.comment-action:hover{
-    color:#fff;
-}
-
-.comment-action.liked{
-    color:#7c5cff;
-}
-
-.comment-action.delete{
-    color:#ff5c73;
-}
-
-/* NESTED REPLIES */
-
-.replies{
-    margin-left:47px;
-    border-left:1px solid #292e43;
-}
-
-.reply{
-    padding-left:13px;
-}
-
-/* COMPOSER */
-
-.composer{
-    position:fixed;
-    bottom:0;
-    left:50%;
-    transform:translateX(-50%);
-    width:100%;
-    max-width:700px;
-    background:#0b0f1e;
-    border-top:1px solid #24283a;
-    padding:10px 12px;
-    z-index:30;
-}
-
-.composer-row{
-    display:flex;
-    align-items:flex-end;
-    gap:8px;
-}
-
-.composer-avatar{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    object-fit:cover;
-    background:#161a2b;
-    flex-shrink:0;
-}
-
-.input-box{
-    flex:1;
-    background:#151a2b;
-    border:1px solid #252b40;
-    border-radius:18px;
-    display:flex;
-    align-items:flex-end;
-    padding:7px 10px;
-}
-
-#cInput{
-    width:100%;
-    min-height:22px;
-    max-height:100px;
-    resize:none;
-    background:none;
-    border:none;
-    outline:none;
-    color:#fff;
-    font-size:14px;
-    line-height:1.4;
-}
-
-#cInput::placeholder{
-    color:#73798d;
-}
-
-.composer-btn{
-    width:36px;
-    height:36px;
-    border-radius:50%;
-    border:0;
-    background:#151a2b;
-    color:#aeb4c8;
-    cursor:pointer;
-    flex-shrink:0;
-}
-
-.composer-btn:hover{
-    background:#20263b;
-    color:#fff;
-}
-
-.send-btn{
-    background:#7357ff;
-    color:#fff;
-}
-
-.send-btn:hover{
-    background:#826aff;
-}
-
-.recording{
-    background:#d9465f;
-    color:#fff;
-}
-
-.file-preview{
-    display:none;
-    margin:8px 44px 0 44px;
-    padding:7px 10px;
-    background:#151a2b;
-    border-radius:10px;
-    font-size:12px;
-    color:#aeb4c8;
-}
-
-.file-preview.active{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-}
-
-.remove-preview{
-    background:none;
-    border:0;
-    color:#ff6178;
-    cursor:pointer;
-}
-
-.replying{
-    display:none;
-    margin:0 44px 8px 44px;
-    padding:7px 10px;
-    border-left:3px solid #7357ff;
-    background:#111628;
-    border-radius:6px;
-    font-size:12px;
-    color:#9da4ba;
-}
-
-.replying.active{
-    display:block;
-}
-
-.replying button{
-    float:right;
-    border:0;
-    background:none;
-    color:#ff6178;
-    cursor:pointer;
-}
-
-/* MODAL */
-
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.75);
-    z-index:100;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-.modal.active{
-    display:flex;
-}
-
-.modal-box{
-    width:100%;
-    max-width:350px;
-    background:#111628;
-    border:1px solid #292f45;
-    border-radius:14px;
-    padding:20px;
-    text-align:center;
-}
-
-.modal-title{
-    font-size:17px;
-    font-weight:700;
-    margin-bottom:8px;
-}
-
-.modal-text{
-    color:#8f96aa;
-    font-size:13px;
-    margin-bottom:18px;
-}
-
-.modal-actions{
-    display:flex;
-    gap:10px;
-}
-
-.modal-actions button{
-    flex:1;
-    padding:11px;
-    border:0;
-    border-radius:9px;
-    cursor:pointer;
-}
-
-.cancel-btn{
-    background:#20263a;
-    color:#fff;
-}
-
-.confirm-delete{
-    background:#d83f59;
-    color:#fff;
-}
-
-.toast{
-    position:fixed;
-    left:50%;
-    bottom:90px;
-    transform:translateX(-50%);
-    background:#20263a;
-    color:#fff;
-    padding:10px 15px;
-    border-radius:9px;
-    font-size:13px;
-    display:none;
-    z-index:200;
-}
-
-.toast.show{
-    display:block;
-}
-
-@media(max-width:500px){
-
-    .header{
-        height:58px;
-    }
-
-    .comment{
-        padding:13px 12px;
-    }
-
-    .replies{
-        margin-left:35px;
-    }
-
-    .comment-time{
-        font-size:10px;
-    }
-
-}
-
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:#070914; color:#fff; font-family:Arial,Helvetica,sans-serif; min-height:100vh; }
+.app { max-width:700px; margin:auto; min-height:100vh; background:#090c19; position:relative; }
+.header { height:62px; display:flex; align-items:center; padding:0 16px; border-bottom:1px solid #202438; position:sticky; top:0; background:#090c19; z-index:20; }
+.back-btn { width:40px; height:40px; border:0; background:none; color:#fff; font-size:20px; cursor:pointer; }
+.header-title { font-size:19px; font-weight:700; margin-left:8px; }
+.header-count { color:#9298ad; font-size:14px; margin-left:7px; }
+.post-box { padding:15px; border-bottom:1px solid #202438; }
+.post-user { display:flex; align-items:center; }
+.post-avatar { width:42px; height:42px; border-radius:50%; object-fit:cover; background:#161a2b; }
+.post-user-info { margin-left:10px; }
+.post-name { font-size:15px; font-weight:700; }
+.post-username { color:#8c92a8; font-size:13px; margin-top:2px; }
+.post-content { margin-top:12px; line-height:1.5; color:#e9ebf5; white-space:pre-wrap; word-break:break-word; }
+.post-image { width:100%; max-height:450px; object-fit:cover; border-radius:12px; margin-top:12px; }
+.comments-area { padding-bottom:110px; }
+.loading { text-align:center; padding:35px 15px; color:#8d93a9; }
+.empty { text-align:center; padding:45px 20px; color:#858ba1; }
+.empty i { font-size:30px; margin-bottom:12px; display:block; }
+.comment { padding:14px 15px; border-bottom:1px solid #171b2b; }
+.comment-inner { display:flex; align-items:flex-start; }
+.comment-avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; flex-shrink:0; background:#161a2b; }
+.comment-main { margin-left:10px; min-width:0; flex:1; }
+.comment-head { display:flex; align-items:center; gap:7px; }
+.comment-name { font-size:14px; font-weight:700; }
+.comment-username { color:#7f869d; font-size:12px; }
+.comment-time { color:#6f758b; font-size:11px; margin-left:auto; }
+.comment-text { color:#e5e7ef; font-size:14px; line-height:1.45; margin-top:5px; word-break:break-word; }
+.comment-media { margin-top:9px; max-width:260px; max-height:300px; border-radius:10px; object-fit:cover; display:block; }
+.comment-voice { margin-top:8px; width:100%; max-width:300px; height:38px; }
+.comment-actions { display:flex; align-items:center; gap:18px; margin-top:9px; }
+.comment-action { border:0; background:none; color:#858ba1; cursor:pointer; font-size:12px; display:flex; align-items:center; gap:5px; }
+.comment-action:hover { color:#fff; }
+.comment-action.liked { color:#7c5cff; }
+.comment-action.delete { color:#ff5c73; }
+.replies { margin-left:47px; border-left:1px solid #292e43; margin-top:10px; }
+.reply { padding-left:13px; padding-top:10px; }
+.composer { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:700px; background:#0b0f1e; border-top:1px solid #24283a; padding:10px 12px; z-index:30; }
+.composer-row { display:flex; align-items:flex-end; gap:8px; }
+.composer-avatar { width:36px; height:36px; border-radius:50%; object-fit:cover; background:#161a2b; flex-shrink:0; }
+.input-box { flex:1; background:#151a2b; border:1px solid #252b40; border-radius:18px; display:flex; align-items:flex-end; padding:7px 10px; }
+#cInput { width:100%; min-height:22px; max-height:100px; resize:none; background:none; border:none; outline:none; color:#fff; font-size:14px; line-height:1.4; font-family:inherit; }
+#cInput::placeholder { color:#73798d; }
+.composer-btn { width:36px; height:36px; border-radius:50%; border:0; background:#151a2b; color:#aeb4c8; cursor:pointer; flex-shrink:0; }
+.composer-btn:hover { background:#20263b; color:#fff; }
+.send-btn { background:#7357ff; color:#fff; }
+.send-btn:hover { background:#826aff; }
+.recording { background:#d9465f !important; color:#fff !important; }
+.file-preview { display:none; margin:8px 44px 0 44px; padding:7px 10px; background:#151a2b; border-radius:10px; font-size:12px; color:#aeb4c8; align-items:center; justify-content:space-between; }
+.file-preview.active { display:flex; }
+.remove-preview { background:none; border:0; color:#ff6178; cursor:pointer; }
+.replying { display:none; margin:0 44px 8px 44px; padding:7px 10px; border-left:3px solid #7357ff; background:#111628; border-radius:6px; font-size:12px; color:#9da4ba; }
+.replying.active { display:flex; align-items:center; justify-content:space-between; }
+.replying button { border:0; background:none; color:#ff6178; cursor:pointer; }
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:100; align-items:center; justify-content:center; padding:20px; }
+.modal.active { display:flex; }
+.modal-box { width:100%; max-width:350px; background:#111628; border:1px solid #292f45; border-radius:14px; padding:20px; text-align:center; }
+.modal-title { font-size:17px; font-weight:700; margin-bottom:8px; }
+.modal-text { color:#8f96aa; font-size:13px; margin-bottom:18px; }
+.modal-actions { display:flex; gap:10px; }
+.modal-actions button { flex:1; padding:11px; border:0; border-radius:9px; cursor:pointer; }
+.cancel-btn { background:#20263a; color:#fff; }
+.confirm-delete { background:#d83f59; color:#fff; }
+.toast { position:fixed; left:50%; bottom:90px; transform:translateX(-50%); background:#20263a; color:#fff; padding:10px 15px; border-radius:9px; font-size:13px; display:none; z-index:200; }
+.toast.show { display:block; }
+@media(max-width:500px) { .header { height:58px; } .comment { padding:13px 12px; } .replies { margin-left:35px; } .comment-time { font-size:10px; } }
 </style>
 </head>
-
 <body>
 
 <div class="app">
-
-    <!-- HEADER -->
-
     <div class="header">
-
-        <button class="back-btn" onclick="goBack()">
-            <i class="fa-solid fa-arrow-left"></i>
-        </button>
-
-        <div class="header-title">
-            Comments
-        </div>
-
-        <div class="header-count" id="commentCount">
-            0
-        </div>
-
+        <button class="back-btn" onclick="goBack()"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="header-title">Comments</div>
+        <div class="header-count" id="commentCount">0</div>
     </div>
-
-
-    <!-- POST -->
 
     <div class="post-box" id="postBox">
-
-        <div class="loading">
-            Loading post...
-        </div>
-
+        <div class="loading">Loading post...</div>
     </div>
-
-
-    <!-- COMMENTS -->
 
     <div class="comments-area" id="commentsArea">
-
-        <div class="loading">
-            Loading comments...
-        </div>
-
+        <div class="loading">Loading comments...</div>
     </div>
-
-
-    <!-- COMPOSER -->
 
     <div class="composer">
-
-        <div class="replying" id="replyingBox">
-
-            <span id="replyingText">
-                Replying to comment
-            </span>
-
-            <button onclick="cancelReply()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
+        <div class="replying" id="replyBar">
+            <span id="replyName">Replying to comment</span>
+            <button onclick="cancelReply()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
 
         <div class="file-preview" id="filePreview">
-
-            <span id="filePreviewText">
-                Photo selected
-            </span>
-
-            <button class="remove-preview" onclick="removeSelectedFile()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
+            <span id="filePreviewText">Photo selected</span>
+            <button class="remove-preview" onclick="removeSelectedImage()"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
 
         <div class="composer-row">
-
-            <img
-                id="composerAvatar"
-                class="composer-avatar"
-                src=""
-                alt=""
-            >
-
-
-            <button
-                class="composer-btn"
-                onclick="pickImage()"
-                title="Photo"
-            >
-                <i class="fa-regular fa-image"></i>
-            </button>
-
-
+            <img id="composerAvatar" class="composer-avatar" src="" alt="">
+            <button class="composer-btn" onclick="pickCommentImage()" title="Photo"><i class="fa-regular fa-image"></i></button>
             <div class="input-box">
-
-                <textarea
-                    id="cInput"
-                    placeholder="Write a comment..."
-                    rows="1"
-                ></textarea>
-
+                <textarea id="cInput" placeholder="Write a comment..." rows="1"></textarea>
             </div>
-
-
-            <button
-                id="recordBtn"
-                class="composer-btn"
-                onclick="toggleRec()"
-                title="Voice comment"
-            >
-                <i class="fa-solid fa-microphone"></i>
-            </button>
-
-
-            <button
-                class="composer-btn send-btn"
-                onclick="sendC()"
-                title="Send"
-            >
-                <i class="fa-solid fa-paper-plane"></i>
-            </button>
-
+            <button id="recordBtn" class="composer-btn" onclick="toggleCommentVoice()" title="Voice comment"><i class="fa-solid fa-microphone"></i></button>
+            <button class="composer-btn send-btn" onclick="sendComment()" title="Send"><i class="fa-solid fa-paper-plane"></i></button>
         </div>
 
-
-        <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
-            style="display:none"
-            onchange="handleImageSelected(event)"
-        >
-
+        <input type="file" id="imageInput" accept="image/*" style="display:none">
     </div>
-
 </div>
-
-
-<!-- DELETE MODAL -->
 
 <div class="modal" id="deleteModal">
-
     <div class="modal-box">
-
-        <div class="modal-title">
-            Delete comment?
-        </div>
-
-        <div class="modal-text">
-            This comment will be permanently deleted.
-        </div>
-
+        <div class="modal-title">Delete comment?</div>
+        <div class="modal-text">This comment will be permanently deleted.</div>
         <div class="modal-actions">
-
-            <button
-                class="cancel-btn"
-                onclick="closeDeleteModal()"
-            >
-                Cancel
-            </button>
-
-            <button
-                class="confirm-delete"
-                onclick="confirmDelete()"
-            >
-                Delete
-            </button>
-
+            <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+            <button class="confirm-delete" onclick="confirmDeleteComment()">Delete</button>
         </div>
-
     </div>
-
 </div>
 
-
 <div class="toast" id="toast"></div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script>
-
 let currentUser = null;
 let currentPostId = null;
 let currentPost = null;
-
 let allComments = [];
 let allCommentLikes = [];
-
 let selectedImageFile = null;
-
 let mediaRecorder = null;
 let audioChunks = [];
 let recordedAudioBlob = null;
 let isRecording = false;
-
 let replyingTo = null;
 let deletingCommentId = null;
 
-
 /* BASIC HELPERS */
-
-function escapeHTML(value){
-
-    if(value === null || value === undefined){
-        return "";
-    }
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-}
-
-
-function defaultAvatar(){
-
-    return "data:image/svg+xml;charset=UTF-8," +
-    encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg"
-             width="100"
-             height="100"
-             viewBox="0 0 100 100">
-
-            <rect width="100" height="100"
-                  fill="#171c2d"/>
-
-            <circle cx="50" cy="38" r="18"
-                    fill="#777f98"/>
-
-            <path d="M20 88
-                     C24 65 38 57 50 57
-                     C62 57 76 65 80 88"
-                  fill="#777f98"/>
-
-        </svg>
-    `);
-
-}
-
-
-function timeAgo(date){
-
-    if(!date){
-        return "";
-    }
-
-    const now = new Date();
-    const then = new Date(date);
-
-    const seconds =
-        Math.floor((now - then) / 1000);
-
-    if(seconds < 10){
-        return "now";
-    }
-
-    if(seconds < 60){
-        return seconds + "s";
-    }
-
-    const minutes =
-        Math.floor(seconds / 60);
-
-    if(minutes < 60){
-        return minutes + "m";
-    }
-
-    const hours =
-        Math.floor(minutes / 60);
-
-    if(hours < 24){
-        return hours + "h";
-    }
-
-    const days =
-        Math.floor(hours / 24);
-
-    if(days < 7){
-        return days + "d";
-    }
-
-    const weeks =
-        Math.floor(days / 7);
-
-    if(weeks < 5){
-        return weeks + "w";
-    }
-
-    return then.toLocaleDateString();
-
-}
-
-
-function showToast(message){
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    setTimeout(function(){
-
-        toast.classList.remove("show");
-
-    },2500);
-
-}
-
-
-function goBack(){
-
-    if(history.length > 1){
-
-        history.back();
-
-    }else{
-
-        window.location.href = "home.html";
-
-    }
-
-}
-
-
-/* GET POST ID */
-
-function getPostId(){
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    return params.get("post");
-
-}
-
+function escapeHTML(value){ if(value===null||value===undefined){return"";} return String(value).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+function defaultAvatar(){ return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="#171c2d"/><circle cx="50" cy="38" r="18" fill="#777f98"/><path d="M20 88 C24 65 38 57 50 57 C62 57 76 65 80 88" fill="#777f98"/></svg>`); }
+function timeAgo(date){ if(!date){return"";} const now=new Date(); const then=new Date(date); const seconds=Math.floor((now-then)/1000); if(seconds<10){return"now";} if(seconds<60){return seconds+"s";} const minutes=Math.floor(seconds/60); if(minutes<60){return minutes+"m";} const hours=Math.floor(minutes/60); if(hours<24){return hours+"h";} const days=Math.floor(hours/24); if(days<7){return days+"d";} const weeks=Math.floor(days/7); if(weeks<5){return weeks+"w";} return then.toLocaleDateString(); }
+function showToast(message){ const toast=document.getElementById("toast"); toast.textContent=message; toast.classList.add("show"); setTimeout(function(){ toast.classList.remove("show"); },2500); }
+function goBack(){ if(history.length>1){ history.back(); }else{ window.location.href="home.html"; } }
+function getPostId(){ const params=new URLSearchParams(window.location.search); return params.get("post"); }
 
 /* CURRENT USER */
-
 async function loadCurrentUser(){
-
-    const result =
-        await supabaseClient.auth.getUser();
-
-    if(result.error){
-
-        console.error(result.error);
-
-        return false;
-
-    }
-
-    currentUser =
-        result.data.user;
-
-    if(!currentUser){
-
-        window.location.href =
-            "login.html";
-
-        return false;
-
-    }
-
+    const result = await supabaseClient.auth.getUser();
+    if(result.error){ console.error(result.error); return false; }
+    currentUser = result.data.user;
+    if(!currentUser){ window.location.href="login.html"; return false; }
+    
+    // Load composer avatar
+    const { data: profile } = await supabaseClient.from('profiles').select('avatar_url').eq('id', currentUser.id).single();
+    const avatarEl = document.getElementById('composerAvatar');
+    if(profile && profile.avatar_url) avatarEl.src = profile.avatar_url;
+    else avatarEl.src = defaultAvatar();
+    
     return true;
-
 }
-
 
 /* LOAD POST */
-
 async function loadPost(){
-
-    const result =
-        await supabaseClient
-        .from("posts")
-        .select(`
-            id,
-            User_id,
-            content,
-            image_url,
-            Create_at
-        `)
-        .eq("id",currentPostId)
-        .maybeSingle();
-
-
-    if(result.error){
-
-        console.error(
-            "Post error:",
-            result.error
-        );
-
-        document.getElementById(
-            "postBox"
-        ).innerHTML = `
-
-            <div class="empty">
-                Unable to load post.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    if(!result.data){
-
-        document.getElementById(
-            "postBox"
-        ).innerHTML = `
-
-            <div class="empty">
-                Post not found.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    currentPost =
-        result.data;
-
-
+    const result = await supabaseClient.from("posts").select("id, User_id, content, image_url, Create_at").eq("id",currentPostId).maybeSingle();
+    if(result.error || !result.data){ document.getElementById("postBox").innerHTML = `<div class="empty">Post not found.</div>`; return; }
+    currentPost = result.data;
+    
     let profile = null;
+    const profileResult = await supabaseClient.from("profiles").select("id, full_name, username, avatar_url").eq("id",currentPost.User_id).maybeSingle();
+    if(!profileResult.error){ profile = profileResult.data; }
 
+    const avatar = profile && profile.avatar_url ? profile.avatar_url : defaultAvatar();
+    const name = profile && profile.full_name ? profile.full_name : "StudentX User";
+    const username = profile && profile.username ? "@" + profile.username : "";
 
-    const profileResult =
-        await supabaseClient
-        .from("profiles")
-        .select(`
-            id,
-            full_name,
-            username,
-            avatar_url
-        `)
-        .eq("id",currentPost.User_id)
-        .maybeSingle();
-
-
-    if(!profileResult.error){
-
-        profile =
-            profileResult.data;
-
-    }
-
-
-    const avatar =
-        profile &&
-        profile.avatar_url
-        ? profile.avatar_url
-        : defaultAvatar();
-
-
-    const name =
-        profile &&
-        profile.full_name
-        ? profile.full_name
-        : "StudentX User";
-
-
-    const username =
-        profile &&
-        profile.username
-        ? "@" + profile.username
-        : "";
-
-
-    let html = `
-
-        <div class="post-user">
-
-            <img
-                class="post-avatar"
-                src="${escapeHTML(avatar)}"
-                onerror="this.src='${defaultAvatar()}'"
-                alt=""
-            >
-
-            <div class="post-user-info">
-
-                <div class="post-name">
-                    ${escapeHTML(name)}
-                </div>
-
-                <div class="post-username">
-                    ${escapeHTML(username)}
-                    ${username ? " · " : ""}
-                    ${timeAgo(currentPost.Create_at)}
-                </div>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    if(currentPost.content){
-
-        html += `
-
-            <div class="post-content">
-                ${escapeHTML(
-                    currentPost.content
-                )}
-            </div>
-
-        `;
-
-    }
-
-
-    if(currentPost.image_url){
-
-        html += `
-
-            <img
-                class="post-image"
-                src="${escapeHTML(
-                    currentPost.image_url
-                )}"
-                onerror="
-                    this.style.display='none'
-                "
-                alt=""
-            >
-
-        `;
-
-    }
-
-
-    document.getElementById(
-        "postBox"
-    ).innerHTML = html;
-
+    let html = `<div class="post-user"><img class="post-avatar" src="${escapeHTML(avatar)}" onerror="this.src='${defaultAvatar()}'" alt=""><div class="post-user-info"><div class="post-name">${escapeHTML(name)}</div><div class="post-username">${escapeHTML(username)} ${username ? " · " : ""} ${timeAgo(currentPost.Create_at)}</div></div></div>`;
+    if(currentPost.content){ html += `<div class="post-content">${escapeHTML(currentPost.content)}</div>`; }
+    if(currentPost.image_url){ html += `<img class="post-image" src="${escapeHTML(currentPost.image_url)}" onerror="this.style.display='none'" alt="">`; }
+    document.getElementById("postBox").innerHTML = html;
 }
-
 
 /* LOAD COMMENTS */
-
 async function loadComments(){
-
-    const result =
-        await supabaseClient
-        .from("comments")
-        .select(`
-            id,
-            post_id,
-            user_id,
-            parent_id,
-            content,
-            media_url,
-            media_type,
-            created_at,
-            updated_at
-        `)
-        .eq("post_id",currentPostId)
-        .order(
-            "created_at",
-            {ascending:true}
-        );
-
-
-    if(result.error){
-
-        console.error(
-            "Comments error:",
-            result.error
-        );
-
-        document.getElementById(
-            "commentsArea"
-        ).innerHTML = `
-
-            <div class="empty">
-                Unable to load comments.
-            </div>
-
-        `;
-
-        return;
-
-    }
-
-
-    allComments =
-        result.data || [];
-
-
+    const result = await supabaseClient.from("comments").select("id, post_id, user_id, parent_id, content, media_url, media_type, created_at").eq("post_id",currentPostId).order("created_at",{ascending:true});
+    if(result.error){ document.getElementById("commentsArea").innerHTML = `<div class="empty">Unable to load comments.</div>`; return; }
+    allComments = result.data || [];
     await loadCommentProfiles();
-
     await loadCommentLikes();
-
     renderComments();
-
 }
-   async function sendComment() {
-    if (!currentUser) {
-        showToast("Please login first");
+
+// WANNAN AIKIN TA BACE, NA SA TA NAN DOMIN TA JUYA
+async function loadCommentProfiles() {
+    const userIds = [...new Set(allComments.map(c => c.user_id))];
+    if (userIds.length === 0) return;
+    const { data, error } = await supabaseClient.from('profiles').select('id, full_name, username, avatar_url').in('id', userIds);
+    if (error) return;
+    const profileMap = {};
+    data.forEach(p => profileMap[p.id] = p);
+    allComments.forEach(comment => { comment.user = profileMap[comment.user_id] || null; });
+}
+
+// WANNAN MA TA BACE
+async function loadCommentLikes() {
+    if (allComments.length === 0) { allCommentLikes = []; return; }
+    const commentIds = allComments.map(c => c.id);
+    const { data, error } = await supabaseClient.from('comment_likes').select('id, comment_id, user_id').in('comment_id', commentIds);
+    if (error) { allCommentLikes = []; return; }
+    allCommentLikes = data || [];
+}
+
+// WANNAN MA TA BACE DOMIN TA NUNA COMMENTS A SCREEN
+function renderComments() {
+    const commentsArea = document.getElementById("commentsArea");
+    document.getElementById("commentCount").innerText = allComments.length;
+    if (allComments.length === 0) {
+        commentsArea.innerHTML = `<div class="empty"><i class="fa-regular fa-comment"></i>No comments yet. Be the first!</div>`;
         return;
     }
+    const rootComments = allComments.filter(c => !c.parent_id);
+    let html = '';
+    rootComments.forEach(comment => { html += buildCommentHtml(comment); });
+    commentsArea.innerHTML = html;
+}
 
+function buildCommentHtml(comment, isReply = false) {
+    const likes = allCommentLikes.filter(l => l.comment_id === comment.id);
+    const isLiked = likes.some(l => l.user_id === (currentUser ? currentUser.id : null));
+    const profile = comment.user || {};
+    const avatar = profile.avatar_url || defaultAvatar();
+    const name = profile.full_name || "StudentX User";
+    const username = profile.username ? "@" + profile.username : "";
+    
+    let mediaHtml = '';
+    if (comment.media_type === 'image' && comment.media_url) {
+        mediaHtml = `<img class="comment-media" src="${escapeHTML(comment.media_url)}" alt="">`;
+    } else if (comment.media_type === 'voice' && comment.media_url) {
+        mediaHtml = `<audio class="comment-voice" controls src="${escapeHTML(comment.media_url)}"></audio>`;
+    }
+
+    const replies = allComments.filter(c => c.parent_id === comment.id);
+    let repliesHtml = '';
+    if (replies.length > 0) {
+        repliesHtml = '<div class="replies">';
+        replies.forEach(reply => { repliesHtml += buildCommentHtml(reply, true); });
+        repliesHtml += '</div>';
+    }
+
+    return `
+        <div class="comment ${isReply ? 'reply' : ''}">
+            <div class="comment-inner">
+                <img class="comment-avatar" src="${escapeHTML(avatar)}" onerror="this.src='${defaultAvatar()}'" alt="">
+                <div class="comment-main">
+                    <div class="comment-head">
+                        <div class="comment-name">${escapeHTML(name)}</div>
+                        <div class="comment-username">${escapeHTML(username)}</div>
+                        <div class="comment-time">${timeAgo(comment.created_at)}</div>
+                    </div>
+                    <div class="comment-text">${escapeHTML(comment.content || '')}</div>
+                    ${mediaHtml}
+                    <div class="comment-actions">
+                        <button class="comment-action ${isLiked ? 'liked' : ''}" onclick="toggleCommentLike('${comment.id}')">
+                            <i class="fa-solid fa-heart"></i> ${likes.length}
+                        </button>
+                        <button class="comment-action" onclick="replyToComment('${comment.id}')">
+                            <i class="fa-solid fa-reply"></i> Reply
+                        </button>
+                        ${comment.user_id === (currentUser ? currentUser.id : null) ? `
+                        <button class="comment-action delete" onclick="deleteComment('${comment.id}')">
+                            <i class="fa-solid fa-trash"></i> Delete
+                        </button>` : ''}
+                    </div>
+                </div>
+            </div>
+            ${repliesHtml}
+        </div>
+    `;
+}
+
+/* SEND COMMENT */
+async function sendComment() {
+    if (!currentUser) { showToast("Please login first"); return; }
     const input = document.getElementById("cInput");
     const text = input.value.trim();
-
-    if (!text && !selectedImageFile && !recordedAudioBlob) {
-        showToast("Write a comment or attach media");
-        return;
-    }
-
-    const sendBtn = document.getElementById("sendBtn");
+    if (!text && !selectedImageFile && !recordedAudioBlob) { showToast("Write a comment or attach media"); return; }
+    const sendBtn = document.querySelector(".send-btn");
 
     try {
         sendBtn.disabled = true;
-
-        let mediaUrl = null;
-        let mediaType = null;
-
-        /* =========================
-           UPLOAD IMAGE
-        ========================= */
+        let mediaUrl = null, mediaType = null;
 
         if (selectedImageFile) {
-
-            const ext = selectedImageFile.name
-                .split(".")
-                .pop()
-                .toLowerCase();
-
-            const filePath =
-                currentUser.id +
-                "/" +
-                Date.now() +
-                "." +
-                ext;
-
-            const uploadResult =
-                await supabaseClient
-                .storage
-                .from("comment-media")
-                .upload(
-                    filePath,
-                    selectedImageFile,
-                    {
-                        cacheControl: "3600",
-                        upsert: false
-                    }
-                );
-
-            if (uploadResult.error) {
-                throw uploadResult.error;
-            }
-
-            const publicResult =
-                supabaseClient
-                .storage
-                .from("comment-media")
-                .getPublicUrl(filePath);
-
+            const ext = selectedImageFile.name.split(".").pop().toLowerCase();
+            const filePath = currentUser.id + "/" + Date.now() + "." + ext;
+            const uploadResult = await supabaseClient.storage.from("comment-media").upload(filePath, selectedImageFile, { cacheControl: "3600", upsert: false });
+            if (uploadResult.error) throw uploadResult.error;
+            const publicResult = supabaseClient.storage.from("comment-media").getPublicUrl(filePath);
             mediaUrl = publicResult.data.publicUrl;
             mediaType = "image";
         }
 
-        /* =========================
-           UPLOAD VOICE
-        ========================= */
-
         if (recordedAudioBlob) {
-
             let extension = "webm";
-
-            if (
-                recordedAudioBlob.type &&
-                recordedAudioBlob.type.includes("mp4")
-            ) {
-                extension = "mp4";
-            }
-
-            if (
-                recordedAudioBlob.type &&
-                recordedAudioBlob.type.includes("ogg")
-            ) {
-                extension = "ogg";
-            }
-
-            const voicePath =
-                currentUser.id +
-                "/" +
-                Date.now() +
-                "." +
-                extension;
-
-            const uploadResult =
-                await supabaseClient
-                .storage
-                .from("comment-voice")
-                .upload(
-                    voicePath,
-                    recordedAudioBlob,
-                    {
-                        cacheControl: "3600",
-                        contentType:
-                            recordedAudioBlob.type ||
-                            "audio/webm",
-                        upsert: false
-                    }
-                );
-
-            if (uploadResult.error) {
-                throw uploadResult.error;
-            }
-
-            const publicResult =
-                supabaseClient
-                .storage
-                .from("comment-voice")
-                .getPublicUrl(voicePath);
-
+            if (recordedAudioBlob.type && recordedAudioBlob.type.includes("mp4")) extension = "mp4";
+            if (recordedAudioBlob.type && recordedAudioBlob.type.includes("ogg")) extension = "ogg";
+            const voicePath = currentUser.id + "/" + Date.now() + "." + extension;
+            const uploadResult = await supabaseClient.storage.from("comment-voice").upload(voicePath, recordedAudioBlob, { 
+                cacheControl: "3600", 
+                contentType: recordedAudioBlob.type || "audio/webm", 
+                upsert: false 
+            }); // AN GYARA KUSKURE NAN
+            if (uploadResult.error) throw uploadResult.error;
+            const publicResult = supabaseClient.storage.from("comment-voice").getPublicUrl(voicePath);
             mediaUrl = publicResult.data.publicUrl;
             mediaType = "voice";
         }
 
-        /* =========================
-           CREATE COMMENT
-        ========================= */
+        const commentData = { post_id: currentPostId, user_id: currentUser.id, parent_id: replyingTo ? replyingTo.id : null, content: text || null, media_url: mediaUrl, media_type: mediaType };
+        const result = await supabaseClient.from("comments").insert(commentData).select().single();
+        if (result.error) throw result.error;
 
-        const commentData = {
-            post_id: currentPostId,
-            user_id: currentUser.id,
-            parent_id: replyingTo ? replyingTo.id : null,
-            content: text || null,
-            media_url: mediaUrl,
-            media_type: mediaType
-        };
-
-        const result =
-            await supabaseClient
-            .from("comments")
-            .insert(commentData)
-            .select()
-            .single();
-
-        if (result.error) {
-            throw result.error;
-        }
-
-        /* =========================
-           CREATE NOTIFICATION
-        ========================= */
-
-        if (
-            currentPost &&
-            currentPost.User_id &&
-            currentPost.User_id !== currentUser.id
-        ) {
-
+        if (currentPost && currentPost.User_id && currentPost.User_id !== currentUser.id) {
             let notificationType = "comment";
-
-            if (replyingTo) {
-                notificationType = "comment_reply";
-            }
-
-            const actorName =
-                currentUser.user_metadata?.full_name ||
-                currentUser.email?.split("@")[0] ||
-                "Someone";
-
-            const notificationMessage =
-                replyingTo
-                    ? actorName + " replied to your comment"
-                    : actorName + " commented on your post";
-
-            await supabaseClient
-            .from("notifications")
-            .insert({
-                recipient_id: currentPost.User_id,
-                actor_id: currentUser.id,
-                type: notificationType,
-                post_id: currentPostId,
-                comment_id: result.data.id,
-                message: notificationMessage,
-                is_read: false
-            });
+            if (replyingTo) notificationType = "comment_reply";
+            const actorName = currentUser.user_metadata?.full_name || currentUser.email?.split("@")[0] || "Someone";
+            const notificationMessage = replyingTo ? actorName + " replied to your comment" : actorName + " commented on your post";
+            await supabaseClient.from("notifications").insert({ recipient_id: currentPost.User_id, actor_id: currentUser.id, type: notificationType, post_id: currentPostId, comment_id: result.data.id, message: notificationMessage, is_read: false });
         }
-
-        /* =========================
-           RESET COMPOSER
-        ========================= */
 
         input.value = "";
-
         selectedImageFile = null;
         recordedAudioBlob = null;
-
-        const imageInput =
-            document.getElementById("imageInput");
-
-        if (imageInput) {
-            imageInput.value = "";
-        }
-
-        const preview =
-            document.getElementById("filePreview");
-
-        if (preview) {
-            preview.innerHTML = "";
-            preview.style.display = "none";
-        }
-
+        const imageInput = document.getElementById("imageInput");
+        if (imageInput) imageInput.value = "";
+        const preview = document.getElementById("filePreview");
+        if (preview) { preview.innerHTML = ""; preview.classList.remove("active"); }
         replyingTo = null;
-
-        const replyBar =
-            document.getElementById("replyBar");
-
-        if (replyBar) {
-            replyBar.style.display = "none";
-        }
-
-        /* =========================
-           RELOAD COMMENTS
-        ========================= */
+        const replyBar = document.getElementById("replyBar");
+        if (replyBar) replyBar.classList.remove("active");
 
         await loadComments();
-
         showToast("Comment posted successfully");
-
     } catch (error) {
-
         console.error("SEND COMMENT ERROR:", error);
-
-        showToast(
-            error.message ||
-            "Failed to post comment"
-        );
-
+        showToast(error.message || "Failed to post comment");
     } finally {
-
         sendBtn.disabled = false;
     }
-    } 
-    function replyToComment(commentId) {
-
-    const comment = allComments.find(
-        c => c.id === commentId
-    );
-
-    if (!comment) return;
-
-    replyingTo = comment;
-
-    const replyBar =
-        document.getElementById("replyBar");
-
-    const replyName =
-        document.getElementById("replyName");
-
-    if (replyName) {
-        const name =
-            comment.user?.full_name ||
-            comment.user?.username ||
-            "User";
-
-        replyName.textContent =
-            "Replying to " + name;
-    }
-
-    if (replyBar) {
-        replyBar.style.display = "flex";
-    }
-
-    const input =
-        document.getElementById("cInput");
-
-    if (input) {
-        input.placeholder = "Write a reply...";
-        input.focus();
-    }
 }
 
+/* REPLY */
+function replyToComment(commentId) {
+    const comment = allComments.find(c => c.id === commentId);
+    if (!comment) return;
+    replyingTo = comment;
+    const replyBar = document.getElementById("replyBar");
+    const replyName = document.getElementById("replyName");
+    if (replyName) {
+        const name = comment.user?.full_name || comment.user?.username || "User";
+        replyName.textContent = "Replying to " + name;
+    }
+    if (replyBar) replyBar.classList.add("active");
+    const input = document.getElementById("cInput");
+    if (input) { input.placeholder = "Write a reply..."; input.focus(); }
+}
 
 function cancelReply() {
-
     replyingTo = null;
-
-    const replyBar =
-        document.getElementById("replyBar");
-
-    if (replyBar) {
-        replyBar.style.display = "none";
-    }
-
-    const input =
-        document.getElementById("cInput");
-
-    if (input) {
-        input.placeholder = "Write a comment...";
-    }
+    const replyBar = document.getElementById("replyBar");
+    if (replyBar) replyBar.classList.remove("active");
+    const input = document.getElementById("cInput");
+    if (input) input.placeholder = "Write a comment...";
 }
 
-
-/* =========================
-   COMMENT LIKE
-========================= */
-
+/* LIKE */
 async function toggleCommentLike(commentId) {
-
-    if (!currentUser) {
-        showToast("Please login first");
-        return;
-    }
-
+    if (!currentUser) { showToast("Please login first"); return; }
     try {
-
-        const existing =
-            allCommentLikes.find(
-                like =>
-                    like.comment_id === commentId &&
-                    like.user_id === currentUser.id
-            );
-
+        const existing = allCommentLikes.find(like => like.comment_id === commentId && like.user_id === currentUser.id);
         if (existing) {
-
-            const result =
-                await supabaseClient
-                .from("comment_likes")
-                .delete()
-                .eq("id", existing.id);
-
-            if (result.error) {
-                throw result.error;
-            }
-
+            const result = await supabaseClient.from("comment_likes").delete().eq("id", existing.id);
+            if (result.error) throw result.error;
         } else {
-
-            const result =
-                await supabaseClient
-                .from("comment_likes")
-                .insert({
-                    comment_id: commentId,
-                    user_id: currentUser.id
-                });
-
-            if (result.error) {
-                throw result.error;
-            }
+            const result = await supabaseClient.from("comment_likes").insert({ comment_id: commentId, user_id: currentUser.id });
+            if (result.error) throw result.error;
         }
-
         await loadComments();
-
     } catch (error) {
-
-        console.error(
-            "COMMENT LIKE ERROR:",
-            error
-        );
-
-        showToast(
-            error.message ||
-            "Unable to like comment"
-        );
+        console.error("COMMENT LIKE ERROR:", error);
+        showToast(error.message || "Unable to like comment");
     }
 }
 
-
-/* =========================
-   DELETE COMMENT
-========================= */
-
+/* DELETE */
 async function deleteComment(commentId) {
-
-    if (!currentUser) {
-        showToast("Please login first");
-        return;
-    }
-
-    const comment =
-        allComments.find(
-            c => c.id === commentId
-        );
-
+    if (!currentUser) { showToast("Please login first"); return; }
+    const comment = allComments.find(c => c.id === commentId);
     if (!comment) return;
-
-    if (comment.user_id !== currentUser.id) {
-        showToast(
-            "You can only delete your own comment"
-        );
-        return;
-    }
-
+    if (comment.user_id !== currentUser.id) { showToast("You can only delete your own comment"); return; }
     deletingCommentId = commentId;
-
-    const modal =
-        document.getElementById("deleteModal");
-
-    if (modal) {
-        modal.style.display = "flex";
-    }
+    const modal = document.getElementById("deleteModal");
+    if (modal) modal.classList.add("active");
 }
-
-
-/* =========================
-   CONFIRM DELETE
-========================= */
 
 async function confirmDeleteComment() {
-
     if (!deletingCommentId) return;
-
     try {
-
-        const idsToDelete =
-            getCommentAndReplies(
-                deletingCommentId
-            );
-
-        /* Delete likes first */
-
-        const likeResult =
-            await supabaseClient
-            .from("comment_likes")
-            .delete()
-            .in(
-                "comment_id",
-                idsToDelete
-            );
-
-        if (likeResult.error) {
-            throw likeResult.error;
-        }
-
-        /* Delete comments */
-
-        const commentResult =
-            await supabaseClient
-            .from("comments")
-            .delete()
-            .in(
-                "id",
-                idsToDelete
-            );
-
-        if (commentResult.error) {
-            throw commentResult.error;
-        }
-
+        const idsToDelete = getCommentAndReplies(deletingCommentId);
+        const likeResult = await supabaseClient.from("comment_likes").delete().in("comment_id", idsToDelete);
+        if (likeResult.error) throw likeResult.error;
+        const commentResult = await supabaseClient.from("comments").delete().in("id", idsToDelete);
+        if (commentResult.error) throw commentResult.error;
         closeDeleteModal();
-
         deletingCommentId = null;
-
         await loadComments();
-
-        showToast(
-            "Comment deleted successfully"
-        );
-
+        showToast("Comment deleted successfully");
     } catch (error) {
-
-        console.error(
-            "DELETE COMMENT ERROR:",
-            error
-        );
-
-        showToast(
-            error.message ||
-            "Unable to delete comment"
-        );
+        console.error("DELETE COMMENT ERROR:", error);
+        showToast(error.message || "Unable to delete comment");
     }
 }
 
-
-/* =========================
-   FIND COMMENT + ALL REPLIES
-========================= */
-
 function getCommentAndReplies(commentId) {
-
     const ids = [commentId];
-
     function findReplies(parentId) {
-
-        const replies =
-            allComments.filter(
-                c => c.parent_id === parentId
-            );
-
-        replies.forEach(reply => {
-
-            ids.push(reply.id);
-
-            findReplies(reply.id);
-        });
+        const replies = allComments.filter(c => c.parent_id === parentId);
+        replies.forEach(reply => { ids.push(reply.id); findReplies(reply.id); });
     }
-
     findReplies(commentId);
-
     return ids;
 }
 
-
-/* =========================
-   CLOSE DELETE MODAL
-========================= */
-
 function closeDeleteModal() {
-
-    const modal =
-        document.getElementById("deleteModal");
-
-    if (modal) {
-        modal.style.display = "none";
-    }
-
+    const modal = document.getElementById("deleteModal");
+    if (modal) modal.classList.remove("active");
     deletingCommentId = null;
 }
 
-
-/* =========================
-   IMAGE PICKER
-========================= */
-
+/* IMAGE PICKER */
 function pickCommentImage() {
-
-    const input =
-        document.getElementById("imageInput");
-
-    if (input) {
-        input.click();
-    }
+    const input = document.getElementById("imageInput");
+    if (input) input.click();
 }
-
 
 function handleCommentImage(event) {
-
-    const file =
-        event.target.files &&
-        event.target.files[0];
-
+    const file = event.target.files && event.target.files[0];
     if (!file) return;
-
-    if (!file.type.startsWith("image/")) {
-
-        showToast(
-            "Please select an image"
-        );
-
-        event.target.value = "";
-        return;
-    }
-
+    if (!file.type.startsWith("image/")) { showToast("Please select an image"); event.target.value = ""; return; }
     selectedImageFile = file;
-
-    const preview =
-        document.getElementById("filePreview");
-
+    const preview = document.getElementById("filePreview");
     if (!preview) return;
-
-    const imageUrl =
-        URL.createObjectURL(file);
-
-    preview.innerHTML = `
-        <div class="preview-box">
-            <img
-                src="${imageUrl}"
-                alt="Selected image"
-            >
-
-            <button
-                type="button"
-                onclick="removeSelectedImage()"
-            >
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-        </div>
-    `;
-
-    preview.style.display = "block";
+    const imageUrl = URL.createObjectURL(file);
+    preview.innerHTML = `<div class="preview-box"><img src="${imageUrl}" alt="Selected image" style="width:40px;height:40px;border-radius:5px;margin-right:10px;"><span>Photo selected</span></div><button type="button" onclick="removeSelectedImage()" class="remove-preview"><i class="fa-solid fa-xmark"></i></button>`;
+    preview.classList.add("active");
 }
-
 
 function removeSelectedImage() {
-
     selectedImageFile = null;
-
-    const input =
-        document.getElementById("imageInput");
-
-    if (input) {
-        input.value = "";
-    }
-
-    const preview =
-        document.getElementById("filePreview");
-
-    if (preview) {
-        preview.innerHTML = "";
-        preview.style.display = "none";
-    }
+    const input = document.getElementById("imageInput");
+    if (input) input.value = "";
+    const preview = document.getElementById("filePreview");
+    if (preview) { preview.innerHTML = ""; preview.classList.remove("active"); }
 }
-    /* =========================
-   VOICE RECORDING
-========================= */
 
+/* VOICE RECORDING */
 function getAudioMimeType() {
-
-    const types = [
-        "audio/webm;codecs=opus",
-        "audio/webm",
-        "audio/ogg;codecs=opus",
-        "audio/ogg",
-        "audio/mp4"
-    ];
-
-    for (const type of types) {
-
-        if (
-            window.MediaRecorder &&
-            MediaRecorder.isTypeSupported(type)
-        ) {
-            return type;
-        }
-    }
-
+    const types = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/ogg", "audio/mp4"];
+    for (const type of types) { if (window.MediaRecorder && MediaRecorder.isTypeSupported(type)) return type; }
     return "";
 }
 
-
 async function toggleCommentVoice() {
-
-    if (isRecording) {
-        stopCommentRecording();
-        return;
-    }
-
-    if (!navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia) {
-
-        showToast(
-            "Voice recording is not supported"
-        );
-
-        return;
-    }
-
+    if (isRecording) { stopCommentRecording(); return; }
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { showToast("Voice recording is not supported"); return; }
     try {
-
-        const stream =
-            await navigator.mediaDevices.getUserMedia({
-                audio: true
-            });
-
-        const mimeType =
-            getAudioMimeType();
-
-        mediaRecorder =
-            mimeType
-                ? new MediaRecorder(
-                    stream,
-                    { mimeType: mimeType }
-                  )
-                : new MediaRecorder(stream);
-
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mimeType = getAudioMimeType();
+        mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType: mimeType }) : new MediaRecorder(stream);
         audioChunks = [];
         isRecording = true;
-
-        mediaRecorder.ondataavailable =
-            function(event) {
-
-                if (event.data &&
-                    event.data.size > 0) {
-
-                    audioChunks.push(
-                        event.data
-                    );
-                }
-            };
-
-        mediaRecorder.onstop =
-            function() {
-
-                const type =
-                    mediaRecorder.mimeType ||
-                    "audio/webm";
-
-                recordedAudioBlob =
-                    new Blob(
-                        audioChunks,
-                        { type: type }
-                    );
-
-                stream
-                    .getTracks()
-                    .forEach(
-                        track => track.stop()
-                    );
-
-                showVoicePreview();
-            };
-
+        mediaRecorder.ondataavailable = function(event) { if (event.data && event.data.size > 0) audioChunks.push(event.data); };
+        mediaRecorder.onstop = function() {
+            const type = mediaRecorder.mimeType || "audio/webm";
+            recordedAudioBlob = new Blob(audioChunks, { type: type });
+            stream.getTracks().forEach(track => track.stop());
+            showVoicePreview();
+        };
         mediaRecorder.start();
-
         updateVoiceButton(true);
-
-        showToast(
-            "Recording started"
-        );
-
+        showToast("Recording started");
     } catch (error) {
-
-        console.error(
-            "VOICE ERROR:",
-            error
-        );
-
-        showToast(
-            "Microphone permission is required"
-        );
+        console.error("VOICE ERROR:", error);
+        showToast("Microphone permission is required");
     }
 }
 
-
 function stopCommentRecording() {
-
-    if (
-        mediaRecorder &&
-        mediaRecorder.state !== "inactive"
-    ) {
-
-        mediaRecorder.stop();
-    }
-
+    if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
     isRecording = false;
-
     updateVoiceButton(false);
 }
 
-
 function updateVoiceButton(recording) {
-
-    const button =
-        document.getElementById("voiceBtn");
-
+    const button = document.getElementById("recordBtn");
     if (!button) return;
-
     if (recording) {
-
-        button.innerHTML =
-            '<i class="fa-solid fa-stop"></i>';
-
-        button.classList.add(
-            "recording"
-        );
-
+        button.innerHTML = '<i class="fa-solid fa-stop"></i>';
+        button.classList.add("recording");
     } else {
-
-        button.innerHTML =
-            '<i class="fa-solid fa-microphone"></i>';
-
-        button.classList.remove(
-            "recording"
-        );
+        button.innerHTML = '<i class="fa-solid fa-microphone"></i>';
+        button.classList.remove("recording");
     }
 }
-
-
-/* =========================
-   VOICE PREVIEW
-========================= */
 
 function showVoicePreview() {
-
-    const preview =
-        document.getElementById("filePreview");
-
-    if (!preview ||
-        !recordedAudioBlob) {
-        return;
-    }
-
-    const audioUrl =
-        URL.createObjectURL(
-            recordedAudioBlob
-        );
-
-    preview.innerHTML = `
-        <div class="voice-preview">
-
-            <audio
-                controls
-                src="${audioUrl}">
-            </audio>
-
-            <button
-                type="button"
-                onclick="removeRecordedVoice()">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-
-        </div>
-    `;
-
-    preview.style.display = "block";
+    const preview = document.getElementById("filePreview");
+    if (!preview || !recordedAudioBlob) return;
+    const audioUrl = URL.createObjectURL(recordedAudioBlob);
+    preview.innerHTML = `<div class="voice-preview"><audio controls src="${audioUrl}"></audio></div><button type="button" onclick="removeRecordedVoice()" class="remove-preview"><i class="fa-solid fa-xmark"></i></button>`;
+    preview.classList.add("active");
 }
-
 
 function removeRecordedVoice() {
-
     recordedAudioBlob = null;
-
-    const preview =
-        document.getElementById("filePreview");
-
-    if (preview) {
-
-        preview.innerHTML = "";
-
-        preview.style.display = "none";
-    }
+    const preview = document.getElementById("filePreview");
+    if (preview) { preview.innerHTML = ""; preview.classList.remove("active"); }
 }
 
-
-/* =========================
-   REALTIME COMMENTS
-========================= */
-
+/* REALTIME */
 function subscribeToComments() {
-
     if (!currentPostId) return;
-
-    supabaseClient
-        .channel(
-            "comments-" + currentPostId
-        )
-        .on(
-            "postgres_changes",
-            {
-                event: "*",
-                schema: "public",
-                table: "comments",
-                filter:
-                    "post_id=eq." +
-                    currentPostId
-            },
-            async function() {
-
-                await loadComments();
-            }
-        )
-        .subscribe();
+    supabaseClient.channel("comments-" + currentPostId).on("postgres_changes", { event: "*", schema: "public", table: "comments", filter: "post_id=eq." + currentPostId }, async function() { await loadComments(); }).subscribe();
 }
-
-
-/* =========================
-   REALTIME COMMENT LIKES
-========================= */
 
 function subscribeToCommentLikes() {
-
-    supabaseClient
-        .channel(
-            "comment-likes-" +
-            Date.now()
-        )
-        .on(
-            "postgres_changes",
-            {
-                event: "*",
-                schema: "public",
-                table: "comment_likes"
-            },
-            async function() {
-
-                await loadComments();
-            }
-        )
-        .subscribe();
+    supabaseClient.channel("comment-likes-" + Date.now()).on("postgres_changes", { event: "*", schema: "public", table: "comment_likes" }, async function() { await loadComments(); }).subscribe();
 }
 
-
-/* =========================
-   INPUT EVENTS
-========================= */
-
+/* EVENTS & INIT */
 function setupCommentEvents() {
-
-    const imageInput =
-        document.getElementById(
-            "imageInput"
-        );
-
-    if (imageInput) {
-
-        imageInput.addEventListener(
-            "change",
-            handleCommentImage
-        );
-    }
-
-
-    const input =
-        document.getElementById("cInput");
-
+    const imageInput = document.getElementById("imageInput");
+    if (imageInput) imageInput.addEventListener("change", handleCommentImage);
+    const input = document.getElementById("cInput");
     if (input) {
-
-        input.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (
-                    event.key === "Enter" &&
-                    !event.shiftKey
-                ) {
-
-                    event.preventDefault();
-
-                    sendComment();
-                }
+        input.addEventListener("keydown", function(event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                sendComment();
             }
-        );
+        });
     }
 }
-
-
-/* =========================
-   INITIALIZE PAGE
-========================= */
 
 async function initCommentPage() {
-
     try {
-
         await loadCurrentUser();
-
-        if (!currentUser) {
-
-            showToast(
-                "Please login first"
-            );
-
-            setTimeout(
-                function() {
-                    window.location.href =
-                        "login.html";
-                },
-                1000
-            );
-
-            return;
-        }
-
-        currentPostId =
-            getPostId();
-
-        if (!currentPostId) {
-
-            showToast(
-                "Post not found"
-            );
-
-            return;
-        }
-
+        if (!currentUser) { showToast("Please login first"); setTimeout(function() { window.location.href = "login.html"; }, 1000); return; }
+        currentPostId = getPostId();
+        if (!currentPostId) { showToast("Post not found"); return; }
         await loadPost();
-
         await loadComments();
-
         setupCommentEvents();
-
         subscribeToComments();
-
         subscribeToCommentLikes();
-
     } catch (error) {
-
-        console.error(
-            "COMMENT PAGE ERROR:",
-            error
-        );
-
-        showToast(
-            "Unable to load comments"
-        );
+        console.error("COMMENT PAGE ERROR:", error);
+        showToast("Unable to load comments");
     }
 }
 
-
-/* =========================
-   START
-========================= */
-
 initCommentPage();
-
 </script>
 </body>
 </html>
