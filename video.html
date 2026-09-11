@@ -1,502 +1,1235 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Video - StudentX</title>
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentX Video</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        html, body {
-            background-color: #000;
-            color: #fff;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-        /* --- WURI ƊIN DA AKE SCROLL (FEED CONTAINER) --- */
-        .feed-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            bottom: 60px; /* Ya bar wuri 60px domin Nav Bar */
-            overflow-y: scroll;
-            scroll-snap-type: y mandatory;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-        .feed-container::-webkit-scrollbar {
-            display: none;
-        }
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-        /* Kowane Video Ɗaya-ɗaya */
-        .video-item {
-            width: 100%;
-            height: 100%;
-            scroll-snap-align: start;
-            scroll-snap-stop: always;
-            position: relative;
-            background-color: #111;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: flex-end;
-        }
-        .video-item::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-            pointer-events: none;
-            z-index: 1;
-        }
+html,body{
+    width:100%;
+    height:100%;
+    background:#000;
+    color:#fff;
+    font-family:Arial,Helvetica,sans-serif;
+    overflow:hidden;
+}
 
-        /* --- SASHIN SAMA (TOP BAR) - FIXED --- */
-        .top-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 40px 15px 15px;
-            z-index: 1001; /* Mafi girma don ya kasance a kowanne lokaci */
-            background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
-            pointer-events: none;
-        }
-        .top-tabs {
-            display: flex;
-            gap: 20px;
-            pointer-events: auto;
-        }
-        .tab {
-            color: #ccc;
-            font-size: 17px;
-            font-weight: 500;
-            cursor: pointer;
-            position: relative;
-            text-decoration: none;
-        }
-        .tab.active {
-            color: #fff;
-            font-weight: bold;
-        }
-        .tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background-color: #fff;
-            border-radius: 2px;
-        }
-        
-        /* Alamar Upload */
-        .upload-btn {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 40px;
-            height: 32px;
-            pointer-events: auto;
-        }
-        .upload-btn .fa-camera {
-            font-size: 26px;
-        }
-        .upload-btn .fa-plus {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 12px;
-            background-color: #8A2BE2;
-            border-radius: 50%;
-            padding: 2px 3px;
-            border: 1px solid #fff;
-        }
+.video-feed{
+    width:100%;
+    height:100vh;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    scrollbar-width:none;
+}
 
-        /* --- SASHIN DAMA (RIGHT ACTION BAR) --- */
-        .right-bar {
-            position: absolute;
-            right: 10px;
-            bottom: 90px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 22px;
-            z-index: 15;
-        }
-        .action-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-            background: none;
-            border: none;
-            color: #fff;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .action-item i, .action-item svg {
-            font-size: 30px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
-            transition: transform 0.2s;
-        }
-        .action-item:active i, .action-item:active svg {
-            transform: scale(1.2);
-        }
-        .action-count {
-            font-size: 12px;
-            font-weight: 600;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
+.video-feed::-webkit-scrollbar{
+    display:none;
+}
 
-        /* Profile da Follow Button */
-        .profile-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .profile-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-            object-fit: cover;
-        }
-        .follow-btn {
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 22px;
-            height: 22px;
-            background-color: #8A2BE2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #000;
-            cursor: pointer;
-            color: #fff;
-            font-size: 12px;
-        }
-        .follow-btn.followed {
-            display: none;
-        }
+.video-item{
+    position:relative;
+    width:100%;
+    height:100vh;
+    min-height:100vh;
+    scroll-snap-align:start;
+    background:#111;
+    overflow:hidden;
+}
 
-        .like-btn.liked i {
-            color: #ff4b4b;
-            animation: pop 0.3s;
-        }
-        @keyframes pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-            100% { transform: scale(1); }
-        }
+.video-player{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background:#111;
+}
 
-        .save-btn.saved i {
-            color: #fbbf24;
-        }
+.video-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.85),
+        rgba(0,0,0,.15) 45%,
+        rgba(0,0,0,.25)
+    );
+    pointer-events:none;
+}
 
-        /* --- SASHIN KASA-HAGU (BOTTOM INFO) --- */
-        .bottom-info {
-            position: absolute;
-            bottom: 20px;
-            left: 15px;
-            right: 80px;
-            z-index: 10;
-        }
-        .user-fullname {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 4px;
-            color: #fff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
-        .user-username {
-            font-size: 14px;
-            div: not(.bnav) {
-                pointer-events: none;
-            }
-            color: #ddd;
-            margin-bottom: 8px;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
-        .video-caption {
-            font-size: 14px;
-            color: #eee;
-            line-height: 1.4;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
+.top-tabs{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:62px;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:28px;
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,.65),
+        transparent
+    );
+}
 
-        /* Tsarin Double Tap Like */
-        .heart-animation {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            color: #ff4b4b;
-            z-index: 20;
-            pointer-events: none;
-            opacity: 0;
-        }
-        .heart-animation i {
-            font-size: 100px;
-            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
-        }
-        .heart-animation.animate {
-            animation: heartPop 0.8s ease;
-        }
-        @keyframes heartPop {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            15% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-            30% { transform: translate(-50%, -50%) scale(1); }
-            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
-        }
+.top-tabs button{
+    border:0;
+    background:none;
+    color:#aaa;
+    font-size:15px;
+    font-weight:600;
+}
 
-        /* --- SASHIN NAVIGATION ƊIN ƘASA (BOTTOM NAV BAR) - FIXED --- */
-        /* An sa shi da tsarin da ka so (div da onclick) */
-        .bnav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            background-color: #000;
-            border-top: 1px solid #222;
-            z-index: 2000; /* An ɗaukaka shi sosai domin ya nuna koyaushe */
-        }
-        .nb {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #888;
-            cursor: pointer;
-            gap: 3px;
-            text-decoration: none;
-        }
-        .nb.on {
-            color: #fff;
-        }
-        .nb i {
-            font-size: 20px;
-        }
-        .nb span {
-            font-size: 10px;
-            font-weight: 500;
-        }
+.top-tabs button.active{
+    color:#fff;
+}
 
-    </style>
+.upload-btn{
+    position:fixed;
+    right:15px;
+    top:16px;
+    z-index:25;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.25);
+    background:rgba(0,0,0,.45);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+}
+
+.video-info{
+    position:absolute;
+    left:15px;
+    right:85px;
+    bottom:82px;
+    z-index:10;
+}
+
+.user-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:12px;
+}
+
+.profile-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid #fff;
+    background:#222;
+}
+
+.user-name{
+    font-size:15px;
+    font-weight:700;
+}
+
+.user-username{
+    margin-top:3px;
+    color:#ccc;
+    font-size:12px;
+}
+
+.follow-btn{
+    margin-left:5px;
+    padding:6px 12px;
+    border:1px solid rgba(255,255,255,.7);
+    border-radius:7px;
+    background:transparent;
+    color:#fff;
+    font-size:12px;
+    font-weight:600;
+}
+
+.video-caption{
+    font-size:14px;
+    line-height:1.45;
+    color:#fff;
+    max-width:100%;
+}
+
+.action-column{
+    position:absolute;
+    right:12px;
+    bottom:82px;
+    z-index:15;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+}
+
+.action-item{
+    border:0;
+    background:none;
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:5px;
+    min-width:48px;
+    cursor:pointer;
+}
+
+.action-item i{
+    font-size:24px;
+}
+
+.action-count{
+    font-size:11px;
+    color:#fff;
+}
+
+.action-item.liked i{
+    color:#ff315c;
+}
+
+.action-item.saved i{
+    color:#7c5cff;
+}
+
+.more-btn{
+    margin-top:2px;
+}
+
+.bottom-nav{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom:0;
+    height:58px;
+    z-index:30;
+    display:flex;
+    justify-content:space-around;
+    align-items:center;
+    background:rgba(8,8,12,.92);
+    border-top:1px solid rgba(255,255,255,.08);
+}
+
+.bottom-nav a{
+    color:#888;
+    text-decoration:none;
+    font-size:11px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+}
+
+.bottom-nav a.active{
+    color:#fff;
+}
+
+.bottom-nav i{
+    font-size:20px;
+}
+
+.empty-video{
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#999;
+    font-size:14px;
+}
+
+.loading-video{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:5;
+    color:#aaa;
+    font-size:13px;
+}
+
+@media(min-width:700px){
+    .video-item{
+        max-width:500px;
+        margin:auto;
+    }
+
+    .top-tabs,
+    .bottom-nav{
+        max-width:500px;
+        margin:auto;
+    }
+}
+</style>
 </head>
+</head>
+
 <body>
 
-    <!-- TOP BAR (Fixed) -->
-    <div class="top-bar">
-        <div class="top-tabs">
-            <a href="following.html" class="tab">Following</a>
-            <a href="video.html" class="tab active">For You</a>
-            <a href="live.html" class="tab">Live</a>
-        </div>
-        <a href="upload.html" class="upload-btn">
-            <i class="fas fa-camera"></i>
-            <i class="fas fa-plus"></i>
-        </a>
+<div class="top-tabs">
+    <button class="active" id="followingTab">Following</button>
+    <button id="forYouTab">For You</button>
+    <button id="liveTab">Live</button>
+</div>
+
+<a href="upload.html" class="upload-btn">
+    <i class="fa-solid fa-camera"></i>
+</a>
+
+<div id="videoFeed" class="video-feed">
+    <div class="empty-video">
+        Loading videos...
     </div>
+</div>
 
-    <!-- Wurin da yake ɗauko dukkan video din -->
-    <div class="feed-container" id="feedContainer">
+<nav class="bottom-nav">
 
-        <!-- VIDEO NA FARKO -->
-        <div class="video-item" style="background-image: url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=1400&fit=crop');" data-video="1">
-            
-            <!-- Heart Animation -->
-            <div class="heart-animation">
-                <i class="fas fa-heart"></i>
-            </div>
+    <a href="home.html">
+        <i class="fa-solid fa-house"></i>
+        <span>Home</span>
+    </a>
 
-            <!-- Right Bar -->
-            <div class="right-bar">
-                <div class="profile-wrapper">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" class="profile-avatar" alt="User">
-                    <button class="follow-btn">
-                        <i class="fas fa-plus"></i>
-                    </button>
+    <a href="explore.html">
+        <i class="fa-solid fa-compass"></i>
+        <span>Explore</span>
+    </a>
+
+    <a href="video.html" class="active">
+        <i class="fa-solid fa-video"></i>
+        <span>Video</span>
+    </a>
+
+    <a href="chat.html">
+        <i class="fa-solid fa-message"></i>
+        <span>Chat</span>
+    </a>
+
+    <a href="profile.html">
+        <i class="fa-solid fa-user"></i>
+        <span>Profile</span>
+    </a>
+
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+
+let currentUser = null;
+let allVideos = [];
+let currentFilter = "forYou";
+
+function escapeHTML(text) {
+    if (text === null || text === undefined) return "";
+
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function defaultAvatar() {
+    return "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="100" height="100"
+             viewBox="0 0 100 100">
+            <rect width="100" height="100" fill="#171722"/>
+            <circle cx="50" cy="38" r="20" fill="#777"/>
+            <path d="M18 90c4-22 18-32 32-32s28 10 32 32"
+                  fill="#777"/>
+        </svg>
+        `);
+}
+
+function timeAgo(dateString) {
+
+    const date = new Date(dateString);
+    const now = new Date();
+
+    const seconds = Math.floor((now - date) / 1000);
+
+    if (seconds < 60) {
+        return "now";
+    }
+
+    const minutes = Math.floor(seconds / 60);
+
+    if (minutes < 60) {
+        return minutes + "m";
+    }
+
+    const hours = Math.floor(minutes / 60);
+
+    if (hours < 24) {
+        return hours + "h";
+    }
+
+    const days = Math.floor(hours / 24);
+
+    if (days < 7) {
+        return days + "d";
+    }
+
+    return date.toLocaleDateString();
+}
+
+async function loadCurrentUser() {
+
+    const result =
+        await supabaseClient.auth.getUser();
+
+    if (result.error) {
+        console.error(result.error);
+        return;
+    }
+
+    currentUser = result.data.user || null;
+}
+
+async function loadVideos() {
+
+    const feed = document.getElementById("videoFeed");
+
+    feed.innerHTML = `
+        <div class="loading-video">
+            Loading videos...
+        </div>
+    `;
+
+    try {
+
+        const result = await supabaseClient
+            .from("videos")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+        if (result.error) {
+            throw result.error;
+        }
+
+        allVideos = result.data || [];
+
+        if (!allVideos.length) {
+
+            feed.innerHTML = `
+                <div class="empty-video">
+                    No videos available yet.
                 </div>
-                <button class="action-item like-btn">
-                    <i class="fas fa-heart"></i>
-                    <span class="action-color">45.2K</span>
-                </button>
-                <a href="comment.html" class="action-item">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="action-count">1,200</span>
-                </a>
-                
-                <!-- VIEWS ICON (SVG) -->
-                <div class="action-item">
-                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span class="action-count">15.4K</span>
-                </div>
+            `;
 
-                <button class="action-item save-btn">
-                    <i class="fas fa-bookmark"></i>
-                    <span class="action-count">892</span>
-                </button>
-                <a href="more.html" class="action-item">
-                    <i class="fas fa-ellipsis-vertical"></i>
-                </a>
+            return;
+        }
+
+        await loadVideoProfiles();
+
+        renderVideos();
+
+    } catch (error) {
+
+        console.error(
+            "VIDEO LOAD ERROR:",
+            error
+        );
+
+        feed.innerHTML = `
+            <div class="empty-video">
+                Unable to load videos.
             </div>
+        `;
+    }
+}
 
-            <!-- Bottom Info -->
-            <div class="bottom-info">
-                <h3 class="user-fullname">Fatima Muhammad</h3>
-                <p class="user-username">@fatima_m</p>
-                <p class="video-caption">Just finished my ML basics course! Sharing key notes in the CSS Files. #StudentX</p>
+async function loadVideoProfiles() {
+
+    const userIds = [
+        ...new Set(
+            allVideos
+                .map(video => video.user_id)
+                .filter(Boolean)
+        )
+    ];
+
+    if (!userIds.length) return;
+
+    const result = await supabaseClient
+        .from("profiles")
+        .select(
+            "id,full_name,username,avatar_url,university"
+        )
+        .in("id", userIds);
+
+    if (result.error) {
+        console.error(
+            "PROFILE LOAD ERROR:",
+            result.error
+        );
+
+        return;
+    }
+
+    const profiles = result.data || [];
+
+    allVideos = allVideos.map(video => {
+
+        const profile =
+            profiles.find(
+                p => p.id === video.user_id
+            );
+
+        return {
+            ...video,
+            profile: profile || null
+        };
+    });
+}
+
+function renderVideos() {
+
+    const feed =
+        document.getElementById("videoFeed");
+
+    if (!allVideos.length) {
+
+        feed.innerHTML = `
+            <div class="empty-video">
+                No videos available.
             </div>
-        </div>
+        `;
 
-        <!-- VIDEO NA BIUU -->
-        <div class="video-item" name="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1400&fit=crop');" data-video="2">
-            <div class="heart-animation">
-                <i class="fas fa-heart"></i>
-            </div>
-            <div class="right-bar">
-                <div class="profile-wrapper">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fill" alt="User">
-                    <button class="follow-btn">
-                        <div class="fas fa-plus"></div>
-                    </button>
-                </div>
-                <button class="action-item like-btn">
-                    <i class="fas fa-heart"></i>
-                    <span class="action-count">12.5K</span>
-                </item>
-                <a href="comment.html" class="action-item">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="action-count">340</span>
-                </a>
-                
-                <!-- VIEWS ICON -->
-                <div class="action-item">
-                    <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-1-8z"></path>
-                        <circle cx="12" cy="12" r="3"></circle>
-                    </svg>
-                    <span class="action-count">8.2K</span>
-                </div>
+        return;
+    }
 
-                <button class="action-item save-btn">
-                    <i class="fas fa-bookmark"></i>
-                    <span class="action-count">120</span>
-                </button>
-                <a href="more.html" class="icon-click more.html" "fas fa-ellipsis-vertical"></i>
-                </a>
-            </div>
-            <div class="bottom-info">
-                <h3 class="user-fullname">David Okafor</h3>
-                 <p class="user-username">@david_ok</p>
-                <p class="video-caption">Can someone explain the 2nd law of thermodynamics? #Physics</p>
-            </div>
-        </div>
+    feed.innerHTML = allVideos.map(video => {
 
-    </div>
+        const profile = video.profile || {};
 
-    <!-- Navigation Bar (Ainihin tsarin da ka so) -->
-    <nav class="bnav">
-        <div class="nb on" onclick="window.location.href='home.html'">
-            <i class="fas fa-home"></i>
-            <span>Home</span>
-        </div>
-        <div class="nb" onclick="window.location.href='video.html'">
-            <i class="fas fa-video"></i>
-            <span>Video</span>
-        </div>
-        <div class="nb" onclick="window.location.href='chat.html'">
-            <i class="fas fa-comment-dots"></i>
-            <span>Chat</span>
-        </div>
-        <div class="nb" onclick="window.location.href='studyhub.html'">
-            <i class="brand-icon"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg></i>
-            <span>StudyHub</span>
-        </div>
-        <div class="nb" onclick="window.location.href='profile.html'">
-            <i class="fas fa-user"></i>
-            <span>Profile</span>
-        </div>
-    </nav>
+        const name =
+            profile.full_name ||
+            profile.username ||
+            "StudentX User";
 
-    <script>
-        const feedContainer = document.getElementById('feedContainer');
+        const username =
+            profile.username
+            ? "@" + profile.username
+            : "@studentx";
 
-        feedContainer.addEventListener('click', function(event) {
-            // Follow Button
-            if (event.target.closest('.follow-btn')) {
-                event.target.closest('.follow-btn').classList.add('followed');
-            }
+        const avatar =
+            profile.avatar_url ||
+            defaultAvatar();
 
-            // Like Button
-            if (event.target.closest('.like-btn')) {
-                const btn = event.target.closest('.like-btn');
-                const countSpan = btn.querySelector('.action-count');
-                if (btn.classList.contains('liked')) {
-                    btn.classList.remove('liked');
-                    countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.2K" : "12.5K";
-                } else {
-                    btn.classList.add('liked');
-                    count-countSpan.innerText = parseInt(countSpan.innerText.replace('K', '000').replace('.', '')) === 45200 ? "45.3K" : "12.6K";
-                }
-            }
+        const caption =
+            video.caption || "";
 
-            // Save Button
-            if (event.target.closest('.save-btn')) {
-                event.target.closest('.save-btn').classList.toggle('saved');
-            }
+        return `
+            <section
+                class="video-item"
+                data-video-id="${escapeHTML(video.id)}"
+            >
 
-            // Double Tap Like
-            const videoItem = event.target.closest('.video-item');
-            if (videoItem && !event.target.closest('.right-bar') && !event.target.closest('.bnav')) {
-                const heart = videoItem.querySelector('.heart-animation');
-                const currentTime = new Date().getTime();
-                
-                if (videoItem.lastTap && (currentTime - videoItem.lastTap < 300)) {
-                    const likeBtn = videoItem.querySelector('.like-btn');
-                    if (!likeBtn.classList.contains('liked')) {
-                        likeBtn.classList.add('liked');
-                        const countSpan = likeBtn.querySelector('.action-count');
-                        countSpan.innerText = "45.3K";
+                <video
+                    class="video-player"
+                    src="${escapeHTML(video.video_url)}"
+                    ${video.thumbnail_url
+                        ? `poster="${escapeHTML(video.thumbnail_url)}"`
+                        : ""}
+                    playsinline
+                    loop
+                    muted
+                    preload="metadata"
+                ></video>
+
+                <div class="video-overlay"></div>
+
+                <div class="video-info">
+
+                    <div class="user-row">
+
+                        <img
+                            class="profile-avatar"
+                            src="${escapeHTML(avatar)}"
+                            onerror="this.src=defaultAvatar()"
+                        >
+
+                        <div>
+
+                            <div class="user-name">
+                                ${escapeHTML(name)}
+                            </div>
+
+                            <div class="user-username">
+                                ${escapeHTML(username)}
+                            </div>
+
+                        </div>
+
+                        ${
+                            currentUser &&
+                            currentUser.id !== video.user_id
+                            ? `
+                            <button
+                                class="follow-btn"
+                                onclick="followVideoUser('${escapeHTML(video.user_id)}')"
+                            >
+                                Follow
+                            </button>
+                            `
+                            : ""
+                        }
+
+                    </div>
+
+                    ${
+                        caption
+                        ? `
+                        <div class="video-caption">
+                            ${escapeHTML(caption)}
+                        </div>
+                        `
+                        : ""
                     }
-                    heart.classList.remove('animate');
-                    void heart.offsetWidth;
-                    heart.classList.add('animate');
-                }
-                videoItem.lastTap = currentTime;
+
+                </div>
+
+                <div class="action-column">
+
+                    <button
+                        class="action-item"
+                        onclick="toggleVideoLike('${escapeHTML(video.id)}', this)"
+                    >
+                        <i class="fa-regular fa-heart"></i>
+                        <span class="action-count">0</span>
+                    </button>
+
+                    <button
+                        class="action-item"
+                        onclick="openVideoComments('${escapeHTML(video.id)}')"
+                    >
+                        <i class="fa-regular fa-comment"></i>
+                        <span class="action-count">0</span>
+                    </button>
+
+                    <button
+                        class="action-item"
+                        onclick="toggleVideoSave('${escapeHTML(video.id)}', this)"
+                    >
+                        <i class="fa-regular fa-bookmark"></i>
+                        <span class="action-count">Save</span>
+                    </button>
+
+                    <button
+                        class="action-item"
+                        onclick="shareVideo('${escapeHTML(video.id)}')"
+                    >
+                        <i class="fa-solid fa-share"></i>
+                        <span class="action-count">Share</span>
+                    </button>
+
+                    <button
+                        class="action-item more-btn"
+                        onclick="openVideoMenu('${escapeHTML(video.id)}')"
+                    >
+                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </button>
+
+                </div>
+
+            </section>
+        `;
+
+    }).join("");
+
+    setupVideoObserver();
+    loadVideoStats();
+}
+
+function setupVideoObserver() {
+
+    const videos =
+        document.querySelectorAll(
+            ".video-player"
+        );
+
+    const observer =
+        new IntersectionObserver(
+            entries => {
+
+                entries.forEach(entry => {
+
+                    const video =
+                        entry.target;
+
+                    if (entry.isIntersecting) {
+
+                        videos.forEach(other => {
+
+                            if (other !== video) {
+                                other.pause();
+                            }
+
+                        });
+
+                        video.play().catch(() => {});
+
+                    } else {
+
+                        video.pause();
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.65
             }
+        );
+
+    videos.forEach(video => {
+        observer.observe(video);
+    });
+}
+    async function loadVideoStats() {
+
+    for (const video of allVideos) {
+
+        const likeResult = await supabaseClient
+            .from("video_likes")
+            .select("id", { count: "exact", head: true })
+            .eq("video_id", video.id);
+
+        const saveResult = await supabaseClient
+            .from("video_saves")
+            .select("id", { count: "exact", head: true })
+            .eq("video_id", video.id);
+
+        const viewResult = await supabaseClient
+            .from("video_views")
+            .select("id", { count: "exact", head: true })
+            .eq("video_id", video.id);
+
+        const card = document.querySelector(
+            `[data-video-id="${video.id}"]`
+        );
+
+        if (!card) continue;
+
+        const buttons =
+            card.querySelectorAll(".action-item");
+
+        if (buttons[0]) {
+            buttons[0]
+                .querySelector(".action-count")
+                .textContent =
+                formatCount(likeResult.count || 0);
+        }
+
+        if (buttons[2]) {
+            buttons[2]
+                .querySelector(".action-count")
+                .textContent =
+                "Save";
+        }
+
+        if (buttons[1]) {
+            buttons[1]
+                .querySelector(".action-count")
+                .textContent =
+                formatCount(viewResult.count || 0);
+        }
+
+        await checkVideoLike(video.id, buttons[0]);
+        await checkVideoSave(video.id, buttons[2]);
+
+        await recordVideoView(video.id);
+    }
+}
+
+
+function formatCount(number) {
+
+    if (number >= 1000000) {
+        return (number / 1000000)
+            .toFixed(1)
+            .replace(".0", "") + "M";
+    }
+
+    if (number >= 1000) {
+        return (number / 1000)
+            .toFixed(1)
+            .replace(".0", "") + "K";
+    }
+
+    return String(number);
+}
+
+
+async function checkVideoLike(videoId, button) {
+
+    if (!currentUser || !button) return;
+
+    const result = await supabaseClient
+        .from("video_likes")
+        .select("id")
+        .eq("video_id", videoId)
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+    if (result.data) {
+
+        button.classList.add("liked");
+
+        button.querySelector("i").className =
+            "fa-solid fa-heart";
+    }
+}
+
+
+async function toggleVideoLike(videoId, button) {
+
+    if (!currentUser) {
+        alert("Please login first");
+        return;
+    }
+
+    try {
+
+        const existing = await supabaseClient
+            .from("video_likes")
+            .select("id")
+            .eq("video_id", videoId)
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (existing.data) {
+
+            const result = await supabaseClient
+                .from("video_likes")
+                .delete()
+                .eq("id", existing.data.id);
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            button.classList.remove("liked");
+
+            button.querySelector("i").className =
+                "fa-regular fa-heart";
+
+        } else {
+
+            const result = await supabaseClient
+                .from("video_likes")
+                .insert({
+                    video_id: videoId,
+                    user_id: currentUser.id
+                });
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            button.classList.add("liked");
+
+            button.querySelector("i").className =
+                "fa-solid fa-heart";
+        }
+
+        const countResult =
+            await supabaseClient
+            .from("video_likes")
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("video_id", videoId);
+
+        button.querySelector(".action-count")
+            .textContent =
+            formatCount(countResult.count || 0);
+
+    } catch (error) {
+
+        console.error(
+            "VIDEO LIKE ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to like video"
+        );
+    }
+}
+
+
+async function checkVideoSave(videoId, button) {
+
+    if (!currentUser || !button) return;
+
+    const result = await supabaseClient
+        .from("video_saves")
+        .select("id")
+        .eq("video_id", videoId)
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+    if (result.data) {
+
+        button.classList.add("saved");
+
+        button.querySelector("i").className =
+            "fa-solid fa-bookmark";
+    }
+}
+
+
+async function toggleVideoSave(videoId, button) {
+
+    if (!currentUser) {
+        alert("Please login first");
+        return;
+    }
+
+    try {
+
+        const existing = await supabaseClient
+            .from("video_saves")
+            .select("id")
+            .eq("video_id", videoId)
+            .eq("user_id", currentUser.id)
+            .maybeSingle();
+
+        if (existing.data) {
+
+            const result = await supabaseClient
+                .from("video_saves")
+                .delete()
+                .eq("id", existing.data.id);
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            button.classList.remove("saved");
+
+            button.querySelector("i").className =
+                "fa-regular fa-bookmark";
+
+        } else {
+
+            const result = await supabaseClient
+                .from("video_saves")
+                .insert({
+                    video_id: videoId,
+                    user_id: currentUser.id
+                });
+
+            if (result.error) {
+                throw result.error;
+            }
+
+            button.classList.add("saved");
+
+            button.querySelector("i").className =
+                "fa-solid fa-bookmark";
+        }
+
+    } catch (error) {
+
+        console.error(
+            "VIDEO SAVE ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to save video"
+        );
+    }
+}
+
+
+async function recordVideoView(videoId) {
+
+    if (!currentUser) return;
+
+    const alreadyViewed =
+        sessionStorage.getItem(
+            "video_view_" + videoId
+        );
+
+    if (alreadyViewed) return;
+
+    const result = await supabaseClient
+        .from("video_views")
+        .insert({
+            video_id: videoId,
+            user_id: currentUser.id
         });
-    </script>
+
+    if (!result.error) {
+
+        sessionStorage.setItem(
+            "video_view_" + videoId,
+            "1"
+        );
+    }
+}
+
+
+async function followVideoUser(userId) {
+
+    if (!currentUser) {
+        alert("Please login first");
+        return;
+    }
+
+    if (currentUser.id === userId) return;
+
+    const existing =
+        await supabaseClient
+        .from("followers")
+        .select("id")
+        .eq("follower_id", currentUser.id)
+        .eq("following_id", userId)
+        .maybeSingle();
+
+    if (existing.data) {
+
+        alert("Already following");
+
+        return;
+    }
+
+    const result =
+        await supabaseClient
+        .from("followers")
+        .insert({
+            follower_id: currentUser.id,
+            following_id: userId
+        });
+
+    if (result.error) {
+
+        console.error(
+            "FOLLOW ERROR:",
+            result.error
+        );
+
+        alert(
+            result.error.message ||
+            "Unable to follow user"
+        );
+
+        return;
+    }
+
+    alert("Following");
+}
+
+
+function openVideoComments(videoId) {
+
+    window.location.href =
+        "comment.html?video=" +
+        encodeURIComponent(videoId);
+}
+
+
+async function shareVideo(videoId) {
+
+    const url =
+        window.location.origin +
+        "/video.html?video=" +
+        encodeURIComponent(videoId);
+
+    if (navigator.share) {
+
+        try {
+
+            await navigator.share({
+                title: "StudentX Video",
+                text: "Watch this video on StudentX",
+                url: url
+            });
+
+        } catch (error) {
+
+            console.log(
+                "Share cancelled"
+            );
+        }
+
+    } else {
+
+        await navigator.clipboard.writeText(url);
+
+        alert(
+            "Video link copied"
+        );
+    }
+}
+
+
+function openVideoMenu(videoId) {
+
+    const video =
+        allVideos.find(
+            item => item.id === videoId
+        );
+
+    if (!video) return;
+
+    if (
+        currentUser &&
+        video.user_id === currentUser.id
+    ) {
+
+        const action =
+            confirm(
+                "Delete this video?"
+            );
+
+        if (action) {
+            deleteVideo(videoId);
+        }
+
+    } else {
+
+        alert(
+            "Video options coming next"
+        );
+    }
+}
+
+
+async function deleteVideo(videoId) {
+
+    if (!currentUser) return;
+
+    const video =
+        allVideos.find(
+            item => item.id === videoId
+        );
+
+    if (!video) return;
+
+    if (video.user_id !== currentUser.id) {
+
+        alert(
+            "You can only delete your own video"
+        );
+
+        return;
+    }
+
+    const result =
+        await supabaseClient
+        .from("videos")
+        .delete()
+        .eq("id", videoId)
+        .eq("user_id", currentUser.id);
+
+    if (result.error) {
+
+        console.error(
+            "DELETE VIDEO ERROR:",
+            result.error
+        );
+
+        alert(
+            result.error.message ||
+            "Unable to delete video"
+        );
+
+        return;
+    }
+
+    await loadVideos();
+}
+
+
+document
+    .getElementById("followingTab")
+    .addEventListener("click", function () {
+
+        currentFilter = "following";
+
+        setActiveTab(this);
+
+        loadVideos();
+    });
+
+
+document
+    .getElementById("forYouTab")
+    .addEventListener("click", function () {
+
+        currentFilter = "forYou";
+
+        setActiveTab(this);
+
+        loadVideos();
+    });
+
+
+document
+    .getElementById("liveTab")
+    .addEventListener("click", function () {
+
+        window.location.href =
+            "live.html";
+    });
+
+
+function setActiveTab(button) {
+
+    document
+        .querySelectorAll(".top-tabs button")
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+    button.classList.add("active");
+}
+
+
+async function initVideoPage() {
+
+    await loadCurrentUser();
+
+    await loadVideos();
+}
+
+
+initVideoPage();
+
+</script>
+
 </body>
 </html>
