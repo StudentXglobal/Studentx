@@ -2,6 +2,7 @@
   "id": "/",
   "name": "StudentX",
   "short_name": "StudentX",
+  "description": "StudentX is a student platform to connect, learn, share, chat and discover study resources.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -16,6 +17,14 @@
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ]
 }
