@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
 
-<title>StudentX - Home</title>
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>StudentX Video</title>
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 <style>
 
@@ -17,2031 +18,3321 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 margin:0;
 padding:0;
 box-sizing:border-box;
--webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+width:100%;
+height:100%;
+background:#000;
+color:#fff;
+font-family:Arial,Helvetica,sans-serif;
+overflow:hidden;
 }
 
 body{
-font-family:Poppins,sans-serif;
-background:#0a0a0f;
-color:#fff;
-min-height:100vh;
-padding-bottom:70px;
-}
-
-.hdr{
-position:sticky;
-top:0;
-z-index:100;
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:10px 14px;
-background:rgba(10,10,15,.94);
-backdrop-filter:blur(16px);
--webkit-backdrop-filter:blur(16px);
-border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.hdr-l{
-display:flex;
-align-items:center;
-gap:12px;
-}
-
-.hdr-menu{
-width:36px;
-height:36px;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:rgba(255,255,255,.65);
-font-size:18px;
-cursor:pointer;
-}
-
-.hdr-logo{
-font-size:18px;
-font-weight:900;
-letter-spacing:-.5px;
-}
-
-.hdr-logo b{
-font-weight:900;
-background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.hdr-r{
-display:flex;
-gap:4px;
-}
-
-.hdr-btn{
-width:36px;
-height:36px;
-border-radius:10px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:rgba(255,255,255,.65);
-font-size:16px;
 position:relative;
-cursor:pointer;
 }
 
-.hdr-dot{
+/* VIDEO FEED */
+
+.video-feed{
 position:absolute;
-top:7px;
-right:7px;
-width:7px;
-height:7px;
-border-radius:50%;
-background:#ef4444;
-border:2px solid #0a0a0f;
-}
-
-.stories{
-display:flex;
-gap:14px;
-overflow-x:auto;
-padding:14px 14px 10px;
+top:0;
+left:0;
+right:0;
+bottom:62px;
+overflow-y:auto;
+scroll-snap-type:y mandatory;
 scrollbar-width:none;
 }
 
-.stories::-webkit-scrollbar{
+.video-feed::-webkit-scrollbar{
 display:none;
 }
 
-.st{
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:5px;
-flex-shrink:0;
-cursor:pointer;
+/* VIDEO ITEM */
+
+.video-item{
+position:relative;
+width:100%;
+height:calc(100vh - 62px);
+min-height:calc(100vh - 62px);
+scroll-snap-align:start;
+overflow:hidden;
+background:#111;
 }
 
-.st-ring{
-width:58px;
-height:58px;
-border-radius:50%;
-padding:2.5px;
-background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);
-}
+/* VIDEO */
 
-.st-ring img{
+.video-player{
+position:absolute;
+top:0;
+left:0;
 width:100%;
 height:100%;
-border-radius:50%;
 object-fit:cover;
-border:2.5px solid #0a0a0f;
+background:#111;
 }
 
-.st-add{
-width:58px;
+/* DARK OVERLAY */
+
+.video-overlay{
+position:absolute;
+top:0;
+left:0;
+right:0;
+bottom:0;
+background:
+linear-gradient(
+to bottom,
+rgba(0,0,0,.25),
+transparent 35%,
+rgba(0,0,0,.12) 55%,
+rgba(0,0,0,.88) 100%
+);
+pointer-events:none;
+}
+
+/* TOP BAR */
+
+.video-top{
+position:fixed;
+top:0;
+left:0;
+right:0;
 height:58px;
-border-radius:50%;
-border:2px dashed rgba(124,58,237,.5);
+z-index:20;
+
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:20px;
-color:#a855f7;
-background:rgba(124,58,237,.08);
+
+background:
+linear-gradient(
+to bottom,
+rgba(0,0,0,.65),
+transparent
+);
 }
 
-.st-nm{
-font-size:10px;
-color:rgba(255,255,255,.45);
-max-width:60px;
-text-align:center;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
-}
+/* TOP TABS */
 
-.cpb{
+.video-tabs{
 display:flex;
 align-items:center;
-gap:10px;
-padding:12px;
-margin:0 14px 12px;
-background:rgba(255,255,255,.04);
-border:1px solid rgba(255,255,255,.06);
-border-radius:14px;
-cursor:pointer;
+gap:28px;
 }
 
-.cpb img{
-width:40px;
-height:40px;
-border-radius:50%;
-object-fit:cover;
-border:2px solid rgba(168,85,247,.65);
-flex-shrink:0;
+.video-tab{
+border:0;
+background:none;
+color:#aaa;
+font-size:15px;
+font-weight:600;
+padding:8px 2px;
 }
 
-.cpb-in{
-flex:1;
-min-width:0;
-}
-
-.cpb-name{
-font-size:13px;
-font-weight:700;
+.video-tab.active{
 color:#fff;
-overflow:hidden;
-text-overflow:ellipsis;
-white-space:nowrap;
 }
 
-.cpb-user{
-font-size:10px;
-color:rgba(255,255,255,.45);
-margin-top:1px;
-}
-
-.cpb-placeholder{
-font-size:12px;
-color:rgba(255,255,255,.35);
-margin-top:6px;
-}
-
-.cpb-tools{
-display:flex;
-gap:9px;
-}
-
-.cpb-t{
-color:rgba(255,255,255,.35);
-font-size:16px;
-}
-
-.cpb-t.g{
-color:#10b981;
-}
-
-.cpb-t.r{
-color:#ef4444;
-}
-
-.cpb-t.y{
-color:#f59e0b;
-}
-
-.feed{
-width:100%;
-}
-
-.post{
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.06);
-border-radius:16px;
-margin:0 14px 12px;
-overflow:hidden;
-}
-
-.p-hdr{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px 14px;
-}
-
-.p-av{
-width:40px;
-height:40px;
-border-radius:50%;
-object-fit:cover;
-cursor:pointer;
-border:1px solid rgba(255,255,255,.08);
-flex-shrink:0;
-}
-
-.p-info{
-flex:1;
-min-width:0;
-}
-
-.p-nm{
-font-size:13px;
-font-weight:700;
-display:flex;
-align-items:center;
-gap:4px;
-overflow:hidden;
-white-space:nowrap;
-text-overflow:ellipsis;
-}
-
-.p-nm .vd{
-color:#a855f7;
-font-size:10px;
-}
-
-.p-meta{
-font-size:10px;
-color:rgba(255,255,255,.3);
-margin-top:2px;
-overflow:hidden;
-white-space:nowrap;
-text-overflow:ellipsis;
-}
-
-.p-more{
-width:32px;
-height:32px;
-border-radius:9px;
-display:flex;
-align-items:center;
-justify-content:center;
-color:rgba(255,255,255,.38);
-font-size:14px;
-cursor:pointer;
-flex-shrink:0;
-}
-
-.p-more:active{
-background:rgba(255,255,255,.07);
-}
-
-.p-body{
-padding:0 14px 10px;
-font-size:13px;
-line-height:1.65;
-color:rgba(255,255,255,.72);
-white-space:pre-wrap;
-word-break:break-word;
-}
-
-.p-image{
+.video-tab.active::after{
+content:"";
 display:block;
-width:100%;
-max-height:520px;
-object-fit:cover;
+width:22px;
+height:2px;
+margin:5px auto 0;
+background:#fff;
+border-radius:2px;
 }
 
-.p-file{
-margin:0 14px 10px;
-padding:12px;
-background:rgba(255,255,255,.03);
-border:1px solid rgba(255,255,255,.06);
-border-radius:12px;
-display:flex;
-align-items:center;
-gap:10px;
-cursor:pointer;
-}
+/* UPLOAD BUTTON */
 
-.p-file-ic{
-width:40px;
-height:40px;
-border-radius:10px;
-background:rgba(239,68,68,.1);
+.video-upload{
+position:fixed;
+top:11px;
+right:14px;
+z-index:25;
+
+width:38px;
+height:38px;
+
 display:flex;
 align-items:center;
 justify-content:center;
-color:#ef4444;
+
+border:1px solid rgba(255,255,255,.25);
+border-radius:50%;
+
+background:rgba(0,0,0,.45);
+color:#fff;
+
+text-decoration:none;
+}
+
+.video-upload i{
 font-size:18px;
 }
 
-.p-file-inf{
-flex:1;
+/* VIDEO INFORMATION */
+
+.video-info{
+position:absolute;
+left:14px;
+right:78px;
+bottom:22px;
+z-index:10;
+}
+
+/* USER */
+
+.video-user{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:11px;
+}
+
+.video-avatar{
+width:43px;
+height:43px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #fff;
+background:#222;
+}
+
+.video-user-details{
 min-width:0;
 }
 
-.p-file-nm{
-font-size:12px;
-font-weight:600;
+.video-name{
+font-size:15px;
+font-weight:700;
+white-space:nowrap;
 overflow:hidden;
 text-overflow:ellipsis;
-white-space:nowrap;
 }
 
-.p-file-sz{
-font-size:10px;
-color:rgba(255,255,255,.3);
-margin-top:2px;
+.video-username{
+font-size:12px;
+color:#ccc;
+margin-top:3px;
 }
 
-.p-file-dl{
-color:#a855f7;
-font-size:13px;
-}
-
-.p-acts{
-display:flex;
-align-items:center;
-padding:4px 8px 10px;
-gap:2px;
-border-top:1px solid rgba(255,255,255,.035);
-}
-
-.p-a{
-display:flex;
-align-items:center;
-gap:5px;
-padding:7px 10px;
-border-radius:20px;
-font-size:11px;
-color:rgba(255,255,255,.42);
+.video-follow{
+margin-left:5px;
+padding:6px 11px;
+border:1px solid rgba(255,255,255,.75);
+border-radius:7px;
+background:transparent;
+color:#fff;
+font-size:12px;
 font-weight:600;
-cursor:pointer;
-transition:all .15s;
 }
 
-.p-a:active{
-background:rgba(124,58,237,.12);
+/* CAPTION */
+
+.video-caption{
+font-size:14px;
+line-height:1.45;
+color:#fff;
+word-break:break-word;
 }
 
-.p-a.lk.on{
-color:#ef4444;
-}
+/* ACTIONS */
 
-.p-a.lk.on i{
-animation:likePop .3s ease;
-}
+.video-actions{
+position:absolute;
+right:10px;
+bottom:21px;
+z-index:15;
 
-@keyframes likePop{
-50%{
-transform:scale(1.35);
-}
-}
-
-.p-a-r{
-margin-left:auto;
-}
-
-.feed-loading{
-text-align:center;
-padding:35px 20px;
-color:rgba(255,255,255,.35);
-font-size:12px;
-}
-
-.feed-error{
-margin:20px 14px;
-padding:18px;
-border-radius:14px;
-background:rgba(239,68,68,.08);
-border:1px solid rgba(239,68,68,.15);
-color:#ef9999;
-font-size:12px;
-text-align:center;
-}
-
-.empty-feed{
-padding:45px 20px;
-text-align:center;
-color:rgba(255,255,255,.35);
-}
-
-.empty-feed i{
-font-size:32px;
-margin-bottom:12px;
-color:rgba(168,85,247,.6);
-}
-
-.empty-feed p{
-font-size:12px;
-}
-
-.bnav{
-position:fixed;
-bottom:0;
-left:50%;
-transform:translateX(-50%);
-width:100%;
-max-width:430px;
-height:62px;
-display:flex;
-align-items:center;
-justify-content:space-around;
-background:rgba(10,10,15,.96);
-backdrop-filter:blur(16px);
--webkit-backdrop-filter:blur(16px);
-border-top:1px solid rgba(255,255,255,.06);
-z-index:200;
-}
-
-.nb{
 display:flex;
 flex-direction:column;
 align-items:center;
-gap:3px;
-font-size:9px;
-font-weight:500;
-color:rgba(255,255,255,.3);
+gap:18px;
+}
+
+.video-action{
+width:50px;
+border:0;
+background:none;
+color:#fff;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
 cursor:pointer;
+}
+
+.video-action i{
+font-size:24px;
+margin-bottom:5px;
+}
+
+.video-action span{
+font-size:11px;
+color:#fff;
+}
+
+.video-action.liked i{
+color:#ff315c;
+}
+
+.video-action.saved i{
+color:#7d5cff;
+}
+
+/* BOTTOM NAV */
+/* EXACT STUDENTX NAVIGATION */
+
+.bnav{
+
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+
+height:62px;
+
+z-index:100;
+
+display:flex;
+align-items:center;
+justify-content:space-around;
+
+background:#09090d;
+
+border-top:1px solid rgba(255,255,255,.08);
+}
+
+.nb{
+
+width:20%;
+
+height:100%;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+gap:5px;
+
+color:#777;
+
+font-size:11px;
+
+cursor:pointer;
+
+user-select:none;
 }
 
 .nb i{
-font-size:19px;
+font-size:20px;
 }
 
 .nb.on{
-color:#a855f7;
+color:#fff;
 }
 
-.mnu-ov{
-position:fixed;
-inset:0;
-z-index:500;
-display:none;
-align-items:flex-end;
-justify-content:center;
+.nb.on i{
+color:#fff;
 }
 
-.mnu-ov.show{
-display:flex;
-}
+/* EMPTY / LOADING */
 
-.mnu-sh{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.58);
-}
-
-.mnu-glass{
-position:relative;
-z-index:1;
-width:100%;
-max-width:430px;
-background:rgba(20,20,45,.95);
-backdrop-filter:blur(24px);
--webkit-backdrop-filter:blur(24px);
-border:1px solid rgba(255,255,255,.08);
-border-radius:20px 20px 0 0;
-padding:12px 0 24px;
-animation:mnuUp .25s ease;
-}
-
-@keyframes mnuUp{
-from{
-transform:translateY(100%);
-}
-to{
-transform:translateY(0);
-}
-}
-
-.mnu-handle{
-width:36px;
-height:4px;
-background:rgba(255,255,255,.15);
-border-radius:4px;
-margin:0 auto 12px;
-}
-
-.mnu-item{
+.video-message{
+height:100%;
 display:flex;
 align-items:center;
-gap:12px;
-padding:14px 20px;
-font-size:13px;
-font-weight:500;
-color:rgba(255,255,255,.72);
-cursor:pointer;
-}
+justify-content:center;
 
-.mnu-item:active{
-background:rgba(124,58,237,.12);
-}
-
-.mnu-item i{
-width:18px;
-text-align:center;
+color:#aaa;
 font-size:14px;
-color:rgba(255,255,255,.45);
 }
 
-.mnu-item.dng{
-color:#ef4444;
+/* MOBILE */
+
+@media(min-width:700px){
+
+.video-feed{
+max-width:500px;
+margin:auto;
 }
 
-.mnu-item.dng i{
-color:#ef4444;
+.video-top{
+max-width:500px;
+margin:auto;
 }
 
-.mnu-div{
-height:1px;
-background:rgba(255,255,255,.06);
-margin:6px 20px;
+.bnav{
+max-width:500px;
+margin:auto;
 }
 
-.toast{
-position:fixed;
-top:16px;
-left:50%;
-transform:translateX(-50%);
-z-index:9999;
-padding:11px 20px;
-background:rgba(124,58,237,.94);
-backdrop-filter:blur(12px);
-color:#fff;
-border-radius:12px;
-font-size:12px;
-font-weight:600;
-box-shadow:0 4px 20px rgba(0,0,0,.3);
-animation:toastIn .3s ease;
-}
-
-@keyframes toastIn{
-from{
-opacity:0;
-transform:translateX(-50%) translateY(-10px);
-}
-to{
-opacity:1;
-transform:translateX(-50%) translateY(0);
-}
 }
 
 </style>
+
 </head>
 
 <body>
 
-<header class="hdr">
 
-<div class="hdr-l">
+<!-- TOP VIDEO BAR -->
 
-<div class="hdr-menu"
-onclick="window.location.href='menu.html'">
-<i class="fas fa-bars"></i>
+<div class="video-top">
+
+<div class="video-tabs">
+
+<button
+class="video-tab"
+id="followingTab"
+type="button">
+Following
+</button>
+
+<button
+class="video-tab active"
+id="forYouTab"
+type="button">
+For You
+</button>
+
+<button
+class="video-tab"
+id="liveTab"
+type="button">
+Live
+</button>
+
 </div>
 
-<div class="hdr-logo">
-Student<b>X</b>
 </div>
 
-</div>
 
-<div class="hdr-r">
+<!-- UPLOAD / CAMERA -->
 
-<div class="hdr-btn"
-onclick="window.location.href='search.html'">
-<i class="fas fa-search"></i>
-</div>
+<button
+class="video-upload"
+id="uploadVideoBtn"
+type="button"
+aria-label="Upload video">
 
-<div class="hdr-btn"
-onclick="window.location.href='notification.html'">
-<i class="fas fa-bell"></i>
-<span class="hdr-dot"></span>
-</div>
-
-</div>
-
-</header>
-
-<!-- STORIES -->
-<div class="stories" id="stories">
-
-<div class="st">
-<div class="st-add">
 <i class="fas fa-plus"></i>
-</div>
-<div class="st-nm">Your Story</div>
-</div>
 
-</div>
+</button>
 
-<!-- CREATE POST -->
-<div class="cpb"
-onclick="window.location.href='create-post.html'">
 
-<img
-id="profileAvatar"
-src=""
-alt="Profile">
+<!-- VIDEO FEED -->
 
-<div class="cpb-in">
+<main
+class="video-feed"
+id="videoFeed">
 
-<div
-id="fullName"
-class="cpb-name">
-Loading...
-</div>
-
-<div
-id="username"
-class="cpb-user">
-@loading...
-</div>
-
-<div class="cpb-placeholder">
-What's on your mind?
-</div>
-
-</div>
-
-<div class="cpb-tools">
-
-<div class="cpb-t g">
-<i class="fas fa-image"></i>
-</div>
-
-<div class="cpb-t r">
-<i class="fas fa-video"></i>
-</div>
-
-<div class="cpb-t y">
-<i class="fas fa-poll"></i>
-</div>
-
-</div>
-
-</div>
-
-<!-- REAL SUPABASE FEED -->
-<main id="feed" class="feed">
-
-<div class="feed-loading">
-<i class="fas fa-circle-notch fa-spin"></i>
-<br><br>
-Loading posts...
+<div class="video-message">
+Loading videos...
 </div>
 
 </main>
 
+
 <!-- BOTTOM NAV -->
+
 <nav class="bnav">
 
-<div class="nb on"
+<div class="nb"
 onclick="window.location.href='home.html'">
+
 <i class="fas fa-home"></i>
+
 <span>Home</span>
+
 </div>
 
-<div class="nb"
+
+<div class="nb on"
 onclick="window.location.href='video.html'">
+
 <i class="fas fa-video"></i>
+
 <span>Video</span>
+
 </div>
+
 
 <div class="nb"
 onclick="window.location.href='chat.html'">
+
 <i class="fas fa-comment-dots"></i>
+
 <span>Chat</span>
+
 </div>
+
 
 <div class="nb"
 onclick="window.location.href='studyhub.html'">
+
 <i class="fas fa-book-open"></i>
+
 <span>StudyHub</span>
+
 </div>
+
 
 <div class="nb"
 onclick="window.location.href='profile.html'">
+
 <i class="fas fa-user"></i>
+
 <span>Profile</span>
+
 </div>
 
 </nav>
-
-<!-- POST MENU -->
-<div
-class="mnu-ov"
-id="menuOv">
-
-<div
-class="mnu-sh"
-onclick="closeMenu()">
-</div>
-
-<div
-class="mnu-glass">
-
-<div class="mnu-handle"></div>
-
-<div id="menuItems"></div>
-
-</div>
-
-</div>
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script src="supabase.js"></script>
-
-<script src="auth.js"></script>
 
 <script>
 
 let currentUser = null;
-let profile = null;
-let posts = [];
-let likedPostIds = new Set();
+let videos = [];
 
-const defaultAvatar =
-"data:image/svg+xml;charset=UTF-8," +
-encodeURIComponent(`
-<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
-<rect width="200" height="200" fill="#202027"/>
-<circle cx="100" cy="78" r="42" fill="#777"/>
-<path d="M35 190c8-48 35-70 65-70s57 22 65 70"
-fill="#777"/>
-</svg>
-`);
+
+/* DEFAULT AVATAR */
+
+function defaultAvatar(){
+
+    return "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg"
+             width="100"
+             height="100"
+             viewBox="0 0 100 100">
+
+            <rect
+                width="100"
+                height="100"
+                fill="#171722"/>
+
+            <circle
+                cx="50"
+                cy="38"
+                r="20"
+                fill="#777"/>
+
+            <path
+                d="M18 90c4-22 18-32 32-32s28 10 32 32"
+                fill="#777"/>
+
+        </svg>
+    `);
+
+}
+
+
+/* SECURITY */
 
 function escapeHTML(value){
 
-if(value === null || value === undefined){
-return "";
+    if(
+        value === null ||
+        value === undefined
+    ){
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
-return String(value)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-}
 
+/* TIME */
 
 function timeAgo(date){
 
-if(!date){
-return "";
-}
+    const now = new Date();
 
-const time = new Date(date).getTime();
+    const old = new Date(date);
 
-if(isNaN(time)){
-return "";
-}
+    const seconds =
+        Math.floor(
+            (now - old) / 1000
+        );
 
-let seconds =
-Math.floor((Date.now() - time) / 1000);
+    if(seconds < 60){
 
-if(seconds < 60){
-return "Just now";
-}
+        return "now";
 
-if(seconds < 3600){
-return Math.floor(seconds / 60) + "m ago";
-}
+    }
 
-if(seconds < 86400){
-return Math.floor(seconds / 3600) + "h ago";
-}
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
 
-if(seconds < 604800){
-return Math.floor(seconds / 86400) + "d ago";
-}
+    if(minutes < 60){
 
-return new Date(date).toLocaleDateString();
+        return minutes + "m";
 
-}
+    }
 
+    const hours =
+        Math.floor(
+            minutes / 60
+        );
 
-async function getCurrentUser(){
+    if(hours < 24){
 
-const result =
-await supabaseClient.auth.getUser();
+        return hours + "h";
 
-if(result.error){
-console.error(result.error);
-return null;
-}
+    }
 
-return result.data.user || null;
+    const days =
+        Math.floor(
+            hours / 24
+        );
 
-}
+    if(days < 7){
 
+        return days + "d";
 
-async function loadMyProfile(){
+    }
 
-if(!currentUser){
-return;
-}
-
-const result =
-await supabaseClient
-.from("profiles")
-.select("id,full_name,username,avatar_url,verified")
-.eq("id",currentUser.id)
-.maybeSingle();
-
-if(result.error){
-
-console.error(
-"Profile loading error:",
-result.error
-);
-
-return;
-}
-
-profile = result.data;
-
-if(!profile){
-return;
-}
-
-const avatar =
-profile.avatar_url ||
-defaultAvatar;
-
-const avatarElement =
-document.getElementById("profileAvatar");
-
-if(avatarElement){
-avatarElement.src = avatar;
-}
-
-const nameElement =
-document.getElementById("fullName");
-
-if(nameElement){
-
-nameElement.textContent =
-profile.full_name ||
-profile.username ||
-"StudentX User";
-
-}
-
-const usernameElement =
-document.getElementById("username");
-
-if(usernameElement){
-
-usernameElement.textContent =
-profile.username
-? "@" + profile.username
-: "";
-
-}
+    return old.toLocaleDateString();
 
 }
 
 
-async function loadStories(){
+/* CURRENT USER */
 
-const storiesElement =
-document.getElementById("stories");
+async function loadCurrentUser(){
 
-if(!storiesElement){
-return;
-}
+    const result =
+        await supabaseClient
+        .auth
+        .getUser();
 
-let html = `
-<div class="st"
-onclick="window.location.href='story-upload.html'">
+    if(result.error){
 
-<div class="st-add">
-<i class="fas fa-plus"></i>
-</div>
+        console.error(
+            "USER ERROR:",
+            result.error
+        );
 
-<div class="st-nm">
-Your Story
-</div>
+        return;
 
-</div>
-`;
+    }
 
-const result =
-await supabaseClient
-.from("profiles")
-.select("id,full_name,username,avatar_url")
-.neq("id",currentUser ? currentUser.id : "")
-.order("created_at",{ascending:false})
-.limit(10);
-
-if(result.error){
-
-console.error(
-"Stories/profile loading error:",
-result.error
-);
-
-storiesElement.innerHTML = html;
-return;
-
-}
-
-(result.data || []).forEach(function(user){
-
-const avatar =
-user.avatar_url ||
-defaultAvatar;
-
-const name =
-user.full_name ||
-user.username ||
-"Student";
-
-html += `
-
-<div class="st"
-onclick="openUserProfile('${user.id}')">
-
-<div class="st-ring">
-
-<img
-src="${escapeHTML(avatar)}"
-alt=""
-onerror="this.src=defaultAvatar">
-
-</div>
-
-<div class="st-nm">
-${escapeHTML(
-name.split(" ")[0]
-)}
-</div>
-
-</div>
-
-`;
-
-});
-
-storiesElement.innerHTML = html;
+    currentUser =
+        result.data.user || null;
 
 }
 
 
-function openUserProfile(userId){
+/* LOAD VIDEOS */
 
-if(!userId){
-return;
-}
+async function loadVideos(){
 
-window.location.href =
-"profile.html?id=" +
-encodeURIComponent(userId);
+    const feed =
+        document.getElementById(
+            "videoFeed"
+        );
 
-}
+    feed.innerHTML = `
+        <div class="video-message">
+            Loading videos...
+        </div>
+    `;
 
 
-function showMsg(message){
+    const result =
+        await supabaseClient
+        .from("videos")
+        .select("*")
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
 
-const old =
-document.querySelector(".toast");
 
-if(old){
-old.remove();
-}
+    if(result.error){
 
-const toast =
-document.createElement("div");
+        console.error(
+            "VIDEO ERROR:",
+            result.error
+        );
 
-toast.className = "toast";
+        feed.innerHTML = `
+            <div class="video-message">
+                Unable to load videos.
+            </div>
+        `;
 
-toast.textContent = message;
+        return;
 
-document.body.appendChild(toast);
+    }
 
-setTimeout(function(){
 
-if(toast.parentNode){
-toast.remove();
-}
+    videos =
+        result.data || [];
 
-},2500);
 
-}
-async function loadLikedPosts(){
+    if(!videos.length){
 
-likedPostIds = new Set();
+        feed.innerHTML = `
+            <div class="video-message">
+                No videos yet.
+            </div>
+        `;
 
-if(!currentUser){
-return;
-}
+        return;
 
-const result =
-await supabaseClient
-.from("likes")
-.select("post_id")
-.eq("user_id",currentUser.id);
+    }
 
-if(result.error){
 
-console.error(
-"Likes loading error:",
-result.error
-);
+    await loadProfiles();
 
-return;
-}
-
-(result.data || []).forEach(function(row){
-
-likedPostIds.add(
-String(row.post_id)
-);
-
-});
+    renderVideos();
 
 }
 
 
-async function loadPosts(){
+/* LOAD PROFILES */
 
-const feed =
-document.getElementById("feed");
+async function loadProfiles(){
 
-feed.innerHTML = `
-<div class="feed-loading">
-<i class="fas fa-circle-notch fa-spin"></i>
-<br><br>
-Loading posts...
-</div>
-`;
-
-const result =
-await supabaseClient
-.from("posts")
-.select(`
-id,
-User_id,
-content,
-image_url,
-Like,
-Create_at
-`)
-.order("Create_at",{ascending:false})
-.limit(50);
-
-if(result.error){
-
-console.error(
-"Posts loading error:",
-result.error
-);
-
-feed.innerHTML = `
-<div class="feed-error">
-
-<i class="fas fa-triangle-exclamation"></i>
-
-<br><br>
-
-Unable to load posts.
-
-<br><br>
-
-${escapeHTML(result.error.message)}
-
-</div>
-`;
-
-return;
-}
-
-posts = result.data || [];
-
-await loadLikedPosts();
-
-await attachPostProfiles();
-
-renderFeed();
-
-}
+    const userIds =
+        [
+            ...new Set(
+                videos
+                .map(video =>
+                    video.user_id
+                )
+                .filter(Boolean)
+            )
+        ];
 
 
-async function attachPostProfiles(){
+    if(!userIds.length){
 
-if(!posts.length){
-return;
-}
+        return;
 
-const userIds = [
-...new Set(
-posts
-.map(function(post){
-return post.User_id;
-})
-.filter(Boolean)
-)
-];
+    }
 
-if(!userIds.length){
-return;
-}
 
-const result =
-await supabaseClient
-.from("profiles")
-.select(
-"id,full_name,username,avatar_url,verified"
-)
-.in("id",userIds);
+    const result =
+        await supabaseClient
+        .from("profiles")
+        .select(
+            "id,full_name,username,avatar_url,university"
+        )
+        .in(
+            "id",
+            userIds
+        );
 
-if(result.error){
 
-console.error(
-"Post profiles error:",
-result.error
-);
+    if(result.error){
 
-return;
-}
+        console.error(
+            "PROFILE ERROR:",
+            result.error
+        );
 
-const profileMap = {};
+        return;
 
-(result.data || []).forEach(function(user){
+    }
 
-profileMap[user.id] = user;
 
-});
+    const profiles =
+        result.data || [];
 
-posts.forEach(function(post){
 
-post.profile =
-profileMap[post.User_id] || null;
+    videos =
+        videos.map(video => {
 
-});
+            const profile =
+                profiles.find(
+                    item =>
+                        item.id ===
+                        video.user_id
+                );
+
+
+            return {
+                ...video,
+                profile:
+                    profile || null
+            };
+
+        });
 
 }
 
 
-function renderFeed(){
+/* RENDER VIDEOS */
 
-const feed =
-document.getElementById("feed");
+function renderVideos(){
 
-if(!feed){
-return;
-}
+    const feed =
+        document.getElementById(
+            "videoFeed"
+        );
 
-if(!posts.length){
 
-feed.innerHTML = `
+    feed.innerHTML =
+        videos.map(video => {
 
-<div class="empty-feed">
+            const profile =
+                video.profile || {};
 
-<i class="far fa-newspaper"></i>
 
-<p>
-No posts found yet.
-</p>
+            const name =
+                profile.full_name ||
+                profile.username ||
+                "StudentX User";
 
-<p style="margin-top:6px">
-Be the first to create a post.
-</p>
 
-</div>
+            const username =
+                profile.username
+                ? "@" +
+                  profile.username
+                : "@studentx";
 
-`;
 
-return;
-}
+            const avatar =
+                profile.avatar_url ||
+                defaultAvatar();
 
-feed.innerHTML =
-posts.map(renderPost).join("");
 
-}
+            const caption =
+                video.caption || "";
 
 
-function renderPost(post){
+            return `
 
-const user =
-post.profile || {};
+            <section
+                class="video-item"
+                data-video-id="${escapeHTML(video.id)}"
+            >
 
-const name =
-user.full_name ||
-user.username ||
-"StudentX User";
 
-const username =
-user.username
-? "@" + user.username
-: "";
+                <video
 
-const avatar =
-user.avatar_url ||
-defaultAvatar;
+                    class="video-player"
 
-const verified =
-user.verified
-? `<i class="fas fa-check-circle vd"></i>`
-: "";
+                    src="${escapeHTML(
+                        video.video_url
+                    )}"
 
-const liked =
-likedPostIds.has(String(post.id));
+                    ${
+                        video.thumbnail_url
+                        ?
+                        `poster="${escapeHTML(
+                            video.thumbnail_url
+                        )}"`
+                        :
+                        ""
+                    }
 
-const likeCount =
-Number(post.Like || 0);
+                    playsinline
 
-let bodyHTML = "";
+                    loop
 
-if(post.content){
+                    muted
 
-bodyHTML = `
+                    preload="metadata"
 
-<div class="p-body">
-${escapeHTML(post.content)}
-</div>
+                ></video>
 
-`;
 
-}
+                <div class="video-overlay"></div>
 
-let imageHTML = "";
 
-if(post.image_url){
+                <div class="video-info">
 
-imageHTML = `
 
-<img
-class="p-image"
-src="${escapeHTML(post.image_url)}"
-alt="Post image"
-loading="lazy"
-onerror="this.style.display='none'">
+                    <div class="video-user">
 
-`;
 
-}
+                        <img
 
-return `
+                            class="video-avatar"
 
-<article
-class="post"
-id="post-${escapeHTML(post.id)}">
+                            src="${escapeHTML(
+                                avatar
+                            )}"
 
-<div class="p-hdr">
+                            onerror="
+                                this.src=defaultAvatar()
+                            "
 
-<img
-class="p-av"
-src="${escapeHTML(avatar)}"
-alt="${escapeHTML(name)}"
-onclick="openUserProfile('${escapeHTML(post.User_id)}')"
-onerror="this.src=defaultAvatar">
+                        >
 
-<div class="p-info">
 
-<div class="p-nm">
+                        <div
+                            class="video-user-details"
+                        >
 
-${escapeHTML(name)}
+                            <div
+                                class="video-name"
+                            >
+                                ${escapeHTML(
+                                    name
+                                )}
+                            </div>
+
 
-${verified}
+                            <div
+                                class="video-username"
+                            >
+                                ${escapeHTML(
+                                    username
+                                )}
+                            </div>
 
-</div>
+                        </div>
 
-<div class="p-meta">
 
-${escapeHTML(username)}
+                        ${
+                            currentUser &&
+                            currentUser.id !==
+                            video.user_id
+                            ?
+
+                            `
+                            <button
+                                class="video-follow"
+                                onclick="
+                                    followVideo(
+                                        '${escapeHTML(
+                                            video.user_id
+                                        )}'
+                                    )
+                                "
+                            >
+                                Follow
+                            </button>
+                            `
 
-${username ? " · " : ""}
+                            :
 
-${timeAgo(post.Create_at)}
+                            ""
+                        }
+
+
+                    </div>
+
+
+                    ${
+                        caption
+                        ?
+
+                        `
+                        <div
+                            class="video-caption"
+                        >
+                            ${escapeHTML(
+                                caption
+                            )}
+                        </div>
+                        `
 
-</div>
+                        :
+
+                        ""
+                    }
+
+
+                </div>
+
+
+                <div class="video-actions">
+
 
-</div>
+                    <button
+                        class="video-action"
+                        onclick="
+                            likeVideo(
+                                '${escapeHTML(
+                                    video.id
+                                )}',
+                                this
+                            )
+                        "
+                    >
 
-<div
-class="p-more"
-onclick="openMenu('${escapeHTML(post.id)}','${escapeHTML(post.User_id)}')">
+                        <i
+                            class="far fa-heart"
+                        ></i>
 
-<i class="fas fa-ellipsis-h"></i>
+                        <span>0</span>
 
-</div>
+                    </button>
 
-</div>
 
-${bodyHTML}
+                    <button
+                        class="video-action"
+                        onclick="
+                            openVideoComments(
+                                '${escapeHTML(
+                                    video.id
+                                )}'
+                            )
+                        "
+                    >
 
-${imageHTML}
+                        <i
+                            class="far fa-comment"
+                        ></i>
 
-<div class="p-acts">
+                        <span>0</span>
 
-<div
-class="p-a lk ${liked ? "on" : ""}"
-onclick="toggleLike('${escapeHTML(post.id)}')">
+                    </button>
 
-<i class="${liked ? "fas" : "far"} fa-heart"></i>
 
-<span>
-${likeCount}
-</span>
+                    <button
+                        class="video-action"
+                        onclick="
+                            saveVideo(
+                                '${escapeHTML(
+                                    video.id
+                                )}',
+                                this
+                            )
+                        "
+                    >
 
-</div>
+                        <i
+                            class="far fa-bookmark"
+                        ></i>
 
-<div
-class="p-a"
-onclick="openComments('${escapeHTML(post.id)}')">
+                        <span>Save</span>
 
-<i class="far fa-comment"></i>
+                    </button>
 
-<span>0</span>
 
-</div>
+                    <button
+                        class="video-action"
+                        onclick="
+                            shareVideo(
+                                '${escapeHTML(
+                                    video.id
+                                )}'
+                            )
+                        "
+                    >
 
-<div
-class="p-a"
-onclick="repost('${escapeHTML(post.id)}')">
+                        <i
+                            class="fas fa-share"
+                        ></i>
 
-<i class="fas fa-retweet"></i>
+                        <span>Share</span>
 
-<span>0</span>
+                    </button>
 
-</div>
 
-<div
-class="p-a p-a-r"
-onclick="toggleSave('${escapeHTML(post.id)}')">
+                    <button
+                        class="video-action"
+                        onclick="
+                            videoMenu(
+                                '${escapeHTML(
+                                    video.id
+                                )}'
+                            )
+                        "
+                    >
 
-<i class="far fa-bookmark"></i>
+                        <i
+                            class="fas fa-ellipsis-vertical"
+                        ></i>
 
-</div>
+                    </button>
 
-</div>
 
-</article>
+                </div>
 
-`;
 
-}
+            </section>
 
+            `;
 
-async function toggleLike(postId){
+        }).join("");
 
-if(!currentUser){
 
-showMsg("Please login first");
+    setupVideoPlayback();
 
-return;
-}
-
-const id =
-String(postId);
-
-const alreadyLiked =
-likedPostIds.has(id);
-
-if(alreadyLiked){
-
-const result =
-await supabaseClient
-.from("likes")
-.delete()
-.eq("post_id",postId)
-.eq("user_id",currentUser.id);
-
-if(result.error){
-
-console.error(result.error);
-
-showMsg(
-"Unable to unlike post"
-);
-
-return;
-}
-
-likedPostIds.delete(id);
-
-}else{
-
-const result =
-await supabaseClient
-.from("likes")
-.insert({
-
-post_id:postId,
-
-user_id:currentUser.id
-
-});
-
-if(result.error){
-
-console.error(result.error);
-
-showMsg(
-"Unable to like post"
-);
-
-return;
-}
-
-likedPostIds.add(id);
-
-}
-
-await updatePostLikeCount(postId);
-
-renderFeed();
-
-}
-
-
-async function updatePostLikeCount(postId){
-
-const result =
-await supabaseClient
-.from("likes")
-.select("id",{count:"exact",head:true})
-.eq("post_id",postId);
-
-if(result.error){
-
-console.error(
-"Like count error:",
-result.error
-);
-
-return;
-}
-
-const count =
-result.count || 0;
-
-const post =
-posts.find(function(item){
-
-return String(item.id) === String(postId);
-
-});
-
-if(post){
-
-post.Like = count;
-
-}
+    loadVideoCounts();
 
 }
 
 
-async function refreshLikeCounts(){
+/* VIDEO PLAY / PAUSE */
 
-for(const post of posts){
+function setupVideoPlayback(){
 
-await updatePostLikeCount(post.id);
-
-}
-
-renderFeed();
-
-}
+    const players =
+        document.querySelectorAll(
+            ".video-player"
+        );
 
 
-function openComments(postId){
+    const observer =
+        new IntersectionObserver(
 
-window.location.href =
-"comment.html?post=" +
-encodeURIComponent(postId);
+            entries => {
 
-}
+                entries.forEach(
+                    entry => {
 
-
-function repost(postId){
-
-showMsg(
-"Repost feature will be connected to Supabase next."
-);
-
-}
+                        const video =
+                            entry.target;
 
 
-function toggleSave(postId){
+                        if(
+                            entry.isIntersecting
+                        ){
 
-showMsg(
-"Save feature will be connected to Supabase next."
-);
+                            players.forEach(
+                                other => {
 
-}
+                                    if(
+                                        other !==
+                                        video
+                                    ){
+
+                                        other.pause();
+
+                                    }
+
+                                }
+                            );
 
 
-function scrollToPost(postId){
+                            video.play()
+                            .catch(
+                                () => {}
+                            );
 
-const element =
-document.getElementById(
-"post-" + postId
-);
+                        }
+                        else{
 
-if(element){
+                            video.pause();
 
-element.scrollIntoView({
-behavior:"smooth",
-block:"center"
-});
+                        }
 
-element.style.boxShadow =
-"0 0 0 2px rgba(168,85,247,.7)";
+                    }
+                );
 
-setTimeout(function(){
+            },
 
-element.style.boxShadow = "";
+            {
+                threshold:0.65
+            }
 
-},1800);
+        );
 
-}
 
-}
- function openMenu(postId,userId){
-
-const isMine =
-String(userId) === String(currentUser?.id);
-
-let html = "";
-
-if(isMine){
-
-html += `
-
-<div
-class="mnu-item"
-onclick="editPost('${escapeHTML(postId)}')">
-
-<i class="fas fa-pen"></i>
-
-Edit Post
-
-</div>
-
-<div
-class="mnu-item"
-onclick="pinPost('${escapeHTML(postId)}')">
-
-<i class="fas fa-thumbtack"></i>
-
-Pin Post
-
-</div>
-
-<div class="mnu-div"></div>
-
-<div
-class="mnu-item dng"
-onclick="deletePost('${escapeHTML(postId)}')">
-
-<i class="fas fa-trash"></i>
-
-Delete Post
-
-</div>
-
-<div class="mnu-div"></div>
-
-`;
-
-}else{
-
-html += `
-
-<div
-class="mnu-item"
-onclick="openUserProfile('${escapeHTML(userId)}');closeMenu()">
-
-<i class="fas fa-user"></i>
-
-View Profile
-
-</div>
-
-<div
-class="mnu-item"
-onclick="showMsg('Post hidden');closeMenu()">
-
-<i class="fas fa-eye-slash"></i>
-
-Hide Post
-
-</div>
-
-<div class="mnu-div"></div>
-
-`;
+    players.forEach(
+        video =>
+            observer.observe(video)
+    );
 
 }
 
-html += `
 
-<div
-class="mnu-item"
-onclick="copyPostLink('${escapeHTML(postId)}')">
+/* START */
 
-<i class="fas fa-link"></i>
+async function initVideo(){
 
-Copy Link
+    await loadCurrentUser();
 
-</div>
-
-<div
-class="mnu-item"
-onclick="showMsg('Share coming soon');closeMenu()">
-
-<i class="fas fa-share"></i>
-
-Share Post
-
-</div>
-
-<div class="mnu-div"></div>
-
-<div
-class="mnu-item dng"
-onclick="reportPost('${escapeHTML(postId)}')">
-
-<i class="fas fa-flag"></i>
-
-Report Post
-
-</div>
-
-`;
-
-document.getElementById(
-"menuItems"
-).innerHTML = html;
-
-document.getElementById(
-"menuOv"
-).classList.add("show");
+    await loadVideos();
 
 }
 
 
-function closeMenu(){
+initVideo();
 
-document.getElementById(
-"menuOv"
-).classList.remove("show");
+                                 </script>
+                                 <script>
+
+/* =========================
+   FORMAT NUMBER
+========================= */
+
+function formatVideoCount(number){
+
+    number = Number(number || 0);
+
+    if(number >= 1000000){
+        return (number / 1000000)
+            .toFixed(1)
+            .replace(".0","") + "M";
+    }
+
+    if(number >= 1000){
+        return (number / 1000)
+            .toFixed(1)
+            .replace(".0","") + "K";
+    }
+
+    return String(number);
+}
+
+
+/* =========================
+   LOAD COUNTS
+========================= */
+
+async function loadVideoCounts(){
+
+    for(const video of videos){
+
+        const card =
+            document.querySelector(
+                `[data-video-id="${video.id}"]`
+            );
+
+        if(!card) continue;
+
+
+        const buttons =
+            card.querySelectorAll(
+                ".video-action"
+            );
+
+
+        /* LIKES */
+
+        const likes =
+            await supabaseClient
+            .from("video_likes")
+            .select("id",{
+                count:"exact",
+                head:true
+            })
+            .eq(
+                "video_id",
+                video.id
+            );
+
+
+        if(buttons[0]){
+
+            buttons[0]
+            .querySelector("span")
+            .textContent =
+                formatVideoCount(
+                    likes.count || 0
+                );
+
+        }
+
+
+        /* COMMENTS */
+
+        const comments =
+            await supabaseClient
+            .from("video_comments")
+            .select("id",{
+                count:"exact",
+                head:true
+            })
+            .eq(
+                "video_id",
+                video.id
+            );
+
+
+        if(buttons[1]){
+
+            buttons[1]
+            .querySelector("span")
+            .textContent =
+                formatVideoCount(
+                    comments.count || 0
+                );
+
+        }
+
+
+        /* VIEWS */
+
+        const views =
+            await supabaseClient
+            .from("video_views")
+            .select("id",{
+                count:"exact",
+                head:true
+            })
+            .eq(
+                "video_id",
+                video.id
+            );
+
+
+        /* SAVE STATUS */
+
+        if(currentUser){
+
+            const saved =
+                await supabaseClient
+                .from("video_saves")
+                .select("id")
+                .eq(
+                    "video_id",
+                    video.id
+                )
+                .eq(
+                    "user_id",
+                    currentUser.id
+                )
+                .maybeSingle();
+
+
+            if(
+                saved.data &&
+                buttons[2]
+            ){
+
+                buttons[2]
+                .classList.add("saved");
+
+                buttons[2]
+                .querySelector("i")
+                .className =
+                    "fas fa-bookmark";
+
+            }
+
+
+            /* LIKE STATUS */
+
+            const liked =
+                await supabaseClient
+                .from("video_likes")
+                .select("id")
+                .eq(
+                    "video_id",
+                    video.id
+                )
+                .eq(
+                    "user_id",
+                    currentUser.id
+                )
+                .maybeSingle();
+
+
+            if(
+                liked.data &&
+                buttons[0]
+            ){
+
+                buttons[0]
+                .classList.add("liked");
+
+                buttons[0]
+                .querySelector("i")
+                .className =
+                    "fas fa-heart";
+
+            }
+
+        }
+
+    }
 
 }
 
 
-function editPost(postId){
+/* =========================
+   LIKE VIDEO
+========================= */
 
-closeMenu();
-
-window.location.href =
-"create-post.html?edit=" +
-encodeURIComponent(postId);
-
-}
-
-
-function pinPost(postId){
-
-closeMenu();
-
-showMsg(
-"Pin feature will be connected to Supabase."
-);
-
-}
-
-
-async function deletePost(postId){
-
-closeMenu();
-
-if(!currentUser){
-
-showMsg("Please login first");
-
-return;
-
-}
-
-const confirmed =
-confirm(
-"Are you sure you want to delete this post?"
-);
-
-if(!confirmed){
-return;
-}
-
-const result =
-await supabaseClient
-.from("posts")
-.delete()
-.eq("id",postId)
-.eq("User_id",currentUser.id);
-
-if(result.error){
-
-console.error(
-"Delete post error:",
-result.error
-);
-
-showMsg(
-"Unable to delete post"
-);
-
-return;
-}
-
-posts =
-posts.filter(function(post){
-
-return String(post.id) !== String(postId);
-
-});
-
-renderFeed();
-
-showMsg(
-"Post deleted successfully"
-);
-
-}
-
-
-function copyPostLink(postId){
-
-closeMenu();
-
-const url =
-window.location.origin +
-window.location.pathname +
-"?post=" +
-encodeURIComponent(postId);
-
-if(
-navigator.clipboard &&
-navigator.clipboard.writeText
+async function likeVideo(
+    videoId,
+    button
 ){
 
-navigator.clipboard
-.writeText(url)
-.then(function(){
+    if(!currentUser){
 
-showMsg("Post link copied!");
+        alert("Please login first");
 
-})
-.catch(function(){
+        return;
 
-showMsg("Unable to copy link");
+    }
 
-});
 
-}else{
+    try{
 
-showMsg("Copy not supported");
+        const existing =
+            await supabaseClient
+            .from("video_likes")
+            .select("id")
+            .eq(
+                "video_id",
+                videoId
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+
+        if(existing.data){
+
+            const result =
+                await supabaseClient
+                .from("video_likes")
+                .delete()
+                .eq(
+                    "id",
+                    existing.data.id
+                );
+
+
+            if(result.error)
+                throw result.error;
+
+
+            button.classList.remove(
+                "liked"
+            );
+
+            button.querySelector("i")
+                .className =
+                "far fa-heart";
+
+
+        }else{
+
+            const result =
+                await supabaseClient
+                .from("video_likes")
+                .insert({
+
+                    video_id:
+                        videoId,
+
+                    user_id:
+                        currentUser.id
+
+                });
+
+
+            if(result.error)
+                throw result.error;
+
+
+            button.classList.add(
+                "liked"
+            );
+
+            button.querySelector("i")
+                .className =
+                "fas fa-heart";
+
+        }
+
+
+        const count =
+            await supabaseClient
+            .from("video_likes")
+            .select("id",{
+                count:"exact",
+                head:true
+            })
+            .eq(
+                "video_id",
+                videoId
+            );
+
+
+        button.querySelector("span")
+            .textContent =
+            formatVideoCount(
+                count.count || 0
+            );
+
+
+    }catch(error){
+
+        console.error(
+            "LIKE VIDEO ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to like video"
+        );
+
+    }
 
 }
 
+
+/* =========================
+   SAVE VIDEO
+========================= */
+
+async function saveVideo(
+    videoId,
+    button
+){
+
+    if(!currentUser){
+
+        alert("Please login first");
+
+        return;
+
+    }
+
+
+    try{
+
+        const existing =
+            await supabaseClient
+            .from("video_saves")
+            .select("id")
+            .eq(
+                "video_id",
+                videoId
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+
+        if(existing.data){
+
+            const result =
+                await supabaseClient
+                .from("video_saves")
+                .delete()
+                .eq(
+                    "id",
+                    existing.data.id
+                );
+
+
+            if(result.error)
+                throw result.error;
+
+
+            button.classList.remove(
+                "saved"
+            );
+
+            button.querySelector("i")
+                .className =
+                "far fa-bookmark";
+
+
+        }else{
+
+            const result =
+                await supabaseClient
+                .from("video_saves")
+                .insert({
+
+                    video_id:
+                        videoId,
+
+                    user_id:
+                        currentUser.id
+
+                });
+
+
+            if(result.error)
+                throw result.error;
+
+
+            button.classList.add(
+                "saved"
+            );
+
+            button.querySelector("i")
+                .className =
+                "fas fa-bookmark";
+
+        }
+
+    }catch(error){
+
+        console.error(
+            "SAVE VIDEO ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to save video"
+        );
+
+    }
+
 }
 
 
-function reportPost(postId){
+/* =========================
+   RECORD VIEW
+========================= */
 
-closeMenu();
+async function recordVideoView(
+    videoId
+){
 
-showMsg(
-"Post reported"
+    if(!currentUser)
+        return;
+
+
+    const key =
+        "studentx_video_view_" +
+        videoId;
+
+
+    if(
+        sessionStorage.getItem(key)
+    ){
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("video_views")
+        .insert({
+
+            video_id:
+                videoId,
+
+            user_id:
+                currentUser.id
+
+        });
+
+
+    if(result.error){
+
+        console.error(
+            "VIEW ERROR:",
+            result.error
+        );
+
+        return;
+
+    }
+
+
+    sessionStorage.setItem(
+        key,
+        "1"
+    );
+
+}
+
+
+/* =========================
+   FOLLOW USER
+========================= */
+
+async function followVideo(
+    userId
+){
+
+    if(!currentUser){
+
+        alert("Please login first");
+
+        return;
+
+    }
+
+
+    if(
+        currentUser.id === userId
+    ){
+
+        return;
+
+    }
+
+
+    const existing =
+        await supabaseClient
+        .from("followers")
+        .select("id")
+        .eq(
+            "follower_id",
+            currentUser.id
+        )
+        .eq(
+            "following_id",
+            userId
+        )
+        .maybeSingle();
+
+
+    if(existing.data){
+
+        alert("Already following");
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("followers")
+        .insert({
+
+            follower_id:
+                currentUser.id,
+
+            following_id:
+                userId
+
+        });
+
+
+    if(result.error){
+
+        console.error(
+            "FOLLOW ERROR:",
+            result.error
+        );
+
+        alert(
+            result.error.message ||
+            "Unable to follow"
+        );
+
+        return;
+
+    }
+
+
+    alert("Following");
+
+}
+
+
+/* =========================
+   COMMENTS
+========================= */
+
+function openVideoComments(
+    videoId
+){
+
+    window.location.href =
+        "comment.html?video=" +
+        encodeURIComponent(
+            videoId
+        );
+
+}
+
+
+/* =========================
+   SHARE
+========================= */
+
+async function shareVideo(
+    videoId
+){
+
+    const url =
+        window.location.origin +
+        "/video.html?video=" +
+        encodeURIComponent(
+            videoId
+        );
+
+
+    if(
+        navigator.share
+    ){
+
+        try{
+
+            await navigator.share({
+
+                title:
+                    "StudentX Video",
+
+                text:
+                    "Watch this video on StudentX",
+
+                url:url
+
+            });
+
+        }catch(error){
+
+            console.log(
+                "Share cancelled"
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    try{
+
+        await navigator.clipboard
+            .writeText(url);
+
+        alert(
+            "Video link copied"
+        );
+
+    }catch(error){
+
+        alert(url);
+
+    }
+
+}
+
+
+/* =========================
+   MORE
+========================= */
+
+function videoMenu(
+    videoId
+){
+
+    const video =
+        videos.find(
+            item =>
+                item.id ===
+                videoId
+        );
+
+
+    if(!video) return;
+
+
+    if(
+        currentUser &&
+        video.user_id ===
+        currentUser.id
+    ){
+
+        const remove =
+            confirm(
+                "Delete this video?"
+            );
+
+
+        if(remove){
+
+            deleteVideo(
+                videoId
+            );
+
+        }
+
+    }else{
+
+        alert(
+            "Video options will be added next."
+        );
+
+    }
+
+}
+
+
+/* =========================
+   DELETE VIDEO
+========================= */
+
+async function deleteVideo(
+    videoId
+){
+
+    if(!currentUser)
+        return;
+
+
+    const result =
+        await supabaseClient
+        .from("videos")
+        .delete()
+        .eq(
+            "id",
+            videoId
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        );
+
+
+    if(result.error){
+
+        console.error(
+            "DELETE VIDEO ERROR:",
+            result.error
+        );
+
+        alert(
+            result.error.message ||
+            "Unable to delete video"
+        );
+
+        return;
+
+    }
+
+
+    await loadVideos();
+
+}
+
+
+/* =========================
+   START VIEW TRACKING
+========================= */
+
+function setupVideoViews(){
+
+    const items =
+        document.querySelectorAll(
+            ".video-item"
+        );
+
+
+    const observer =
+        new IntersectionObserver(
+
+            entries => {
+
+                entries.forEach(
+                    entry => {
+
+                        if(
+                            entry.isIntersecting
+                        ){
+
+                            const videoId =
+                                entry.target
+                                .dataset
+                                .videoId;
+
+
+                            if(videoId){
+
+                                recordVideoView(
+                                    videoId
+                                );
+
+                            }
+
+                        }
+
+                    }
+                );
+
+            },
+
+            {
+                threshold:0.7
+            }
+
+        );
+
+
+    items.forEach(
+        item =>
+            observer.observe(item)
+    );
+
+}
+
+
+/* =========================
+   FOLLOWING FILTER
+========================= */
+
+async function loadFollowingVideos(){
+
+    if(!currentUser){
+
+        return [];
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("followers")
+        .select(
+            "following_id"
+        )
+        .eq(
+            "follower_id",
+            currentUser.id
+        );
+
+
+    if(result.error){
+
+        console.error(
+            "FOLLOWING ERROR:",
+            result.error
+        );
+
+        return [];
+
+    }
+
+
+    const ids =
+        (result.data || [])
+        .map(
+            item =>
+                item.following_id
+        );
+
+
+    if(!ids.length){
+
+        return [];
+
+    }
+
+
+    return videos.filter(
+        video =>
+            ids.includes(
+                video.user_id
+            )
+    );
+
+}
+
+
+/* =========================
+   TAB FILTER
+========================= */
+
+async function showFollowing(){
+
+    const following =
+        await loadFollowingVideos();
+
+
+    const original =
+        videos;
+
+
+    if(!following.length){
+
+        document.getElementById(
+            "videoFeed"
+        ).innerHTML = `
+            <div class="video-message">
+                No videos from people you follow yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    videos = following;
+
+    renderVideos();
+
+    videos = original;
+
+}
+
+
+/* =========================
+   TAB BUTTONS
+========================= */
+
+document
+.getElementById("forYouTab")
+.addEventListener(
+    "click",
+    async function(){
+
+        document
+        .querySelectorAll(
+            ".video-tab"
+        )
+        .forEach(
+            tab =>
+                tab.classList.remove(
+                    "active"
+                )
+        );
+
+        this.classList.add(
+            "active"
+        );
+
+        await loadVideos();
+
+    }
 );
 
-}
 
+document
+.getElementById("followingTab")
+.addEventListener(
+    "click",
+    async function(){
 
-function scrollToRequestedPost(){
+        document
+        .querySelectorAll(
+            ".video-tab"
+        )
+        .forEach(
+            tab =>
+                tab.classList.remove(
+                    "active"
+                )
+        );
 
-const params =
-new URLSearchParams(
-window.location.search
+        this.classList.add(
+            "active"
+        );
+
+        await showFollowing();
+
+    }
 );
 
-const postId =
-params.get("post");
 
-if(!postId){
-return;
-}
+document
+.getElementById("liveTab")
+.addEventListener(
+    "click",
+    function(){
 
-setTimeout(function(){
+        alert(
+            "Live is coming next."
+        );
 
-scrollToPost(postId);
-
-},700);
-
-}
-
-
-function subscribeToPosts(){
-
-supabaseClient
-.channel("home-posts-feed")
-
-.on(
-"postgres_changes",
-{
-event:"INSERT",
-schema:"public",
-table:"posts"
-},
-async function(){
-
-await loadPosts();
-
-}
-)
-
-.on(
-"postgres_changes",
-{
-event:"UPDATE",
-schema:"public",
-table:"posts"
-},
-async function(){
-
-await loadPosts();
-
-}
-)
-
-.on(
-"postgres_changes",
-{
-event:"DELETE",
-schema:"public",
-table:"posts"
-},
-async function(){
-
-await loadPosts();
-
-}
-)
-
-.subscribe();
-
-}
-
-
-function subscribeToLikes(){
-
-supabaseClient
-.channel("home-likes-feed")
-
-.on(
-"postgres_changes",
-{
-event:"INSERT",
-schema:"public",
-table:"likes"
-},
-async function(payload){
-
-await updatePostLikeCount(
-payload.new.post_id
+    }
 );
 
-renderFeed();
 
-}
-)
+/* =========================
+   UPLOAD BUTTON
+========================= */
 
-.on(
-"postgres_changes",
-{
-event:"DELETE",
-schema:"public",
-table:"likes"
-},
-async function(payload){
+document
+.getElementById("uploadVideoBtn")
+.addEventListener(
+    "click",
+    function(){
 
-await updatePostLikeCount(
-payload.old.post_id
+        alert(
+            "Video upload interface is coming in the next part."
+        );
+
+    }
 );
 
-renderFeed();
+                                 </script>
+                                 <!-- =========================
+     VIDEO UPLOAD MODAL
+========================= -->
 
-}
-)
+<div id="uploadModal" class="upload-modal">
 
-.subscribe();
+    <div class="upload-box">
 
-}
+        <div class="upload-header">
+            <button
+                type="button"
+                class="upload-close"
+                onclick="closeVideoUpload()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+
+            <h2>Upload Video</h2>
+
+            <div></div>
+        </div>
 
 
-async function initHome(){
+        <div id="uploadChooseArea">
 
-try{
+            <div class="upload-icon">
+                <i class="fas fa-video"></i>
+            </div>
 
-currentUser =
-await getCurrentUser();
+            <h3>Add a video</h3>
 
-if(!currentUser){
+            <p>
+                Record a new video or choose one
+                from your phone.
+            </p>
 
-window.location.href =
-"login.html";
 
-return;
+            <button
+                type="button"
+                class="upload-option"
+                onclick="openVideoCamera()">
 
-}
+                <i class="fas fa-camera"></i>
 
-await loadMyProfile();
+                <span>Record Video</span>
 
-await loadStories();
+            </button>
 
-await loadPosts();
 
-subscribeToPosts();
+            <button
+                type="button"
+                class="upload-option"
+                onclick="chooseVideoFile()">
 
-subscribeToLikes();
+                <i class="fas fa-folder-open"></i>
 
-scrollToRequestedPost();
+                <span>Choose from Phone</span>
 
-}catch(error){
+            </button>
 
-console.error(
-"Home initialization error:",
-error
-);
+        </div>
 
-const feed =
-document.getElementById("feed");
 
-if(feed){
+        <div
+            id="videoPreviewArea"
+            style="display:none;">
 
-feed.innerHTML = `
+            <video
+                id="uploadPreview"
+                class="upload-preview"
+                controls
+                playsinline>
+            </video>
 
-<div class="feed-error">
 
-Something went wrong
-while loading StudentX.
+            <div class="caption-area">
 
-<br><br>
+                <textarea
+                    id="videoCaption"
+                    maxlength="500"
+                    placeholder="Write a caption...">
+                </textarea>
 
-Please refresh the page.
+                <div class="caption-count">
+                    <span id="captionCount">0</span>/500
+                </div>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="postVideoBtn"
+                class="post-video-btn"
+                onclick="publishVideo()">
+
+                <i class="fas fa-paper-plane"></i>
+
+                Post Video
+
+            </button>
+
+
+            <button
+                type="button"
+                class="change-video-btn"
+                onclick="changeSelectedVideo()">
+
+                Change Video
+
+            </button>
+
+        </div>
+
+
+        <div
+            id="uploadProgress"
+            style="display:none;">
+
+            <div class="progress-text">
+                Uploading video...
+            </div>
+
+            <div class="progress-track">
+
+                <div
+                    id="progressBar"
+                    class="progress-bar">
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-`;
+
+<!-- HIDDEN VIDEO INPUT -->
+
+<input
+    type="file"
+    id="videoFileInput"
+    accept="video/*"
+    style="display:none;">
+
+
+<style>
+
+/* =========================
+   UPLOAD MODAL
+========================= */
+
+.upload-modal{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:9999;
+
+    background:rgba(0,0,0,.92);
+
+    display:none;
+
+    align-items:flex-end;
+
+    justify-content:center;
 
 }
 
-}
+
+.upload-modal.show{
+
+    display:flex;
 
 }
 
 
-document.addEventListener(
-"visibilitychange",
-function(){
+.upload-box{
 
-if(
-document.visibilityState === "visible" &&
-currentUser
-){
+    width:100%;
 
-loadPosts();
+    max-width:600px;
+
+    max-height:94vh;
+
+    overflow-y:auto;
+
+    background:#101016;
+
+    border-radius:24px 24px 0 0;
+
+    padding:20px;
+
+    box-sizing:border-box;
 
 }
 
+
+.upload-header{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    margin-bottom:28px;
+
 }
+
+
+.upload-header h2{
+
+    margin:0;
+
+    color:#fff;
+
+    font-size:20px;
+
+}
+
+
+.upload-close{
+
+    width:42px;
+
+    height:42px;
+
+    border:0;
+
+    border-radius:50%;
+
+    background:#202027;
+
+    color:#fff;
+
+    font-size:16px;
+
+}
+
+
+.upload-icon{
+
+    width:76px;
+
+    height:76px;
+
+    margin:20px auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:linear-gradient(
+        135deg,
+        #6d35ff,
+        #287cff
+    );
+
+    color:#fff;
+
+    font-size:28px;
+
+}
+
+
+#uploadChooseArea{
+
+    text-align:center;
+
+}
+
+
+#uploadChooseArea h3{
+
+    color:#fff;
+
+    margin:10px 0 8px;
+
+}
+
+
+#uploadChooseArea p{
+
+    color:#999;
+
+    font-size:14px;
+
+    line-height:1.5;
+
+    margin:0 auto 25px;
+
+    max-width:300px;
+
+}
+
+
+.upload-option{
+
+    width:100%;
+
+    height:58px;
+
+    margin-top:12px;
+
+    border:1px solid #292933;
+
+    border-radius:15px;
+
+    background:#18181f;
+
+    color:#fff;
+
+    display:flex;
+
+    align-items:center;
+
+    padding:0 18px;
+
+    gap:15px;
+
+    font-size:15px;
+
+    cursor:pointer;
+
+}
+
+
+.upload-option i{
+
+    width:25px;
+
+    font-size:18px;
+
+}
+
+
+.upload-option:active{
+
+    transform:scale(.98);
+
+}
+
+
+/* =========================
+   PREVIEW
+========================= */
+
+.upload-preview{
+
+    width:100%;
+
+    max-height:58vh;
+
+    background:#000;
+
+    border-radius:16px;
+
+    object-fit:contain;
+
+}
+
+
+.caption-area{
+
+    position:relative;
+
+    margin-top:15px;
+
+}
+
+
+#videoCaption{
+
+    width:100%;
+
+    min-height:100px;
+
+    resize:none;
+
+    box-sizing:border-box;
+
+    background:#18181f;
+
+    border:1px solid #292933;
+
+    border-radius:15px;
+
+    color:#fff;
+
+    padding:15px;
+
+    padding-bottom:35px;
+
+    outline:none;
+
+    font-size:15px;
+
+}
+
+
+#videoCaption::placeholder{
+
+    color:#777;
+
+}
+
+
+.caption-count{
+
+    position:absolute;
+
+    right:12px;
+
+    bottom:10px;
+
+    color:#777;
+
+    font-size:12px;
+
+}
+
+
+.post-video-btn{
+
+    width:100%;
+
+    height:55px;
+
+    margin-top:15px;
+
+    border:0;
+
+    border-radius:15px;
+
+    background:linear-gradient(
+        135deg,
+        #6d35ff,
+        #287cff
+    );
+
+    color:#fff;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+
+.post-video-btn:disabled{
+
+    opacity:.55;
+
+}
+
+
+.change-video-btn{
+
+    width:100%;
+
+    height:48px;
+
+    margin-top:10px;
+
+    border:1px solid #292933;
+
+    border-radius:15px;
+
+    background:#18181f;
+
+    color:#fff;
+
+}
+
+
+#uploadProgress{
+
+    margin-top:20px;
+
+}
+
+
+.progress-text{
+
+    color:#fff;
+
+    text-align:center;
+
+    font-size:14px;
+
+    margin-bottom:10px;
+
+}
+
+
+.progress-track{
+
+    width:100%;
+
+    height:7px;
+
+    background:#292933;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+}
+
+
+.progress-bar{
+
+    width:0%;
+
+    height:100%;
+
+    background:linear-gradient(
+        90deg,
+        #6d35ff,
+        #287cff
+    );
+
+    transition:.2s;
+
+}
+
+
+</style>
+
+
+<script>
+
+/* =========================
+   UPLOAD VARIABLES
+========================= */
+
+let selectedVideoFile = null;
+
+let selectedVideoUrl = null;
+
+
+/* =========================
+   OPEN UPLOAD
+========================= */
+
+function openVideoUpload(){
+
+    const modal =
+        document.getElementById(
+            "uploadModal"
+        );
+
+    modal.classList.add("show");
+
+    showUploadChooseArea();
+
+}
+
+
+/* =========================
+   CLOSE UPLOAD
+========================= */
+
+function closeVideoUpload(){
+
+    const modal =
+        document.getElementById(
+            "uploadModal"
+        );
+
+    modal.classList.remove("show");
+
+    resetVideoUpload();
+
+}
+
+
+/* =========================
+   CHOOSE AREA
+========================= */
+
+function showUploadChooseArea(){
+
+    document.getElementById(
+        "uploadChooseArea"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "videoPreviewArea"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "uploadProgress"
+    ).style.display = "none";
+
+}
+
+
+/* =========================
+   CAMERA
+========================= */
+
+function openVideoCamera(){
+
+    const input =
+        document.getElementById(
+            "videoFileInput"
+        );
+
+
+    input.value = "";
+
+    input.setAttribute(
+        "capture",
+        "environment"
+    );
+
+
+    input.click();
+
+}
+
+
+/* =========================
+   PHONE FILE
+========================= */
+
+function chooseVideoFile(){
+
+    const input =
+        document.getElementById(
+            "videoFileInput"
+        );
+
+
+    input.value = "";
+
+    input.removeAttribute(
+        "capture"
+    );
+
+
+    input.click();
+
+}
+
+
+/* =========================
+   FILE SELECTED
+========================= */
+
+document
+.getElementById("videoFileInput")
+.addEventListener(
+    "change",
+    function(event){
+
+        const file =
+            event.target.files[0];
+
+
+        if(!file){
+
+            return;
+
+        }
+
+
+        if(
+            !file.type.startsWith(
+                "video/"
+            )
+        ){
+
+            alert(
+                "Please select a video file."
+            );
+
+            return;
+
+        }
+
+
+        selectedVideoFile = file;
+
+
+        if(selectedVideoUrl){
+
+            URL.revokeObjectURL(
+                selectedVideoUrl
+            );
+
+        }
+
+
+        selectedVideoUrl =
+            URL.createObjectURL(
+                file
+            );
+
+
+        const preview =
+            document.getElementById(
+                "uploadPreview"
+            );
+
+
+        preview.src =
+            selectedVideoUrl;
+
+
+        document.getElementById(
+            "uploadChooseArea"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "videoPreviewArea"
+        ).style.display = "block";
+
+
+        document.getElementById(
+            "videoCaption"
+        ).value = "";
+
+
+        document.getElementById(
+            "captionCount"
+        ).textContent = "0";
+
+    }
 );
 
 
-initHome();
+/* =========================
+   CHANGE VIDEO
+========================= */
 
-</script>
+function changeSelectedVideo(){
 
-<script src="logout.js"></script>
-<script src="theme.js"></script>
+    selectedVideoFile = null;
 
-</body>
-</html>
+    chooseVideoFile();
+
+}
+
+
+/* =========================
+   CAPTION COUNTER
+========================= */
+
+document
+.getElementById("videoCaption")
+.addEventListener(
+    "input",
+    function(){
+
+        document.getElementById(
+            "captionCount"
+        ).textContent =
+            this.value.length;
+
+    }
+);
+
+
+/* =========================
+   RESET
+========================= */
+
+function resetVideoUpload(){
+
+    selectedVideoFile = null;
+
+
+    if(selectedVideoUrl){
+
+        URL.revokeObjectURL(
+            selectedVideoUrl
+        );
+
+        selectedVideoUrl = null;
+
+    }
+
+
+    const preview =
+        document.getElementById(
+            "uploadPreview"
+        );
+
+
+    if(preview){
+
+        preview.pause();
+
+        preview.removeAttribute(
+            "src"
+        );
+
+        preview.load();
+
+    }
+
+
+    const input =
+        document.getElementById(
+            "videoFileInput"
+        );
+
+
+    if(input){
+
+        input.value = "";
+
+    }
+
+
+    const caption =
+        document.getElementById(
+            "videoCaption"
+        );
+
+
+    if(caption){
+
+        caption.value = "";
+
+    }
+
+
+    document.getElementById(
+        "captionCount"
+    ).textContent = "0";
+
+
+    showUploadChooseArea();
+
+}
+
+
+/* =========================
+   PUBLISH VIDEO
+========================= */
+
+async function publishVideo(){
+
+    if(!currentUser){
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+
+    }
+
+
+    if(!selectedVideoFile){
+
+        alert(
+            "Please select a video."
+        );
+
+        return;
+
+    }
+
+
+    const button =
+        document.getElementById(
+            "postVideoBtn"
+        );
+
+
+    const progress =
+        document.getElementById(
+            "uploadProgress"
+        );
+
+
+    const progressBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    try{
+
+        button.disabled = true;
+
+        progress.style.display =
+            "block";
+
+
+        progressBar.style.width =
+            "10%";
+
+
+        const extension =
+            getVideoExtension(
+                selectedVideoFile
+            );
+
+
+        const filePath =
+            currentUser.id +
+            "/" +
+            Date.now() +
+            "." +
+            extension;
+
+
+        /* =====================
+           UPLOAD TO STORAGE
+        ===================== */
+
+        const uploadResult =
+            await supabaseClient
+            .storage
+            .from("videos")
+            .upload(
+                filePath,
+                selectedVideoFile,
+                {
+                    cacheControl:"3600",
+
+                    contentType:
+                        selectedVideoFile.type ||
+                        "video/mp4",
+
+                    upsert:false
+                }
+            );
+
+
+        if(uploadResult.error){
+
+            throw uploadResult.error;
+
+        }
+
+
+        progressBar.style.width =
+            "65%";
+
+
+        /* =====================
+           GET PUBLIC URL
+        ===================== */
+
+        const publicResult =
+            supabaseClient
+            .storage
+            .from("videos")
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const videoUrl =
+            publicResult
+            .data
+            .publicUrl;
+
+
+        if(!videoUrl){
+
+            throw new Error(
+                "Unable to create video URL."
+            );
+
+        }
+
+
+        /* =====================
+           INSERT DATABASE ROW
+        ===================== */
+
+        const caption =
+            document
+            .getElementById(
+                "videoCaption"
+            )
+            .value
+            .trim();
+
+
+        const insertResult =
+            await supabaseClient
+            .from("videos")
+            .insert({
+
+                user_id:
+                    currentUser.id,
+
+                video_url:
+                    videoUrl,
+
+                thumbnail_url:
+                    null,
+
+                caption:
+                    caption || null
+
+            })
+            .select()
+            .single();
+
+
+        if(insertResult.error){
+
+            throw insertResult.error;
+
+        }
+
+
+        progressBar.style.width =
+            "100%";
+
+
+        /* =====================
+           SUCCESS
+        ===================== */
+
+        setTimeout(
+            async function(){
+
+                closeVideoUpload();
+
+
+                await loadVideos();
+
+
+                window.scrollTo({
+
+                    top:0,
+
+                    behavior:"smooth"
+
+                });
+
+            },
+            400
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "VIDEO UPLOAD ERROR:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Video upload failed."
+        );
+
+
+        progress.style.display =
+            "none";
+
+
+    }finally{
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+/* =========================
+   GET EXTENSION
+========================= */
+
+function getVideoExtension(file){
+
+    const name =
+        file.name || "";
+
+
+    const parts =
+        name.split(".");
+
+
+    if(parts.length > 1){
+
+        const ext =
+            parts
+            .pop()
+            .toLowerCase();
+
+
+        if(
+            /^[a-z0-9]+$/.test(ext)
+        ){
+
+            return ext;
+
+        }
+
+    }
+
+
+    if(
+        file.type ===
+        "video/webm"
+    ){
+
+        return "webm";
+
+    }
+
+
+    if(
+        file.type ===
+        "video/quicktime"
+    ){
+
+        return "mov";
+
+    }
+
+
+    return "mp4";
+
+}
+
+
+/* =========================
+   REPLACE OLD UPLOAD BUTTON
+========================= */
+
+const uploadButton =
+    document.getElementById(
+        "uploadVideoBtn"
+    );
+
+
+if(uploadButton){
+
+    uploadButton.onclick =
+        function(event){
+
+            event.preventDefault();
+
+            openVideoUpload();
+
+        };
+
+}
+
+         </script>
