@@ -285,7 +285,7 @@ document.getElementById("followingTab").addEventListener("click",async function(
     loadVideoCounts();
 });
 document.getElementById("liveTab").addEventListener("click",function(){alert("Live is coming next.");});
-</script>
+
 </html>
 <!-- Hidden File Input don zaɓar bidiyo daga waya -->
 <input type="file" id="hiddenVideoInput" accept="video/*" style="display: none;">
@@ -308,3 +308,92 @@ document.getElementById("liveTab").addEventListener("click",function(){alert("Li
         </div>
     </div>
 </div>
+let selectedVideoFile = null;
+
+// Lokacin da aka danna maɓallin Upload (+ icon)
+document.getElementById("uploadVideoBtn").addEventListener("click", function(){
+    if(!currentUser){
+        alert("Don Allah yi login tukunna kafin ka loda bidiyo.");
+        window.location.href = "login.html";
+        return;
+    }
+    document.getElementById("hiddenVideoInput").click();
+});
+
+// Lokacin da aka zaɓi bidiyo daga waya
+document.getElementById("hiddenVideoInput").addEventListener("change", function(e){
+    const file = e.target.files[0];
+    if(!file) return;
+
+    // Tabbatar cewa fayil din bidiyo ne
+    if(!file.type.startsWith("video/")){
+        alert("Don Allah zaɓi ingantaccen fayil ɗin bidiyo.");
+        return;
+    }
+
+    selectedVideoFile = file;
+    const videoURL = URL.createObjectURL(file);
+    document.getElementById("uploadPreview").src = videoURL;
+    document.getElementById("uploadModal").style.display = "block";
+});
+
+// Rufe modal din loda bidiyo
+function closeUploadModal(){
+    document.getElementById("uploadModal").style.display = "none";
+    document.getElementById("hiddenVideoInput").value = "";
+    document.getElementById("uploadCaption").value = "";
+    document.getElementById("uploadPreview").src = "";
+    selectedVideoFile = null;
+}
+
+// Ayyukan tura bidiyon zuwa Supabase Storage da Database
+async function publishVideo(){
+    if(!selectedVideoFile || !currentUser) return;
+    
+    const caption = document.getElementById("uploadCaption").value.trim();
+    const btn = document.getElementById("publishBtn");
+    btn.textContent = "Ana lodawa...";
+    btn.disabled = true;
+
+    try {
+        const fileExt = selectedVideoFile.name.split('.').pop();
+        const fileName = `${currentUser.id}_${Date.now()}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        // 1. Ajiye bidiyon a cikin Supabase Storage Bucket (mai suna 'videos')
+        const { data: uploadData, error: uploadError } = await supabaseClient.storage
+            .from("videos")
+            .upload(filePath, selectedVideoFile);
+
+        if(uploadError) throw uploadError;
+
+        // 2. Samo Public URL na bidiyon da aka loda
+        const { data: urlData } = supabaseClient.storage
+            .from("videos")
+            .getPublicUrl(filePath);
+
+        const videoUrl = urlData.publicUrl;
+
+        // 3. Rubuta bayanan a cikin teburin 'videos' na database
+        const { error: insertError } = await supabaseClient
+            .from("videos")
+            .insert({
+                user_id: currentUser.id,
+                video_url: videoUrl,
+                caption: caption
+            });
+
+        if(insertError) throw insertError;
+
+        alert("An loda bidiyon ku cikin nasara!");
+        closeUploadModal();
+        await loadVideos(); // Sake loda shafin domin ganin sabon bidiyon
+    } catch(err) {
+        console.error("Upload error:", err);
+        alert("An samu matsala wajen lodawa. Tabbatar kana da 'videos' storage bucket a Supabase kuma yana da izini.");
+    } finally {
+        btn.textContent = "Loda Yanzu";
+        btn.disabled = false;
+    }
+}
+    </script>
