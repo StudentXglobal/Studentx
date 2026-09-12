@@ -3256,7 +3256,49 @@ initNotifications();
 /* =========================
    CLOSE SCRIPT
 ========================= */
+  
+async function loadBroadcastNotifications() {
+    try {
+        const { data, error } = await supabaseClient
+            .from("notifications")
+            .select("*")
+            .order("created_at", { ascending: false });
 
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+            let container = document.getElementById("adminBroadcastList");
+            if (!container) return;
+
+            let html = "";
+            data.forEach(n => {
+                // Tsara lokacin da aka tura saƙon
+                let dateStr = new Date(n.created_at).toLocaleDateString();
+                
+                html += `
+                    <div style="display: flex; align-items: flex-start; padding: 15px; border-bottom: 1px solid #1e1e2d; background: rgba(138, 43, 226, 0.04); margin-bottom: 8px;">
+                        <div style="width: 42px; height: 42px; border-radius: 50%; background: #8A2BE2; display: flex; align-items: center; justify-content: center; margin-right: 12px; flex-shrink: 0; font-size: 18px;">
+                            📢
+                        </div>
+                        <div style="flex-grow: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <h4 style="color: #fff; font-size: 15px; margin: 0; font-weight: 600;">${n.title}</h4>
+                                <span style="color: #777; font-size: 11px;">${dateStr}</span>
+                            </div>
+                            <p style="color: #ccc; font-size: 14px; margin: 0; line-height: 1.4;">${n.message}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+    } catch (err) {
+        console.error("Error fetching broadcasts:", err);
+    }
+}
+
+// Kira aikin a lokacin da shafin ya buɗe
+window.addEventListener("DOMContentLoaded", loadBroadcastNotifications);
 </script>
 
 </body>
