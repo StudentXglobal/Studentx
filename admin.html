@@ -606,6 +606,21 @@
                 document.getElementById("broadcastTitle").value = "";
                 document.getElementById("broadcastMsg").value = "";
             } catch(e) {
+                console.error(e);
+                alert("Detailed Error: " + (e.message || JSON.stringify(e)));
+            }
+        }
+            try {
+                const { error } = await supabaseClient.from("notifications").insert({
+                    title: title,
+                    message: message,
+                    target: "all_users"
+                });
+                if(error) throw error;
+                alert("Notification broadcasted successfully to all users!");
+                document.getElementById("broadcastTitle").value = "";
+                document.getElementById("broadcastMsg").value = "";
+            } catch(e) {
                 alert("Failed to send notification. Make sure 'notifications' table exists in Supabase.");
             }
         }
