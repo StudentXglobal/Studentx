@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudentX Admin Dashboard</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0b0b0f;color:#fff;font-family:Arial,Helvetica,sans-serif;padding:20px;}
+.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:15px;}
+.admin-title{font-size:20px;font-weight:bold;color:#6d35ff;display:flex;align-items:center;gap:10px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-bottom:25px;}
+.stat-card{background:#141419;border:1px solid rgba(255,255,255,0.08);padding:15px;border-radius:10px;text-align:center;}
+.stat-card h3{font-size:22px;margin-bottom:5px;color:#fff;}
+.stat-card p{font-size:12px;color:#aaa;}
+.section-title{font-size:16px;font-weight:bold;margin-bottom:15px;color:#ddd;}
+.table-container{width:100%;overflow-x:auto;background:#141419;border-radius:10px;border:1px solid rgba(255,255,255,0.08);margin-bottom:25px;}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;}
+th,td{padding:12px 15px;border-bottom:1px solid rgba(255,255,255,0.05);white-space:nowrap;}
+th{background:#1c1c24;color:#aaa;font-weight:600;}
+tr:hover{background:rgba(255,255,255,0.02);}
+.action-btn{background:#ff315c;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold;}
+.action-btn.secondary{background:#333;}
+.back-link{display:inline-block;margin-bottom:20px;color:#aaa;text-decoration:none;font-size:14px;}
+.back-link i{margin-right:5px;}
+</style>
+</head>
+<body>
+
+<a href="video.html" class="back-link"><i class="fas fa-arrow-left">Komawa Video Feed</i></a>
+
+<div class="admin-header">
+<div class="admin-title"><i class="fas fa-shield-alt"></i> StudentX Admin Panel</div>
+<button onclick="loadAdminData()" class="action-btn secondary"><i class="fas fa-sync-alt"></i> Sabuntawa</button>
+</div>
+
+<div class="stats-grid">
+<div class="stat-card"><h3 id="totalUsers">0</h3><p>Masu Amfani</p></div>
+<div class="stat-card"><h3 id="totalVideos">0</h3><p>Jimlar Bidiyoyi</p></div>
+<div class="stat-card"><h3 id="totalLikes">0</h3><p>Likes</p></div>
+</div>
+
+<div class="section-title">Sarrafa Bidiyoyi (Video Moderation)</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Mai Bidiyo</th>
+<th>Bayani (Caption)</th>
+<th>Ayyuka</th>
+</tr>
+</thead>
+<tbody id="videosTableBody">
+<tr><td colspan="4" style="text-align:center;color:#aaa;">Ana lodi...</td></tr>
+</tbody>
+</table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+async function checkAdminAccess(){
+    const r = await supabaseClient.auth.getUser();
+    if(r.error || !r.data.user){
+        alert("Da fatan za a fara shiga (Login)!");
+        window.location.href="login.html";
+        return;
+    }
+    // Zaka iya saka binciken email din admin dinka anan idan ka na bukata
+    loadAdminData();
+}
+
+async function loadAdminData(){
+    try {
+        // Dauko jimlar users
+        const usersRes = await supabaseClient.from("profiles").select("id", { count: "exact", head: true });
+        document.getElementById("totalUsers").textContent = usersRes.count || 0;
+
+        // Dauko jimlar videos
+        const videosRes = await supabaseClient.from("videos").select("id, user_id, caption, video_url, created_at", { count: "exact" }).order("created_at", { ascending: false });
+        document.getElementById("totalVideos").textContent = videosRes.count || 0;
+
+        // Dauko jimlar likes
+        const likesRes = await supabaseClient.from("video_likes").select("id", { count: "exact", head: true });
+        document.getElementById("totalLikes").textContent = likesRes.count || 0;
+
+        // Cika teburin bidiyoyi
+        const tbody = document.getElementById("videosTableBody");
+        const videos = videosRes.data || [];
+        if(videos.length === 0){
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#aaa;">Babu bidiyo a yanzu.</td></tr>`;
+            return;
+        }
+
+        let html = "";
+        videos.forEach(v => {
+            html += `<tr>
+                <td>${v.id.substring(0,8)}...</td>
+                <td>${v.user_id.substring(0,8)}...</td>
+                <td>${v.caption ? v.caption.substring(0, 30) + '...' : 'Babu bayani'}</td>
+                <td>
+                    <button class="action-btn" onclick="deleteVideoAsAdmin('${v.id}')">Goge</button>
+                </td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+
+    } catch(e) {
+        console.error(e);
+        alert("An samu matsala wajen lodi bayanai.");
+    }
+}
+
+async function deleteVideoAsAdmin(videoId){
+    if(!confirm("Kuna da tabbas kuna son goge wannan bidiyon?")) return;
+    const { error } = await supabaseClient.from("videos").delete().eq("id", videoId);
+    if(error){
+        alert("An kasa goge bidiyon.");
+    } else {
+        alert("An goge bidiyon cikin nasara!");
+        loadAdminData();
+    }
+}
+
+checkAdminAccess();
+</script>
+</body>
+</html>
