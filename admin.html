@@ -1,130 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StudentX Admin Dashboard</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:#0b0b0f;color:#fff;font-family:Arial,Helvetica,sans-serif;padding:20px;}
-.admin-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:15px;}
-.admin-title{font-size:20px;font-weight:bold;color:#6d35ff;display:flex;align-items:center;gap:10px;}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:15px;margin-bottom:25px;}
-.stat-card{background:#141419;border:1px solid rgba(255,255,255,0.08);padding:15px;border-radius:10px;text-align:center;}
-.stat-card h3{font-size:22px;margin-bottom:5px;color:#fff;}
-.stat-card p{font-size:12px;color:#aaa;}
-.section-title{font-size:16px;font-weight:bold;margin-bottom:15px;color:#ddd;}
-.table-container{width:100%;overflow-x:auto;background:#141419;border-radius:10px;border:1px solid rgba(255,255,255,0.08);margin-bottom:25px;}
-table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;}
-th,td{padding:12px 15px;border-bottom:1px solid rgba(255,255,255,0.05);white-space:nowrap;}
-th{background:#1c1c24;color:#aaa;font-weight:600;}
-tr:hover{background:rgba(255,255,255,0.02);}
-.action-btn{background:#ff315c;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:bold;}
-.action-btn.secondary{background:#333;}
-.back-link{display:inline-block;margin-bottom:20px;color:#aaa;text-decoration:none;font-size:14px;}
-.back-link i{margin-right:5px;}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #0f0f1a;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            display: flex;
+        }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 250px;
+            background-color: #1a1a2e;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #2c2c3e;
+            position: sticky;
+            top: 0;
+        }
+        .sidebar-header {
+            padding: 25px 20px;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #2c2c3e;
+            color: #fff;
+        }
+        .sidebar-header span { color: #8A2BE2; }
+        
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #b0b3b8;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        .nav-item:hover { background-color: #2c2c3e; color: #fff; }
+        .nav-item.active {
+            background-color: #8A2BE2;
+            color: #fff;
+        }
+        .nav-item i { width: 20px; text-align: center; }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #2c2c3e;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ff4b4b;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .top-bar h1 { font-size: 24px; }
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #1a1a2e;
+            padding: 8px 15px;
+            border-radius: 25px;
+            border: 1px solid #2c2c3e;
+        }
+        .admin-profile img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+        .admin-profile span { font-size: 14px; font-weight: 600; }
+
+        /* --- STATS GRID --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+        .stat-card {
+            background-color: #1a1a2e;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #2c2c3e;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background-color: #2c1a40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A2BE2;
+            font-size: 20px;
+        }
+        .stat-info h3 { font-size: 24px; font-weight: bold; margin-bottom: 4px; }
+        .stat-info p { font-size: 13px; color: #888; }
+
+        /* --- CHARTS & ACTIVITY --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: #1a1a2e;
+            border: 1px solid #2c2c3e;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header h3 { font-size: 17px; }
+        .card-header span { font-size: 12px; color: #8A2BE2; cursor: pointer; }
+
+        /* Simple CSS Chart */
+        .chart-placeholder {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            height: 200px;
+            gap: 15px;
+            padding-top: 20px;
+        }
+        .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+        .bar { width: 100%; max-width: 40px; background: linear-gradient(to top, #8A2BE2, #c29dff); border-radius: 6px 6px 0 0; opacity: 0.8; }
+        .bar-label { font-size: 12px; color: #888; }
+
+        /* Activity List */
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #2c2c3e;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-icon {
+            width: 35px; height: 35px; border-radius: 50%; background-color: #2c2c3e;
+            display: flex; align-items: center; justify-content: center; color: #8A2BE2; font-size: 14px; flex-shrink: 0;
+        }
+        .activity-text { font-size: 14px; flex-grow: 1; }
+        .activity-text b { color: #fff; }
+        .activity-text p { color: #888; font-size: 12px; margin-top: 2px; }
+        .activity-time { font-size: 11px; color: #666; }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            html, body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .sidebar-nav { flex-direction: row; overflow-x: auto; }
+            .main-content { height: auto; }
+            .content-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<a href="video.html" class="back-link"><i class="fas fa-arrow-left">Komawa Video Feed</i></a>
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">Student<span>X</span> Admin</div>
+        
+        <div class="sidebar-nav">
+            <a href="admin.html" class="nav-item active"><i class="fas fa-gauge"></i> Dashboard</a>
+            <a href="admin-users.html" class="nav-item"><i class="fas fa-users"></i> Manage Users</a>
+            <a href="admin-reports.html" class="nav-item"><i class="fas fa-flag"></i> Reported Posts</a>
+            <a href="admin-ads.html" class="nav-item"><i class="fas fa-bullhorn"></i> Ads Approval</a>
+            <a href="admin-revenue.html" class="nav-item"><i class="fas fa-money-bill-trend-up"></i> Revenue</a>
+            <a href="admin-scholarships.html" class="nav-item"><i class="fas fa-graduation-cap"></i> Scholarships</a>
+            <a href="admin-settings.html" class="nav-item"><i class="fas fa-gear"></i> Settings</a>
+        </div>
 
-<div class="admin-header">
-<div class="admin-title"><i class="fas fa-shield-alt"></i> StudentX Admin Panel</div>
-<button onclick="loadAdminData()" class="action-btn secondary"><i class="fas fa-sync-alt"></i> Sabuntawa</button>
-</div>
+        <div class="sidebar-footer">
+            <a href="logout.html" class="logout-btn"><i class="fas fa-right-from-bracket"></i> Logout</a>
+        </div>
+    </div>
 
-<div class="stats-grid">
-<div class="stat-card"><h3 id="totalUsers">0</h3><p>Masu Amfani</p></div>
-<div class="stat-card"><h3 id="totalVideos">0</h3><p>Jimlar Bidiyoyi</p></div>
-<div class="stat-card"><h3 id="totalLikes">0</h3><p>Likes</p></div>
-</div>
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <div class="top-bar">
+            <h1>Dashboard Overview</h1>
+            <div class="admin-profile">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=50&h=50&fit=crop" alt="Admin">
+                <span>Yusuf (Admin)</span>
+            </div>
+        </div>
 
-<div class="section-title">Sarrafa Bidiyoyi (Video Moderation)</div>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>ID</th>
-<th>Mai Bidiyo</th>
-<th>Bayani (Caption)</th>
-<th>Ayyuka</th>
-</tr>
-</thead>
-<tbody id="videosTableBody">
-<tr><td colspan="4" style="text-align:center;color:#aaa;">Ana lodi...</td></tr>
-</tbody>
-</table>
-</div>
+        <!-- STATS CARDS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-info">
+                    <h3>12,450</h3>
+                    <p>Total Students</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-video"></i></div>
+                <div class="stat-info">
+                    <h3>340</h3>
+                    <p>Active Live Streams</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-flag"></i></div>
+                <div class="stat-info">
+                    <h3>24</h3>
+                    <p>Pending Reports</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                <div class="stat-info">
+                    <h3>$4,580</h3>
+                    <p>Monthly Revenue</p>
+                </div>
+            </div>
+        </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase.js"></script>
-<script>
-async function checkAdminAccess(){
-    const r = await supabaseClient.auth.getUser();
-    if(r.error || !r.data.user){
-        alert("Da fatan za a fara shiga (Login)!");
-        window.location.href="login.html";
-        return;
-    }
-    // Zaka iya saka binciken email din admin dinka anan idan ka na bukata
-    loadAdminData();
-}
+        <!-- CHARTS & ACTIVITY -->
+        <div class="content-grid">
+            
+            <!-- Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>User Growth (Last 6 Months)</h3>
+                    <span>View Details</span>
+                </div>
+                <div class="chart-placeholder">
+                    <div class="bar-group"><div class="bar" style="height: 40%;"></div><span class="bar-label">Jun</span></div>
+                    <div class="bar-group"><div class="bar" style="height: 55%;"></div><span class="bar-label">Jul</span></div>
+                    <div class="bar-group"><div class="bar" style="height: 50%;"></div><span class="bar-label">Aug</span></div>
+                    <div class="bar-group"><div class="bar" style="height: 70%;"></div><span class="bar-label">Sep</span></div>
+                    <div class="bar-group"><div class="bar" style="height: 85%;"></div><span class="bar-label">Oct</span></div>
+                    <div class="bar-group"><div class="bar" style="height: 95%;"></div><span class="bar-label">Nov</span></div>
+                </div>
+            </div>
 
-async function loadAdminData(){
-    try {
-        // Dauko jimlar users
-        const usersRes = await supabaseClient.from("profiles").select("id", { count: "exact", head: true });
-        document.getElementById("totalUsers").textContent = usersRes.count || 0;
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Recent Activity</h3>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon" style="color: #ff4b4b;"><i class="fas fa-flag"></i></div>
+                    <div class="activity-text">
+                        <b>Fatima's Post Reported</b>
+                        <p>Reason: Spam content</p>
+                    </div>
+                    <div class="activity-time">2m</div>
+                </div>
 
-        // Dauko jimlar videos
-        const videosRes = await supabaseClient.from("videos").select("id, user_id, caption, video_url, created_at", { count: "exact" }).order("created_at", { ascending: false });
-        document.getElementById("totalVideos").textContent = videosRes.count || 0;
+                <div class="activity-item">
+                    <div class="activity-icon" style="color: #4caf50;"><i class="fas fa-user-plus"></i></div>
+                    <div class="activity-text">
+                        <b>New User Registered</b>
+                        <p>David Okafor joined</p>
+                    </div>
+                    <div class="activity-time">15m</div>
+                </div>
 
-        // Dauko jimlar likes
-        const likesRes = await supabaseClient.from("video_likes").select("id", { count: "exact", head: true });
-        document.getElementById("totalLikes").textContent = likesRes.count || 0;
+                <div class="activity-item">
+                    <div class="activity-icon" style="color: #fbbf24;"><i class="fas fa-bullhorn"></i></div>
+                    <div class="activity-text">
+                        <b>New Ad Request</b>
+                        <p>FUD Bookstore wants to advertise</p>
+                    </div>
+                    <div class="activity-time">1h</div>
+                </div>
 
-        // Cika teburin bidiyoyi
-        const tbody = document.getElementById("videosTableBody");
-        const videos = videosRes.data || [];
-        if(videos.length === 0){
-            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#aaa;">Babu bidiyo a yanzu.</td></tr>`;
-            return;
-        }
+                <div class="activity-item">
+                    <div class="activity-icon"><i class="fas fa-crown"></i></div>
+                    <div class="activity-text">
+                        <b>New Premium Subscriber</b>
+                        <p>Aisha Bello upgraded to Plus</p>
+                    </div>
+                    <div class="activity-time">3h</div>
+                </div>
+            </div>
 
-        let html = "";
-        videos.forEach(v => {
-            html += `<tr>
-                <td>${v.id.substring(0,8)}...</td>
-                <td>${v.user_id.substring(0,8)}...</td>
-                <td>${v.caption ? v.caption.substring(0, 30) + '...' : 'Babu bayani'}</td>
-                <td>
-                    <button class="action-btn" onclick="deleteVideoAsAdmin('${v.id}')">Goge</button>
-                </td>
-            </tr>`;
-        });
-        tbody.innerHTML = html;
+        </div>
+    </div>
 
-    } catch(e) {
-        console.error(e);
-        alert("An samu matsala wajen lodi bayanai.");
-    }
-}
-
-async function deleteVideoAsAdmin(videoId){
-    if(!confirm("Kuna da tabbas kuna son goge wannan bidiyon?")) return;
-    const { error } = await supabaseClient.from("videos").delete().eq("id", videoId);
-    if(error){
-        alert("An kasa goge bidiyon.");
-    } else {
-        alert("An goge bidiyon cikin nasara!");
-        loadAdminData();
-    }
-}
-
-checkAdminAccess();
-</script>
 </body>
 </html>
