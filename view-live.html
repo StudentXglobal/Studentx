@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1.0">
+
+<title>StudentX Live</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+width:100%;
+height:100%;
+background:#000;
+color:#fff;
+font-family:Arial,sans-serif;
+overflow:hidden;
+}
+
+.live-page{
+position:relative;
+width:100%;
+height:100vh;
+background:#000;
+}
+
+#remoteVideo{
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+background:#000;
+}
+
+.loading{
+position:absolute;
+inset:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:12px;
+background:#050505;
+z-index:20;
+}
+
+.loading i{
+font-size:36px;
+color:#8a2be2;
+}
+
+.loading span{
+font-size:14px;
+color:#aaa;
+}
+
+.error{
+position:absolute;
+inset:0;
+display:none;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:30px;
+background:#080808;
+z-index:30;
+}
+
+.error i{
+font-size:42px;
+color:#ff304f;
+margin-bottom:15px;
+}
+
+.error h2{
+font-size:19px;
+margin-bottom:8px;
+}
+
+.error p{
+font-size:13px;
+color:#888;
+line-height:1.5;
+}
+
+.top{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+padding:18px 15px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+z-index:10;
+background:linear-gradient(
+to bottom,
+rgba(0,0,0,.7),
+transparent
+);
+}
+
+.back{
+width:42px;
+height:42px;
+border:0;
+border-radius:50%;
+background:rgba(0,0,0,.6);
+color:#fff;
+font-size:16px;
+}
+
+.live-badge{
+padding:7px 11px;
+border-radius:8px;
+background:#ff304f;
+font-size:11px;
+font-weight:700;
+}
+
+.viewer-box{
+position:absolute;
+top:20px;
+right:15px;
+z-index:11;
+padding:7px 10px;
+border-radius:8px;
+background:rgba(0,0,0,.6);
+font-size:12px;
+}
+
+.info{
+position:absolute;
+left:15px;
+right:15px;
+bottom:90px;
+z-index:10;
+display:none;
+}
+
+.streamer{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:10px;
+}
+
+.avatar{
+width:43px;
+height:43px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid #fff;
+}
+
+.name{
+font-size:14px;
+font-weight:700;
+}
+
+.username{
+font-size:11px;
+color:#bbb;
+margin-top:2px;
+}
+
+.title{
+font-size:16px;
+font-weight:600;
+margin-bottom:5px;
+}
+
+.category{
+font-size:12px;
+color:#bbb;
+}
+
+.controls{
+position:absolute;
+bottom:20px;
+left:0;
+right:0;
+z-index:15;
+display:flex;
+justify-content:center;
+}
+
+.leave{
+width:55px;
+height:55px;
+border:0;
+border-radius:50%;
+background:#e52b45;
+color:#fff;
+font-size:18px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="live-page">
+
+<video
+id="remoteVideo"
+autoplay
+playsinline>
+</video>
+
+<div
+id="loading"
+class="loading">
+
+<i class="fas fa-circle-notch fa-spin"></i>
+
+<span>
+Connecting to live...
+</span>
+
+</div>
+
+<div
+id="error"
+class="error">
+
+<i class="fas fa-video-slash"></i>
+
+<h2 id="errorTitle">
+Live unavailable
+</h2>
+
+<p id="errorMessage">
+This live is no longer available.
+</p>
+
+</div>
+
+<div class="top">
+
+<button
+class="back"
+onclick="leaveLive()">
+
+<i class="fas fa-arrow-left"></i>
+
+</button>
+
+<div class="live-badge">
+LIVE
+</div>
+
+</div>
+
+<div class="viewer-box">
+
+<i class="fas fa-eye"></i>
+
+<span id="viewerCount">
+0
+</span>
+
+</div>
+
+<div
+id="liveInfo"
+class="info">
+
+<div class="streamer">
+
+<img
+id="avatar"
+class="avatar"
+src=""
+alt="">
+
+<div>
+
+<div
+id="streamerName"
+class="name">
+</div>
+
+<div
+id="streamerUsername"
+class="username">
+</div>
+
+</div>
+
+</div>
+
+<div
+id="liveTitle"
+class="title">
+</div>
+
+<div
+id="liveCategory"
+class="category">
+</div>
+
+</div>
+
+<div class="controls">
+
+<button
+class="leave"
+onclick="leaveLive()">
+
+<i class="fas fa-phone-slash"></i>
+
+</button>
+
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script>
+
+let currentUser = null;
+let liveSession = null;
+let peerConnection = null;
+let signalChannel = null;
+let viewerJoined = false;
+
+
+/* WEBRTC */
+
+const rtcConfig = {
+
+    iceServers: [
+
+        {
+            urls:
+            "stun:stun.l.google.com:19302"
+        },
+
+        {
+            urls:
+            "stun:stun1.l.google.com:19302"
+        }
+
+    ]
+
+};
+
+
+/* ROOM ID */
+
+function getRoomId(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    return params.get("room");
+
+}
+
+
+/* CURRENT USER */
+
+async function loadCurrentUser(){
+
+    const result =
+        await supabaseClient
+        .auth
+        .getUser();
+
+    if(result.error){
+
+        console.error(
+            result.error
+        );
+
+        return null;
+
+    }
+
+    currentUser =
+        result.data.user;
+
+    if(!currentUser){
+
+        showError(
+            "Login required",
+            "Please login before watching this live."
+        );
+
+        return null;
+
+    }
+
+    return currentUser;
+
+}
+
+
+/* LOAD LIVE */
+
+async function loadLive(){
+
+    const roomId =
+        getRoomId();
+
+    if(!roomId){
+
+        showError(
+            "Invalid live link",
+            "No live room was provided."
+        );
+
+        return false;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("live_sessions")
+        .select("*")
+        .eq(
+            "room_id",
+            roomId
+        )
+        .eq(
+            "status",
+            "live"
+        )
+        .maybeSingle();
+
+
+    if(result.error){
+
+        showError(
+            "Unable to load live",
+            result.error.message
+        );
+
+        return false;
+
+    }
+
+
+    if(!result.data){
+
+        showError(
+            "Live has ended",
+            "This live stream is no longer available."
+        );
+
+        return false;
+
+    }
+
+
+    liveSession =
+        result.data;
+
+
+    await loadStreamer();
+
+    return true;
+
+}
+
+
+/* STREAMER PROFILE */
+
+async function loadStreamer(){
+
+    const result =
+        await supabaseClient
+        .from("profiles")
+        .select(
+            "id,full_name,username,avatar_url"
+        )
+        .eq(
+            "id",
+            liveSession.user_id
+        )
+        .maybeSingle();
+
+
+    if(result.error){
+
+        console.error(
+            result.error
+        );
+
+        return;
+
+    }
+
+
+    const profile =
+        result.data;
+
+
+    if(profile){
+
+        document.getElementById(
+            "streamerName"
+        ).textContent =
+            profile.full_name ||
+            "StudentX User";
+
+
+        document.getElementById(
+            "streamerUsername"
+        ).textContent =
+            profile.username
+            ? "@" + profile.username
+            : "";
+
+
+        document.getElementById(
+            "avatar"
+        ).src =
+            profile.avatar_url ||
+            "";
+    }
+
+
+    document.getElementById(
+        "liveTitle"
+    ).textContent =
+        liveSession.title ||
+        "StudentX Live";
+
+
+    document.getElementById(
+        "liveCategory"
+    ).textContent =
+        liveSession.category ||
+        "General";
+
+
+    document.getElementById(
+        "liveInfo"
+    ).style.display =
+        "block";
+
+}
+
+
+/* PEER CONNECTION */
+
+function createPeerConnection(){
+
+    peerConnection =
+        new RTCPeerConnection(
+            rtcConfig
+        );
+
+
+    /* RECEIVE STREAM */
+
+    peerConnection.ontrack =
+        function(event){
+
+            const video =
+                document.getElementById(
+                    "remoteVideo"
+                );
+
+
+            if(
+                event.streams &&
+                event.streams[0]
+            ){
+
+                video.srcObject =
+                    event.streams[0];
+
+                video.play()
+                .catch(
+                    function(error){
+
+                        console.log(
+                            error
+                        );
+
+                    }
+                );
+
+            }
+
+
+            document.getElementById(
+                "loading"
+            ).style.display =
+                "none";
+
+        };
+
+
+    /* ICE */
+
+    peerConnection.onicecandidate =
+        async function(event){
+
+            if(
+                !event.candidate ||
+                !liveSession ||
+                !currentUser
+            ){
+
+                return;
+
+            }
+
+
+            await sendSignal({
+
+                room_id:
+                    liveSession.room_id,
+
+                sender_id:
+                    currentUser.id,
+
+                receiver_id:
+                    liveSession.user_id,
+
+                signal_type:
+                    "candidate",
+
+                payload:
+                    event.candidate.toJSON()
+
+            });
+
+        };
+
+
+    /* CONNECTION */
+
+    peerConnection.onconnectionstatechange =
+        function(){
+
+            console.log(
+                "WebRTC:",
+                peerConnection
+                .connectionState
+            );
+
+
+            if(
+                peerConnection
+                .connectionState ===
+                "connected"
+            ){
+
+                document.getElementById(
+                    "loading"
+                ).style.display =
+                    "none";
+
+            }
+
+
+            if(
+                peerConnection
+                .connectionState ===
+                "failed"
+            ){
+
+                showError(
+                    "Connection failed",
+                    "Unable to connect to the streamer."
+                );
+
+            }
+
+        };
+
+}
+
+
+/* SIGNALING */
+
+function subscribeToSignals(){
+
+    signalChannel =
+        supabaseClient
+        .channel(
+            "viewer-" +
+            currentUser.id +
+            "-" +
+            liveSession.room_id
+        )
+        .on(
+
+            "postgres_changes",
+
+            {
+                event:
+                    "INSERT",
+
+                schema:
+                    "public",
+
+                table:
+                    "live_signals",
+
+                filter:
+                    "receiver_id=eq." +
+                    currentUser.id
+            },
+
+            async function(payload){
+
+                await handleSignal(
+                    payload.new
+                );
+
+            }
+
+        )
+        .subscribe(
+            function(status){
+
+                console.log(
+                    "Signal status:",
+                    status
+                );
+
+            }
+        );
+
+}
+
+
+/* HANDLE SIGNAL */
+
+async function handleSignal(signal){
+
+    if(!signal){
+
+        return;
+
+    }
+
+
+    if(
+        signal.room_id !==
+        liveSession.room_id
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        signal.sender_id !==
+        liveSession.user_id
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        signal.signal_type ===
+        "offer"
+    ){
+
+        await receiveOffer(
+            signal.payload
+        );
+
+    }
+
+
+    if(
+        signal.signal_type ===
+        "candidate"
+    ){
+
+        await receiveCandidate(
+            signal.payload
+        );
+
+    }
+
+}
+
+
+/* OFFER */
+
+async function receiveOffer(payload){
+
+    if(!payload){
+
+        return;
+
+    }
+
+
+    if(!peerConnection){
+
+        createPeerConnection();
+
+    }
+
+
+    await peerConnection
+    .setRemoteDescription({
+
+        type:
+            payload.type,
+
+        sdp:
+            payload.sdp
+
+    });
+
+
+    const answer =
+        await peerConnection
+        .createAnswer();
+
+
+    await peerConnection
+    .setLocalDescription(
+        answer
+    );
+
+
+    await sendSignal({
+
+        room_id:
+            liveSession.room_id,
+
+        sender_id:
+            currentUser.id,
+
+        receiver_id:
+            liveSession.user_id,
+
+        signal_type:
+            "answer",
+
+        payload:{
+
+            type:
+                answer.type,
+
+            sdp:
+                answer.sdp
+
+        }
+
+    });
+
+}
+
+
+/* ICE CANDIDATE */
+
+async function receiveCandidate(payload){
+
+    if(
+        !peerConnection ||
+        !payload
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        await peerConnection
+        .addIceCandidate(
+            new RTCIceCandidate(
+                payload
+            )
+        );
+
+    }catch(error){
+
+        console.error(
+            "ICE ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* SEND SIGNAL */
+
+async function sendSignal(data){
+
+    const result =
+        await supabaseClient
+        .from("live_signals")
+        .insert({
+
+            room_id:
+                data.room_id,
+
+            sender_id:
+                data.sender_id,
+
+            receiver_id:
+                data.receiver_id,
+
+            signal_type:
+                data.signal_type,
+
+            payload:
+                data.payload || null
+
+        });
+
+
+    if(result.error){
+
+        console.error(
+            "SIGNAL ERROR:",
+            result.error
+        );
+
+    }
+
+}
+
+
+/* JOIN LIVE */
+
+async function joinLive(){
+
+    if(
+        !currentUser ||
+        !liveSession
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        currentUser.id ===
+        liveSession.user_id
+    ){
+
+        showError(
+            "You are the streamer",
+            "Use another account to watch your own live."
+        );
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("live_viewers")
+        .insert({
+
+            room_id:
+                liveSession.room_id,
+
+            user_id:
+                currentUser.id
+
+        });
+
+
+    if(!result.error){
+
+        viewerJoined = true;
+
+    }
+
+
+    await sendSignal({
+
+        room_id:
+            liveSession.room_id,
+
+        sender_id:
+            currentUser.id,
+
+        receiver_id:
+            liveSession.user_id,
+
+        signal_type:
+            "join",
+
+        payload:{
+
+            viewer_id:
+                currentUser.id
+
+        }
+
+    });
+
+
+    await updateViewerCount();
+
+}
+
+
+/* VIEWER COUNT */
+
+async function updateViewerCount(){
+
+    if(!liveSession){
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("live_viewers")
+        .select(
+            "id",
+            {
+                count:
+                    "exact",
+                head:
+                    true
+            }
+        )
+        .eq(
+            "room_id",
+            liveSession.room_id
+        )
+        .is(
+            "left_at",
+            null
+        );
+
+
+    if(result.error){
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "viewerCount"
+    ).textContent =
+        String(
+            result.count || 0
+        );
+
+}
+
+
+/* ERROR */
+
+function showError(
+    title,
+    message
+){
+
+    document.getElementById(
+        "loading"
+    ).style.display =
+        "none";
+
+
+    document.getElementById(
+        "error"
+    ).style.display =
+        "flex";
+
+
+    document.getElementById(
+        "errorTitle"
+    ).textContent =
+        title;
+
+
+    document.getElementById(
+        "errorMessage"
+    ).textContent =
+        message;
+
+}
+
+
+/* LEAVE */
+
+async function leaveLive(){
+
+    if(
+        currentUser &&
+        liveSession
+    ){
+
+        await sendSignal({
+
+            room_id:
+                liveSession.room_id,
+
+            sender_id:
+                currentUser.id,
+
+            receiver_id:
+                liveSession.user_id,
+
+            signal_type:
+                "leave",
+
+            payload:{
+                viewer_id:
+                    currentUser.id
+            }
+
+        });
+
+
+        if(viewerJoined){
+
+            await supabaseClient
+            .from("live_viewers")
+            .delete()
+            .eq(
+                "room_id",
+                liveSession.room_id
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            );
+
+        }
+
+    }
+
+
+    if(peerConnection){
+
+        peerConnection.close();
+
+        peerConnection = null;
+
+    }
+
+
+    if(signalChannel){
+
+        await supabaseClient
+        .removeChannel(
+            signalChannel
+        );
+
+        signalChannel = null;
+
+    }
+
+
+    window.location.href =
+        "video.html";
+
+}
+
+
+/* INIT */
+
+async function initViewLive(){
+
+    const user =
+        await loadCurrentUser();
+
+
+    if(!user){
+
+        return;
+
+    }
+
+
+    const loaded =
+        await loadLive();
+
+
+    if(!loaded){
+
+        return;
+
+    }
+
+
+    createPeerConnection();
+
+    subscribeToSignals();
+
+    await joinLive();
+
+}
+
+
+initViewLive();
+
+
+/* CLEANUP */
+
+window.addEventListener(
+    "beforeunload",
+    function(){
+
+        if(peerConnection){
+
+            peerConnection.close();
+
+        }
+
+    }
+);
+
+      </script>
+      <script>
+
+/* =========================
+   LIVE SESSION REALTIME
+========================= */
+
+let liveSessionChannel = null;
+
+function subscribeToLiveSession(){
+
+    if(!liveSession){
+
+        return;
+
+    }
+
+
+    liveSessionChannel =
+        supabaseClient
+        .channel(
+            "live-session-" +
+            liveSession.id
+        )
+        .on(
+            "postgres_changes",
+            {
+                event:"UPDATE",
+                schema:"public",
+                table:"live_sessions",
+                filter:
+                    "id=eq." +
+                    liveSession.id
+            },
+            function(payload){
+
+                const updated =
+                    payload.new;
+
+
+                if(
+                    updated.status !==
+                    "live"
+                ){
+
+                    showError(
+                        "Live has ended",
+                        "The streamer has ended this live."
+                    );
+
+
+                    setTimeout(
+                        function(){
+
+                            leaveLive();
+
+                        },
+                        2500
+                    );
+
+                    return;
+
+                }
+
+
+                document.getElementById(
+                    "viewerCount"
+                ).textContent =
+                    String(
+                        updated.viewer_count || 0
+                    );
+
+            }
+        )
+        .subscribe();
+
+}
+
+
+/* =========================
+   PERIODIC VIEWER COUNT
+========================= */
+
+let viewerCountTimer = null;
+
+function startViewerCounter(){
+
+    viewerCountTimer =
+        setInterval(
+            async function(){
+
+                if(
+                    liveSession
+                ){
+
+                    await updateViewerCount();
+
+                }
+
+            },
+            10000
+        );
+
+}
+
+
+function stopViewerCounter(){
+
+    if(viewerCountTimer){
+
+        clearInterval(
+            viewerCountTimer
+        );
+
+        viewerCountTimer = null;
+
+    }
+
+}
+
+
+/* =========================
+   FOLLOW STREAMER
+========================= */
+
+async function followStreamer(){
+
+    if(
+        !currentUser ||
+        !liveSession
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        currentUser.id ===
+        liveSession.user_id
+    ){
+
+        return;
+
+    }
+
+
+    const existing =
+        await supabaseClient
+        .from("followers")
+        .select("id")
+        .eq(
+            "follower_id",
+            currentUser.id
+        )
+        .eq(
+            "following_id",
+            liveSession.user_id
+        )
+        .maybeSingle();
+
+
+    if(existing.data){
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("followers")
+        .insert({
+
+            follower_id:
+                currentUser.id,
+
+            following_id:
+                liveSession.user_id
+
+        });
+
+
+    if(result.error){
+
+        console.error(
+            "FOLLOW ERROR:",
+            result.error
+        );
+
+        return;
+
+    }
+
+}
+
+
+/* =========================
+   PAGE START
+========================= */
+
+async function startViewerPage(){
+
+    const user =
+        await loadCurrentUser();
+
+
+    if(!user){
+
+        return;
+
+    }
+
+
+    const loaded =
+        await loadLive();
+
+
+    if(!loaded){
+
+        return;
+
+    }
+
+
+    createPeerConnection();
+
+
+    subscribeToSignals();
+
+
+    subscribeToLiveSession();
+
+
+    await joinLive();
+
+
+    startViewerCounter();
+
+}
+
+
+/* =========================
+   CLEANUP
+========================= */
+
+async function cleanupViewer(){
+
+    stopViewerCounter();
+
+
+    if(
+        currentUser &&
+        liveSession &&
+        viewerJoined
+    ){
+
+        await supabaseClient
+        .from("live_viewers")
+        .delete()
+        .eq(
+            "room_id",
+            liveSession.room_id
+        )
+        .eq(
+            "user_id",
+            currentUser.id
+        );
+
+    }
+
+
+    if(peerConnection){
+
+        try{
+
+            peerConnection.close();
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+        peerConnection = null;
+
+    }
+
+
+    if(signalChannel){
+
+        try{
+
+            await supabaseClient
+            .removeChannel(
+                signalChannel
+            );
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+        signalChannel = null;
+
+    }
+
+
+    if(liveSessionChannel){
+
+        try{
+
+            await supabaseClient
+            .removeChannel(
+                liveSessionChannel
+            );
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+        liveSessionChannel = null;
+
+    }
+
+}
+
+
+/* =========================
+   REPLACE OLD INIT
+========================= */
+
+window.addEventListener(
+    "pagehide",
+    function(){
+
+        cleanupViewer();
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
+
+startViewerPage();
+
+
+</script>
+
+</body>
+
+</html>
