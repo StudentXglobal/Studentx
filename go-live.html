@@ -1543,4 +1543,1018 @@ window.addEventListener(
 
 </script>
 
+<script>
+
+/* =========================================
+   WEBRTC LIVE STREAM
+========================================= */
+
+const rtcConfig = {
+
+    iceServers: [
+
+        {
+            urls:
+            "stun:stun.l.google.com:19302"
+        },
+
+        {
+            urls:
+            "stun:stun1.l.google.com:19302"
+        }
+
+    ]
+
+};
+
+
+/*
+   Each viewer gets a separate
+   WebRTC connection.
+*/
+
+const viewerConnections = {};
+
+
+/*
+   ICE candidates that arrive before
+   remote description is ready.
+*/
+
+const pendingCandidates = {};
+
+
+/* =========================================
+   START WEBRTC SIGNALING
+========================================= */
+
+function startLiveSignaling(){
+
+    if(!currentUser){
+
+        console.error(
+            "No authenticated user."
+        );
+
+        return;
+
+    }
+
+
+    supabaseClient
+    .channel(
+        "studentx-live-signals-" +
+        currentUser.id
+    )
+    .on(
+        "postgres_changes",
+        {
+            event:"INSERT",
+            schema:"public",
+            table:"live_signals",
+            filter:
+            "receiver_id=eq." +
+            currentUser.id
+        },
+        async function(payload){
+
+            try{
+
+                await handleLiveSignal(
+                    payload.new
+                );
+
+            }catch(error){
+
+                console.error(
+                    "SIGNAL ERROR:",
+                    error
+                );
+
+            }
+
+        }
+    )
+    .subscribe(
+        function(status){
+
+            console.log(
+                "Live signaling:",
+                status
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   HANDLE SIGNAL
+========================================= */
+
+async function handleLiveSignal(
+    signal
+){
+
+    if(
+        !signal ||
+        !signal.sender_id
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       Only accept signals belonging
+       to our current live room.
+    */
+
+    if(
+        currentLiveSession &&
+        signal.room_id !==
+        currentLiveSession.room_id
+    ){
+
+        return;
+
+    }
+
+
+    const viewerId =
+        signal.sender_id;
+
+
+    /*
+       VIEWER IS REQUESTING TO JOIN
+    */
+
+    if(
+        signal.signal_type ===
+        "join"
+    ){
+
+        await createOfferForViewer(
+            viewerId
+        );
+
+        return;
+
+    }
+
+
+    /*
+       ANSWER FROM VIEWER
+    */
+
+    if(
+        signal.signal_type ===
+        "answer"
+    ){
+
+        await handleViewerAnswer(
+            viewerId,
+            signal.payload
+        );
+
+        return;
+
+    }
+
+
+    /*
+       ICE CANDIDATE FROM VIEWER
+    */
+
+    if(
+        signal.signal_type ===
+        "candidate"
+    ){
+
+        await handleViewerCandidate(
+            viewerId,
+            signal.payload
+        );
+
+        return;
+
+    }
+
+
+    /*
+       VIEWER LEFT
+    */
+
+    if(
+        signal.signal_type ===
+        "leave"
+    ){
+
+        removeViewerConnection(
+            viewerId
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   CREATE OFFER
+========================================= */
+
+async function createOfferForViewer(
+    viewerId
+){
+
+    if(
+        !currentLiveSession ||
+        !currentUser
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       If connection already exists,
+       don't create another one.
+    */
+
+    if(
+        viewerConnections[viewerId]
+    ){
+
+        return;
+
+    }
+
+
+    const peer =
+        new RTCPeerConnection(
+            rtcConfig
+        );
+
+
+    viewerConnections[viewerId] =
+        peer;
+
+
+    pendingCandidates[viewerId] =
+        [];
+
+
+    /*
+       Add camera + microphone tracks
+    */
+
+    if(cameraStream){
+
+        cameraStream
+        .getTracks()
+        .forEach(
+            function(track){
+
+                peer.addTrack(
+                    track,
+                    cameraStream
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+       ICE candidates
+    */
+
+    peer.onicecandidate =
+        async function(event){
+
+            if(
+                !event.candidate
+            ){
+
+                return;
+
+            }
+
+
+            await sendLiveSignal({
+
+                room_id:
+                    currentLiveSession.room_id,
+
+                sender_id:
+                    currentUser.id,
+
+                receiver_id:
+                    viewerId,
+
+                signal_type:
+                    "candidate",
+
+                payload:
+                    event.candidate.toJSON()
+
+            });
+
+        };
+
+
+    /*
+       Connection state
+    */
+
+    peer.onconnectionstatechange =
+        function(){
+
+            console.log(
+                "Viewer:",
+                viewerId,
+                "Connection:",
+                peer.connectionState
+            );
+
+
+            if(
+                peer.connectionState ===
+                "failed" ||
+                peer.connectionState ===
+                "closed" ||
+                peer.connectionState ===
+                "disconnected"
+            ){
+
+                removeViewerConnection(
+                    viewerId
+                );
+
+            }
+
+        };
+
+
+    /*
+       Create offer
+    */
+
+    const offer =
+        await peer.createOffer({
+
+            offerToReceiveAudio:false,
+
+            offerToReceiveVideo:false
+
+        });
+
+
+    await peer.setLocalDescription(
+        offer
+    );
+
+
+    /*
+       Send offer to viewer
+    */
+
+    await sendLiveSignal({
+
+        room_id:
+            currentLiveSession.room_id,
+
+        sender_id:
+            currentUser.id,
+
+        receiver_id:
+            viewerId,
+
+        signal_type:
+            "offer",
+
+        payload:
+            {
+                type:
+                    offer.type,
+
+                sdp:
+                    offer.sdp
+            }
+
+    });
+
+
+    console.log(
+        "Offer sent to viewer:",
+        viewerId
+    );
+
+}
+
+
+/* =========================================
+   HANDLE VIEWER ANSWER
+========================================= */
+
+async function handleViewerAnswer(
+    viewerId,
+    payload
+){
+
+    const peer =
+        viewerConnections[
+            viewerId
+        ];
+
+
+    if(
+        !peer ||
+        !payload
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        !peer.currentRemoteDescription
+    ){
+
+        await peer.setRemoteDescription({
+
+            type:
+                payload.type,
+
+            sdp:
+                payload.sdp
+
+        });
+
+    }
+
+
+    await flushPendingCandidates(
+        viewerId
+    );
+
+
+    console.log(
+        "Answer received from:",
+        viewerId
+    );
+
+}
+
+
+/* =========================================
+   HANDLE VIEWER ICE
+========================================= */
+
+async function handleViewerCandidate(
+    viewerId,
+    payload
+){
+
+    const peer =
+        viewerConnections[
+            viewerId
+        ];
+
+
+    if(
+        !peer ||
+        !payload
+    ){
+
+        return;
+
+    }
+
+
+    const candidate =
+        new RTCIceCandidate(
+            payload
+        );
+
+
+    /*
+       Remote description may not yet
+       be ready.
+    */
+
+    if(
+        !peer.remoteDescription
+    ){
+
+        if(
+            !pendingCandidates[
+                viewerId
+            ]
+        ){
+
+            pendingCandidates[
+                viewerId
+            ] = [];
+
+        }
+
+
+        pendingCandidates[
+            viewerId
+        ].push(
+            candidate
+        );
+
+
+        return;
+
+    }
+
+
+    try{
+
+        await peer.addIceCandidate(
+            candidate
+        );
+
+    }catch(error){
+
+        console.error(
+            "ADD ICE ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   FLUSH ICE QUEUE
+========================================= */
+
+async function flushPendingCandidates(
+    viewerId
+){
+
+    const peer =
+        viewerConnections[
+            viewerId
+        ];
+
+
+    const queue =
+        pendingCandidates[
+            viewerId
+        ] || [];
+
+
+    if(!peer){
+
+        return;
+
+    }
+
+
+    for(
+        const candidate of queue
+    ){
+
+        try{
+
+            await peer.addIceCandidate(
+                candidate
+            );
+
+        }catch(error){
+
+            console.error(
+                "ICE QUEUE ERROR:",
+                error
+            );
+
+        }
+
+    }
+
+
+    pendingCandidates[
+        viewerId
+    ] = [];
+
+}
+
+
+/* =========================================
+   SEND SIGNAL
+========================================= */
+
+async function sendLiveSignal(
+    data
+){
+
+    if(!data){
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("live_signals")
+        .insert({
+
+            room_id:
+                data.room_id,
+
+            sender_id:
+                data.sender_id,
+
+            receiver_id:
+                data.receiver_id || null,
+
+            signal_type:
+                data.signal_type,
+
+            payload:
+                data.payload || null
+
+        });
+
+
+    if(result.error){
+
+        console.error(
+            "SEND LIVE SIGNAL ERROR:",
+            result.error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   REMOVE VIEWER CONNECTION
+========================================= */
+
+function removeViewerConnection(
+    viewerId
+){
+
+    const peer =
+        viewerConnections[
+            viewerId
+        ];
+
+
+    if(peer){
+
+        try{
+
+            peer.close();
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+
+    delete viewerConnections[
+        viewerId
+    ];
+
+
+    delete pendingCandidates[
+        viewerId
+    ];
+
+
+    console.log(
+        "Viewer connection removed:",
+        viewerId
+    );
+
+}
+
+
+/* =========================================
+   CLOSE ALL CONNECTIONS
+========================================= */
+
+function closeAllViewerConnections(){
+
+    Object.keys(
+        viewerConnections
+    ).forEach(
+        function(viewerId){
+
+            removeViewerConnection(
+                viewerId
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================
+   UPDATE VIEWER COUNT
+========================================= */
+
+async function updateLiveViewerCount(){
+
+    if(
+        !currentLiveSession
+    ){
+
+        return;
+
+    }
+
+
+    const result =
+        await supabaseClient
+        .from("live_viewers")
+        .select(
+            "id",
+            {
+                count:"exact",
+                head:true
+            }
+        )
+        .eq(
+            "room_id",
+            currentLiveSession.room_id
+        )
+        .is(
+            "left_at",
+            null
+        );
+
+
+    if(result.error){
+
+        console.error(
+            "VIEWER COUNT ERROR:",
+            result.error
+        );
+
+        return;
+
+    }
+
+
+    const count =
+        result.count || 0;
+
+
+    const viewerCount =
+        document.getElementById(
+            "viewerCount"
+        );
+
+
+    if(viewerCount){
+
+        viewerCount.textContent =
+            formatLiveViewerCount(
+                count
+            );
+
+    }
+
+
+    /*
+       Save count into live_sessions
+    */
+
+    await supabaseClient
+    .from("live_sessions")
+    .update({
+
+        viewer_count:
+            count
+
+    })
+    .eq(
+        "id",
+        currentLiveSession.id
+    )
+    .eq(
+        "user_id",
+        currentUser.id
+    );
+
+}
+
+
+/* =========================================
+   FORMAT VIEWERS
+========================================= */
+
+function formatLiveViewerCount(
+    number
+){
+
+    number =
+        Number(number || 0);
+
+
+    if(
+        number >= 1000000
+    ){
+
+        return (
+            number / 1000000
+        )
+        .toFixed(1)
+        .replace(
+            ".0",
+            ""
+        ) + "M";
+
+    }
+
+
+    if(
+        number >= 1000
+    ){
+
+        return (
+            number / 1000
+        )
+        .toFixed(1)
+        .replace(
+            ".0",
+            ""
+        ) + "K";
+
+    }
+
+
+    return String(
+        number
+    );
+
+}
+
+
+/* =========================================
+   REGISTER STREAMER
+========================================= */
+
+async function registerStreamerInLive(){
+
+    if(
+        !currentUser ||
+        !currentLiveSession
+    ){
+
+        return;
+
+    }
+
+
+    /*
+       Remove old presence for this room
+    */
+
+    await supabaseClient
+    .from("live_viewers")
+    .delete()
+    .eq(
+        "room_id",
+        currentLiveSession.room_id
+    )
+    .eq(
+        "user_id",
+        currentUser.id
+    );
+
+
+    /*
+       Streamer does not need to be counted
+       as a viewer.
+    */
+
+}
+
+
+/* =========================================
+   START WEBRTC AFTER START LIVE
+========================================= */
+
+async function activateWebRTCLive(){
+
+    if(
+        !currentUser ||
+        !currentLiveSession
+    ){
+
+        return;
+
+    }
+
+
+    startLiveSignaling();
+
+
+    await registerStreamerInLive();
+
+
+    await updateLiveViewerCount();
+
+
+    console.log(
+        "StudentX Direct Live is ready."
+    );
+
+}
+
+
+/* =========================================
+   MODIFY START LIVE
+========================================= */
+
+const originalStartLive =
+    startLive;
+
+
+startLive = async function(){
+
+    await originalStartLive();
+
+
+    /*
+       Only activate WebRTC when
+       a session was successfully created.
+    */
+
+    if(
+        currentLiveSession
+    ){
+
+        await activateWebRTCLive();
+
+    }
+
+};
+
+
+/* =========================================
+   MODIFY END LIVE
+========================================= */
+
+const originalEndLive =
+    endLive;
+
+
+endLive = async function(){
+
+    if(
+        currentLiveSession
+    ){
+
+        closeAllViewerConnections();
+
+    }
+
+
+    await originalEndLive();
+
+};
+
+
+/* =========================================
+   PERIODIC VIEWER COUNT
+========================================= */
+
+setInterval(
+    async function(){
+
+        if(
+            currentLiveSession
+        ){
+
+            await updateLiveViewerCount();
+
+        }
+
+    },
+    10000
+);
+
+</script>
 </body>
