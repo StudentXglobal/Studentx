@@ -204,7 +204,7 @@ function renderVideoCard(v){
 }
 function renderAdCard(ad){
     return `<section class="video-item" data-ad-id="${escapeHTML(ad.id)}">
-    <video class="video-player" src="${escapeHTML(ad.video_url)}" playsinline loop muted preload="metadata"></video>
+    <video class="video-player" src="${escapeHTML(ad.video_url)}" playsinline loop preload="metadata" controls></video>
     <div class="video-overlay"></div>
     <div class="video-info">
     <span class="sponsored-badge">Sponsored Ad</span>
