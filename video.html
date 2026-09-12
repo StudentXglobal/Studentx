@@ -54,12 +54,8 @@ body{position:relative;}
 <button class="video-tab" id="liveTab" type="button">Live</button>
 </div>
 </div>
-<button class="video-upload" id="uploadVideoBtn" type="button" aria-label="Upload video">
-<i class="fas fa-plus"></i>
-</button>
-<main class="video-feed" id="videoFeed">
-<div class="video-message">Loading videos...</div>
-</main>
+<button class="video-upload" id="uploadVideoBtn" type="button" aria-label="Upload video"><i class="fas fa-plus"></i></button>
+<main class="video-feed" id="videoFeed"><div class="video-message">Loading videos...</div></main>
 <nav class="bnav">
 <div class="nb" onclick="window.location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div>
 <div class="nb on" onclick="window.location.href='video.html'"><i class="fas fa-video"></i><span>Video</span></div>
@@ -67,13 +63,26 @@ body{position:relative;}
 <div class="nb" onclick="window.location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div>
 <div class="nb" onclick="window.location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div>
 </nav>
+
+<input type="file" id="hiddenVideoInput" accept="video/*" style="display: none;">
+<div id="uploadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:1000; padding:20px; box-sizing:border-box; overflow-y:auto;">
+<div style="max-width:400px; margin:40px auto; background:#141419; padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.1);">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+<h3 style="font-size:16px; font-weight:bold; color:#fff;">Loda Sabon Bidiyo</h3>
+<button onclick="closeUploadModal()" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;"><i class="fas fa-times"></i></button>
+</div>
+<video id="uploadPreview" style="width:100%; max-height:240px; object-fit:cover; border-radius:8px; margin-bottom:15px; background:#000;" controls></video>
+<textarea id="uploadCaption" placeholder="Rubuta bayani ko #hashtags game da bidiyon..." style="width:100%; height:80px; background:#1f1f28; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px; margin-bottom:15px; resize:none; font-size:14px; outline:none;"></textarea>
+<div style="display:flex; gap:10px;">
+<button id="publishBtn" onclick="publishVideo()" style="flex:1; background:#6d35ff; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Loda Yanzu</button>
+<button onclick="closeUploadModal()" style="flex:1; background:#222; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Soke</button>
+</div></div></div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script>
-let currentUser = null;
-let currentProfile = null;
-let videos = [];
-const sampleAds = [
+let currentUser=null, currentProfile=null, videos=[], selectedVideoFile=null;
+const sampleAds=[
     {id:'ad_tech_1',isAd:true,category:'tech',title:'StudentX Tech Store',username:'@studentx_store',avatar_url:'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=100',caption:'Get durable student laptops and coding accessories with 20% discount! 💻✨ #Tech #StudentX',video_url:'https://assets.mixkit.co/videos/preview/mixkit-hands-typing-on-a-laptop-keyboard-42825-large.mp4',cta_text:'Shop Tech Deals',cta_url:'https://studentx.app/store'},
     {id:'ad_study_1',isAd:true,category:'study',title:'StudyHub Masterclass',username:'@studyhub_pro',avatar_url:'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100',caption:'Ace your semester exams with AI past questions and collaborative study rooms. 📚🚀 #StudyHub',video_url:'https://assets.mixkit.co/videos/preview/mixkit-student-girl-studying-at-the-library-41662-large.mp4',cta_text:'Join Masterclass',cta_url:'https://studentx.app/studyhub'},
     {id:'ad_lifestyle_1',isAd:true,category:'lifestyle',title:'Campus Eats Delivery',username:'@campuseats',avatar_url:'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=100',caption:'Hungry during late-night studies? Fast hostel food delivery in 15 minutes! 🍔🛵 #HostelLife',video_url:'https://assets.mixkit.co/videos/preview/mixkit-delivery-guy-riding-a-scooter-in-the-city-41584-large.mp4',cta_text:'Order Food Now',cta_url:'https://studentx.app/food'}
@@ -122,7 +131,7 @@ function getTargetedAd(){return sampleAds[Math.floor(Math.random()*sampleAds.len
 function renderVideosWithAds(){
     const f=document.getElementById("videoFeed");
     let html="",c=0;
-    videos.forEach((v)=>{
+    videos.forEach(v=>{
         html+=renderVideoCard(v);
         c++;
         if(c%5===0)html+=renderAdCard(getTargetedAd());
@@ -191,6 +200,46 @@ function setupVideoPlayback(){
 }
 async function initVideo(){await loadCurrentUser();await loadVideos();}
 initVideo();
+
+document.getElementById("uploadVideoBtn").addEventListener("click",function(){
+    if(!currentUser){alert("Please login first");window.location.href="login.html";return;}
+    document.getElementById("hiddenVideoInput").click();
+});
+document.getElementById("hiddenVideoInput").addEventListener("change",function(e){
+    const f=e.target.files[0];
+    if(!f)return;
+    if(!f.type.startsWith("video/")){alert("Please select a video file.");return;}
+    selectedVideoFile=f;
+    document.getElementById("uploadPreview").src=URL.createObjectURL(f);
+    document.getElementById("uploadModal").style.display="block";
+});
+function closeUploadModal(){
+    document.getElementById("uploadModal").style.display="none";
+    document.getElementById("hiddenVideoInput").value="";
+    document.getElementById("uploadCaption").value="";
+    document.getElementById("uploadPreview").src="";
+    selectedVideoFile=null;
+}
+async function publishVideo(){
+    if(!selectedVideoFile||!currentUser)return;
+    const cap=document.getElementById("uploadCaption").value.trim();
+    const btn=document.getElementById("publishBtn");
+    btn.textContent="Lodawa...";btn.disabled=true;
+    try{
+        const ext=selectedVideoFile.name.split('.').pop();
+        const fname=`${currentUser.id}_${Date.now()}.${ext}`;
+        const {error:upErr}=await supabaseClient.storage.from("videos").upload(fname,selectedVideoFile);
+        if(upErr)throw upErr;
+        const {data:urlData}=supabaseClient.storage.from("videos").getPublicUrl(fname);
+        const {error:insErr}=await supabaseClient.from("videos").insert({user_id:currentUser.id,video_url:urlData.publicUrl,caption:cap});
+        if(insErr)throw insErr;
+        alert("An loda bidiyon!");
+        closeUploadModal();
+        await loadVideos();
+    }catch(err){console.error(err);alert("An samu matsala wajen lodawa.");}
+    finally{btn.textContent="Loda Yanzu";btn.disabled=false;}
+}
+
 function formatVideoCount(n){
     n=Number(n||0);
     if(n>=1000000)return(n/1000000).toFixed(1).replace(".0","")+"M";
@@ -285,115 +334,5 @@ document.getElementById("followingTab").addEventListener("click",async function(
     loadVideoCounts();
 });
 document.getElementById("liveTab").addEventListener("click",function(){alert("Live is coming next.");});
-
+</script>
 </html>
-<!-- Hidden File Input don zaɓar bidiyo daga waya -->
-<input type="file" id="hiddenVideoInput" accept="video/*" style="display: none;">
-
-<!-- TikTok-style Upload Modal -->
-<div id="uploadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:1000; padding:20px; box-sizing:border-box; overflow-y:auto;">
-    <div style="max-width:400px; margin:40px auto; background:#141419; padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.1);">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 style="font-size:16px; font-weight:bold; color:#fff;">Loda Sabon Bidiyo</h3>
-            <button onclick="closeUploadModal()" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;"><i class="fas fa-times"></i></button>
-        </div>
-        
-        <video id="uploadPreview" style="width:100%; max-height:240px; object-fit:cover; border-radius:8px; margin-bottom:15px; background:#000;" controls></video>
-        
-        <textarea id="uploadCaption" placeholder="Rubuta bayani ko #hashtags game da bidiyon..." style="width:100%; height:80px; background:#1f1f28; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px; margin-bottom:15px; resize:none; font-size:14px; outline:none;"></textarea>
-        
-        <div style="display:flex; gap:10px;">
-            <button id="publishBtn" onclick="publishVideo()" style="flex:1; background:#6d35ff; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Loda Yanzu</button>
-            <button onclick="closeUploadModal()" style="flex:1; background:#222; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Soke</button>
-        </div>
-    </div>
-</div>
-let selectedVideoFile = null;
-
-// Lokacin da aka danna maɓallin Upload (+ icon)
-document.getElementById("uploadVideoBtn").addEventListener("click", function(){
-    if(!currentUser){
-        alert("Don Allah yi login tukunna kafin ka loda bidiyo.");
-        window.location.href = "login.html";
-        return;
-    }
-    document.getElementById("hiddenVideoInput").click();
-});
-
-// Lokacin da aka zaɓi bidiyo daga waya
-document.getElementById("hiddenVideoInput").addEventListener("change", function(e){
-    const file = e.target.files[0];
-    if(!file) return;
-
-    // Tabbatar cewa fayil din bidiyo ne
-    if(!file.type.startsWith("video/")){
-        alert("Don Allah zaɓi ingantaccen fayil ɗin bidiyo.");
-        return;
-    }
-
-    selectedVideoFile = file;
-    const videoURL = URL.createObjectURL(file);
-    document.getElementById("uploadPreview").src = videoURL;
-    document.getElementById("uploadModal").style.display = "block";
-});
-
-// Rufe modal din loda bidiyo
-function closeUploadModal(){
-    document.getElementById("uploadModal").style.display = "none";
-    document.getElementById("hiddenVideoInput").value = "";
-    document.getElementById("uploadCaption").value = "";
-    document.getElementById("uploadPreview").src = "";
-    selectedVideoFile = null;
-}
-
-// Ayyukan tura bidiyon zuwa Supabase Storage da Database
-async function publishVideo(){
-    if(!selectedVideoFile || !currentUser) return;
-    
-    const caption = document.getElementById("uploadCaption").value.trim();
-    const btn = document.getElementById("publishBtn");
-    btn.textContent = "Ana lodawa...";
-    btn.disabled = true;
-
-    try {
-        const fileExt = selectedVideoFile.name.split('.').pop();
-        const fileName = `${currentUser.id}_${Date.now()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        // 1. Ajiye bidiyon a cikin Supabase Storage Bucket (mai suna 'videos')
-        const { data: uploadData, error: uploadError } = await supabaseClient.storage
-            .from("videos")
-            .upload(filePath, selectedVideoFile);
-
-        if(uploadError) throw uploadError;
-
-        // 2. Samo Public URL na bidiyon da aka loda
-        const { data: urlData } = supabaseClient.storage
-            .from("videos")
-            .getPublicUrl(filePath);
-
-        const videoUrl = urlData.publicUrl;
-
-        // 3. Rubuta bayanan a cikin teburin 'videos' na database
-        const { error: insertError } = await supabaseClient
-            .from("videos")
-            .insert({
-                user_id: currentUser.id,
-                video_url: videoUrl,
-                caption: caption
-            });
-
-        if(insertError) throw insertError;
-
-        alert("An loda bidiyon ku cikin nasara!");
-        closeUploadModal();
-        await loadVideos(); // Sake loda shafin domin ganin sabon bidiyon
-    } catch(err) {
-        console.error("Upload error:", err);
-        alert("An samu matsala wajen lodawa. Tabbatar kana da 'videos' storage bucket a Supabase kuma yana da izini.");
-    } finally {
-        btn.textContent = "Loda Yanzu";
-        btn.disabled = false;
-    }
-}
-    </script>
