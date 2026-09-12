@@ -446,4 +446,104 @@ document.getElementById("followingTab").addEventListener("click",async function(
     loadVideoCounts();
 });
 </script>
+    <script>
+// Sabunta 'handleOptionAction' domin saka StudentX Watermark lokacin download
+async function handleOptionAction(action){
+    document.getElementById("optionsModal").style.display="none";
+    const v=videos.find(i=>i.id===activeVideoIdForMenu);
+    if(!v)return;
+    if(action==='interested'){
+        alert("Preferences updated: Showing more videos like this.");
+        videos=videos.sort((a,b)=>b.id===v.id?1:-1);
+        renderVideosWithAds();
+    }else if(action==='not_interested'){
+        alert("Preferences updated: Showing fewer videos like this.");
+        videos=videos.filter(i=>i.id!==v.id);
+        renderVideosWithAds();
+    }else if(action==='copy_link'){
+        const url=window.location.origin+"/video.html?video="+encodeURIComponent(v.id);
+        try{await navigator.clipboard.writeText(url);alert("Video link copied!");}catch(e){alert(url);}
+    }else if(action==='download'){
+        alert("Ana shirya bidiyon tare da StudentX Watermark...");
+        try{
+            const video = document.createElement('video');
+            video.crossOrigin = 'anonymous';
+            video.src = v.video_url;
+            video.muted = true;
+            
+            await new Promise((resolve, reject) => {
+                video.onloadedmetadata = () => resolve();
+                video.onerror = () => reject(new Error("Video load failed"));
+            });
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 720;
+            canvas.height = video.videoHeight || 1280;
+            const ctx = canvas.getContext('2d');
+
+            const stream = canvas.captureStream(30);
+            let recorder;
+            try {
+                recorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
+            } catch(e) {
+                try { recorder = new MediaRecorder(stream, { mimeType: 'video/webm' }); }
+                catch(err) { recorder = new MediaRecorder(stream); }
+            }
+
+            const chunks = [];
+            recorder.ondataavailable = e => chunks.push(e.data);
+            recorder.onstop = () => {
+                const blob = new Blob(chunks, { type: 'video/webm' });
+                const blobUrl = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = blobUrl;
+                a.download = `studentx_watermarked_${v.id}.webm`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(blobUrl);
+                document.body.removeChild(a);
+                alert("An sauke bidiyon da StudentX watermark cikin nasara!");
+            };
+
+            recorder.start();
+            video.play();
+
+            function drawFrame() {
+                if (video.paused || video.ended) {
+                    recorder.stop();
+                    return;
+                }
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                
+                // Rubuta StudentX Watermark a saman bidiyo (Akwatin dama a sama)
+                ctx.save();
+                ctx.font = 'bold 32px Arial';
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+                ctx.shadowBlur = 6;
+                ctx.fillText('⚡ StudentX', canvas.width - 220, 70);
+                ctx.restore();
+
+                requestAnimationFrame(drawFrame);
+            }
+            video.onplay = () => drawFrame();
+
+        } catch(e) {
+            console.error(e);
+            // Fallback idan na'urar mai amfani bataso ba, zai sauko ta yadda yake a al'ada
+            const response = await fetch(v.video_url);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = `studentx_video_${v.id}.mp4`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(blobUrl);
+            alert("An sauke bidiyon ba tare da watermark ba saboda matsalar na'ura.");
+        }
+    }
+}
+    </script>
 </html>
