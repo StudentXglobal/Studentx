@@ -469,7 +469,7 @@ async function handleOptionAction(action){
             const video = document.createElement('video');
             video.crossOrigin = 'anonymous';
             video.src = v.video_url;
-            video.muted = true;
+            video.muted = false;
             
             await new Promise((resolve, reject) => {
                 video.onloadedmetadata = () => resolve();
