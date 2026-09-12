@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Watch Live - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #000;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* --- LIVE VIDEO BACKGROUND --- */
+        .live-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            background-color: #111;
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Inuwa a baya don sa rubutun ya bayyana */
+        .live-container::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            pointer-events: none;
+        }
+
+        /* --- TOP BAR (Host Info & Viewers) --- */
+        .top-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 15px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+        }
+        
+        .host-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .host-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+        .host-details h3 {
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .host-details p {
+            font-size: 12px;
+            color: #ddd;
+        }
+        .live-badge {
+            background-color: #ff4b4b;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .follow-btn {
+            background-color: #8A2BE2;
+            color: #fff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+        .follow-btn.followed {
+            background-color: transparent;
+            border: 1px solid #fff;
+        }
+
+        .viewers-count {
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .close-btn {
+            color: #fff;
+            font-size: 24px;
+            text-decoration: none;
+            margin-left: 15px;
+            cursor: pointer;
+        }
+
+        /* --- RIGHT ACTION BAR (Gifts, etc) --- */
+        .right-bar {
+            position: absolute;
+            right: 10px;
+            bottom: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+        }
+        .action-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+        }
+        .action-icon i {
+            font-size: 30px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        .action-icon span {
+            font-size: 11px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .gift-icon i { color: #fbbf24; }
+        .share-icon i { color: #fff; }
+
+        /* --- CHAT AREA --- */
+        .chat-area {
+            position: absolute;
+            bottom: 70px;
+            left: 10px;
+            right: 70px;
+            max-height: 40%;
+            overflow-y: auto;
+            scrollbar-width: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 5;
+        }
+        .chat-area::-webkit-scrollbar { display: none; }
+
+        .chat-msg {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: inline-block;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .chat-msg .username {
+            color: #8A2BE2;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .chat-msg.gift {
+            background: linear-gradient(90deg, rgba(251, 191, 36, 0.3), rgba(0,0,0,0.6));
+            border: 1px solid rgba(251, 191, 36, 0.5);
+        }
+        .chat-msg.gift .username { color: #fbbf24; }
+
+        /* --- BOTTOM BAR (Chat Input / Host Controls) --- */
+        .bottom-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 10;
+        }
+        .chat-input {
+            flex-grow: 1;
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid #444;
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .chat-input::placeholder { color: #ccc; }
+        .send-btn {
+            background-color: #8A2BE2;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Host Controls (Idan mai watsa shiri ne) */
+        .host-controls {
+            display: none;
+            flex-grow: 1;
+            justify-content: center;
+            gap: 20px;
+        }
+        .host-btn {
+            background-color: rgba(255, 0, 0, 0.6);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .host-btn.flip {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="live-container" style="background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=800&h=1400&fit=crop');">
+        
+        <!-- TOP BAR -->
+        <div class="top-bar">
+            <div class="host-info">
+                <a href="profile.html" class="close-btn" style="margin-left: 0; margin-right: 10px; font-size: 20px;"><i class="fas fa-chevron-down"></i></a>
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" class="host-avatar" alt="Host">
+                <div class="host-details">
+                    <h3>Fatima Muhammad <span class="live-badge">LIVE</span></h3>
+                    <p>Federal University Dutse</p>
+                </div>
+                <button class="follow-btn" id="followBtn" onclick="toggleFollow()">Follow</button>
+            </div>
+            <div class="viewers-count">
+                <i class="fas fa-eye"></i> <span id="viewerCount">1,245</span>
+            </div>
+        </div>
+
+        <!-- RIGHT BAR (Viewer Actions) -->
+        <div class="right-bar" id="viewerRightBar">
+            <button class="action-icon gift-icon" onclick="sendGift()">
+                <i class="fas fa-gift"></i>
+                <span>Gift</span>
+            </button>
+            <button class="action-icon share-icon" onclick="shareLive()">
+                <i class="fas fa-share"></i>
+                <span>Share</span>
+            </button>
+        </div>
+
+        <!-- CHAT AREA -->
+        <div class="chat-area" id="chatArea">
+            <div class="chat-msg"><span class="username">David:</span> Wow, you explain this so well!</div>
+            <div class="chat-msg gift"><span class="username">Aisha sent a gift:</span> Rose x1</div>
+            <div class="chat-msg"><span class="username">Emeka:</span> Can you repeat the 2nd law of thermodynamics?</div>
+        </div>
+
+        <!-- BOTTOM BAR -->
+        <div class="bottom-bar">
+            <!-- Viewer Input -->
+            <div id="viewerInput" style="display: flex; width: 100%; gap: 10px;">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Say something...">
+                <button class="send-btn" onclick="sendChat()"><i class="fas fa-paper-plane"></i></button>
+            </div>
+
+            <!-- Host Controls (Hidden by default) -->
+            <div class="host-controls" id="hostControls">
+                <button class="host-btn flip"><i class="fas fa-camera-rotate"></i> Flip</button>
+                <button class="host-btn" onclick="endLive()"><i class="fas fa-stop"></i> End Live</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // LOGIC DON BINCika IDAN VIEWER NE KO HOST
+        // ==========================================
+        // Idan ka buɗe link ɗin kamar haka: view-live.html?role=host
+        // zai nuna maɓallan Host (End Live, Flip Camera). Idan ba a saka role ba, zai nuna na Viewer.
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const role = urlParams.get('role'); // zai dauko 'host' ko 'viewer'
+
+        if (role === 'host') {
+            // Mai watsa shiri (Host)
+            document.getElementById('viewerInput').style.display = 'none';
+            document.getElementById('hostControls').style.display = 'flex';
+            document.getElementById('viewerRightBar').style.display = 'none'; // Host ba ya ganin gift button
+        } else {
+            // Mai Kallo (Viewer)
+            document.getElementById('viewerInput').style.display = 'flex';
+            document.getElementById('hostControls').style.display = 'none';
+        }
+
+        // ==========================================
+        // CHAT LOGIC (Kwaikwayon Tattaunawa)
+        // ==========================================
+        const chatArea = document.getElementById('chatArea');
+        const chatInput = document.getElementById('chatInput');
+
+        function sendChat() {
+            const text = chatInput.value.trim();
+            if (text !== '') {
+                const msg = `<div class="chat-msg"><span class="username">You:</span> ${text}</div>`;
+                chatArea.insertAdjacentHTML('beforeend', msg);
+                chatInput.value = '';
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }
+
+        // Kaddamar da saƙo idan an danna Enter
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendChat();
+        });
+
+        // ==========================================
+        // GIFT LOGIC
+        // ==========================================
+        function sendGift() {
+            const gifts = ["Rose", "Heart", "Crown", "Lion"];
+            const randomGift = gifts[Math.floor(Math.random() * gifts.length)];
+            const msg = `<div class="chat-msg gift"><span class="username">You sent a gift:</span> ${randomGift} x1</div>`;
+            chatArea.insertAdjacentHTML('beforeend', msg);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        // ==========================================
+        // FOLLOW LOGIC
+        // ==========================================
+        function toggleFollow() {
+            const btn = document.getElementById('followBtn');
+            if (btn.classList.contains('followed')) {
+                btn.classList.remove('followed');
+                btn.innerText = 'Follow';
+            } else {
+                btn.classList.add('followed');
+                btn.innerText = 'Following';
+            }
+        }
+
+        // ==========================================
+        // SHARE & END LIVE LOGIC
+        // ==========================================
+        function shareLive() {
+            alert("Share link copied to clipboard!");
+        }
+
+        function endLive() {
+            if (confirm("Are you sure you want to end the live stream?")) {
+                window.location.href = "live.html"; // Koma bayan an gama Live
+            }
+        }
+
+        // ==========================================
+        // SIMULATE VIEWERS & CHAT (Don sa app ya kama da na gaske)
+        // ==========================================
+        let viewerCount = 1245;
+        setInterval(() => {
+            viewerCount += Math.floor(Math.random() * 10) - 3;
+            document.getElementById('viewerCount').innerText = viewerCount.toLocaleString();
+        }, 3000);
+
+        // Kwaikwayon saƙonni masu zuwa daga wasu masu kallo
+        const fakeUsers = ["David", "Aisha", "Emeka", "Halima", "Yusuf"];
+        const fakeMessages = ["Nice!", "Hello from FUD", "How does this work?", "Great stream", "Gift coming!"];
+        
+        setInterval(() => {
+            if (role !== 'host' && Math.random() > 0.6) {
+                const user = fakeUsers[Math.floor(Math.random() * fakeUsers.length)];
+                const msgText = fakeMessages[Math.floor(Math.random() * fakeMessages.length)];
+                const msg = `<div class="chat-msg"><span class="username">${user}:</span> ${msgText}</div>`;
+                chatArea.insertAdjacentHTML('beforeend', msg);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+        }, 4000);
+
+    </script>
+</body>
+</html>
