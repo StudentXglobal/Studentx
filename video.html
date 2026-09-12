@@ -27,7 +27,8 @@ body{position:relative;}
 .video-user-details{min-width:0;cursor:pointer;}
 .video-name{font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .video-username{font-size:12px;color:#ccc;margin-top:3px;}
-.video-follow{margin-left:5px;padding:6px 11px;border:1px solid rgba(255,255,255,.75);border-radius:7px;background:transparent;color:#fff;font-size:12px;font-weight:600;cursor:pointer;}
+.video-follow{margin-left:5px;padding:6px 14px;border:1px solid rgba(255,255,255,.75);border-radius:7px;background:transparent;color:#fff;font-size:12px;font-weight:600;cursor:pointer;}
+.video-follow.following{background:#fff;color:#000;border-color:#fff;}
 .sponsored-badge{display:inline-block;background:rgba(255,255,255,0.2);padding:2px 8px;border-radius:4px;font-size:10px;font-weight:bold;margin-bottom:5px;letter-spacing:0.5px;}
 .ad-cta-btn{display:inline-block;margin-top:10px;padding:8px 16px;background:#6d35ff;color:#fff;font-size:13px;font-weight:600;border-radius:8px;text-decoration:none;border:none;cursor:pointer;}
 .video-caption{font-size:14px;line-height:1.45;color:#fff;word-break:break-word;}
@@ -43,7 +44,12 @@ body{position:relative;}
 .nb.on{color:#fff;}
 .nb.on i{color:#fff;}
 .video-message{height:100%;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:14px;}
-@media(min-width:700px){.video-feed, .video-top, .bnav{max-width:500px;margin:auto;}}
+.custom-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;align-items:flex-end;justify-content:center;}
+.custom-sheet{width:100%;max-width:500px;background:#141419;border-top-left-radius:16px;border-top-right-radius:16px;padding:20px;border-top:1px solid rgba(255,255,255,0.1);animation:slideUp 0.3s ease;}
+@keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.sheet-option{display:flex;align-items:center;gap:15px;width:100%;padding:14px 0;background:none;border:none;color:#fff;font-size:15px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.05);text-align:left;}
+.sheet-option i{font-size:18px;width:24px;text-align:center;color:#aaa;}
+@media(min-width:700px){.video-feed, .video-top, .bnav, .custom-sheet{max-width:500px;margin:auto;}}
 </style>
 </head>
 <body>
@@ -65,23 +71,51 @@ body{position:relative;}
 </nav>
 
 <input type="file" id="hiddenVideoInput" accept="video/*" style="display: none;">
-<div id="uploadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:1000; padding:20px; box-sizing:border-box; overflow-y:auto;">
-<div style="max-width:400px; margin:40px auto; background:#141419; padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.1);">
+<input type="file" id="cameraVideoInput" accept="video/*" capture="environment" style="display: none;">
+
+<div id="uploadOptionsModal" class="custom-modal" onclick="closeModals(event)">
+<div class="sheet-option" onclick="triggerDeviceUpload()" style="border:none; font-weight:bold; justify-content:center; color:#6d35ff;"><i class="fas fa-video" style="color:#6d35ff;"></i> Upload Video from Phone</div>
+<div class="sheet-option" onclick="triggerCameraRecord()" style="border:none; font-weight:bold; justify-content:center; color:#fff;"><i class="fas fa-camera" style="color:#fff;"></i> Record Video</div>
+</div>
+
+<div id="uploadModal" class="custom-modal" style="align-items:center;">
+<div style="width:90%; max-width:400px; background:#141419; padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.1);">
 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-<h3 style="font-size:16px; font-weight:bold; color:#fff;">Loda Sabon Bidiyo</h3>
+<h3 style="font-size:16px; font-weight:bold; color:#fff;">Upload New Video</h3>
 <button onclick="closeUploadModal()" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;"><i class="fas fa-times"></i></button>
 </div>
 <video id="uploadPreview" style="width:100%; max-height:240px; object-fit:cover; border-radius:8px; margin-bottom:15px; background:#000;" controls></video>
-<textarea id="uploadCaption" placeholder="Rubuta bayani ko #hashtags game da bidiyon..." style="width:100%; height:80px; background:#1f1f28; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px; margin-bottom:15px; resize:none; font-size:14px; outline:none;"></textarea>
+<textarea id="uploadCaption" placeholder="Write a caption or add #hashtags..." style="width:100%; height:80px; background:#1f1f28; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px; margin-bottom:15px; resize:none; font-size:14px; outline:none;"></textarea>
 <div style="display:flex; gap:10px;">
-<button id="publishBtn" onclick="publishVideo()" style="flex:1; background:#6d35ff; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Loda Yanzu</button>
-<button onclick="closeUploadModal()" style="flex:1; background:#222; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Soke</button>
+<button id="publishBtn" onclick="publishVideo()" style="flex:1; background:#6d35ff; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Post Now</button>
+<button onclick="closeUploadModal()" style="flex:1; background:#222; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Cancel</button>
 </div></div></div>
+<div id="optionsModal" class="custom-modal" onclick="closeModals(event)">
+<div class="custom-sheet" id="optionsSheet">
+<button class="sheet-option" onclick="handleOptionAction('interested')"><i class="fas fa-thumbs-up"></i> Interested (Show more like this)</button>
+<button class="sheet-option" onclick="handleOptionAction('not_interested')"><i class="fas fa-thumbs-down"></i> Not Interested (Show less like this)</button>
+<button class="sheet-option" onclick="handleOptionAction('copy_link')"><i class="fas fa-link"></i> Copy Link</button>
+<button class="sheet-option" onclick="handleOptionAction('download')"><i class="fas fa-download"></i> Download Video</button>
+</div>
+</div>
+
+<div id="shareModal" class="custom-modal" onclick="closeModals(event)">
+<div class="custom-sheet">
+<div style="font-size:15px; font-weight:bold; margin-bottom:15px; text-align:center;">Share to</div>
+<div style="display:flex; justify-content:space-around; margin-bottom:20px;">
+<div onclick="shareToSocial('whatsapp')" style="text-align:center; cursor:pointer;"><div style="width:50px; height:50px; background:#25D366; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 5px;"><i class="fab fa-whatsapp" style="font-size:24px; color:#fff;"></i></div><span style="font-size:12px; color:#aaa;">WhatsApp</span></div>
+<div onclick="shareToSocial('facebook')" style="text-align:center; cursor:pointer;"><div style="width:50px; height:50px; background:#1877F2; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 5px;"><i class="fab fa-facebook-f" style="font-size:22px; color:#fff;"></i></div><span style="font-size:12px; color:#aaa;">Facebook</span></div>
+<div onclick="shareToSocial('tiktok')" style="text-align:center; cursor:pointer;"><div style="width:50px; height:50px; background:#000; border:1px solid #fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 5px;"><i class="fab fa-tiktok" style="font-size:20px; color:#fff;"></i></div><span style="font-size:12px; color:#aaa;">TikTok</span></div>
+<div onclick="shareToSocial('copy')" style="text-align:center; cursor:pointer;"><div style="width:50px; height:50px; background:#333; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 5px;"><i class="fas fa-copy" style="font-size:20px; color:#fff;"></i></div><span style="font-size:12px; color:#aaa;">Copy Link</span></div>
+</div>
+<button onclick="document.getElementById('shareModal').style.display='none'" style="width:100%; background:#222; border:none; padding:12px; border-radius:8px; color:#fff; font-weight:bold; cursor:pointer;">Cancel</button>
+</div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase.js"></script>
 <script>
-let currentUser=null, currentProfile=null, videos=[], selectedVideoFile=null;
+let currentUser=null, currentProfile=null, videos=[], selectedVideoFile=null, activeVideoIdForMenu=null;
 const sampleAds=[
     {id:'ad_tech_1',isAd:true,category:'tech',title:'StudentX Tech Store',username:'@studentx_store',avatar_url:'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=100',caption:'Get durable student laptops and coding accessories with 20% discount! 💻✨ #Tech #StudentX',video_url:'https://assets.mixkit.co/videos/preview/mixkit-hands-typing-on-a-laptop-keyboard-42825-large.mp4',cta_text:'Shop Tech Deals',cta_url:'https://studentx.app/store'},
     {id:'ad_study_1',isAd:true,category:'study',title:'StudyHub Masterclass',username:'@studyhub_pro',avatar_url:'https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=100',caption:'Ace your semester exams with AI past questions and collaborative study rooms. 📚🚀 #StudyHub',video_url:'https://assets.mixkit.co/videos/preview/mixkit-student-girl-studying-at-the-library-41662-large.mp4',cta_text:'Join Masterclass',cta_url:'https://studentx.app/studyhub'},
@@ -146,7 +180,7 @@ function renderVideoCard(v){
     const uname=prof.username?"@"+prof.username:"@studentx";
     const avatar=prof.avatar_url||defaultAvatar();
     const cap=v.caption||"";
-    return `<section class="video-item" data-video-id="${escapeHTML(v.id)}">
+    return `<section class="video-item" data-video-id="${escapeHTML(v.id)}" ondblclick="handleDoubleTap('${escapeHTML(v.id)}', this)">
     <video class="video-player" src="${escapeHTML(v.video_url)}" ${v.thumbnail_url?`poster="${escapeHTML(v.thumbnail_url)}"`:''} playsinline loop muted preload="metadata"></video>
     <div class="video-overlay"></div>
     <div class="video-info">
@@ -156,7 +190,7 @@ function renderVideoCard(v){
     <div class="video-name">${escapeHTML(name)}</div>
     <div class="video-username">${escapeHTML(uname)}</div>
     </div>
-    ${currentUser&&currentUser.id!==v.user_id?`<button class="video-follow" onclick="followVideo('${escapeHTML(v.user_id)}')">Follow</button>`:''}
+    ${currentUser&&currentUser.id!==v.user_id?`<button class="video-follow" id="follow-btn-${escapeHTML(v.user_id)}" onclick="followVideo('${escapeHTML(v.user_id)}')">Follow</button>`:''}
     </div>
     ${cap?`<div class="video-caption">${escapeHTML(cap)}</div>`:''}
     </div>
@@ -164,8 +198,8 @@ function renderVideoCard(v){
     <button class="video-action" onclick="likeVideo('${escapeHTML(v.id)}',this)"><i class="far fa-heart"></i><span>0</span></button>
     <button class="video-action" onclick="openVideoComments('${escapeHTML(v.id)}')"><i class="far fa-comment"></i><span>0</span></button>
     <button class="video-action" onclick="saveVideo('${escapeHTML(v.id)}',this)"><i class="far fa-bookmark"></i><span>Save</span></button>
-    <button class="video-action" onclick="shareVideo('${escapeHTML(v.id)}')"><i class="fas fa-share"></i><span>Share</span></button>
-    <button class="video-action" onclick="videoMenu('${escapeHTML(v.id)}')"><i class="fas fa-ellipsis-vertical"></i></button>
+    <button class="video-action" onclick="openShareModal('${escapeHTML(v.id)}')"><i class="fas fa-share"></i><span>Share</span></button>
+    <button class="video-action" onclick="openVideoMenu('${escapeHTML(v.id)}')"><i class="fas fa-ellipsis-vertical"></i></button>
     </div></section>`;
 }
 function renderAdCard(ad){
@@ -200,22 +234,33 @@ function setupVideoPlayback(){
 }
 async function initVideo(){await loadCurrentUser();await loadVideos();}
 initVideo();
-
 document.getElementById("uploadVideoBtn").addEventListener("click",function(){
     if(!currentUser){alert("Please login first");window.location.href="login.html";return;}
-    document.getElementById("hiddenVideoInput").click();
+    document.getElementById("uploadOptionsModal").style.display="flex";
 });
-document.getElementById("hiddenVideoInput").addEventListener("change",function(e){
+function triggerDeviceUpload(){
+    document.getElementById("uploadOptionsModal").style.display="none";
+    document.getElementById("hiddenVideoInput").click();
+}
+function triggerCameraRecord(){
+    document.getElementById("uploadOptionsModal").style.display="none";
+    document.getElementById("cameraVideoInput").click();
+}
+document.getElementById("hiddenVideoInput").addEventListener("change",handleFileSelected);
+document.getElementById("cameraVideoInput").addEventListener("change",handleFileSelected);
+
+function handleFileSelected(e){
     const f=e.target.files[0];
     if(!f)return;
     if(!f.type.startsWith("video/")){alert("Please select a video file.");return;}
     selectedVideoFile=f;
     document.getElementById("uploadPreview").src=URL.createObjectURL(f);
-    document.getElementById("uploadModal").style.display="block";
-});
+    document.getElementById("uploadModal").style.display="flex";
+}
 function closeUploadModal(){
     document.getElementById("uploadModal").style.display="none";
     document.getElementById("hiddenVideoInput").value="";
+    document.getElementById("cameraVideoInput").value="";
     document.getElementById("uploadCaption").value="";
     document.getElementById("uploadPreview").src="";
     selectedVideoFile=null;
@@ -224,7 +269,7 @@ async function publishVideo(){
     if(!selectedVideoFile||!currentUser)return;
     const cap=document.getElementById("uploadCaption").value.trim();
     const btn=document.getElementById("publishBtn");
-    btn.textContent="Lodawa...";btn.disabled=true;
+    btn.textContent="Uploading...";btn.disabled=true;
     try{
         const ext=selectedVideoFile.name.split('.').pop();
         const fname=`${currentUser.id}_${Date.now()}.${ext}`;
@@ -233,11 +278,11 @@ async function publishVideo(){
         const {data:urlData}=supabaseClient.storage.from("videos").getPublicUrl(fname);
         const {error:insErr}=await supabaseClient.from("videos").insert({user_id:currentUser.id,video_url:urlData.publicUrl,caption:cap});
         if(insErr)throw insErr;
-        alert("An loda bidiyon!");
+        alert("Video uploaded successfully!");
         closeUploadModal();
         await loadVideos();
-    }catch(err){console.error(err);alert("An samu matsala wajen lodawa.");}
-    finally{btn.textContent="Loda Yanzu";btn.disabled=false;}
+    }catch(err){console.error(err);alert("Failed to upload video.");}
+    finally{btn.textContent="Post Now";btn.disabled=false;}
 }
 
 function formatVideoCount(n){
@@ -260,6 +305,13 @@ async function loadVideoCounts(){
             if(sv.data&&bs[2]){bs[2].classList.add("saved");bs[2].querySelector("i").className="fas fa-bookmark";}
             const lk=await supabaseClient.from("video_likes").select("id").eq("video_id",v.id).eq("user_id",currentUser.id).maybeSingle();
             if(lk.data&&bs[0]){bs[0].classList.add("liked");bs[0].querySelector("i").className="fas fa-heart";}
+            
+            const fl=await supabaseClient.from("followers").select("id").eq("follower_id",currentUser.id).eq("following_id",v.user_id).maybeSingle();
+            const fBtn=document.getElementById(`follow-btn-${v.user_id}`);
+            if(fBtn && (fl.data || currentUser.id===v.user_id)){
+                if(currentUser.id===v.user_id) fBtn.style.display='none';
+                else{fBtn.textContent="Following";fBtn.classList.add("following");}
+            }
         }
     }
 }
@@ -278,6 +330,12 @@ async function likeVideo(id,btn){
         btn.querySelector("span").textContent=formatVideoCount(cnt.count||0);
     }catch(e){console.error(e);}
 }
+function handleDoubleTap(id, cardElement){
+    const likeBtn = cardElement.querySelectorAll(".video-action")[0];
+    if(likeBtn && !likeBtn.classList.contains("liked")){
+        likeVideo(id, likeBtn);
+    }
+}
 async function saveVideo(id,btn){
     if(!currentUser){alert("Please login first");return;}
     try{
@@ -294,29 +352,83 @@ async function saveVideo(id,btn){
 async function followVideo(uid){
     if(!currentUser){alert("Please login first");return;}
     if(currentUser.id===uid)return;
+    const btn=document.getElementById(`follow-btn-${uid}`);
     const ex=await supabaseClient.from("followers").select("id").eq("follower_id",currentUser.id).eq("following_id",uid).maybeSingle();
-    if(ex.data){alert("Already following");return;}
-    const r=await supabaseClient.from("followers").insert({follower_id:currentUser.id,following_id:uid});
-    if(r.error){alert("Unable to follow");return;}
-    alert("Following");
+    if(ex.data){
+        await supabaseClient.from("followers").delete().eq("id",ex.data.id);
+        if(btn){btn.textContent="Follow";btn.classList.remove("following");}
+        alert("Unfollowed user");
+    }else{
+        const r=await supabaseClient.from("followers").insert({follower_id:currentUser.id,following_id:uid});
+        if(r.error){alert("Unable to follow");return;}
+        if(btn){btn.textContent="Following";btn.classList.add("following");}
+        alert("Following user");
+    }
 }
 function openVideoComments(id){window.location.href="comment.html?video="+encodeURIComponent(id);}
-async function shareVideo(id){
-    const url=window.location.origin+"/video.html?video="+encodeURIComponent(id);
-    if(navigator.share){try{await navigator.share({title:"StudentX Video",text:"Watch this video on StudentX",url:url});}catch(e){}return;}
-    try{await navigator.clipboard.writeText(url);alert("Video link copied");}catch(e){alert(url);}
+let activeShareUrl="";
+function openShareModal(id){
+    activeShareUrl=window.location.origin+"/video.html?video="+encodeURIComponent(id);
+    document.getElementById("shareModal").style.display="flex";
 }
-function videoMenu(id){
-    const v=videos.find(i=>i.id===id);
+async function shareToSocial(platform){
+    if(platform==='copy'){
+        try{await navigator.clipboard.writeText(activeShareUrl);alert("Video link copied to clipboard!");}catch(e){alert(activeShareUrl);}
+    }else if(platform==='whatsapp'){
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent("Check out this awesome video on StudentX: "+activeShareUrl)}`,"_blank");
+    }else if(platform==='facebook'){
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(activeShareUrl)}`,"_blank");
+    }else if(platform==='tiktok'){
+        try{await navigator.clipboard.writeText(activeShareUrl);alert("Link copied! You can now paste it on TikTok.");}catch(e){}
+    }
+    document.getElementById("shareModal").style.display="none";
+}
+function openVideoMenu(id){
+    activeVideoIdForMenu=id;
+    document.getElementById("optionsModal").style.display="flex";
+}
+async function handleOptionAction(action){
+    document.getElementById("optionsModal").style.display="none";
+    const v=videos.find(i=>i.id===activeVideoIdForMenu);
     if(!v)return;
-    if(currentUser&&v.user_id===currentUser.id){if(confirm("Delete this video?"))deleteVideo(id);}
-    else{alert("Video options.");}
+    if(action==='interested'){
+        alert("Preferences updated: Showing more videos like this.");
+        videos=videos.sort((a,b)=>b.id===v.id?1:-1);
+        renderVideosWithAds();
+    }else if(action==='not_interested'){
+        alert("Preferences updated: Showing fewer videos like this.");
+        videos=videos.filter(i=>i.id!==v.id);
+        renderVideosWithAds();
+    }else if(action==='copy_link'){
+        const url=window.location.origin+"/video.html?video="+encodeURIComponent(v.id);
+        try{await navigator.clipboard.writeText(url);alert("Video link copied!");}catch(e){alert(url);}
+    }else if(action==='download'){
+        alert("Starting video download...");
+        try{
+            const response=await fetch(v.video_url);
+            const blob=await response.blob();
+            const blobUrl=window.URL.createObjectURL(blob);
+            const a=document.createElement('a');
+            a.style.display='none';
+            a.href=blobUrl;
+            a.download=`studentx_video_${v.id}.mp4`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(blobUrl);
+            alert("Video downloaded successfully to phone storage!");
+        }catch(e){
+            window.open(v.video_url, '_blank');
+        }
+    }
 }
-async function deleteVideo(id){
-    if(!currentUser)return;
-    await supabaseClient.from("videos").delete().eq("id",id).eq("user_id",currentUser.id);
-    await loadVideos();
+function closeModals(e){
+    if(e.target.classList.contains('custom-modal')){
+        e.target.style.display='none';
+    }
 }
+document.getElementById("liveTab").addEventListener("click",function(){
+    window.location.href="go-live.html";
+});
 document.getElementById("forYouTab").addEventListener("click",async function(){
     document.querySelectorAll(".video-tab").forEach(t=>t.classList.remove("active"));
     this.classList.add("active");await loadVideos();
@@ -333,6 +445,5 @@ document.getElementById("followingTab").addEventListener("click",async function(
     setupVideoPlayback();
     loadVideoCounts();
 });
-document.getElementById("liveTab").addEventListener("click",function(){alert("Live is coming next.");});
 </script>
 </html>
