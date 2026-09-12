@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "443803391103",
+    "project_id": "ichat-d8714",
+    "storage_bucket": "ichat-d8714.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:443803391103:android:4460ae5f823d95d2f91b4a",
+        "android_client_info": {
+          "package_name": "com.studentx.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9aopw0bYNpr7_n0vp8Jxl6bIWcL9p2Zs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
