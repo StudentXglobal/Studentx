@@ -181,7 +181,7 @@ function renderVideoCard(v){
     const avatar=prof.avatar_url||defaultAvatar();
     const cap=v.caption||"";
     return `<section class="video-item" data-video-id="${escapeHTML(v.id)}" ondblclick="handleDoubleTap('${escapeHTML(v.id)}', this)">
-    <video class="video-player" src="${escapeHTML(v.video_url)}" ${v.thumbnail_url?`poster="${escapeHTML(v.thumbnail_url)}"`:''} playsinline loop muted preload="metadata"></video>
+    <video class="video-player" src="${escapeHTML(v.video_url)}" ${v.thumbnail_url?`poster="${escapeHTML(v.thumbnail_url)}"`:''} playsinline loop preload="metadata"></video>
     <div class="video-overlay"></div>
     <div class="video-info">
     <div class="video-user">
