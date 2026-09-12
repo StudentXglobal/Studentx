@@ -545,5 +545,49 @@ async function handleOptionAction(action){
         }
     }
 }
-    </script>
+        <script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const videos = document.querySelectorAll("video");
+
+  videos.forEach(video => {
+
+    // Dole video ya kasance da sound
+    video.muted = false;
+    video.defaultMuted = false;
+    video.volume = 1.0;
+
+    // Ƙoƙarin kunna video da sound
+    video.play().then(() => {
+      console.log("StudentX: Video playing with sound");
+    }).catch(() => {
+      console.log("Browser blocked autoplay with sound");
+
+      // Da zarar user ya taɓa screen/video, kunna sound
+      const enableSound = () => {
+        video.muted = false;
+        video.volume = 1.0;
+
+        video.play().catch(() => {});
+
+        document.removeEventListener("click", enableSound);
+        document.removeEventListener("touchstart", enableSound);
+      };
+
+      document.addEventListener("click", enableSound, { once: true });
+      document.addEventListener("touchstart", enableSound, { once: true });
+    });
+
+    // Idan wani code ya sake saka mute, cire shi
+    video.addEventListener("volumechange", () => {
+      if (video.muted) {
+        video.muted = false;
+        video.volume = 1.0;
+      }
+    });
+
+  });
+
+});
+</script>
 </html>
