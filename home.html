@@ -1,0 +1,2047 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+
+<title>StudentX - Home</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+body{
+font-family:Poppins,sans-serif;
+background:#0a0a0f;
+color:#fff;
+min-height:100vh;
+padding-bottom:70px;
+}
+
+.hdr{
+position:sticky;
+top:0;
+z-index:100;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:10px 14px;
+background:rgba(10,10,15,.94);
+backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.hdr-l{
+display:flex;
+align-items:center;
+gap:12px;
+}
+
+.hdr-menu{
+width:36px;
+height:36px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.65);
+font-size:18px;
+cursor:pointer;
+}
+
+.hdr-logo{
+font-size:18px;
+font-weight:900;
+letter-spacing:-.5px;
+}
+
+.hdr-logo b{
+font-weight:900;
+background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.hdr-r{
+display:flex;
+gap:4px;
+}
+
+.hdr-btn{
+width:36px;
+height:36px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.65);
+font-size:16px;
+position:relative;
+cursor:pointer;
+}
+
+.hdr-dot{
+position:absolute;
+top:7px;
+right:7px;
+width:7px;
+height:7px;
+border-radius:50%;
+background:#ef4444;
+border:2px solid #0a0a0f;
+}
+
+.stories{
+display:flex;
+gap:14px;
+overflow-x:auto;
+padding:14px 14px 10px;
+scrollbar-width:none;
+}
+
+.stories::-webkit-scrollbar{
+display:none;
+}
+
+.st{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:5px;
+flex-shrink:0;
+cursor:pointer;
+}
+
+.st-ring{
+width:58px;
+height:58px;
+border-radius:50%;
+padding:2.5px;
+background:linear-gradient(135deg,#7c3aed,#a855f7,#06b6d4);
+}
+
+.st-ring img{
+width:100%;
+height:100%;
+border-radius:50%;
+object-fit:cover;
+border:2.5px solid #0a0a0f;
+}
+
+.st-add{
+width:58px;
+height:58px;
+border-radius:50%;
+border:2px dashed rgba(124,58,237,.5);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+color:#a855f7;
+background:rgba(124,58,237,.08);
+}
+
+.st-nm{
+font-size:10px;
+color:rgba(255,255,255,.45);
+max-width:60px;
+text-align:center;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.cpb{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px;
+margin:0 14px 12px;
+background:rgba(255,255,255,.04);
+border:1px solid rgba(255,255,255,.06);
+border-radius:14px;
+cursor:pointer;
+}
+
+.cpb img{
+width:40px;
+height:40px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid rgba(168,85,247,.65);
+flex-shrink:0;
+}
+
+.cpb-in{
+flex:1;
+min-width:0;
+}
+
+.cpb-name{
+font-size:13px;
+font-weight:700;
+color:#fff;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.cpb-user{
+font-size:10px;
+color:rgba(255,255,255,.45);
+margin-top:1px;
+}
+
+.cpb-placeholder{
+font-size:12px;
+color:rgba(255,255,255,.35);
+margin-top:6px;
+}
+
+.cpb-tools{
+display:flex;
+gap:9px;
+}
+
+.cpb-t{
+color:rgba(255,255,255,.35);
+font-size:16px;
+}
+
+.cpb-t.g{
+color:#10b981;
+}
+
+.cpb-t.r{
+color:#ef4444;
+}
+
+.cpb-t.y{
+color:#f59e0b;
+}
+
+.feed{
+width:100%;
+}
+
+.post{
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.06);
+border-radius:16px;
+margin:0 14px 12px;
+overflow:hidden;
+}
+
+.p-hdr{
+display:flex;
+align-items:center;
+gap:10px;
+padding:12px 14px;
+}
+
+.p-av{
+width:40px;
+height:40px;
+border-radius:50%;
+object-fit:cover;
+cursor:pointer;
+border:1px solid rgba(255,255,255,.08);
+flex-shrink:0;
+}
+
+.p-info{
+flex:1;
+min-width:0;
+}
+
+.p-nm{
+font-size:13px;
+font-weight:700;
+display:flex;
+align-items:center;
+gap:4px;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
+}
+
+.p-nm .vd{
+color:#a855f7;
+font-size:10px;
+}
+
+.p-meta{
+font-size:10px;
+color:rgba(255,255,255,.3);
+margin-top:2px;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
+}
+
+.p-more{
+width:32px;
+height:32px;
+border-radius:9px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.38);
+font-size:14px;
+cursor:pointer;
+flex-shrink:0;
+}
+
+.p-more:active{
+background:rgba(255,255,255,.07);
+}
+
+.p-body{
+padding:0 14px 10px;
+font-size:13px;
+line-height:1.65;
+color:rgba(255,255,255,.72);
+white-space:pre-wrap;
+word-break:break-word;
+}
+
+.p-image{
+display:block;
+width:100%;
+max-height:520px;
+object-fit:cover;
+}
+
+.p-file{
+margin:0 14px 10px;
+padding:12px;
+background:rgba(255,255,255,.03);
+border:1px solid rgba(255,255,255,.06);
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:10px;
+cursor:pointer;
+}
+
+.p-file-ic{
+width:40px;
+height:40px;
+border-radius:10px;
+background:rgba(239,68,68,.1);
+display:flex;
+align-items:center;
+justify-content:center;
+color:#ef4444;
+font-size:18px;
+}
+
+.p-file-inf{
+flex:1;
+min-width:0;
+}
+
+.p-file-nm{
+font-size:12px;
+font-weight:600;
+overflow:hidden;
+text-overflow:ellipsis;
+white-space:nowrap;
+}
+
+.p-file-sz{
+font-size:10px;
+color:rgba(255,255,255,.3);
+margin-top:2px;
+}
+
+.p-file-dl{
+color:#a855f7;
+font-size:13px;
+}
+
+.p-acts{
+display:flex;
+align-items:center;
+padding:4px 8px 10px;
+gap:2px;
+border-top:1px solid rgba(255,255,255,.035);
+}
+
+.p-a{
+display:flex;
+align-items:center;
+gap:5px;
+padding:7px 10px;
+border-radius:20px;
+font-size:11px;
+color:rgba(255,255,255,.42);
+font-weight:600;
+cursor:pointer;
+transition:all .15s;
+}
+
+.p-a:active{
+background:rgba(124,58,237,.12);
+}
+
+.p-a.lk.on{
+color:#ef4444;
+}
+
+.p-a.lk.on i{
+animation:likePop .3s ease;
+}
+
+@keyframes likePop{
+50%{
+transform:scale(1.35);
+}
+}
+
+.p-a-r{
+margin-left:auto;
+}
+
+.feed-loading{
+text-align:center;
+padding:35px 20px;
+color:rgba(255,255,255,.35);
+font-size:12px;
+}
+
+.feed-error{
+margin:20px 14px;
+padding:18px;
+border-radius:14px;
+background:rgba(239,68,68,.08);
+border:1px solid rgba(239,68,68,.15);
+color:#ef9999;
+font-size:12px;
+text-align:center;
+}
+
+.empty-feed{
+padding:45px 20px;
+text-align:center;
+color:rgba(255,255,255,.35);
+}
+
+.empty-feed i{
+font-size:32px;
+margin-bottom:12px;
+color:rgba(168,85,247,.6);
+}
+
+.empty-feed p{
+font-size:12px;
+}
+
+.bnav{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:100%;
+max-width:430px;
+height:62px;
+display:flex;
+align-items:center;
+justify-content:space-around;
+background:rgba(10,10,15,.96);
+backdrop-filter:blur(16px);
+-webkit-backdrop-filter:blur(16px);
+border-top:1px solid rgba(255,255,255,.06);
+z-index:200;
+}
+
+.nb{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:3px;
+font-size:9px;
+font-weight:500;
+color:rgba(255,255,255,.3);
+cursor:pointer;
+}
+
+.nb i{
+font-size:19px;
+}
+
+.nb.on{
+color:#a855f7;
+}
+
+.mnu-ov{
+position:fixed;
+inset:0;
+z-index:500;
+display:none;
+align-items:flex-end;
+justify-content:center;
+}
+
+.mnu-ov.show{
+display:flex;
+}
+
+.mnu-sh{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.58);
+}
+
+.mnu-glass{
+position:relative;
+z-index:1;
+width:100%;
+max-width:430px;
+background:rgba(20,20,45,.95);
+backdrop-filter:blur(24px);
+-webkit-backdrop-filter:blur(24px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:20px 20px 0 0;
+padding:12px 0 24px;
+animation:mnuUp .25s ease;
+}
+
+@keyframes mnuUp{
+from{
+transform:translateY(100%);
+}
+to{
+transform:translateY(0);
+}
+}
+
+.mnu-handle{
+width:36px;
+height:4px;
+background:rgba(255,255,255,.15);
+border-radius:4px;
+margin:0 auto 12px;
+}
+
+.mnu-item{
+display:flex;
+align-items:center;
+gap:12px;
+padding:14px 20px;
+font-size:13px;
+font-weight:500;
+color:rgba(255,255,255,.72);
+cursor:pointer;
+}
+
+.mnu-item:active{
+background:rgba(124,58,237,.12);
+}
+
+.mnu-item i{
+width:18px;
+text-align:center;
+font-size:14px;
+color:rgba(255,255,255,.45);
+}
+
+.mnu-item.dng{
+color:#ef4444;
+}
+
+.mnu-item.dng i{
+color:#ef4444;
+}
+
+.mnu-div{
+height:1px;
+background:rgba(255,255,255,.06);
+margin:6px 20px;
+}
+
+.toast{
+position:fixed;
+top:16px;
+left:50%;
+transform:translateX(-50%);
+z-index:9999;
+padding:11px 20px;
+background:rgba(124,58,237,.94);
+backdrop-filter:blur(12px);
+color:#fff;
+border-radius:12px;
+font-size:12px;
+font-weight:600;
+box-shadow:0 4px 20px rgba(0,0,0,.3);
+animation:toastIn .3s ease;
+}
+
+@keyframes toastIn{
+from{
+opacity:0;
+transform:translateX(-50%) translateY(-10px);
+}
+to{
+opacity:1;
+transform:translateX(-50%) translateY(0);
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<header class="hdr">
+
+<div class="hdr-l">
+
+<div class="hdr-menu"
+onclick="window.location.href='menu.html'">
+<i class="fas fa-bars"></i>
+</div>
+
+<div class="hdr-logo">
+Student<b>X</b>
+</div>
+
+</div>
+
+<div class="hdr-r">
+
+<div class="hdr-btn"
+onclick="window.location.href='search.html'">
+<i class="fas fa-search"></i>
+</div>
+
+<div class="hdr-btn"
+onclick="window.location.href='notification.html'">
+<i class="fas fa-bell"></i>
+<span class="hdr-dot"></span>
+</div>
+
+</div>
+
+</header>
+
+<!-- STORIES -->
+<div class="stories" id="stories">
+
+<div class="st">
+<div class="st-add">
+<i class="fas fa-plus"></i>
+</div>
+<div class="st-nm">Your Story</div>
+</div>
+
+</div>
+
+<!-- CREATE POST -->
+<div class="cpb"
+onclick="window.location.href='create-post.html'">
+
+<img
+id="profileAvatar"
+src=""
+alt="Profile">
+
+<div class="cpb-in">
+
+<div
+id="fullName"
+class="cpb-name">
+Loading...
+</div>
+
+<div
+id="username"
+class="cpb-user">
+@loading...
+</div>
+
+<div class="cpb-placeholder">
+What's on your mind?
+</div>
+
+</div>
+
+<div class="cpb-tools">
+
+<div class="cpb-t g">
+<i class="fas fa-image"></i>
+</div>
+
+<div class="cpb-t r">
+<i class="fas fa-video"></i>
+</div>
+
+<div class="cpb-t y">
+<i class="fas fa-poll"></i>
+</div>
+
+</div>
+
+</div>
+
+<!-- REAL SUPABASE FEED -->
+<main id="feed" class="feed">
+
+<div class="feed-loading">
+<i class="fas fa-circle-notch fa-spin"></i>
+<br><br>
+Loading posts...
+</div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+
+<div class="nb on"
+onclick="window.location.href='home.html'">
+<i class="fas fa-home"></i>
+<span>Home</span>
+</div>
+
+<div class="nb"
+onclick="window.location.href='video.html'">
+<i class="fas fa-video"></i>
+<span>Video</span>
+</div>
+
+<div class="nb"
+onclick="window.location.href='chat.html'">
+<i class="fas fa-comment-dots"></i>
+<span>Chat</span>
+</div>
+
+<div class="nb"
+onclick="window.location.href='studyhub.html'">
+<i class="fas fa-book-open"></i>
+<span>StudyHub</span>
+</div>
+
+<div class="nb"
+onclick="window.location.href='profile.html'">
+<i class="fas fa-user"></i>
+<span>Profile</span>
+</div>
+
+</nav>
+
+<!-- POST MENU -->
+<div
+class="mnu-ov"
+id="menuOv">
+
+<div
+class="mnu-sh"
+onclick="closeMenu()">
+</div>
+
+<div
+class="mnu-glass">
+
+<div class="mnu-handle"></div>
+
+<div id="menuItems"></div>
+
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="auth.js"></script>
+
+<script>
+
+let currentUser = null;
+let profile = null;
+let posts = [];
+let likedPostIds = new Set();
+
+const defaultAvatar =
+"data:image/svg+xml;charset=UTF-8," +
+encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+<rect width="200" height="200" fill="#202027"/>
+<circle cx="100" cy="78" r="42" fill="#777"/>
+<path d="M35 190c8-48 35-70 65-70s57 22 65 70"
+fill="#777"/>
+</svg>
+`);
+
+function escapeHTML(value){
+
+if(value === null || value === undefined){
+return "";
+}
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+}
+
+
+function timeAgo(date){
+
+if(!date){
+return "";
+}
+
+const time = new Date(date).getTime();
+
+if(isNaN(time)){
+return "";
+}
+
+let seconds =
+Math.floor((Date.now() - time) / 1000);
+
+if(seconds < 60){
+return "Just now";
+}
+
+if(seconds < 3600){
+return Math.floor(seconds / 60) + "m ago";
+}
+
+if(seconds < 86400){
+return Math.floor(seconds / 3600) + "h ago";
+}
+
+if(seconds < 604800){
+return Math.floor(seconds / 86400) + "d ago";
+}
+
+return new Date(date).toLocaleDateString();
+
+}
+
+
+async function getCurrentUser(){
+
+const result =
+await supabaseClient.auth.getUser();
+
+if(result.error){
+console.error(result.error);
+return null;
+}
+
+return result.data.user || null;
+
+}
+
+
+async function loadMyProfile(){
+
+if(!currentUser){
+return;
+}
+
+const result =
+await supabaseClient
+.from("profiles")
+.select("id,full_name,username,avatar_url,verified")
+.eq("id",currentUser.id)
+.maybeSingle();
+
+if(result.error){
+
+console.error(
+"Profile loading error:",
+result.error
+);
+
+return;
+}
+
+profile = result.data;
+
+if(!profile){
+return;
+}
+
+const avatar =
+profile.avatar_url ||
+defaultAvatar;
+
+const avatarElement =
+document.getElementById("profileAvatar");
+
+if(avatarElement){
+avatarElement.src = avatar;
+}
+
+const nameElement =
+document.getElementById("fullName");
+
+if(nameElement){
+
+nameElement.textContent =
+profile.full_name ||
+profile.username ||
+"StudentX User";
+
+}
+
+const usernameElement =
+document.getElementById("username");
+
+if(usernameElement){
+
+usernameElement.textContent =
+profile.username
+? "@" + profile.username
+: "";
+
+}
+
+}
+
+
+async function loadStories(){
+
+const storiesElement =
+document.getElementById("stories");
+
+if(!storiesElement){
+return;
+}
+
+let html = `
+<div class="st"
+onclick="window.location.href='story-upload.html'">
+
+<div class="st-add">
+<i class="fas fa-plus"></i>
+</div>
+
+<div class="st-nm">
+Your Story
+</div>
+
+</div>
+`;
+
+const result =
+await supabaseClient
+.from("profiles")
+.select("id,full_name,username,avatar_url")
+.neq("id",currentUser ? currentUser.id : "")
+.order("created_at",{ascending:false})
+.limit(10);
+
+if(result.error){
+
+console.error(
+"Stories/profile loading error:",
+result.error
+);
+
+storiesElement.innerHTML = html;
+return;
+
+}
+
+(result.data || []).forEach(function(user){
+
+const avatar =
+user.avatar_url ||
+defaultAvatar;
+
+const name =
+user.full_name ||
+user.username ||
+"Student";
+
+html += `
+
+<div class="st"
+onclick="openUserProfile('${user.id}')">
+
+<div class="st-ring">
+
+<img
+src="${escapeHTML(avatar)}"
+alt=""
+onerror="this.src=defaultAvatar">
+
+</div>
+
+<div class="st-nm">
+${escapeHTML(
+name.split(" ")[0]
+)}
+</div>
+
+</div>
+
+`;
+
+});
+
+storiesElement.innerHTML = html;
+
+}
+
+
+function openUserProfile(userId){
+
+if(!userId){
+return;
+}
+
+window.location.href =
+"profile.html?id=" +
+encodeURIComponent(userId);
+
+}
+
+
+function showMsg(message){
+
+const old =
+document.querySelector(".toast");
+
+if(old){
+old.remove();
+}
+
+const toast =
+document.createElement("div");
+
+toast.className = "toast";
+
+toast.textContent = message;
+
+document.body.appendChild(toast);
+
+setTimeout(function(){
+
+if(toast.parentNode){
+toast.remove();
+}
+
+},2500);
+
+}
+async function loadLikedPosts(){
+
+likedPostIds = new Set();
+
+if(!currentUser){
+return;
+}
+
+const result =
+await supabaseClient
+.from("likes")
+.select("post_id")
+.eq("user_id",currentUser.id);
+
+if(result.error){
+
+console.error(
+"Likes loading error:",
+result.error
+);
+
+return;
+}
+
+(result.data || []).forEach(function(row){
+
+likedPostIds.add(
+String(row.post_id)
+);
+
+});
+
+}
+
+
+async function loadPosts(){
+
+const feed =
+document.getElementById("feed");
+
+feed.innerHTML = `
+<div class="feed-loading">
+<i class="fas fa-circle-notch fa-spin"></i>
+<br><br>
+Loading posts...
+</div>
+`;
+
+const result =
+await supabaseClient
+.from("posts")
+.select(`
+id,
+User_id,
+content,
+image_url,
+Like,
+Create_at
+`)
+.order("Create_at",{ascending:false})
+.limit(50);
+
+if(result.error){
+
+console.error(
+"Posts loading error:",
+result.error
+);
+
+feed.innerHTML = `
+<div class="feed-error">
+
+<i class="fas fa-triangle-exclamation"></i>
+
+<br><br>
+
+Unable to load posts.
+
+<br><br>
+
+${escapeHTML(result.error.message)}
+
+</div>
+`;
+
+return;
+}
+
+posts = result.data || [];
+
+await loadLikedPosts();
+
+await attachPostProfiles();
+
+renderFeed();
+
+}
+
+
+async function attachPostProfiles(){
+
+if(!posts.length){
+return;
+}
+
+const userIds = [
+...new Set(
+posts
+.map(function(post){
+return post.User_id;
+})
+.filter(Boolean)
+)
+];
+
+if(!userIds.length){
+return;
+}
+
+const result =
+await supabaseClient
+.from("profiles")
+.select(
+"id,full_name,username,avatar_url,verified"
+)
+.in("id",userIds);
+
+if(result.error){
+
+console.error(
+"Post profiles error:",
+result.error
+);
+
+return;
+}
+
+const profileMap = {};
+
+(result.data || []).forEach(function(user){
+
+profileMap[user.id] = user;
+
+});
+
+posts.forEach(function(post){
+
+post.profile =
+profileMap[post.User_id] || null;
+
+});
+
+}
+
+
+function renderFeed(){
+
+const feed =
+document.getElementById("feed");
+
+if(!feed){
+return;
+}
+
+if(!posts.length){
+
+feed.innerHTML = `
+
+<div class="empty-feed">
+
+<i class="far fa-newspaper"></i>
+
+<p>
+No posts found yet.
+</p>
+
+<p style="margin-top:6px">
+Be the first to create a post.
+</p>
+
+</div>
+
+`;
+
+return;
+}
+
+feed.innerHTML =
+posts.map(renderPost).join("");
+
+}
+
+
+function renderPost(post){
+
+const user =
+post.profile || {};
+
+const name =
+user.full_name ||
+user.username ||
+"StudentX User";
+
+const username =
+user.username
+? "@" + user.username
+: "";
+
+const avatar =
+user.avatar_url ||
+defaultAvatar;
+
+const verified =
+user.verified
+? `<i class="fas fa-check-circle vd"></i>`
+: "";
+
+const liked =
+likedPostIds.has(String(post.id));
+
+const likeCount =
+Number(post.Like || 0);
+
+let bodyHTML = "";
+
+if(post.content){
+
+bodyHTML = `
+
+<div class="p-body">
+${escapeHTML(post.content)}
+</div>
+
+`;
+
+}
+
+let imageHTML = "";
+
+if(post.image_url){
+
+imageHTML = `
+
+<img
+class="p-image"
+src="${escapeHTML(post.image_url)}"
+alt="Post image"
+loading="lazy"
+onerror="this.style.display='none'">
+
+`;
+
+}
+
+return `
+
+<article
+class="post"
+id="post-${escapeHTML(post.id)}">
+
+<div class="p-hdr">
+
+<img
+class="p-av"
+src="${escapeHTML(avatar)}"
+alt="${escapeHTML(name)}"
+onclick="openUserProfile('${escapeHTML(post.User_id)}')"
+onerror="this.src=defaultAvatar">
+
+<div class="p-info">
+
+<div class="p-nm">
+
+${escapeHTML(name)}
+
+${verified}
+
+</div>
+
+<div class="p-meta">
+
+${escapeHTML(username)}
+
+${username ? " · " : ""}
+
+${timeAgo(post.Create_at)}
+
+</div>
+
+</div>
+
+<div
+class="p-more"
+onclick="openMenu('${escapeHTML(post.id)}','${escapeHTML(post.User_id)}')">
+
+<i class="fas fa-ellipsis-h"></i>
+
+</div>
+
+</div>
+
+${bodyHTML}
+
+${imageHTML}
+
+<div class="p-acts">
+
+<div
+class="p-a lk ${liked ? "on" : ""}"
+onclick="toggleLike('${escapeHTML(post.id)}')">
+
+<i class="${liked ? "fas" : "far"} fa-heart"></i>
+
+<span>
+${likeCount}
+</span>
+
+</div>
+
+<div
+class="p-a"
+onclick="openComments('${escapeHTML(post.id)}')">
+
+<i class="far fa-comment"></i>
+
+<span>0</span>
+
+</div>
+
+<div
+class="p-a"
+onclick="repost('${escapeHTML(post.id)}')">
+
+<i class="fas fa-retweet"></i>
+
+<span>0</span>
+
+</div>
+
+<div
+class="p-a p-a-r"
+onclick="toggleSave('${escapeHTML(post.id)}')">
+
+<i class="far fa-bookmark"></i>
+
+</div>
+
+</div>
+
+</article>
+
+`;
+
+}
+
+
+async function toggleLike(postId){
+
+if(!currentUser){
+
+showMsg("Please login first");
+
+return;
+}
+
+const id =
+String(postId);
+
+const alreadyLiked =
+likedPostIds.has(id);
+
+if(alreadyLiked){
+
+const result =
+await supabaseClient
+.from("likes")
+.delete()
+.eq("post_id",postId)
+.eq("user_id",currentUser.id);
+
+if(result.error){
+
+console.error(result.error);
+
+showMsg(
+"Unable to unlike post"
+);
+
+return;
+}
+
+likedPostIds.delete(id);
+
+}else{
+
+const result =
+await supabaseClient
+.from("likes")
+.insert({
+
+post_id:postId,
+
+user_id:currentUser.id
+
+});
+
+if(result.error){
+
+console.error(result.error);
+
+showMsg(
+"Unable to like post"
+);
+
+return;
+}
+
+likedPostIds.add(id);
+
+}
+
+await updatePostLikeCount(postId);
+
+renderFeed();
+
+}
+
+
+async function updatePostLikeCount(postId){
+
+const result =
+await supabaseClient
+.from("likes")
+.select("id",{count:"exact",head:true})
+.eq("post_id",postId);
+
+if(result.error){
+
+console.error(
+"Like count error:",
+result.error
+);
+
+return;
+}
+
+const count =
+result.count || 0;
+
+const post =
+posts.find(function(item){
+
+return String(item.id) === String(postId);
+
+});
+
+if(post){
+
+post.Like = count;
+
+}
+
+}
+
+
+async function refreshLikeCounts(){
+
+for(const post of posts){
+
+await updatePostLikeCount(post.id);
+
+}
+
+renderFeed();
+
+}
+
+
+function openComments(postId){
+
+window.location.href =
+"comment.html?post=" +
+encodeURIComponent(postId);
+
+}
+
+
+function repost(postId){
+
+showMsg(
+"Repost feature will be connected to Supabase next."
+);
+
+}
+
+
+function toggleSave(postId){
+
+showMsg(
+"Save feature will be connected to Supabase next."
+);
+
+}
+
+
+function scrollToPost(postId){
+
+const element =
+document.getElementById(
+"post-" + postId
+);
+
+if(element){
+
+element.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+element.style.boxShadow =
+"0 0 0 2px rgba(168,85,247,.7)";
+
+setTimeout(function(){
+
+element.style.boxShadow = "";
+
+},1800);
+
+}
+
+}
+function openMenu(postId,userId){
+
+const isMine =
+String(userId) === String(currentUser?.id);
+
+let html = "";
+
+if(isMine){
+
+html += `
+
+<div
+class="mnu-item"
+onclick="editPost('${escapeHTML(postId)}')">
+
+<i class="fas fa-pen"></i>
+
+Edit Post
+
+</div>
+
+<div
+class="mnu-item"
+onclick="pinPost('${escapeHTML(postId)}')">
+
+<i class="fas fa-thumbtack"></i>
+
+Pin Post
+
+</div>
+
+<div class="mnu-div"></div>
+
+<div
+class="mnu-item dng"
+onclick="deletePost('${escapeHTML(postId)}')">
+
+<i class="fas fa-trash"></i>
+
+Delete Post
+
+</div>
+
+<div class="mnu-div"></div>
+
+`;
+
+}else{
+
+html += `
+
+<div
+class="mnu-item"
+onclick="openUserProfile('${escapeHTML(userId)}');closeMenu()">
+
+<i class="fas fa-user"></i>
+
+View Profile
+
+</div>
+
+<div
+class="mnu-item"
+onclick="showMsg('Post hidden');closeMenu()">
+
+<i class="fas fa-eye-slash"></i>
+
+Hide Post
+
+</div>
+
+<div class="mnu-div"></div>
+
+`;
+
+}
+
+html += `
+
+<div
+class="mnu-item"
+onclick="copyPostLink('${escapeHTML(postId)}')">
+
+<i class="fas fa-link"></i>
+
+Copy Link
+
+</div>
+
+<div
+class="mnu-item"
+onclick="showMsg('Share coming soon');closeMenu()">
+
+<i class="fas fa-share"></i>
+
+Share Post
+
+</div>
+
+<div class="mnu-div"></div>
+
+<div
+class="mnu-item dng"
+onclick="reportPost('${escapeHTML(postId)}')">
+
+<i class="fas fa-flag"></i>
+
+Report Post
+
+</div>
+
+`;
+
+document.getElementById(
+"menuItems"
+).innerHTML = html;
+
+document.getElementById(
+"menuOv"
+).classList.add("show");
+
+}
+
+
+function closeMenu(){
+
+document.getElementById(
+"menuOv"
+).classList.remove("show");
+
+}
+
+
+function editPost(postId){
+
+closeMenu();
+
+window.location.href =
+"create-post.html?edit=" +
+encodeURIComponent(postId);
+
+}
+
+
+function pinPost(postId){
+
+closeMenu();
+
+showMsg(
+"Pin feature will be connected to Supabase."
+);
+
+}
+
+
+async function deletePost(postId){
+
+closeMenu();
+
+if(!currentUser){
+
+showMsg("Please login first");
+
+return;
+
+}
+
+const confirmed =
+confirm(
+"Are you sure you want to delete this post?"
+);
+
+if(!confirmed){
+return;
+}
+
+const result =
+await supabaseClient
+.from("posts")
+.delete()
+.eq("id",postId)
+.eq("User_id",currentUser.id);
+
+if(result.error){
+
+console.error(
+"Delete post error:",
+result.error
+);
+
+showMsg(
+"Unable to delete post"
+);
+
+return;
+}
+
+posts =
+posts.filter(function(post){
+
+return String(post.id) !== String(postId);
+
+});
+
+renderFeed();
+
+showMsg(
+"Post deleted successfully"
+);
+
+}
+
+
+function copyPostLink(postId){
+
+closeMenu();
+
+const url =
+window.location.origin +
+window.location.pathname +
+"?post=" +
+encodeURIComponent(postId);
+
+if(
+navigator.clipboard &&
+navigator.clipboard.writeText
+){
+
+navigator.clipboard
+.writeText(url)
+.then(function(){
+
+showMsg("Post link copied!");
+
+})
+.catch(function(){
+
+showMsg("Unable to copy link");
+
+});
+
+}else{
+
+showMsg("Copy not supported");
+
+}
+
+}
+
+
+function reportPost(postId){
+
+closeMenu();
+
+showMsg(
+"Post reported"
+);
+
+}
+
+
+function scrollToRequestedPost(){
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const postId =
+params.get("post");
+
+if(!postId){
+return;
+}
+
+setTimeout(function(){
+
+scrollToPost(postId);
+
+},700);
+
+}
+
+
+function subscribeToPosts(){
+
+supabaseClient
+.channel("home-posts-feed")
+
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"posts"
+},
+async function(){
+
+await loadPosts();
+
+}
+)
+
+.on(
+"postgres_changes",
+{
+event:"UPDATE",
+schema:"public",
+table:"posts"
+},
+async function(){
+
+await loadPosts();
+
+}
+)
+
+.on(
+"postgres_changes",
+{
+event:"DELETE",
+schema:"public",
+table:"posts"
+},
+async function(){
+
+await loadPosts();
+
+}
+)
+
+.subscribe();
+
+}
+
+
+function subscribeToLikes(){
+
+supabaseClient
+.channel("home-likes-feed")
+
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"likes"
+},
+async function(payload){
+
+await updatePostLikeCount(
+payload.new.post_id
+);
+
+renderFeed();
+
+}
+)
+
+.on(
+"postgres_changes",
+{
+event:"DELETE",
+schema:"public",
+table:"likes"
+},
+async function(payload){
+
+await updatePostLikeCount(
+payload.old.post_id
+);
+
+renderFeed();
+
+}
+)
+
+.subscribe();
+
+}
+
+
+async function initHome(){
+
+try{
+
+currentUser =
+await getCurrentUser();
+
+if(!currentUser){
+
+window.location.href =
+"login.html";
+
+return;
+
+}
+
+await loadMyProfile();
+
+await loadStories();
+
+await loadPosts();
+
+subscribeToPosts();
+
+subscribeToLikes();
+
+scrollToRequestedPost();
+
+}catch(error){
+
+console.error(
+"Home initialization error:",
+error
+);
+
+const feed =
+document.getElementById("feed");
+
+if(feed){
+
+feed.innerHTML = `
+
+<div class="feed-error">
+
+Something went wrong
+while loading StudentX.
+
+<br><br>
+
+Please refresh the page.
+
+</div>
+
+`;
+
+}
+
+}
+
+}
+
+
+document.addEventListener(
+"visibilitychange",
+function(){
+
+if(
+document.visibilityState === "visible" &&
+currentUser
+){
+
+loadPosts();
+
+}
+
+}
+);
+
+
+initHome();
+
+</script>
+
+<script src="logout.js"></script>
+<script src="theme.js"></script>
+
+</body>
+</html>
