@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Live - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* CSS VARIABLES DON SAUYA LAUNUKA GABAƊAYA */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #fff;
+            --text-muted: #888;
+            --border-color: #2c2c2c;
+            --primary-color: #8A2BE2;
+        }
+        :root.light-mode {
+            --bg-color: #f0f2f5;
+            --card-bg: #fff;
+            --text-color: #050505;
+            --text-muted: #65676b;
+            --border-color: #e4e6eb;
+            --primary-color: #8A2BE2;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-color);
+            padding: 35px 15px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .go-live-btn {
+            background-color: var(--primary-color);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- TABS --- */
+        .tabs {
+            display: flex;
+            gap: 20px;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .tab {
+            color: var(--text-muted);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .tab.active {
+            color: var(--text-color);
+        }
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -16px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        /* --- LIVE GRID --- */
+        .live-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+            padding-bottom: 80px;
+        }
+
+        .live-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 3/4; /* Ya kama tsayin kallon waya */
+            background-color: var(--card-bg);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .live-card:active {
+            transform: scale(0.97);
+        }
+
+        .live-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Inuwa a bayan rubutu don su bayyana */
+        .live-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 30%, transparent 60%, rgba(0,0,0,0.9) 100%);
+            pointer-events: none;
+        }
+
+        .live-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #ff4b4b;
+            color: #fff;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
+        }
+
+        .viewers {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #fff;
+            font-size: 11px;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            backdrop-filter: blur(4px);
+            z-index: 2;
+        }
+
+        .streamer-info {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 2;
+        }
+        .streamer-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+        .streamer-name {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* --- BOTTOM NAV BAR --- */
+        .bnav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px;
+            display: flex; justify-content: space-around; align-items: center;
+            background-color: var(--bg-color); border-top: 1px solid var(--border-color); z-index: 2000;
+        }
+        .nb { display: flex; flex-direction: column; align-items: center; color: var(--text-muted); cursor: pointer; gap: 3px; text-decoration: none; }
+        .nb.on { color: var(--primary-color); }
+        .nb i { font-size: 20px; }
+        .nb span { font-size: 10px; font-weight: 500; }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="header-title">Live</div>
+        <a href="go-live.html" class="go-live-btn"><i class="fas fa-video"></i> Go Live</a>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+        <div class="tab active">For You</div>
+        <div class="tab">Nearby</div>
+        <div class="tab">Gaming</div>
+        <div class="tab">Music</div>
+    </div>
+
+    <!-- LIVE GRID -->
+    <div class="live-grid">
+        
+        <!-- Live Card 1 -->
+        <div class="live-card" onclick="window.location.href='view-live.html?id=1'">
+            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=600&fit=crop" alt="Live Stream">
+            <div class="live-badge"><i class="fas fa-circle" style="font-size: 6px;"></i> LIVE</div>
+            <div class="viewers"><i class="fas fa-eye"></i> 1.2K</div>
+            <div class="streamer-info">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=50&h=50&fit=crop" class="streamer-avatar" alt="Fatima">
+                <span class="streamer-name">Fatima Muhammad</span>
+            </div>
+        </div>
+
+        <!-- Live Card 2 -->
+        <div class="live-card" onclick="window.location.href='view-live.html?id=2'">
+            <img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=400&h=600&fit=crop" alt="Live Stream">
+            <div class="live-badge"><i class="fas fa-circle" style="font-size: 6px;"></i> LIVE</div>
+            <div class="viewers"><i class="fas fa-eye"></i> 845</div>
+            <div class="streamer-info">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50&h=50&fit=crop" class="streamer-avatar" alt="David">
+                <span class="streamer-name">David Okafor</span>
+            </div>
+        </div>
+
+        <!-- Live Card 3 -->
+        <div class="live-card" onclick="window.location.href='view-live.html?id=3'">
+            <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=400&h=600&fit=crop" alt="Live Stream">
+            <div class="live-badge"><i class="fas fa-circle" style="font-size: 6px;"></i> LIVE</div>
+            <div class="viewers"><i class="fas fa-eye"></i> 3.4K</div>
+            <div class="streamer-info">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50&h=50&fit=crop" class="streamer-avatar" alt="Aisha">
+                <span class="streamer-name">Aisha Bello</span>
+            </div>
+        </div>
+
+        <!-- Live Card 4 -->
+        <div class="live-card" onclick="window.location.href='view-live.html?id=4'">
+            <img src="https://images.unsplash.com/photo-1532104173441-d74f1b57562e?w=400&h=600&fit=crop" alt="Live Stream">
+            <div class="live-badge"><i class="fas fa-circle" style="font-size: 6px;"></i> LIVE</div>
+            <div class="viewers"><i class="fas fa-eye"></i> 567</div>
+            <div class="streamer-info">
+                <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=50&h=50&fit=crop" class="streamer-avatar" alt="Yusuf">
+                <span class="streamer-name">Yusuf Garba</span>
+            </div>
+        </div>
+        
+        <!-- Live Card 5 -->
+        <div class="live-card" onclick="window.location.href='view-live.html?id=5'">
+            <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&h=600&fit=crop" alt="Live Stream">
+            <div class="live-badge"><i class="fas fa-circle" style="font-size: 6px;"></i> LIVE</div>
+            <div class="viewers"><i class="fas fa-eye"></i> 12.4K</div>
+            <div class="streamer-info">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50&h=50&fit=crop" class="streamer-avatar" alt="Halima">
+                <span class="streamer-name">Halima Yusuf</span>
+            </div>
+        </div>
+
+        <!-- Live Card 6 -->
+        <div class="live-card" onclick="window.location.href='view-live.html?id=6'">
+            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=600&fit=crop" alt="Live Stream">
+            <div class="live-badge"><i class="fas fa-circle" style="font-size: 6px;"></i> LIVE</div>
+            <div class="viewers"><i class="fas fa-eye"></i> 980</div>
+            <div class="streamer-info">
+                <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=50&h=50&fit=crop" class="streamer-avatar" alt="Emeka">
+                <span class="streamer-name">Emeka Nwankwo</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bnav">
+        <a href="home.html" class="nb"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="video.html" class="nb"><i class="fas fa-video"></i><span>Video</span></a>
+        <a href="chat.html" class="nb"><i class="fas fa-comment-dots"></i><span>Chat</span></a>
+        <a href="studyhub.html" class="nb"><i class="fas fa-book-open"></i><span>StudyHub</span></a>
+        <a href="profile.html" class="nb"><i class="fas fa-user"></i><span>Profile</span></a>
+    </nav>
+
+    <!-- Theme.js for Dark/Light Mode -->
+    <script src="theme.js"></script>
+
+    <script>
+        // JavaScript don canja Tabs (For You, Nearby, da sauransu)
+        const tabs = document.querySelectorAll('.tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
