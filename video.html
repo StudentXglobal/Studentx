@@ -287,3 +287,24 @@ document.getElementById("followingTab").addEventListener("click",async function(
 document.getElementById("liveTab").addEventListener("click",function(){alert("Live is coming next.");});
 </script>
 </html>
+<!-- Hidden File Input don zaɓar bidiyo daga waya -->
+<input type="file" id="hiddenVideoInput" accept="video/*" style="display: none;">
+
+<!-- TikTok-style Upload Modal -->
+<div id="uploadModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:1000; padding:20px; box-sizing:border-box; overflow-y:auto;">
+    <div style="max-width:400px; margin:40px auto; background:#141419; padding:20px; border-radius:14px; border:1px solid rgba(255,255,255,0.1);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="font-size:16px; font-weight:bold; color:#fff;">Loda Sabon Bidiyo</h3>
+            <button onclick="closeUploadModal()" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <video id="uploadPreview" style="width:100%; max-height:240px; object-fit:cover; border-radius:8px; margin-bottom:15px; background:#000;" controls></video>
+        
+        <textarea id="uploadCaption" placeholder="Rubuta bayani ko #hashtags game da bidiyon..." style="width:100%; height:80px; background:#1f1f28; color:#fff; border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:10px; margin-bottom:15px; resize:none; font-size:14px; outline:none;"></textarea>
+        
+        <div style="display:flex; gap:10px;">
+            <button id="publishBtn" onclick="publishVideo()" style="flex:1; background:#6d35ff; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Loda Yanzu</button>
+            <button onclick="closeUploadModal()" style="flex:1; background:#222; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:14px;">Soke</button>
+        </div>
+    </div>
+</div>
