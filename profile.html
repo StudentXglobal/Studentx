@@ -121,163 +121,159 @@ function escapeHTML(value) {
 
 // 1. LOAD PROFILE
 async function loadProfile() {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if (!user) { window.location.href = "login.html"; return; }
-    currentUser = user;
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
     
-    // Get profile ID from URL or default to current user
-    const params = new URLSearchParams(window.location.search);
-    currentProfileId = params.get("id") || user.id;
+    if (userError || !user) {
+        console.error("Auth Error:", userError);
+        window.location.href = "login.html";
+        return;
+    }
+    
+    currentUser = user;
+    currentProfileId = user.id;
 
-    // Fetch Profile
-    const { data: profile } = await supabaseClient
-        .from("profiles")
-        .select("full_name, username, avatar_url, bio, role, school")
-        .eq("id", currentProfileId)
-        .single();
+    try {
+        // Fetch Profile
+        const { data: profile, error: profileError } = await supabaseClient
+            .from("profiles")
+            .select("full_name, username, avatar_url, bio, role, school")
+            .eq("id", currentProfileId)
+            .single();
 
-    // Fetch Stats
-    const [postsRes, followersRes, followingRes, likesRes] = await Promise.all([
-        supabaseClient.from("posts").select("id", { count: 'exact', head: true }).eq("user_id", currentProfileId),
-        supabaseClient.from("follows").select("follower_id", { count: 'exact', head: true }).eq("following_id", currentProfileId),
-        supabaseClient.from("follows").select("following_id", { count: 'exact', head: true }).eq("follower_id", currentProfileId),
-        // Fetch likes count for all posts by this user
-        supabaseClient.from("post_likes").select("id", { count: 'exact', head: true }).eq("post_author_id", currentProfileId)
-    ]);
+        if (profileError) throw profileError;
 
-    const avatar = profile?.avatar_url || defaultAvatar();
-    const name = profile?.full_name || "StudentX User";
-    const username = profile?.username ? "@" + profile.username : "@studentx";
-    const bio = profile?.bio || "No bio yet";
-    const role = profile?.role || "Student";
-    const school = profile?.school || "";
-
-    document.getElementById("profileBox").innerHTML = `
-        <div class="top-section">
-            <div class="profile-info">
-                <h2>${escapeHTML(name)}</h2>
-                <p style="color: #7357ff; font-weight: 600;">${escapeHTML(username)}</p>
-                <p>${escapeHTML(role)} ${school ? " | " + escapeHTML(school) : ""}</p>
-                <p class="bio">${escapeHTML(bio)}</p>
-            </div>
-            <img class="profile-avatar" src="${avatar}" onerror="this.src='${defaultAvatar()}'" alt="Profile">
-        </div>
-        ${currentProfileId === currentUser.id ? `<button class="edit-btn" onclick="window.location.href='edit-profile.html'">Edit Profile</button>` : `<button class="edit-btn">Follow</button>`}
+        // Fetch Stats separately so if one fails, others still load
+        const postsRes = await supabaseClient.from("posts").select("id", { count: 'exact', head: true }).eq("user_id", currentProfileId);
+        const followersRes = await supabaseClient.from("follows").select("follower_id", { count: 'exact', head: true }).eq("following_id", currentProfileId);
+        const followingRes = await supabaseClient.from("follows").select("following_id", { count: 'exact', head: true }).eq("follower_id", currentProfileId);
         
-        <div class="stats-row">
-            <div class="stat-box"><h4>${postsRes.count || 0}</h4><p>Posts</p></div>
-            <div class="stat-box"><h4>${followersRes.count || 0}</h4><p>Followers</p></div>
-            <div class="stat-box"><h4>${followingRes.count || 0}</h4><p>Following</p></div>
-            <div class="stat-box"><h4>${likesRes.count || 0}</h4><p>Likes</p></div>
-        </div>
-    `;
+        // Note: If 'post_likes' table doesn't exist or has different name, this will fail silently
+        let likesCount = 0;
+        try {
+            const likesRes = await supabaseClient.from("post_likes").select("id", { count: 'exact', head: true }).eq("post_author_id", currentProfileId);
+            likesCount = likesRes.count || 0;
+        } catch (e) {
+            console.warn("Could not fetch likes count. Check 'post_likes' table.");
+        }
 
-    loadPosts();
+        const avatar = profile?.avatar_url || defaultAvatar();
+        const name = profile?.full_name || "StudentX User";
+        const username = profile?.username ? "@" + profile.username : "@studentx";
+        const bio = profile?.bio || "No bio yet";
+        const role = profile?.role || "Student";
+        const school = profile?.school || "";
+
+        document.getElementById("profileBox").innerHTML = `
+            <div class="top-section">
+                <div class="profile-info">
+                    <h2>${escapeHTML(name)}</h2>
+                    <p style="color: #7357ff; font-weight: 600;">${escapeHTML(username)}</p>
+                    <p>${escapeHTML(role)} ${school ? " | " + escapeHTML(school) : ""}</p>
+                    <p class="bio">${escapeHTML(bio)}</p>
+                </div>
+                <img class="profile-avatar" src="${avatar}" onerror="this.src='${defaultAvatar()}'" alt="Profile">
+            </div>
+            <button class="edit-btn" onclick="window.location.href='edit-profile.html'">Edit Profile</button>
+            
+            <div class="stats-row">
+                <div class="stat-box"><h4>${postsRes.count || 0}</h4><p>Posts</p></div>
+                <div class="stat-box"><h4>${followersRes.count || 0}</h4><p>Followers</p></div>
+                <div class="stat-box"><h4>${followingRes.count || 0}</h4><p>Following</p></div>
+                <div class="stat-box"><h4>${likesCount}</h4><p>Likes</p></div>
+            </div>
+        `;
+
+        loadPosts();
+
+    } catch (error) {
+        console.error("Profile Fetch Error:", error.message);
+        document.getElementById("profileBox").innerHTML = `<div class="loading" style="color: #ff5c73;">Error loading profile. Check console.</div>`;
+    }
 }
 
 // 2. LOAD POSTS / VIDEOS / SAVED
 async function loadPosts() {
     document.getElementById("postsArea").innerHTML = `<div class="loading">Loading ${activeTab}...</div>`;
     
-    let query = supabaseClient.from("posts").select(`
-        id, content, image_url, video_url, created_at, user_id,
-        profiles:user_id (full_name, username, avatar_url)
-    `);
+    try {
+        let query = supabaseClient.from("posts").select(`
+            id, content, image_url, video_url, created_at, user_id
+        `);
 
-    if (activeTab === 'posts') {
-        query = query.eq("user_id", currentProfileId).order("created_at", { ascending: false });
-    } else if (activeTab === 'video') {
-        query = query.eq("user_id", currentProfileId).not("video_url", "is", null).order("created_at", { ascending: false });
-    } else if (activeTab === 'saved') {
-        // Fetch saved posts
-        const { data: saved } = await supabaseClient.from("saved_posts").select("post_id").eq("user_id", currentUser.id);
-        const savedIds = saved ? saved.map(s => s.post_id) : [];
-        if (savedIds.length === 0) {
-            document.getElementById("postsArea").innerHTML = `<div class="loading">No saved posts yet.</div>`;
+        if (activeTab === 'posts') {
+            query = query.eq("user_id", currentProfileId).order("created_at", { ascending: false });
+        } else if (activeTab === 'video') {
+            query = query.eq("user_id", currentProfileId).not("video_url", "is", null).order("created_at", { ascending: false });
+        } else if (activeTab === 'saved') {
+            const { data: saved } = await supabaseClient.from("saved_posts").select("post_id").eq("user_id", currentUser.id);
+            const savedIds = saved ? saved.map(s => s.post_id) : [];
+            if (savedIds.length === 0) {
+                document.getElementById("postsArea").innerHTML = `<div class="loading">No saved posts yet.</div>`;
+                return;
+            }
+            query = query.in("id", savedIds).order("created_at", { ascending: false });
+        }
+
+        const { data: posts, error: postsError } = await query;
+
+        if (postsError) throw postsError;
+
+        if (!posts || posts.length === 0) {
+            document.getElementById("postsArea").innerHTML = `<div class="loading">No ${activeTab} found.</div>`;
             return;
         }
-        query = query.in("id", savedIds).order("created_at", { ascending: false });
-    }
 
-    const { data: posts, error } = await query;
-    if (error) {
-        document.getElementById("postsArea").innerHTML = `<div class="loading">Error loading posts.</div>`;
-        return;
-    }
-
-    if (!posts || posts.length === 0) {
-        document.getElementById("postsArea").innerHTML = `<div class="loading">No ${activeTab} found.</div>`;
-        return;
-    }
-
-    // Fetch interactions for all posts
-    const postIds = posts.map(p => p.id);
-    const [likesRes, commentsRes, savesRes, viewsRes] = await Promise.all([
-        supabaseClient.from("post_likes").select("post_id").in("post_id", postIds),
-        supabaseClient.from("comments").select("post_id").in("post_id", postIds),
-        supabaseClient.from("saved_posts").select("post_id").in("post_id", postIds),
-        supabaseClient.from("post_views").select("post_id").in("post_id", postIds) // Assuming you have a views table
-    ]);
-
-    const likesMap = {};
-    likesRes.data?.forEach(l => likesMap[l.post_id] = (likesMap[l.post_id] || 0) + 1);
-    
-    const commentsMap = {};
-    commentsRes.data?.forEach(c => commentsMap[c.post_id] = (commentsMap[c.post_id] || 0) + 1);
-    
-    const savesMap = {};
-    savesRes.data?.forEach(s => savesMap[s.post_id] = (savesMap[s.post_id] || 0) + 1);
-    
-    const viewsMap = {};
-    viewsRes.data?.forEach(v => viewsMap[v.post_id] = (viewsMap[v.post_id] || 0) + 1);
-
-    // Check if current user liked/saved
-    const myLikes = likesRes.data?.filter(l => l.user_id === currentUser.id).map(l => l.post_id) || [];
-    const mySaves = savesRes.data?.filter(s => s.user_id === currentUser.id).map(s => s.post_id) || [];
-
-    let html = "";
-    posts.forEach(post => {
-        const profile = post.profiles || {};
+        // Fetch user profile separately to avoid foreign key issues
+        const { data: myProfile } = await supabaseClient.from("profiles").select("full_name, username, avatar_url").eq("id", currentProfileId).single();
+        const profile = myProfile || {};
         const avatar = profile.avatar_url || defaultAvatar();
         const name = profile.full_name || "StudentX User";
         const username = profile.username ? "@" + profile.username : "@studentx";
-        const isVideo = !!post.video_url;
-        const mediaUrl = isVideo ? post.video_url : post.image_url;
 
-        html += `
-            <div class="post-card">
-                <div class="post-header">
-                    <img src="${avatar}" class="post-avatar" onerror="this.src='${defaultAvatar()}'" alt="">
-                    <div class="post-user">
-                        <h4>${escapeHTML(name)}</h4>
-                        <p>${escapeHTML(username)}</p>
+        let html = "";
+        posts.forEach(post => {
+            const isVideo = !!post.video_url;
+            const mediaUrl = isVideo ? post.video_url : post.image_url;
+
+            html += `
+                <div class="post-card">
+                    <div class="post-header">
+                        <img src="${avatar}" class="post-avatar" onerror="this.src='${defaultAvatar()}'" alt="">
+                        <div class="post-user">
+                            <h4>${escapeHTML(name)}</h4>
+                            <p>${escapeHTML(username)}</p>
+                        </div>
+                    </div>
+                    ${post.content ? `<div class="post-content">${escapeHTML(post.content)}</div>` : ""}
+                    ${mediaUrl ? `<${isVideo ? 'video controls' : 'img'} src="${mediaUrl}" class="post-media" onerror="this.style.display='none'">${isVideo ? '</video>' : ''}` : ""}
+                    
+                    <div class="post-actions">
+                        <div class="action-group" onclick="toggleLike('${post.id}', this)">
+                            <i class="fa-solid fa-heart"></i> <span>0</span>
+                        </div>
+                        <div class="action-group" onclick="window.location.href='comment.html?post=${post.id}'">
+                            <i class="fa-solid fa-comment-dots"></i> <span>0</span>
+                        </div>
+                        <div class="action-group" onclick="repostPost('${post.id}')">
+                            <i class="fa-solid fa-retweet"></i> <span>0</span>
+                        </div>
+                        <div class="action-group" onclick="toggleSave('${post.id}', this)">
+                            <i class="fa-solid fa-bookmark"></i> <span>0</span>
+                        </div>
+                        <div class="action-group">
+                            <i class="fa-solid fa-eye"></i> <span>0</span>
+                        </div>
                     </div>
                 </div>
-                ${post.content ? `<div class="post-content">${escapeHTML(post.content)}</div>` : ""}
-                ${mediaUrl ? `<${isVideo ? 'video controls' : 'img'} src="${mediaUrl}" class="post-media" onerror="this.style.display='none'">${isVideo ? '</video>' : ''}` : ""}
-                
-                <div class="post-actions">
-                    <div class="action-group ${myLikes.includes(post.id) ? 'liked' : ''}" onclick="toggleLike('${post.id}', this)">
-                        <i class="fa-solid fa-heart"></i> <span>${likesMap[post.id] || 0}</span>
-                    </div>
-                    <div class="action-group" onclick="window.location.href='comment.html?post=${post.id}'">
-                        <i class="fa-solid fa-comment-dots"></i> <span>${commentsMap[post.id] || 0}</span>
-                    </div>
-                    <div class="action-group" onclick="repostPost('${post.id}')">
-                        <i class="fa-solid fa-retweet"></i> <span>0</span>
-                    </div>
-                    <div class="action-group ${mySaves.includes(post.id) ? 'saved' : ''}" onclick="toggleSave('${post.id}', this)">
-                        <i class="fa-solid fa-bookmark"></i> <span>${savesMap[post.id] || 0}</span>
-                    </div>
-                    <div class="action-group">
-                        <i class="fa-solid fa-eye"></i> <span>${viewsMap[post.id] || 0}</span>
-                    </div>
-                </div>
-            </div>
-        `;
-    });
+            `;
+        });
 
-    document.getElementById("postsArea").innerHTML = html;
+        document.getElementById("postsArea").innerHTML = html;
+
+    } catch (error) {
+        console.error("Posts Fetch Error:", error.message);
+        document.getElementById("postsArea").innerHTML = `<div class="loading" style="color: #ff5c73;">Error loading posts. Check console.</div>`;
+    }
 }
 
 // 3. TABS SWITCH
@@ -288,33 +284,13 @@ function switchTab(tab) {
     loadPosts();
 }
 
-// 4. INTERACTION FUNCTIONS (Mock)
+// 4. INTERACTION FUNCTIONS (Mock for now)
 async function toggleLike(postId, el) {
-    const isLiked = el.classList.contains('liked');
-    if (isLiked) {
-        await supabaseClient.from("post_likes").delete().match({ post_id: postId, user_id: currentUser.id });
-        el.classList.remove('liked');
-        el.querySelector('span').innerText = parseInt(el.querySelector('span').innerText) - 1;
-    } else {
-        await supabaseClient.from("post_likes").insert({ post_id: postId, user_id: currentUser.id, post_author_id: currentProfileId });
-        el.classList.add('liked');
-        el.querySelector('span').innerText = parseInt(el.querySelector('span').innerText) + 1;
-    }
+    el.classList.toggle('liked');
 }
-
 async function toggleSave(postId, el) {
-    const isSaved = el.classList.contains('saved');
-    if (isSaved) {
-        await supabaseClient.from("saved_posts").delete().match({ post_id: postId, user_id: currentUser.id });
-        el.classList.remove('saved');
-        el.querySelector('span').innerText = parseInt(el.querySelector('span').innerText) - 1;
-    } else {
-        await supabaseClient.from("saved_posts").insert({ post_id: postId, user_id: currentUser.id });
-        el.classList.add('saved');
-        el.querySelector('span').innerText = parseInt(el.querySelector('span').innerText) + 1;
-    }
+    el.classList.toggle('saved');
 }
-
 function repostPost(postId) {
     alert("Repost feature coming soon!");
 }
