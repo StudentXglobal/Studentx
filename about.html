@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About Us - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #121212;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            padding: 40px 15px 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-bottom: 1px solid #2c2c2c;
+            z-index: 100;
+        }
+        .back-btn {
+            color: #fff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* --- CONTENT --- */
+        .content-container {
+            padding: 20px 15px 40px;
+            line-height: 1.6;
+        }
+        .app-logo-container {
+            text-align: center;
+            margin: 20px 0 30px;
+        }
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            background-color: #8A2BE2;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .app-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .app-version {
+            font-size: 13px;
+            color: #888;
+        }
+        .section-heading {
+            font-size: 16px;
+            font-weight: bold;
+            color: #8A2BE2;
+            margin-top: 25px;
+            margin-bottom: 8px;
+        }
+        .about-text {
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <a href="menu.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">About Us</div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="content-container">
+        <div class="app-logo-container">
+            <div class="app-logo">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="app-name">StudentX</div>
+            <div class="app-version">Version 1.0.0</div>
+        </div>
+
+        <div class="section-heading">About StudentX</div>
+        <p class="about-text">
+            StudentX is a modern social and academic platform designed specifically for students. It connects peers, empowers study groups, and provides an engaging environment for sharing knowledge, notes, and academic updates.
+        </p>
+
+        <div class="section-heading">Our Mission</div>
+        <p class="about-text">
+            Our mission is to bridge the gap between social interaction and academic success, making learning collaborative, accessible, and enjoyable for students everywhere.
+        </p>
+
+        <div class="section-heading">Developer & Support</div>
+        <p class="about-text">
+            Built with passion to support student communities worldwide. For inquiries, feedback, or support, reach out to us through the app support channels.
+        </p>
+    </div>
+
+    <script src="theme.js"></script>
+</body>
+</html>
