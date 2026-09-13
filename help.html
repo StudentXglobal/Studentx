@@ -149,6 +149,12 @@
 
     <!-- SCRIPT LOGIC -->
     <script>
+        // Tabbatar an kafa Supabase Client anan ko kuma a cikin wani fayil din da kake amfani da shi a sauran shafuka
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL'; // Canza zuwa Supabase URL dinka idan babu shi a wani fayil din gama-gari
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // Canza zuwa Anon Key dinka
+        
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
         document.getElementById("helpForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             const btn = document.getElementById("submitBtn");
@@ -156,12 +162,11 @@
             btn.disabled = true;
 
             const full_name = document.getElementById("fullName").value;
-            const username = document.getElementById("username").value;
+            const username = document.getElementById("username" ).value;
             const category = document.getElementById("category").value;
             const message = document.getElementById("message").value;
 
             try {
-                // Tabbatar kana da table mai suna 'support_messages' a Supabase din ka
                 const { error } = await supabaseClient.from("support_messages").insert({
                     full_name,
                     username,
