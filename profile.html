@@ -21,7 +21,7 @@ html, body { background: #070914; color: #fff; min-height: 100vh; }
 /* --- PROFILE BOX --- */
 .profile-box { padding: 20px; border-bottom: 1px solid #202438; }
 .top-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
-.profile-info h2 { font-size: 22px; font-weight: 800; margin-bottom: 5px; }
+.profile-info h2 { font-size: 22px; font-weight: 800; margin-bottom: 5px; display: flex; align-items: center; flex-wrap: wrap; }
 .profile-info p { color: #9298ad; font-size: 14px; margin-bottom: 3px; }
 .profile-info .bio { color: #e9ebf5; font-size: 14px; margin-top: 10px; line-height: 1.4; }
 .edit-btn { background: none; border: 1px solid #7357ff; color: #7357ff; padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 13px; }
@@ -46,7 +46,7 @@ html, body { background: #070914; color: #fff; min-height: 100vh; }
 .post-card { border-bottom: 1px solid #171b2b; padding: 15px; }
 .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .post-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: #161a2b; }
-.post-user h4 { font-size: 15px; font-weight: 700; }
+.post-user h4 { font-size: 15px; font-weight: 700; display: flex; align-items: center; flex-wrap: wrap; }
 .post-user p { font-size: 12px; color: #8c92a8; }
 .post-content { font-size: 14px; line-height: 1.5; color: #e9ebf5; margin-bottom: 10px; white-space: pre-wrap; word-break: break-word; }
 .post-media { width: 100%; max-height: 400px; object-fit: cover; border-radius: 12px; margin-bottom: 10px; background: #161a2b; }
@@ -63,6 +63,30 @@ html, body { background: #070914; color: #fff; min-height: 100vh; }
 .nb.on { color: #7357ff; }
 .nb i { font-size: 18px; }
 .nb span { font-size: 10px; font-weight: 500; }
+
+/* ==========================================
+   CSS DIN PREMIUM BADGES (Wanda ChatGPT ya bayar)
+   ========================================== */
+.studentx-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 900;
+    line-height: 1;
+    vertical-align: middle;
+    margin-left: 4px;
+    box-sizing: border-box;
+    position: relative;
+    top: -2px;
+}
+.premium-badge { background: #9b4dff; }
+.premium-plus-badge { background: #f5b700; box-shadow: 0 0 3px rgba(245, 183, 0, 0.5); }
 </style>
 </head>
 <body>
@@ -119,6 +143,23 @@ function escapeHTML(value) {
     return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
+// ==========================================
+// AIKIN NUNA BADGE DIN PREMIUM (Central Function)
+// ==========================================
+function getPremiumBadge(user) {
+    if (!user || !user.premium_plan) return '';
+
+    if (user.premium_plan === 'plus') {
+        return `<span class="studentx-badge premium-plus-badge" title="StudentX Premium Plus" aria-label="StudentX Premium Plus Verified">✓</span>`;
+    }
+
+    if (user.premium_plan === 'standard') {
+        return `<span class="studentx-badge premium-badge" title="StudentX Premium" aria-label="StudentX Premium Verified">✓</span>`;
+    }
+
+    return '';
+}
+
 // 1. LOAD PROFILE
 async function loadProfile() {
     const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
@@ -133,21 +174,20 @@ async function loadProfile() {
     currentProfileId = user.id;
 
     try {
-        // Fetch Profile
+        // Fetch Profile (An ƙara premium_plan a cikin select)
         const { data: profile, error: profileError } = await supabaseClient
             .from("profiles")
-            .select("full_name, username, avatar_url, bio, role, school")
+            .select("full_name, username, avatar_url, bio, role, school, premium_plan")
             .eq("id", currentProfileId)
             .single();
 
         if (profileError) throw profileError;
 
-        // Fetch Stats separately so if one fails, others still load
+        // Fetch Stats separately
         const postsRes = await supabaseClient.from("posts").select("id", { count: 'exact', head: true }).eq("user_id", currentProfileId);
         const followersRes = await supabaseClient.from("follows").select("follower_id", { count: 'exact', head: true }).eq("following_id", currentProfileId);
         const followingRes = await supabaseClient.from("follows").select("following_id", { count: 'exact', head: true }).eq("follower_id", currentProfileId);
         
-        // Note: If 'post_likes' table doesn't exist or has different name, this will fail silently
         let likesCount = 0;
         try {
             const likesRes = await supabaseClient.from("post_likes").select("id", { count: 'exact', head: true }).eq("post_author_id", currentProfileId);
@@ -166,7 +206,7 @@ async function loadProfile() {
         document.getElementById("profileBox").innerHTML = `
             <div class="top-section">
                 <div class="profile-info">
-                    <h2>${escapeHTML(name)}</h2>
+                    <h2>${escapeHTML(name)} ${getPremiumBadge(profile)}</h2>
                     <p style="color: #7357ff; font-weight: 600;">${escapeHTML(username)}</p>
                     <p>${escapeHTML(role)} ${school ? " | " + escapeHTML(school) : ""}</p>
                     <p class="bio">${escapeHTML(bio)}</p>
@@ -223,8 +263,8 @@ async function loadPosts() {
             return;
         }
 
-        // Fetch user profile separately to avoid foreign key issues
-        const { data: myProfile } = await supabaseClient.from("profiles").select("full_name, username, avatar_url").eq("id", currentProfileId).single();
+        // Fetch user profile separately to include premium_plan for the badge
+        const { data: myProfile } = await supabaseClient.from("profiles").select("full_name, username, avatar_url, premium_plan").eq("id", currentProfileId).single();
         const profile = myProfile || {};
         const avatar = profile.avatar_url || defaultAvatar();
         const name = profile.full_name || "StudentX User";
@@ -240,7 +280,7 @@ async function loadPosts() {
                     <div class="post-header">
                         <img src="${avatar}" class="post-avatar" onerror="this.src='${defaultAvatar()}'" alt="">
                         <div class="post-user">
-                            <h4>${escapeHTML(name)}</h4>
+                            <h4>${escapeHTML(name)} ${getPremiumBadge(profile)}</h4>
                             <p>${escapeHTML(username)}</p>
                         </div>
                     </div>
