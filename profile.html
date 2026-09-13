@@ -57,16 +57,14 @@ html, body { background: #070914; color: #fff; min-height: 100vh; }
 .action-group.liked i { color: #ff5c73; }
 .action-group.saved i { color: #fbbf24; }
 
-/* --- NAV BAR (Ainihin HTML dinka) --- */
+/* --- NAV BAR --- */
 .bnav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 700px; height: 55px; display: flex; justify-content: space-around; align-items: center; background-color: #0b0f1e; border-top: 1px solid #24283a; z-index: 2000; }
 .nb { display: flex; flex-direction: column; align-items: center; color: #858ba1; cursor: pointer; gap: 2px; text-decoration: none; }
 .nb.on { color: #7357ff; }
 .nb i { font-size: 18px; }
 .nb span { font-size: 10px; font-weight: 500; }
 
-/* ==========================================
-   CSS DIN PREMIUM BADGES (Wanda ChatGPT ya bayar)
-   ========================================== */
+/* --- PREMIUM BADGES --- */
 .studentx-badge {
     display: inline-flex;
     align-items: center;
@@ -116,7 +114,7 @@ html, body { background: #070914; color: #fff; min-height: 100vh; }
     </div>
 </div>
 
-<!-- NAVIGATION BAR (Ainihin HTML dinka) -->
+<!-- NAVIGATION BAR -->
 <nav class="bnav">
     <a href="home.html" class="nb"><i class="fas fa-home"></i><span>Home</span></a>
     <a href="video.html" class="nb"><i class="fas fa-video"></i><span>Video</span></a>
@@ -143,20 +141,14 @@ function escapeHTML(value) {
     return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
 }
 
-// ==========================================
-// AIKIN NUNA BADGE DIN PREMIUM (Central Function)
-// ==========================================
 function getPremiumBadge(user) {
     if (!user || !user.premium_plan) return '';
-
     if (user.premium_plan === 'plus') {
         return `<span class="studentx-badge premium-plus-badge" title="StudentX Premium Plus" aria-label="StudentX Premium Plus Verified">✓</span>`;
     }
-
     if (user.premium_plan === 'standard') {
         return `<span class="studentx-badge premium-badge" title="StudentX Premium" aria-label="StudentX Premium Verified">✓</span>`;
     }
-
     return '';
 }
 
@@ -174,27 +166,51 @@ async function loadProfile() {
     currentProfileId = user.id;
 
     try {
-        // Fetch Profile (An ƙara premium_plan a cikin select)
-        const { data: profile, error: profileError } = await supabaseClient
+        let { data: profile, error: profileError } = await supabaseClient
             .from("profiles")
             .select("full_name, username, avatar_url, bio, role, school, premium_plan")
             .eq("id", currentProfileId)
-            .single();
+            .maybeSingle();
 
-        if (profileError) throw profileError;
+        if (profileError) {
+            console.warn("Profile fetch warning:", profileError.message);
+        }
 
-        // Fetch Stats separately
-        const postsRes = await supabaseClient.from("posts").select("id", { count: 'exact', head: true }).eq("user_id", currentProfileId);
-        const followersRes = await supabaseClient.from("follows").select("follower_id", { count: 'exact', head: true }).eq("following_id", currentProfileId);
-        const followingRes = await supabaseClient.from("follows").select("following_id", { count: 'exact', head: true }).eq("follower_id", currentProfileId);
-        
+        if (!profile) {
+            const defaultProfile = {
+                id: currentProfileId,
+                full_name: user.email ? user.email.split('@')[0] : "StudentX User",
+                username: "user_" + user.id.slice(0, 6),
+                premium_plan: 'free'
+            };
+            await supabaseClient.from("profiles").upsert([defaultProfile]);
+            profile = defaultProfile;
+        }
+
+        let postsCount = 0;
+        let followersCount = 0;
+        let followingCount = 0;
         let likesCount = 0;
+
+        try {
+            const postsRes = await supabaseClient.from("posts").select("id", { count: 'exact', head: true }).eq("user_id", currentProfileId);
+            postsCount = postsRes.count || 0;
+        } catch (e) {}
+
+        try {
+            const followersRes = await supabaseClient.from("follows").select("follower_id", { count: 'exact', head: true }).eq("following_id", currentProfileId);
+            followersCount = followersRes.count || 0;
+        } catch (e) {}
+
+        try {
+            const followingRes = await supabaseClient.from("follows").select("following_id", { count: 'exact', head: true }).eq("follower_id", currentProfileId);
+            followingCount = followingRes.count || 0;
+        } catch (e) {}
+
         try {
             const likesRes = await supabaseClient.from("post_likes").select("id", { count: 'exact', head: true }).eq("post_author_id", currentProfileId);
             likesCount = likesRes.count || 0;
-        } catch (e) {
-            console.warn("Could not fetch likes count. Check 'post_likes' table.");
-        }
+        } catch (e) {}
 
         const avatar = profile?.avatar_url || defaultAvatar();
         const name = profile?.full_name || "StudentX User";
@@ -216,9 +232,9 @@ async function loadProfile() {
             <button class="edit-btn" onclick="window.location.href='edit-profile.html'">Edit Profile</button>
             
             <div class="stats-row">
-                <div class="stat-box"><h4>${postsRes.count || 0}</h4><p>Posts</p></div>
-                <div class="stat-box"><h4>${followersRes.count || 0}</h4><p>Followers</p></div>
-                <div class="stat-box"><h4>${followingRes.count || 0}</h4><p>Following</p></div>
+                <div class="stat-box"><h4>${postsCount}</h4><p>Posts</p></div>
+                <div class="stat-box"><h4>${followersCount}</h4><p>Followers</p></div>
+                <div class="stat-box"><h4>${followingCount}</h4><p>Following</p></div>
                 <div class="stat-box"><h4>${likesCount}</h4><p>Likes</p></div>
             </div>
         `;
@@ -227,7 +243,7 @@ async function loadProfile() {
 
     } catch (error) {
         console.error("Profile Fetch Error:", error.message);
-        document.getElementById("profileBox").innerHTML = `<div class="loading" style="color: #ff5c73;">Error loading profile. Check console.</div>`;
+        document.getElementById("profileBox").innerHTML = `<div class="loading" style="color: #ff5c73;">Error loading profile: ${escapeHTML(error.message)}</div>`;
     }
 }
 
@@ -263,8 +279,7 @@ async function loadPosts() {
             return;
         }
 
-        // Fetch user profile separately to include premium_plan for the badge
-        const { data: myProfile } = await supabaseClient.from("profiles").select("full_name, username, avatar_url, premium_plan").eq("id", currentProfileId).single();
+        const { data: myProfile } = await supabaseClient.from("profiles").select("full_name, username, avatar_url, premium_plan").eq("id", currentProfileId).maybeSingle();
         const profile = myProfile || {};
         const avatar = profile.avatar_url || defaultAvatar();
         const name = profile.full_name || "StudentX User";
@@ -324,7 +339,7 @@ function switchTab(tab) {
     loadPosts();
 }
 
-// 4. INTERACTION FUNCTIONS (Mock for now)
+// 4. INTERACTIONS
 async function toggleLike(postId, el) {
     el.classList.toggle('liked');
 }
