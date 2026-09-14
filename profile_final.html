@@ -1,0 +1,5087 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+>
+
+<title>StudentX - Profile</title>
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+>
+
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    width:100%;
+    min-height:100%;
+}
+
+body{
+    font-family:Poppins,sans-serif;
+    background:#0a0a0f;
+    color:#fff;
+    padding-bottom:70px;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header{
+
+    position:sticky;
+    top:0;
+    z-index:100;
+
+    height:70px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    padding:0 18px;
+
+    background:rgba(10,10,15,.96);
+
+    backdrop-filter:blur(18px);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+}
+
+.header-title{
+
+    font-size:24px;
+    font-weight:800;
+}
+
+.menu-btn{
+
+    width:42px;
+    height:42px;
+
+    border-radius:12px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.08);
+
+    color:#aaa;
+
+    font-size:18px;
+}
+
+
+/* =========================
+   COVER
+========================= */
+
+.cover{
+
+    width:100%;
+    height:150px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #008751 33.33%,
+            #ffffff 33.33%,
+            #ffffff 66.66%,
+            #008751 66.66%
+        );
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+}
+
+.cover span{
+
+    color:#008751;
+
+    font-size:30px;
+
+    font-weight:800;
+
+    letter-spacing:2px;
+}
+
+
+/* =========================
+   PROFILE AREA
+========================= */
+
+.profile-info{
+
+    padding:55px 20px 0;
+
+    position:relative;
+}
+
+
+/* =========================
+   AVATAR
+========================= */
+
+.avatar-box{
+
+    position:absolute;
+
+    top:-42px;
+    left:20px;
+
+    width:84px;
+    height:84px;
+
+    border-radius:50%;
+
+    border:4px solid #0a0a0f;
+
+    background:#181832;
+
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.avatar-box img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.avatar-initials{
+
+    color:#a855f7;
+
+    font-size:28px;
+
+    font-weight:800;
+}
+
+
+/* =========================
+   PROFILE NAME
+========================= */
+
+.name-row{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+}
+
+.profile-name{
+
+    font-size:20px;
+
+    font-weight:800;
+
+    word-break:break-word;
+}
+
+.verified{
+
+    color:#a855f7;
+
+    font-size:14px;
+}
+
+
+/* =========================
+   USERNAME
+========================= */
+
+.profile-username{
+
+    margin-top:3px;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:13px;
+}
+
+
+/* =========================
+   BIO
+========================= */
+
+.profile-bio{
+
+    margin-top:12px;
+
+    color:rgba(255,255,255,.65);
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+
+    display:flex;
+
+    margin-top:20px;
+
+    padding:15px 0;
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+}
+
+.stat{
+
+    flex:1;
+
+    text-align:center;
+}
+
+.stat:not(:last-child){
+
+    border-right:
+        1px solid rgba(255,255,255,.06);
+}
+
+.stat-number{
+
+    font-size:17px;
+
+    font-weight:800;
+}
+
+.stat-label{
+
+    margin-top:2px;
+
+    font-size:10px;
+
+    color:rgba(255,255,255,.35);
+
+    text-transform:uppercase;
+}
+
+
+/* =========================
+   EDIT BUTTON
+========================= */
+
+.edit-btn{
+
+    width:100%;
+
+    margin-top:15px;
+
+    padding:13px;
+
+    border:none;
+
+    border-radius:13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #a855f7
+        );
+
+    color:#fff;
+
+    font-family:Poppins,sans-serif;
+
+    font-size:14px;
+
+    font-weight:700;
+}
+
+
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+
+    display:flex;
+
+    margin-top:18px;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.06);
+}
+
+.tab{
+
+    flex:1;
+
+    padding:13px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:13px;
+
+    font-weight:600;
+}
+
+.tab.active{
+
+    color:#a855f7;
+
+    border-bottom:
+        2px solid #a855f7;
+}
+
+
+/* =========================
+   POSTS
+========================= */
+
+.posts-container{
+
+    padding:16px;
+}
+
+.loading{
+
+    padding:40px 20px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:13px;
+}
+
+.empty-posts{
+
+    padding:50px 20px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.3);
+}
+
+.empty-posts i{
+
+    display:block;
+
+    margin-bottom:10px;
+
+    font-size:35px;
+}
+
+
+/* =========================
+   BOTTOM NAVIGATION
+========================= */
+
+.bnav{
+
+    position:fixed;
+
+    bottom:0;
+    left:0;
+
+    width:100%;
+
+    height:64px;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:space-around;
+
+    background:rgba(10,10,15,.97);
+
+    backdrop-filter:blur(18px);
+
+    border-top:
+        1px solid rgba(255,255,255,.06);
+
+    z-index:200;
+}
+
+.nb{
+
+    min-width:55px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:4px;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:9px;
+
+    font-weight:500;
+}
+
+.nb i{
+
+    font-size:19px;
+}
+
+.nb.on{
+
+    color:#a855f7;
+}
+
+
+/* =========================
+   POST UI
+========================= */
+
+.post{
+
+    margin-bottom:16px;
+
+    padding:14px;
+
+    background:
+        rgba(255,255,255,.04);
+
+    border:
+        1px solid rgba(255,255,255,.06);
+
+    border-radius:16px;
+
+    overflow:hidden;
+}
+
+.p-hdr{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+}
+
+.p-av{
+
+    width:42px;
+    height:42px;
+
+    flex:none;
+
+    border-radius:50%;
+
+    background:#181832;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    color:#a855f7;
+
+    font-size:13px;
+
+    font-weight:800;
+}
+
+.p-av img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+}
+
+.p-inf{
+
+    min-width:0;
+}
+
+.p-nm{
+
+    font-size:13px;
+
+    font-weight:700;
+}
+
+.p-meta{
+
+    margin-top:2px;
+
+    color:rgba(255,255,255,.35);
+
+    font-size:10px;
+}
+
+.p-body{
+
+    margin-top:12px;
+
+    color:rgba(255,255,255,.8);
+
+    font-size:13px;
+
+    line-height:1.6;
+
+    white-space:pre-wrap;
+
+    word-break:break-word;
+}
+
+.p-acts{
+
+    display:flex;
+
+    align-items:center;
+
+    margin-top:12px;
+
+    padding-top:10px;
+
+    border-top:
+        1px solid rgba(255,255,255,.05);
+}
+
+.p-a{
+
+    flex:1;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:5px;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:11px;
+}
+
+.p-a i{
+
+    font-size:15px;
+}
+
+.profile-loading{
+
+    padding:40px 20px;
+
+    text-align:center;
+
+    color:rgba(255,255,255,.4);
+
+    font-size:13px;
+}
+
+
+/* =========================
+   IMAGE VIEW
+========================= */
+
+.view-ov{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:500;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(0,0,0,.95);
+
+    padding:20px;
+}
+
+.view-ov.show{
+
+    display:flex;
+}
+
+.view-ov img{
+
+    max-width:100%;
+    max-height:90vh;
+
+    object-fit:contain;
+
+    border-radius:10px;
+}
+
+.view-close{
+
+    position:absolute;
+
+    top:20px;
+    right:20px;
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:rgba(255,255,255,.1);
+
+    color:#fff;
+
+    z-index:2;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(min-width:600px){
+
+    body{
+
+        max-width:430px;
+
+        margin:auto;
+
+        border-left:
+            1px solid rgba(255,255,255,.05);
+
+        border-right:
+            1px solid rgba(255,255,255,.05);
+    }
+
+    .bnav{
+
+        max-width:430px;
+
+        left:50%;
+
+        transform:
+            translateX(-50%);
+    }
+
+}
+
+</style>
+<style>
+/* =========================================================
+   STUDENTX PREMIUM BADGES
+   Added without changing existing UI design
+========================================================= */
+.studentx-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 17px;
+    height: 17px;
+    min-width: 17px;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1;
+    vertical-align: middle;
+    margin-left: 5px;
+    box-sizing: border-box;
+}
+
+.premium-badge {
+    background: #9b4dff;
+}
+
+.premium-plus-badge {
+    background: #f5b700;
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header class="header">
+
+    <div class="header-title">
+        Profile
+    </div>
+
+    <div
+        class="menu-btn"
+        id="profileMenuBtn"
+    >
+        <i class="fas fa-ellipsis-h"></i>
+    </div>
+
+</header>
+
+
+<!-- =========================
+     COVER PHOTO
+========================= -->
+
+<div
+    class="cover"
+    id="coverDisplay"
+>
+
+    <span id="coverText">
+        Nigeria
+    </span>
+
+</div>
+
+
+<!-- =========================
+     PROFILE INFORMATION
+========================= -->
+
+<section class="profile-info">
+
+
+    <!-- AVATAR -->
+
+    <div
+        class="avatar-box"
+        id="avatarBox"
+    >
+
+        <div
+            class="avatar-initials"
+            id="avatarInitials"
+        >
+            --
+        </div>
+
+    </div>
+
+
+    <!-- NAME -->
+
+    <div class="name-row">
+
+        <div
+            class="profile-name"
+            id="profileName"
+        >
+            Loading...
+        </div>
+
+    </div>
+
+
+    <!-- USERNAME -->
+
+    <div
+        class="profile-username"
+        id="profileUsername"
+    >
+        Loading...
+    </div>
+
+
+    <!-- BIO -->
+
+    <div
+        class="profile-bio"
+        id="profileBio"
+    >
+        Loading...
+    </div>
+
+
+    <!-- =========================
+         REAL SUPABASE STATS
+    ========================= -->
+
+    <div class="stats">
+
+        <!-- POSTS -->
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="postsCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Posts
+            </div>
+
+        </div>
+
+
+        <!-- FOLLOWERS -->
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="followersCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Followers
+            </div>
+
+        </div>
+
+
+        <!-- FOLLOWING -->
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="followingCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Following
+            </div>
+
+        </div>
+
+
+        <!-- LIKES -->
+
+        <div class="stat">
+
+            <div
+                class="stat-number"
+                id="likesCount"
+            >
+                0
+            </div>
+
+            <div class="stat-label">
+                Likes
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         EDIT PROFILE
+    ========================= -->
+
+    <button
+        class="edit-btn"
+        id="editProfileBtn"
+    >
+        Edit Profile
+    </button>
+
+
+    <!-- =========================
+         TABS
+    ========================= -->
+
+    <div class="tabs">
+
+        <div
+            class="tab active"
+            id="postsTab"
+        >
+            Posts
+        </div>
+
+        <div
+            class="tab"
+            id="videosTab"
+        >
+            Videos
+        </div>
+
+        <div
+            class="tab"
+            id="savedTab"
+        >
+            Saved
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     POSTS
+========================= -->
+
+<div
+    class="posts-container"
+    id="postsView"
+>
+
+    <div class="loading">
+        Loading posts...
+    </div>
+
+</div>
+
+
+<!-- =========================
+     SAVED POSTS
+========================= -->
+
+<div
+    class="posts-container"
+    id="videosView"
+    style="display:none;"
+>
+    <div class="sx-loading">Loading videos...</div>
+</div>
+
+
+<!-- =========================
+     SAVED POSTS + VIDEOS
+========================= -->
+
+<div
+    class="posts-container"
+    id="savedView"
+    style="display:none;"
+>
+
+    <div class="empty-posts">
+
+        <i class="far fa-bookmark"></i>
+
+        <div>
+            No saved posts
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     IMAGE VIEWER
+========================= -->
+
+<div
+    class="view-ov"
+    id="viewOv"
+    onclick="closeView()"
+>
+
+    <div class="view-close">
+
+        <i class="fas fa-times"></i>
+
+    </div>
+
+    <img
+        id="viewImg"
+        src=""
+        alt="Profile photo"
+    >
+
+</div>
+
+
+<!-- =========================
+     PROFILE IMAGE INPUT
+========================= -->
+
+<input
+    type="file"
+    id="picInput"
+    accept="image/*"
+    style="display:none"
+>
+
+
+<!-- =========================
+     COVER IMAGE INPUT
+========================= -->
+
+<input
+    type="file"
+    id="coverInput"
+    accept="image/*"
+    style="display:none"
+>
+
+
+<!-- =========================
+     BOTTOM NAVIGATION
+========================= -->
+
+<nav class="bnav">
+
+
+    <!-- HOME -->
+
+    <div
+        class="nb"
+        onclick="goHome()"
+    >
+
+        <i class="fas fa-home"></i>
+
+        <span>
+            Home
+        </span>
+
+    </div>
+
+
+    <!-- VIDEO -->
+
+    <div
+        class="nb"
+        onclick="goVideo()"
+    >
+
+        <i class="fas fa-video"></i>
+
+        <span>
+            Video
+        </span>
+
+    </div>
+
+
+    <!-- CHAT -->
+
+    <div
+        class="nb"
+        onclick="goChat()"
+    >
+
+        <i class="fas fa-comment-dots"></i>
+
+        <span>
+            Chat
+        </span>
+
+    </div>
+
+
+    <!-- STUDYHUB -->
+
+    <div
+        class="nb"
+        onclick="goStudyHub()"
+    >
+
+        <i class="fas fa-book-open"></i>
+
+        <span>
+            StudyHub
+        </span>
+
+    </div>
+
+
+    <!-- PROFILE -->
+
+    <div
+        class="nb on"
+        onclick="goProfile()"
+    >
+
+        <i class="fas fa-user"></i>
+
+        <span>
+            Profile
+        </span>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     SUPABASE LIBRARY
+========================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- =========================
+     SUPABASE CONNECTION
+========================= -->
+
+<script>
+
+const SUPABASE_URL =
+    "https://acragelglvdnqhvbjcgx.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+</script>
+<script>
+
+/* =========================================================
+   STUDENTX PROFILE — PART 3
+   LOAD CURRENT USER PROFILE
+========================================================= */
+
+let currentUser = null;
+let currentProfile = null;
+
+
+/* =========================================================
+   GET CURRENT USER
+========================================================= */
+
+async function getCurrentUser() {
+
+    try {
+
+        const {
+            data: {
+                user
+            },
+            error
+        } = await supabaseClient.auth.getUser();
+
+        if (error) {
+            console.error("Auth error:", error);
+            return null;
+        }
+
+        if (!user) {
+            console.log("No logged-in user");
+            return null;
+        }
+
+        currentUser = user;
+
+        return user;
+
+    } catch (error) {
+
+        console.error(
+            "Failed to get current user:",
+            error
+        );
+
+        return null;
+    }
+}
+
+
+/* =========================================================
+   LOAD PROFILE FROM SUPABASE
+========================================================= */
+
+async function loadProfile() {
+
+    try {
+
+        const user = await getCurrentUser();
+
+        if (!user) {
+
+            setProfileLoadingState(
+                "Please login first"
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           GET PROFILE
+        ----------------------------------------- */
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                username,
+                avatar_url,
+                full_name,
+                bio,
+                university,
+                department,
+                verified,
+                created_at,
+                email,
+                account_type,
+                country,
+                state,
+                city,
+                profile_visibility,
+                premium_plan,
+                cover_url,
+                faculty,
+                level,
+                graduation_year
+            `)
+            .eq("id", user.id)
+            .maybeSingle();
+
+
+        /* -----------------------------------------
+           ERROR
+        ----------------------------------------- */
+
+        if (error) {
+
+            console.error(
+                "Profile loading error:",
+                error
+            );
+
+            setProfileLoadingState(
+                "Unable to load profile"
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           PROFILE NOT FOUND
+        ----------------------------------------- */
+
+        if (!data) {
+
+            console.log(
+                "Profile does not exist for this user."
+            );
+
+            setProfileLoadingState(
+                "Profile not found"
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           SAVE PROFILE
+        ----------------------------------------- */
+
+        currentProfile = data;
+
+
+        /* -----------------------------------------
+           UPDATE PROFILE UI
+        ----------------------------------------- */
+
+        updateProfileUI(data);
+
+
+        console.log(
+            "StudentX profile loaded:",
+            data
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected profile error:",
+            error
+        );
+
+        setProfileLoadingState(
+            "Something went wrong"
+        );
+    }
+}
+
+
+/* =========================================================
+   UPDATE PROFILE UI
+========================================================= */
+
+function updateProfileUI(profile) {
+
+
+    /* -----------------------------------------
+       FULL NAME
+    ----------------------------------------- */
+
+    const nameElement =
+        document.getElementById("profileName");
+
+    if (nameElement) {
+
+        const displayName =
+            profile.full_name ||
+            "StudentX User";
+
+        nameElement.innerHTML =
+            escapeHTML(displayName) +
+            getIdentityBadge(profile);
+    }
+
+
+    /* -----------------------------------------
+       USERNAME
+    ----------------------------------------- */
+
+    const usernameElement =
+        document.getElementById("profileUsername");
+
+    if (usernameElement) {
+
+        if (profile.username) {
+
+            usernameElement.textContent =
+                "@" + profile.username;
+
+        } else {
+
+            usernameElement.textContent =
+                "@username";
+        }
+    }
+
+
+    /* -----------------------------------------
+       BIO
+    ----------------------------------------- */
+
+    const bioElement =
+        document.getElementById("profileBio");
+
+    if (bioElement) {
+
+        bioElement.textContent =
+            profile.bio ||
+            "No bio yet.";
+    }
+
+
+    /* -----------------------------------------
+       AVATAR
+    ----------------------------------------- */
+
+    updateAvatar(profile);
+
+
+    /* -----------------------------------------
+       COVER
+    ----------------------------------------- */
+
+    updateCover(profile);
+
+
+    /* -----------------------------------------
+       VERIFIED
+    ----------------------------------------- */
+
+    updateVerifiedBadge(profile);
+}
+
+
+/* =========================================================
+   UPDATE AVATAR
+========================================================= */
+
+function updateAvatar(profile) {
+
+    const avatarBox =
+        document.getElementById("avatarBox");
+
+    const initials =
+        document.getElementById("avatarInitials");
+
+    if (!avatarBox) {
+        return;
+    }
+
+
+    /* -----------------------------------------
+       IF AVATAR EXISTS
+    ----------------------------------------- */
+
+    if (profile.avatar_url) {
+
+        avatarBox.style.backgroundImage =
+            `url("${profile.avatar_url}")`;
+
+        avatarBox.style.backgroundSize =
+            "cover";
+
+        avatarBox.style.backgroundPosition =
+            "center";
+
+        avatarBox.style.backgroundRepeat =
+            "no-repeat";
+
+
+        if (initials) {
+            initials.style.display =
+                "none";
+        }
+
+    } else {
+
+        /* -------------------------------------
+           NO AVATAR → INITIALS
+        ------------------------------------- */
+
+        avatarBox.style.backgroundImage =
+            "none";
+
+        if (initials) {
+
+            initials.style.display =
+                "flex";
+
+            initials.textContent =
+                getInitials(
+                    profile.full_name
+                );
+        }
+    }
+}
+
+
+/* =========================================================
+   GET USER INITIALS
+========================================================= */
+
+function getInitials(name) {
+
+    if (!name) {
+        return "--";
+    }
+
+    const words =
+        name
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+    if (words.length === 1) {
+
+        return words[0]
+            .substring(0, 2)
+            .toUpperCase();
+    }
+
+    return (
+        words[0].charAt(0) +
+        words[words.length - 1].charAt(0)
+    ).toUpperCase();
+}
+
+
+/* =========================================================
+   UPDATE COVER
+========================================================= */
+
+function updateCover(profile) {
+
+    const cover =
+        document.getElementById("coverDisplay");
+
+    const coverText =
+        document.getElementById("coverText");
+
+    if (!cover) {
+        return;
+    }
+
+
+    if (profile.cover_url) {
+
+        cover.style.backgroundImage =
+            `url("${profile.cover_url}")`;
+
+        cover.style.backgroundSize =
+            "cover";
+
+        cover.style.backgroundPosition =
+            "center";
+
+        cover.style.backgroundRepeat =
+            "no-repeat";
+
+
+        if (coverText) {
+            coverText.style.display =
+                "none";
+        }
+
+    } else {
+
+        cover.style.backgroundImage =
+            "none";
+
+        if (coverText) {
+
+            coverText.style.display =
+                "block";
+
+            coverText.textContent =
+                profile.country ||
+                "Nigeria";
+        }
+    }
+}
+
+
+/* =========================================================
+   VERIFIED BADGE
+========================================================= */
+
+function updateVerifiedBadge(profile) {
+    const nameElement = document.getElementById("profileName");
+    if (!nameElement) return;
+
+    const displayName =
+        profile?.full_name ||
+        "StudentX User";
+
+    nameElement.innerHTML =
+        escapeHTML(displayName) +
+        getIdentityBadge(profile);
+}
+
+
+/* =========================================================
+   LOADING / ERROR STATE
+========================================================= */
+
+function setProfileLoadingState(message) {
+
+    const name =
+        document.getElementById(
+            "profileName"
+        );
+
+    const username =
+        document.getElementById(
+            "profileUsername"
+        );
+
+    const bio =
+        document.getElementById(
+            "profileBio"
+        );
+
+
+    if (name) {
+        name.textContent = message;
+    }
+
+    if (username) {
+        username.textContent = "";
+    }
+
+    if (bio) {
+        bio.textContent = "";
+    }
+}
+
+
+/* =========================================================
+   START PROFILE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        loadProfile();
+
+    }
+);
+
+</script>
+<!-- =========================================================
+     STUDENTX PROFILE — PART 4
+     POSTS + FOLLOWERS + FOLLOWING + LIKES
+========================================================= -->
+
+<script>
+
+const PROFILE_TABLE = "profiles";
+const POSTS_TABLE = "posts";
+const FOLLOWERS_TABLE = "followers";
+const LIKES_TABLE = "likes";
+
+
+/* =========================================================
+   LOAD PROFILE STATISTICS
+========================================================= */
+
+async function loadProfileStats() {
+
+    if (!currentUser) {
+        return;
+    }
+
+    const userId = currentUser.id;
+
+
+    /* =====================================================
+       POSTS COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(POSTS_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("User_id", userId);
+
+
+        if (error) {
+
+            console.error(
+                "Posts count error:",
+                error
+            );
+
+        } else {
+
+            const postsCount =
+                document.getElementById(
+                    "postsCount"
+                );
+
+            if (postsCount) {
+
+                postsCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Posts count error:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       FOLLOWERS COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(FOLLOWERS_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "following_id",
+                userId
+            );
+
+
+        if (!error) {
+
+            const followersCount =
+                document.getElementById(
+                    "followersCount"
+                );
+
+            if (followersCount) {
+
+                followersCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Followers count error:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       FOLLOWING COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(FOLLOWERS_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "follower_id",
+                userId
+            );
+
+
+        if (!error) {
+
+            const followingCount =
+                document.getElementById(
+                    "followingCount"
+                );
+
+            if (followingCount) {
+
+                followingCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Following count error:",
+            error
+        );
+    }
+
+
+    /* =====================================================
+       LIKES COUNT
+    ===================================================== */
+
+    try {
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from(LIKES_TABLE)
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "user_id",
+                userId
+            );
+
+
+        if (!error) {
+
+            const likesCount =
+                document.getElementById(
+                    "likesCount"
+                );
+
+            if (likesCount) {
+
+                likesCount.textContent =
+                    formatNumber(count || 0);
+            }
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Likes count error:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   LOAD USER POSTS
+========================================================= */
+
+async function loadUserPosts() {
+
+    const postsView =
+        document.getElementById(
+            "postsView"
+        );
+
+    if (!postsView) {
+        return;
+    }
+
+
+    if (!currentUser) {
+
+        postsView.innerHTML = `
+            <div class="empty-posts">
+                Please login to view posts.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    postsView.innerHTML = `
+        <div class="loading">
+            Loading posts...
+        </div>
+    `;
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(POSTS_TABLE)
+            .select(
+                "id, User_id, content, image_url, Like, Create_at"
+            )
+            .eq(
+                "User_id",
+                currentUser.id
+            )
+            .order(
+                "Create_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "Posts loading error:",
+                error
+            );
+
+            postsView.innerHTML = `
+                <div class="empty-posts">
+                    Unable to load posts.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        if (!data || data.length === 0) {
+
+            postsView.innerHTML = `
+                <div class="empty-posts">
+
+                    <i class="fas fa-camera"></i>
+
+                    <div>
+                        No posts yet
+                    </div>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        postsView.innerHTML = "";
+
+
+        data.forEach(function(post) {
+
+            postsView.appendChild(
+                createProfilePost(post)
+            );
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected posts error:",
+            error
+        );
+
+        postsView.innerHTML = `
+            <div class="empty-posts">
+                Something went wrong.
+            </div>
+        `;
+    }
+}
+
+
+/* =========================================================
+   CREATE PROFILE POST
+========================================================= */
+
+function createProfilePost(post) {
+
+    const postElement =
+        document.createElement("article");
+
+    postElement.className =
+        "post";
+
+    postElement.dataset.postId =
+        post.id;
+
+
+    /* =====================================================
+       PROFILE DATA
+    ===================================================== */
+
+    const profile =
+        currentProfile || {};
+
+    const fullName =
+        profile.full_name ||
+        "StudentX User";
+
+    const username =
+        profile.username
+            ? "@" + profile.username
+            : "@username";
+
+    const avatar =
+        profile.avatar_url || "";
+
+    const verified =
+        profile.verified === true;
+
+
+    /* =====================================================
+       POST DATA
+    ===================================================== */
+
+    const text =
+        post.content || "";
+
+    const image =
+        post.image_url || "";
+
+    const postDate =
+        formatPostDate(
+            post.Create_at
+        );
+
+
+    /* =====================================================
+       AVATAR
+    ===================================================== */
+
+    let avatarHTML = "";
+
+    if (avatar) {
+
+        avatarHTML = `
+            <img
+                src="${escapeAttribute(avatar)}"
+                alt="Profile"
+                style="
+                    width:100%;
+                    height:100%;
+                    object-fit:cover;
+                    border-radius:50%;
+                "
+            >
+        `;
+
+    } else {
+
+        avatarHTML =
+            escapeHTML(
+                fullName
+                    .charAt(0)
+                    .toUpperCase()
+            );
+    }
+
+
+    /* =====================================================
+       VERIFIED
+    ===================================================== */
+
+    const verifiedHTML =
+        getIdentityBadge(profile);
+
+
+    /* =====================================================
+       CONTENT
+    ===================================================== */
+
+    let bodyHTML = "";
+
+    if (text) {
+
+        bodyHTML = `
+            <div class="p-body">
+                ${escapeHTML(text)}
+            </div>
+        `;
+    }
+
+
+    /* =====================================================
+       IMAGE
+    ===================================================== */
+
+    if (image) {
+
+        bodyHTML += `
+            <img
+                src="${escapeAttribute(image)}"
+                alt="Post"
+                loading="lazy"
+                onclick="openPostImage(this.src)"
+                style="
+                    display:block;
+                    width:100%;
+                    max-height:500px;
+                    object-fit:cover;
+                    cursor:pointer;
+                "
+            >
+        `;
+    }
+
+
+    /* =====================================================
+       POST CARD
+    ===================================================== */
+
+    postElement.innerHTML = `
+
+        <div class="p-hdr">
+
+            <div class="p-av">
+                ${avatarHTML}
+            </div>
+
+
+            <div class="p-inf">
+
+                <div class="p-nm">
+
+                    ${escapeHTML(fullName)}
+
+                    ${verifiedHTML}
+
+                </div>
+
+
+                <div class="p-meta">
+
+                    ${escapeHTML(username)}
+                    ·
+                    ${escapeHTML(postDate)}
+
+                </div>
+
+            </div>
+
+
+            <!-- MENU -->
+            <div
+                class="p-more"
+                onclick="openProfilePostMenu('${post.id}')"
+            >
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+
+        </div>
+
+
+        ${bodyHTML}
+
+
+        <!-- ACTIONS -->
+
+        <div class="p-acts">
+
+            <!-- LIKE -->
+
+            <div
+                class="p-a like-action"
+                id="like-${post.id}"
+                onclick="toggleProfileLike('${post.id}')"
+            >
+
+                <i
+                    class="far fa-heart"
+                    id="like-icon-${post.id}"
+                ></i>
+
+                <span
+                    id="like-count-${post.id}"
+                >
+                    0
+                </span>
+
+            </div>
+
+
+            <!-- COMMENT -->
+
+            <div
+                class="p-a"
+                onclick="openProfileComments('${post.id}')"
+            >
+
+                <i class="far fa-comment"></i>
+
+                <span>
+                    0
+                </span>
+
+            </div>
+
+
+            <!-- REPOST -->
+
+            <div
+                class="p-a"
+                onclick="repostProfilePost('${post.id}')"
+            >
+
+                <i class="fas fa-retweet"></i>
+
+                <span>
+                    0
+                </span>
+
+            </div>
+
+
+            <!-- BOOKMARK -->
+
+            <div class="p-a p-a-r">
+
+                <i class="far fa-bookmark"></i>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* =====================================================
+       LOAD REAL LIKE DATA
+    ===================================================== */
+
+    loadProfilePostLikes(
+        post.id
+    );
+
+
+    return postElement;
+}
+    async function loadProfilePostLikes(postId) {
+
+    try {
+
+        const {
+            data: {
+                user
+            }
+        } = await supabaseClient.auth.getUser();
+
+
+        const {
+            count,
+            error
+        } = await supabaseClient
+            .from("likes")
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq("post_id", postId);
+
+
+        if (error) {
+
+            console.error(
+                "Like count error:",
+                error
+            );
+
+            return;
+        }
+
+
+        const countElement =
+            document.getElementById(
+                "like-count-" + postId
+            );
+
+        if (countElement) {
+
+            countElement.textContent =
+                formatNumber(count || 0);
+        }
+
+
+        /* -----------------------------------------
+           CHECK WHETHER CURRENT USER LIKED
+        ----------------------------------------- */
+
+        if (!user) {
+            return;
+        }
+
+
+        const {
+            data: myLike,
+            error: myLikeError
+        } = await supabaseClient
+            .from("likes")
+            .select("id")
+            .eq("post_id", postId)
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+
+        if (myLikeError) {
+
+            console.error(
+                "My like check error:",
+                myLikeError
+            );
+
+            return;
+        }
+
+
+        if (myLike) {
+
+            setProfilePostLiked(
+                postId,
+                true
+            );
+
+        } else {
+
+            setProfilePostLiked(
+                postId,
+                false
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Load likes error:",
+            error
+        );
+    }
+    }
+    function setProfilePostLiked(
+    postId,
+    liked
+) {
+
+    const action =
+        document.getElementById(
+            "like-" + postId
+        );
+
+    const icon =
+        document.getElementById(
+            "like-icon-" + postId
+        );
+
+    if (!action || !icon) {
+        return;
+    }
+
+
+    if (liked) {
+
+        icon.className =
+            "fas fa-heart";
+
+        action.style.color =
+            "#a855f7";
+
+    } else {
+
+        icon.className =
+            "far fa-heart";
+
+        action.style.color =
+            "";
+    }
+    }
+    async function toggleProfileLike(
+    postId
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    const action =
+        document.getElementById(
+            "like-" + postId
+        );
+
+    const countElement =
+        document.getElementById(
+            "like-count-" + postId
+        );
+
+    if (!action || !countElement) {
+        return;
+    }
+
+
+    action.style.pointerEvents =
+        "none";
+
+
+    try {
+
+        /* -----------------------------------------
+           CHECK EXISTING LIKE
+        ----------------------------------------- */
+
+        const {
+            data: existingLike,
+            error: checkError
+        } = await supabaseClient
+            .from("likes")
+            .select("id")
+            .eq(
+                "post_id",
+                postId
+            )
+            .eq(
+                "user_id",
+                currentUser.id
+            )
+            .maybeSingle();
+
+
+        if (checkError) {
+
+            console.error(
+                "Check like error:",
+                checkError
+            );
+
+            alert(
+                checkError.message
+            );
+
+            return;
+        }
+
+
+        /* -----------------------------------------
+           REMOVE LIKE
+        ----------------------------------------- */
+
+        if (existingLike) {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("likes")
+                .delete()
+                .eq(
+                    "id",
+                    existingLike.id
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Unlike error:",
+                    error
+                );
+
+                alert(
+                    error.message
+                );
+
+                return;
+            }
+
+
+            setProfilePostLiked(
+                postId,
+                false
+            );
+
+
+        }
+
+        /* -----------------------------------------
+           ADD LIKE
+        ----------------------------------------- */
+
+        else {
+
+            const {
+                error
+            } = await supabaseClient
+                .from("likes")
+                .insert({
+
+                    post_id:
+                        postId,
+
+                    user_id:
+                        currentUser.id
+
+                });
+
+
+            if (error) {
+
+                console.error(
+                    "Like error:",
+                    error
+                );
+
+                alert(
+                    error.message
+                );
+
+                return;
+            }
+
+
+            setProfilePostLiked(
+                postId,
+                true
+            );
+        }
+
+
+        /* -----------------------------------------
+           REFRESH COUNT
+        ----------------------------------------- */
+
+        const {
+            count,
+            error: countError
+        } = await supabaseClient
+            .from("likes")
+            .select("id", {
+                count: "exact",
+                head: true
+            })
+            .eq(
+                "post_id",
+                postId
+            );
+
+
+        if (!countError) {
+
+            countElement.textContent =
+                formatNumber(count || 0);
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Toggle like error:",
+            error
+        );
+
+        alert(
+            "Unable to update like."
+        );
+
+    } finally {
+
+        action.style.pointerEvents =
+            "";
+    }
+    }
+
+/* =========================================================
+   OPEN POST IMAGE
+========================================================= */
+
+function openPostImage(url) {
+
+    const viewer =
+        document.getElementById(
+            "viewOv"
+        );
+
+    const image =
+        document.getElementById(
+            "viewImg"
+        );
+
+    if (!viewer || !image) {
+        return;
+    }
+
+
+    image.src = url;
+
+    viewer.style.display =
+        "flex";
+}
+
+
+/* =========================================================
+   CLOSE IMAGE VIEWER
+========================================================= */
+
+function closeView() {
+
+    const viewer =
+        document.getElementById(
+            "viewOv"
+        );
+
+    const image =
+        document.getElementById(
+            "viewImg"
+        );
+
+
+    if (viewer) {
+
+        viewer.style.display =
+            "none";
+    }
+
+
+    if (image) {
+
+        image.src = "";
+    }
+}
+
+
+/* =========================================================
+   NUMBER FORMATTER
+========================================================= */
+
+function formatNumber(number) {
+
+    number =
+        Number(number) || 0;
+
+
+    if (number >= 1000000000) {
+
+        return (
+            (number / 1000000000)
+                .toFixed(1)
+                .replace(".0", "")
+            + "B"
+        );
+    }
+
+
+    if (number >= 1000000) {
+
+        return (
+            (number / 1000000)
+                .toFixed(1)
+                .replace(".0", "")
+            + "M"
+        );
+    }
+
+
+    if (number >= 1000) {
+
+        return (
+            (number / 1000)
+                .toFixed(1)
+                .replace(".0", "")
+            + "K"
+        );
+    }
+
+
+    return number.toString();
+}
+
+
+/* =========================================================
+   DATE FORMATTER
+========================================================= */
+
+function formatPostDate(date) {
+
+    if (!date) {
+        return "";
+    }
+
+
+    const d =
+        new Date(date);
+
+
+    if (isNaN(d.getTime())) {
+        return "";
+    }
+
+
+    return d.toLocaleDateString(
+        "en-NG",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+}
+
+
+/* =========================================================
+   HTML SECURITY
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+/* =========================================================
+   ATTRIBUTE SECURITY
+========================================================= */
+
+function escapeAttribute(value) {
+
+    return String(value)
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        );
+}
+
+
+/* =========================================================
+   POSTS / VIDEOS / SAVED TABS
+========================================================= */
+
+const postsTab =
+    document.getElementById("postsTab");
+
+const videosTab =
+    document.getElementById("videosTab");
+
+const savedTab =
+    document.getElementById("savedTab");
+
+const postsView =
+    document.getElementById("postsView");
+
+const videosView =
+    document.getElementById("videosView");
+
+const savedView =
+    document.getElementById("savedView");
+
+function setProfileTab(tab) {
+    [postsTab, videosTab, savedTab].forEach(t => {
+        if (t) t.classList.remove("active");
+    });
+
+    [postsView, videosView, savedView].forEach(v => {
+        if (v) v.style.display = "none";
+    });
+
+    if (tab === "posts") {
+        postsTab?.classList.add("active");
+        if (postsView) postsView.style.display = "block";
+    }
+
+    if (tab === "videos") {
+        videosTab?.classList.add("active");
+        if (videosView) videosView.style.display = "block";
+        loadProfileVideos();
+    }
+
+    if (tab === "saved") {
+        savedTab?.classList.add("active");
+        if (savedView) savedView.style.display = "block";
+        loadSavedContent();
+    }
+}
+
+postsTab?.addEventListener("click", () => setProfileTab("posts"));
+videosTab?.addEventListener("click", () => setProfileTab("videos"));
+savedTab?.addEventListener("click", () => setProfileTab("saved"));
+
+
+/* =========================================================
+   START PART 4
+========================================================= */
+
+async function startProfilePart4() {
+
+    if (!currentUser) {
+
+        await getCurrentUser();
+    }
+
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    await Promise.all([
+        loadProfileStats(),
+        loadUserPosts()
+    ]);
+}
+
+
+/* =========================================================
+   RUN AFTER PROFILE LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        setTimeout(
+            function() {
+
+                startProfilePart4();
+
+            },
+            300
+        );
+
+    }
+);
+
+                </script>
+<!-- =========================================================
+     STUDENTX PROFILE — PART 5
+     EDIT PROFILE + AVATAR + COVER
+========================================================= -->
+
+<script>
+
+/* =========================================================
+   STORAGE CONFIG
+========================================================= */
+
+const PROFILE_BUCKET = "avatars";
+const COVER_BUCKET = "covers";
+
+
+/* =========================================================
+   EDIT PROFILE BUTTON
+========================================================= */
+
+const editProfileBtn =
+    document.getElementById(
+        "editProfileBtn"
+    );
+
+
+if (editProfileBtn) {
+
+    editProfileBtn.addEventListener(
+        "click",
+        function() {
+            window.location.href = "create-post.html";
+        }
+    );
+}
+
+
+/* =========================================================
+   OPEN EDIT PROFILE
+========================================================= */
+
+function openEditProfile() {
+
+    if (!currentProfile) {
+
+        alert(
+            "Profile is still loading. Please wait."
+        );
+
+        return;
+    }
+
+
+    /* Prevent duplicate modal */
+
+    const oldModal =
+        document.getElementById(
+            "editProfileModal"
+        );
+
+    if (oldModal) {
+        oldModal.remove();
+    }
+
+
+    const modal =
+        document.createElement("div");
+
+    modal.id =
+        "editProfileModal";
+
+    modal.className =
+        "profile-edit-modal";
+
+
+    modal.innerHTML = `
+
+        <div
+            class="profile-edit-box"
+        >
+
+            <div
+                class="profile-edit-header"
+            >
+
+                <h3>
+                    Edit Profile
+                </h3>
+
+                <button
+                    type="button"
+                    class="profile-edit-close"
+                    id="closeEditProfile"
+                >
+                    <i class="fas fa-times"></i>
+                </button>
+
+            </div>
+
+
+            <div
+                class="profile-edit-body"
+            >
+
+                <label>
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="editFullName"
+                    value="${escapeAttribute(
+                        currentProfile.full_name || ""
+                    )}"
+                    maxlength="80"
+                >
+
+
+                <label>
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="editUsername"
+                    value="${escapeAttribute(
+                        currentProfile.username || ""
+                    )}"
+                    maxlength="30"
+                >
+
+
+                <label>
+                    Bio
+                </label>
+
+                <textarea
+                    id="editBio"
+                    maxlength="160"
+                    rows="4"
+                >${escapeHTML(
+                    currentProfile.bio || ""
+                )}</textarea>
+
+
+                <label>
+                    University
+                </label>
+
+                <input
+                    type="text"
+                    id="editUniversity"
+                    value="${escapeAttribute(
+                        currentProfile.university || ""
+                    )}"
+                >
+
+
+                <label>
+                    Department
+                </label>
+
+                <input
+                    type="text"
+                    id="editDepartment"
+                    value="${escapeAttribute(
+                        currentProfile.department || ""
+                    )}"
+                >
+
+
+                <label>
+                    Faculty
+                </label>
+
+                <input
+                    type="text"
+                    id="editFaculty"
+                    value="${escapeAttribute(
+                        currentProfile.faculty || ""
+                    )}"
+                >
+
+
+                <label>
+                    Level
+                </label>
+
+                <input
+                    type="text"
+                    id="editLevel"
+                    value="${escapeAttribute(
+                        currentProfile.level || ""
+                    )}"
+                >
+
+
+                <label>
+                    Graduation Year
+                </label>
+
+                <input
+                    type="number"
+                    id="editGraduationYear"
+                    value="${escapeAttribute(
+                        currentProfile.graduation_year || ""
+                    )}"
+                >
+
+
+                <label>
+                    Country
+                </label>
+
+                <input
+                    type="text"
+                    id="editCountry"
+                    value="${escapeAttribute(
+                        currentProfile.country || ""
+                    )}"
+                >
+
+
+                <label>
+                    State
+                </label>
+
+                <input
+                    type="text"
+                    id="editState"
+                    value="${escapeAttribute(
+                        currentProfile.state || ""
+                    )}"
+                >
+
+
+                <label>
+                    City
+                </label>
+
+                <input
+                    type="text"
+                    id="editCity"
+                    value="${escapeAttribute(
+                        currentProfile.city || ""
+                    )}"
+                >
+
+
+                <button
+                    type="button"
+                    class="save-profile-btn"
+                    id="saveProfileBtn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    document.body.appendChild(
+        modal
+    );
+
+
+    /* Close */
+
+    const closeBtn =
+        document.getElementById(
+            "closeEditProfile"
+        );
+
+    if (closeBtn) {
+
+        closeBtn.addEventListener(
+            "click",
+            function() {
+
+                modal.remove();
+
+            }
+        );
+    }
+
+
+    /* Save */
+
+    const saveBtn =
+        document.getElementById(
+            "saveProfileBtn"
+        );
+
+    if (saveBtn) {
+
+        saveBtn.addEventListener(
+            "click",
+            saveProfileChanges
+        );
+    }
+}
+
+
+/* =========================================================
+   SAVE PROFILE CHANGES
+========================================================= */
+
+async function saveProfileChanges() {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    const saveBtn =
+        document.getElementById(
+            "saveProfileBtn"
+        );
+
+
+    const fullName =
+        document.getElementById(
+            "editFullName"
+        )?.value.trim();
+
+
+    const username =
+        document.getElementById(
+            "editUsername"
+        )?.value.trim();
+
+
+    const bio =
+        document.getElementById(
+            "editBio"
+        )?.value.trim();
+
+
+    const university =
+        document.getElementById(
+            "editUniversity"
+        )?.value.trim();
+
+
+    const department =
+        document.getElementById(
+            "editDepartment"
+        )?.value.trim();
+
+
+    const faculty =
+        document.getElementById(
+            "editFaculty"
+        )?.value.trim();
+
+
+    const level =
+        document.getElementById(
+            "editLevel"
+        )?.value.trim();
+
+
+    const graduationYear =
+        document.getElementById(
+            "editGraduationYear"
+        )?.value;
+
+
+    const country =
+        document.getElementById(
+            "editCountry"
+        )?.value.trim();
+
+
+    const state =
+        document.getElementById(
+            "editState"
+        )?.value.trim();
+
+
+    const city =
+        document.getElementById(
+            "editCity"
+        )?.value.trim();
+
+
+    if (!fullName) {
+
+        alert(
+            "Full name is required."
+        );
+
+        return;
+    }
+
+
+    if (saveBtn) {
+
+        saveBtn.disabled =
+            true;
+
+        saveBtn.textContent =
+            "Saving...";
+    }
+
+
+    try {
+
+        const updateData = {
+
+            full_name:
+                fullName,
+
+            username:
+                username || null,
+
+            bio:
+                bio || null,
+
+            university:
+                university || null,
+
+            department:
+                department || null,
+
+            faculty:
+                faculty || null,
+
+            level:
+                level || null,
+
+            graduation_year:
+                graduationYear
+                    ? Number(graduationYear)
+                    : null,
+
+            country:
+                country || null,
+
+            state:
+                state || null,
+
+            city:
+                city || null
+
+        };
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(PROFILE_TABLE)
+            .update(updateData)
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Profile update error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to update profile."
+            );
+
+            return;
+        }
+
+
+        currentProfile =
+            data;
+
+
+        updateProfileUI(
+            data
+        );
+
+
+        const modal =
+            document.getElementById(
+                "editProfileModal"
+            );
+
+        if (modal) {
+            modal.remove();
+        }
+
+
+        alert(
+            "Profile updated successfully."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Save profile error:",
+            error
+        );
+
+        alert(
+            "Something went wrong."
+        );
+
+    } finally {
+
+        if (saveBtn) {
+
+            saveBtn.disabled =
+                false;
+
+            saveBtn.textContent =
+                "Save Changes";
+        }
+    }
+}
+
+
+/* =========================================================
+   PROFILE IMAGE INPUT
+========================================================= */
+
+const picInput =
+    document.getElementById(
+        "picInput"
+    );
+
+
+const avatarBox =
+    document.getElementById(
+        "avatarBox"
+    );
+
+
+if (avatarBox) {
+
+    avatarBox.addEventListener(
+        "click",
+        function() {
+
+            if (picInput) {
+                picInput.click();
+            }
+
+        }
+    );
+}
+
+
+if (picInput) {
+
+    picInput.addEventListener(
+        "change",
+        async function(event) {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await uploadAvatar(
+                file
+            );
+
+            picInput.value = "";
+
+        }
+    );
+}
+
+
+/* =========================================================
+   COVER INPUT
+========================================================= */
+
+const coverDisplay =
+    document.getElementById(
+        "coverDisplay"
+    );
+
+
+const coverInput =
+    document.getElementById(
+        "coverInput"
+    );
+
+
+if (coverDisplay) {
+
+    coverDisplay.addEventListener(
+        "dblclick",
+        function() {
+
+            if (coverInput) {
+                coverInput.click();
+            }
+
+        }
+    );
+}
+
+
+if (coverInput) {
+
+    coverInput.addEventListener(
+        "change",
+        async function(event) {
+
+            const file =
+                event.target.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            await uploadCover(
+                file
+            );
+
+            coverInput.value = "";
+
+        }
+    );
+}
+
+
+/* =========================================================
+   VALIDATE IMAGE
+========================================================= */
+
+function validateImage(
+    file
+) {
+
+    if (!file) {
+        return false;
+    }
+
+
+    if (!file.type.startsWith(
+        "image/"
+    )) {
+
+        alert(
+            "Please select an image."
+        );
+
+        return false;
+    }
+
+
+    const maxSize =
+        5 * 1024 * 1024;
+
+
+    if (
+        file.size >
+        maxSize
+    ) {
+
+        alert(
+            "Image must be less than 5MB."
+        );
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =========================================================
+   UPLOAD AVATAR
+========================================================= */
+
+async function uploadAvatar(
+    file
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    if (!validateImage(file)) {
+        return;
+    }
+
+
+    try {
+
+        const extension =
+            getFileExtension(file);
+
+
+        const filePath =
+            `${currentUser.id}/avatar-${Date.now()}.${extension}`;
+
+
+        const {
+            error:
+            uploadError
+        } = await supabaseClient
+            .storage
+            .from(PROFILE_BUCKET)
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true,
+                    contentType:
+                        file.type
+                }
+            );
+
+
+        if (uploadError) {
+
+            console.error(
+                "Avatar upload error:",
+                uploadError
+            );
+
+            alert(
+                uploadError.message
+            );
+
+            return;
+        }
+
+
+        const {
+            data:
+            publicData
+        } = supabaseClient
+            .storage
+            .from(PROFILE_BUCKET)
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const avatarUrl =
+            publicData.publicUrl;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(PROFILE_TABLE)
+            .update({
+                avatar_url:
+                    avatarUrl
+            })
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Avatar database error:",
+                error
+            );
+
+            alert(
+                error.message
+            );
+
+            return;
+        }
+
+
+        currentProfile =
+            data;
+
+
+        updateAvatar(
+            data
+        );
+
+
+        alert(
+            "Profile photo updated."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Avatar error:",
+            error
+        );
+
+        alert(
+            "Unable to upload profile photo."
+        );
+    }
+}
+
+
+/* =========================================================
+   UPLOAD COVER
+========================================================= */
+
+async function uploadCover(
+    file
+) {
+
+    if (!currentUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        return;
+    }
+
+
+    if (!validateImage(file)) {
+        return;
+    }
+
+
+    try {
+
+        const extension =
+            getFileExtension(file);
+
+
+        const filePath =
+            `${currentUser.id}/cover-${Date.now()}.${extension}`;
+
+
+        const {
+            error:
+            uploadError
+        } = await supabaseClient
+            .storage
+            .from(COVER_BUCKET)
+            .upload(
+                filePath,
+                file,
+                {
+                    upsert: true,
+                    contentType:
+                        file.type
+                }
+            );
+
+
+        if (uploadError) {
+
+            console.error(
+                "Cover upload error:",
+                uploadError
+            );
+
+            alert(
+                uploadError.message
+            );
+
+            return;
+        }
+
+
+        const {
+            data:
+            publicData
+        } = supabaseClient
+            .storage
+            .from(COVER_BUCKET)
+            .getPublicUrl(
+                filePath
+            );
+
+
+        const coverUrl =
+            publicData.publicUrl;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from(PROFILE_TABLE)
+            .update({
+                cover_url:
+                    coverUrl
+            })
+            .eq(
+                "id",
+                currentUser.id
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                "Cover database error:",
+                error
+            );
+
+            alert(
+                error.message
+            );
+
+            return;
+        }
+
+
+        currentProfile =
+            data;
+
+
+        updateCover(
+            data
+        );
+
+
+        alert(
+            "Cover photo updated."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Cover error:",
+            error
+        );
+
+        alert(
+            "Unable to upload cover photo."
+        );
+    }
+}
+
+
+/* =========================================================
+   FILE EXTENSION
+========================================================= */
+
+function getFileExtension(
+    file
+) {
+
+    const parts =
+        file.name.split(".");
+
+    return (
+        parts[
+            parts.length - 1
+        ] || "jpg"
+    )
+        .toLowerCase();
+}
+
+
+/* =========================================================
+   PROFILE MENU
+========================================================= */
+
+const profileMenuBtn =
+    document.getElementById(
+        "profileMenuBtn"
+    );
+
+
+if (profileMenuBtn) {
+
+    profileMenuBtn.addEventListener(
+        "click",
+        function() {
+
+            openProfileMenu();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   OPEN PROFILE MENU
+========================================================= */
+
+function openProfileMenu() {
+
+    const oldMenu =
+        document.getElementById(
+            "profileMenu"
+        );
+
+    if (oldMenu) {
+
+        oldMenu.remove();
+
+        return;
+    }
+
+
+    const menu =
+        document.createElement(
+            "div"
+        );
+
+
+    menu.id =
+        "profileMenu";
+
+
+    menu.className =
+        "profile-menu";
+
+
+    menu.innerHTML = `
+
+        <button
+            type="button"
+            id="menuEditProfile"
+        >
+            <i class="fas fa-user-edit"></i>
+            Edit Profile
+        </button>
+
+        <button
+            type="button"
+            id="menuAvatar"
+        >
+            <i class="fas fa-camera"></i>
+            Change Profile Photo
+        </button>
+
+        <button
+            type="button"
+            id="menuCover"
+        >
+            <i class="fas fa-image"></i>
+            Change Cover Photo
+        </button>
+
+        <button
+            type="button"
+            id="menuLogout"
+        >
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+        </button>
+
+    `;
+
+
+    document.body.appendChild(
+        menu
+    );
+
+
+    /* =====================================================
+       EDIT PROFILE
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuEditProfile"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                menu.remove();
+
+                openEditProfile();
+
+            }
+        );
+
+
+    /* =====================================================
+       CHANGE AVATAR
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuAvatar"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                menu.remove();
+
+                const input =
+                    document.getElementById(
+                        "picInput"
+                    );
+
+                if (input) {
+                    input.click();
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       CHANGE COVER
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuCover"
+        )
+        ?.addEventListener(
+            "click",
+            function() {
+
+                menu.remove();
+
+                const input =
+                    document.getElementById(
+                        "coverInput"
+                    );
+
+                if (input) {
+                    input.click();
+                }
+
+            }
+        );
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    document
+        .getElementById(
+            "menuLogout"
+        )
+        ?.addEventListener(
+            "click",
+            async function() {
+
+                menu.remove();
+
+                await logoutUser();
+
+            }
+        );
+}
+
+
+/* =========================================================
+   LOGOUT USER
+========================================================= */
+
+async function logoutUser() {
+
+    try {
+
+        const {
+            error
+        } = await supabaseClient
+            .auth
+            .signOut();
+
+
+        if (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+            alert(
+                error.message ||
+                "Unable to logout."
+            );
+
+            return;
+        }
+
+
+        currentUser = null;
+
+        currentProfile = null;
+
+
+        window.location.href =
+            "login.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        alert(
+            "Unable to logout."
+        );
+    }
+}
+
+
+/* =========================================================
+   CLOSE PROFILE MENU WHEN CLICKING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    function(event) {
+
+        const menu =
+            document.getElementById(
+                "profileMenu"
+            );
+
+        if (!menu) {
+            return;
+        }
+
+        const button =
+            document.getElementById(
+                "profileMenuBtn"
+            );
+
+        if (
+            !menu.contains(
+                event.target
+            ) &&
+            !button?.contains(
+                event.target
+            )
+        ) {
+
+            menu.remove();
+        }
+    }
+);
+
+
+/* =========================================================
+   STUDENTX PAGE NAVIGATION
+========================================================= */
+
+window.goHome = function() {
+
+    window.location.href =
+        "home.html";
+
+};
+
+
+window.goVideo = function() {
+
+    window.location.href =
+        "video.html";
+
+};
+
+
+window.goChat = function() {
+
+    window.location.href =
+        "chat.html";
+
+};
+
+
+window.goStudyHub = function() {
+
+    window.location.href =
+        "studyhub.html";
+
+};
+
+
+window.goProfile = function() {
+
+    window.location.href =
+        "profile.html";
+
+};
+
+
+/* =========================================================
+   END OF PART 5
+========================================================= */
+
+</script>
+     <script src="theme.js"></script>
+
+<!-- STUDENTX PROFILE — MISSING FEATURES + VIDEOS + SAVED CONTENT -->
+<script>
+/*
+   Supabase tables used here:
+   bookmarks(id, post_id, video_id, user_id, created_at)
+   comments(id, post_id, user_id, content, created_at)
+   reposts(id, post_id, user_id, created_at)
+
+   Videos are read from:
+   videos
+   Expected at minimum: id, user_id, created_at
+   The video URL can be stored in one of these common fields:
+   video_url, url, file_url, video_path, file_path, storage_path.
+*/
+
+const BOOKMARKS_TABLE = "bookmarks";
+const COMMENTS_TABLE = "comments";
+const REPOSTS_TABLE = "reposts";
+const VIDEOS_TABLE = "videos";
+const VIDEO_BUCKET = "videos";
+
+function sxEscape(v){ return escapeHTML(v ?? ""); }
+function sxDate(v){ return formatPostDate(v); }
+
+async function sxCount(table, postId){
+    const {count, error} = await supabaseClient
+        .from(table)
+        .select("id", {count:"exact", head:true})
+        .eq("post_id", postId);
+
+    return error ? 0 : (count || 0);
+}
+
+
+/* =========================================================
+   ONE IDENTITY BADGE
+   Priority: Premium Plus > Premium > Verified
+========================================================= */
+
+function getIdentityBadge(user) {
+    if (!user) return "";
+
+    if (user.premium_plan === "plus") {
+        return `<span class="studentx-badge premium-plus-badge"
+                    title="StudentX Premium Plus"
+                    aria-label="StudentX Premium Plus Verified">✓</span>`;
+    }
+
+    if (user.premium_plan === "standard") {
+        return `<span class="studentx-badge premium-badge"
+                    title="StudentX Premium"
+                    aria-label="StudentX Premium Verified">✓</span>`;
+    }
+
+    if (user.verified === true) {
+        return `<span class="studentx-badge premium-badge"
+                    title="Verified StudentX account"
+                    aria-label="Verified StudentX account">✓</span>`;
+    }
+
+    return "";
+}
+
+
+/* =========================================================
+   POST META + BOOKMARK
+========================================================= */
+
+async function loadProfilePostMeta(postId){
+    const [comments, reposts, bookmarked] = await Promise.all([
+        sxCount(COMMENTS_TABLE, postId),
+        sxCount(REPOSTS_TABLE, postId),
+        currentUser
+            ? supabaseClient.from(BOOKMARKS_TABLE)
+                .select("id")
+                .eq("post_id", postId)
+                .eq("user_id", currentUser.id)
+                .maybeSingle()
+            : Promise.resolve({data:null})
+    ]);
+
+    const article = document.querySelector(
+        `[data-post-id="${CSS.escape(String(postId))}"]`
+    );
+
+    if (!article) return;
+
+    const acts = article.querySelectorAll(".p-acts .p-a");
+
+    if (acts[1]?.querySelector("span")) {
+        acts[1].querySelector("span").textContent = formatNumber(comments);
+    }
+
+    if (acts[2]?.querySelector("span")) {
+        acts[2].querySelector("span").textContent = formatNumber(reposts);
+    }
+
+    const bookmarkButton = acts[3];
+
+    if (bookmarkButton) {
+        const isBookmarked = !!bookmarked?.data;
+
+        bookmarkButton.classList.toggle(
+            "sx-active",
+            isBookmarked
+        );
+
+        const icon = bookmarkButton.querySelector("i");
+
+        if (icon) {
+            icon.className = isBookmarked
+                ? "fas fa-bookmark"
+                : "far fa-bookmark";
+        }
+
+        bookmarkButton.onclick = () =>
+            toggleProfileBookmark(postId);
+    }
+}
+
+async function toggleProfileBookmark(postId){
+    if (!currentUser) {
+        alert("Please login first.");
+        return;
+    }
+
+    const {
+        data: existing,
+        error: checkError
+    } = await supabaseClient
+        .from(BOOKMARKS_TABLE)
+        .select("id")
+        .eq("post_id", postId)
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+    if (checkError) {
+        console.error(checkError);
+        alert("Bookmarks are not available yet. Check the bookmarks table.");
+        return;
+    }
+
+    if (existing) {
+        const {error} = await supabaseClient
+            .from(BOOKMARKS_TABLE)
+            .delete()
+            .eq("id", existing.id);
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+    } else {
+        const {error} = await supabaseClient
+            .from(BOOKMARKS_TABLE)
+            .insert({
+                post_id: postId,
+                user_id: currentUser.id
+            });
+
+        if (error) {
+            alert(error.message);
+            return;
+        }
+    }
+
+    await loadProfilePostMeta(postId);
+
+    if (document.getElementById("savedView")?.style.display !== "none") {
+        loadSavedContent();
+    }
+}
+
+
+/* =========================================================
+   VIDEO URL HELPER
+========================================================= */
+
+function getVideoUrl(video) {
+    const value =
+        video?.video_url ||
+        video?.url ||
+        video?.file_url ||
+        video?.video_path ||
+        video?.file_path ||
+        video?.storage_path ||
+        "";
+
+    if (!value) return "";
+
+    if (/^https?:\/\//i.test(value)) {
+        return value;
+    }
+
+    try {
+        const {data} = supabaseClient
+            .storage
+            .from(VIDEO_BUCKET)
+            .getPublicUrl(value);
+
+        return data?.publicUrl || "";
+    } catch (e) {
+        return "";
+    }
+}
+
+
+/* =========================================================
+   PROFILE VIDEOS FROM SUPABASE
+========================================================= */
+
+async function loadProfileVideos(){
+    const view = document.getElementById("videosView");
+
+    if (!view) return;
+
+    if (!currentUser) {
+        view.innerHTML =
+            '<div class="sx-empty">Please login to view videos.</div>';
+        return;
+    }
+
+    view.innerHTML =
+        '<div class="sx-loading">Loading videos...</div>';
+
+    try {
+        const {
+            data: videos,
+            error
+        } = await supabaseClient
+            .from(VIDEOS_TABLE)
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {ascending:false});
+
+        if (error) throw error;
+
+        if (!videos?.length) {
+            view.innerHTML =
+                '<div class="sx-empty"><i class="fas fa-video"></i><div>No videos yet</div></div>';
+            return;
+        }
+
+        view.innerHTML = "";
+
+        videos.forEach(video => {
+            view.appendChild(
+                createProfileVideoCard(video)
+            );
+        });
+
+    } catch (error) {
+        console.error("Profile videos error:", error);
+
+        view.innerHTML =
+            '<div class="sx-empty">Unable to load videos from Supabase.</div>';
+    }
+}
+
+
+/* =========================================================
+   CREATE VIDEO CARD
+========================================================= */
+
+function createProfileVideoCard(video) {
+    const card = document.createElement("article");
+    card.className = "sx-video-card";
+    card.dataset.videoId = video.id || "";
+
+    const profile = currentProfile || {};
+    const name =
+        profile.full_name ||
+        "StudentX User";
+
+    const username =
+        profile.username
+            ? "@" + profile.username
+            : "@username";
+
+    const avatar =
+        profile.avatar_url || "";
+
+    const videoUrl = getVideoUrl(video);
+
+    let avatarHTML = "";
+
+    if (avatar) {
+        avatarHTML =
+            `<img src="${escapeAttribute(avatar)}" alt="Profile">`;
+    } else {
+        avatarHTML =
+            escapeHTML(
+                name.charAt(0).toUpperCase()
+            );
+    }
+
+    const caption =
+        video.caption ||
+        video.description ||
+        "";
+
+    const date =
+        video.created_at ||
+        video.Create_at ||
+        "";
+
+    card.innerHTML = `
+        <div class="sx-video-head">
+            <div class="sx-video-avatar">
+                ${avatarHTML}
+            </div>
+
+            <div>
+                <div class="sx-video-name">
+                    ${escapeHTML(name)}
+                    ${getIdentityBadge(profile)}
+                </div>
+
+                <div class="sx-video-meta">
+                    ${escapeHTML(username)}
+                    ·
+                    ${escapeHTML(sxDate(date))}
+                </div>
+            </div>
+        </div>
+
+        ${
+            videoUrl
+                ? `<video
+                        class="sx-video-player"
+                        src="${escapeAttribute(videoUrl)}"
+                        controls
+                        playsinline
+                        preload="metadata"
+                    ></video>`
+                : `<div class="sx-empty">Video file URL was not found.</div>`
+        }
+
+        ${
+            caption
+                ? `<div class="sx-video-caption">${escapeHTML(caption)}</div>`
+                : ""
+        }
+    `;
+
+    return card;
+}
+
+
+/* =========================================================
+   SAVED CONTENT — POSTS + VIDEOS
+========================================================= */
+
+async function loadSavedContent(){
+    const view = document.getElementById("savedView");
+
+    if (!view || !currentUser) return;
+
+    view.innerHTML =
+        '<div class="sx-loading">Loading saved posts and videos...</div>';
+
+    try {
+        /*
+         * Load the flexible bookmark rows first. Selecting * means this
+         * works whether the table has post_id, video_id, or both.
+         */
+        const {
+            data: marks,
+            error: marksError
+        } = await supabaseClient
+            .from(BOOKMARKS_TABLE)
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .order("created_at", {ascending:false});
+
+        if (marksError) throw marksError;
+
+        if (!marks?.length) {
+            view.innerHTML =
+                '<div class="sx-empty"><i class="far fa-bookmark"></i><div>No saved posts or videos</div></div>';
+            return;
+        }
+
+        const postIds = [
+            ...new Set(
+                marks
+                    .map(x => x.post_id)
+                    .filter(Boolean)
+            )
+        ];
+
+        const videoIds = [
+            ...new Set(
+                marks
+                    .map(x => x.video_id)
+                    .filter(Boolean)
+            )
+        ];
+
+        const postPromise = postIds.length
+            ? supabaseClient
+                .from(POSTS_TABLE)
+                .select("id, User_id, content, image_url, Like, Create_at")
+                .in("id", postIds)
+            : Promise.resolve({data:[], error:null});
+
+        const videoPromise = videoIds.length
+            ? supabaseClient
+                .from(VIDEOS_TABLE)
+                .select("*")
+                .in("id", videoIds)
+            : Promise.resolve({data:[], error:null});
+
+        const [
+            {data:posts, error:postError},
+            {data:videos, error:videoError}
+        ] = await Promise.all([
+            postPromise,
+            videoPromise
+        ]);
+
+        if (postError) {
+            console.error("Saved posts error:", postError);
+        }
+
+        if (videoError) {
+            console.error("Saved videos error:", videoError);
+        }
+
+        const postMap =
+            new Map(
+                (posts || []).map(
+                    p => [String(p.id), p]
+                )
+            );
+
+        const videoMap =
+            new Map(
+                (videos || []).map(
+                    v => [String(v.id), v]
+                )
+            );
+
+        view.innerHTML = "";
+
+        /*
+         * Preserve the user's saved order from bookmarks.
+         */
+        marks.forEach(mark => {
+            if (mark.post_id) {
+                const post =
+                    postMap.get(
+                        String(mark.post_id)
+                    );
+
+                if (post) {
+                    view.appendChild(
+                        createProfilePost(post)
+                    );
+                }
+            }
+
+            if (mark.video_id) {
+                const video =
+                    videoMap.get(
+                        String(mark.video_id)
+                    );
+
+                if (video) {
+                    view.appendChild(
+                        createProfileVideoCard(video)
+                    );
+                }
+            }
+        });
+
+        if (!view.children.length) {
+            view.innerHTML =
+                '<div class="sx-empty">Saved content could not be found.</div>';
+        }
+
+    } catch (error) {
+        console.error("Saved content error:", error);
+
+        view.innerHTML =
+            '<div class="sx-empty">Saved content is not available. Check the bookmarks table and its RLS policy.</div>';
+    }
+}
+
+
+/* =========================================================
+   OPTIONAL FALLBACK: saved_videos TABLE
+   If video.html uses a separate saved_videos table, merge it.
+========================================================= */
+
+async function loadSavedVideosFallback(){
+    if (!currentUser) return [];
+
+    const {data, error} = await supabaseClient
+        .from("saved_videos")
+        .select("*")
+        .eq("user_id", currentUser.id)
+        .order("created_at", {ascending:false});
+
+    if (error) {
+        return [];
+    }
+
+    return data || [];
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+async function openProfileComments(postId){
+    if (!currentUser) {
+        alert("Please login first.");
+        return;
+    }
+
+    document.getElementById("sxCommentsModal")?.remove();
+
+    const modal = document.createElement("div");
+    modal.id = "sxCommentsModal";
+    modal.className = "sx-modal";
+
+    modal.innerHTML = `
+        <div class="sx-box">
+            <div class="sx-head">
+                <b>Comments</b>
+                <button
+                    type="button"
+                    onclick="document.getElementById('sxCommentsModal')?.remove()"
+                >×</button>
+            </div>
+
+            <div
+                id="sxCommentsList"
+                class="sx-comments"
+            >
+                <div class="sx-loading">
+                    Loading comments...
+                </div>
+            </div>
+
+            <form
+                id="sxCommentForm"
+                class="sx-compose"
+            >
+                <textarea
+                    id="sxCommentInput"
+                    maxlength="1000"
+                    placeholder="Write a comment..."
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Post
+                </button>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", e => {
+        if (e.target === modal) modal.remove();
+    });
+
+    await loadProfileComments(postId);
+
+    document.getElementById("sxCommentForm")?.addEventListener(
+        "submit",
+        async e => {
+            e.preventDefault();
+
+            const input =
+                document.getElementById("sxCommentInput");
+
+            const content =
+                input?.value.trim();
+
+            if (!content) return;
+
+            const button =
+                e.submitter;
+
+            if (button) button.disabled = true;
+
+            const {error} =
+                await supabaseClient
+                    .from(COMMENTS_TABLE)
+                    .insert({
+                        post_id: postId,
+                        user_id: currentUser.id,
+                        content
+                    });
+
+            if (button) button.disabled = false;
+
+            if (error) {
+                console.error(error);
+                alert(error.message);
+                return;
+            }
+
+            input.value = "";
+
+            await loadProfileComments(postId);
+            await loadProfilePostMeta(postId);
+        }
+    );
+}
+
+async function loadProfileComments(postId){
+    const list =
+        document.getElementById("sxCommentsList");
+
+    if (!list) return;
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from(COMMENTS_TABLE)
+        .select("id,user_id,content,created_at")
+        .eq("post_id", postId)
+        .order("created_at", {ascending:true});
+
+    if (error) {
+        list.innerHTML =
+            '<div class="sx-empty">Comments are not available yet.</div>';
+        return;
+    }
+
+    if (!data?.length) {
+        list.innerHTML =
+            '<div class="sx-empty">No comments yet.</div>';
+        return;
+    }
+
+    const ids = [
+        ...new Set(
+            data
+                .map(c => c.user_id)
+                .filter(Boolean)
+        )
+    ];
+
+    let profiles = [];
+
+    if (ids.length) {
+        const result =
+            await supabaseClient
+                .from(PROFILE_TABLE)
+                .select("id,full_name,username,avatar_url,verified,premium_plan")
+                .in("id", ids);
+
+        profiles = result.data || [];
+    }
+
+    const profileMap =
+        new Map(
+            profiles.map(p => [p.id, p])
+        );
+
+    list.innerHTML =
+        data.map(comment => {
+            const p =
+                profileMap.get(comment.user_id) || {};
+
+            const name =
+                p.full_name ||
+                p.username ||
+                "StudentX User";
+
+            return `
+                <div class="sx-comment">
+                    <b>
+                        ${sxEscape(name)}
+                        ${getIdentityBadge(p)}
+                    </b>
+
+                    <small
+                        style="color:#777;margin-left:6px"
+                    >
+                        ${sxEscape(
+                            sxDate(comment.created_at)
+                        )}
+                    </small>
+
+                    <p>
+                        ${sxEscape(comment.content)}
+                    </p>
+                </div>
+            `;
+        }).join("");
+
+    list.scrollTop = list.scrollHeight;
+}
+
+
+/* =========================================================
+   REPOST
+========================================================= */
+
+async function repostProfilePost(postId){
+    if (!currentUser) {
+        alert("Please login first.");
+        return;
+    }
+
+    const {
+        data: existing,
+        error: checkError
+    } = await supabaseClient
+        .from(REPOSTS_TABLE)
+        .select("id")
+        .eq("post_id", postId)
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+    if (checkError) {
+        console.error(checkError);
+        alert("Reposts are not available yet.");
+        return;
+    }
+
+    if (existing) {
+        alert("You already reposted this post.");
+        return;
+    }
+
+    const {error} =
+        await supabaseClient
+            .from(REPOSTS_TABLE)
+            .insert({
+                post_id: postId,
+                user_id: currentUser.id
+            });
+
+    if (error) {
+        alert(error.message);
+        return;
+    }
+
+    await loadProfilePostMeta(postId);
+    alert("Post reposted successfully.");
+}
+
+
+/* =========================================================
+   RECEIVED LIKES
+========================================================= */
+
+async function loadReceivedLikesCount(){
+    if (!currentUser) return;
+
+    const {
+        data: posts,
+        error: postsError
+    } = await supabaseClient
+        .from(POSTS_TABLE)
+        .select("id")
+        .eq("User_id", currentUser.id);
+
+    if (postsError) return;
+
+    const ids =
+        (posts || []).map(p => p.id);
+
+    let count = 0;
+
+    if (ids.length) {
+        const result =
+            await supabaseClient
+                .from(LIKES_TABLE)
+                .select("id", {
+                    count:"exact",
+                    head:true
+                })
+                .in("post_id", ids);
+
+        if (!result.error) {
+            count = result.count || 0;
+        }
+    }
+
+    const el =
+        document.getElementById("likesCount");
+
+    if (el) {
+        el.textContent =
+            formatNumber(count);
+    }
+}
+
+
+/* =========================================================
+   HOOKS
+========================================================= */
+
+const _oldLoadProfileStats =
+    loadProfileStats;
+
+loadProfileStats = async function(){
+    await _oldLoadProfileStats();
+    await loadReceivedLikesCount();
+};
+
+const _oldCreateProfilePost =
+    createProfilePost;
+
+createProfilePost = function(post){
+    const el =
+        _oldCreateProfilePost(post);
+
+    setTimeout(
+        () => loadProfilePostMeta(post.id),
+        0
+    );
+
+    return el;
+};
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function(){
+        setTimeout(() => {
+            if (postsView) {
+                postsView.style.display = "block";
+            }
+
+            if (videosView) {
+                videosView.style.display = "none";
+            }
+
+            if (savedView) {
+                savedView.style.display = "none";
+            }
+        }, 0);
+    }
+);
+</script>
+</script>
+<script>
+/* =========================================================
+   CENTRAL STUDENTX PREMIUM BADGE
+   Compatibility helper used by existing components.
+========================================================= */
+function getPremiumBadge(user) {
+    if (!user) return "";
+
+    if (user.premium_plan === "plus") {
+        return `<span class="studentx-badge premium-plus-badge"
+                    title="StudentX Premium Plus"
+                    aria-label="StudentX Premium Plus Verified">✓</span>`;
+    }
+
+    if (user.premium_plan === "standard") {
+        return `<span class="studentx-badge premium-badge"
+                    title="StudentX Premium"
+                    aria-label="StudentX Premium Verified">✓</span>`;
+    }
+
+    return "";
+}
+</script>
+</body>
+</html>
