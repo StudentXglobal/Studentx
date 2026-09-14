@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudentX Ads Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{background:#0b0b10;color:#fff;font-family:Arial,sans-serif;padding:18px}
+.wrap{max-width:720px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+h1{font-size:20px}.card{background:#15151d;border:1px solid #282833;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-size:12px;color:#aaa;margin:12px 0 6px}
+input,textarea,select{width:100%;background:#20202a;color:#fff;border:1px solid #343442;border-radius:8px;padding:11px;outline:none}
+textarea{min-height:80px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:8px;padding:11px 14px;background:#6d35ff;color:#fff;font-weight:700;cursor:pointer;margin-top:14px}
+button.secondary{background:#25252e}.ad{border-top:1px solid #292933;padding:14px 0}.ad:first-child{border-top:0}
+.status{font-size:11px;padding:4px 7px;border-radius:5px;background:#282833;color:#bbb}.active{color:#72e6a5}.paused{color:#ffd166}
+small{color:#999}.danger{background:#b3263e}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><h1><i class="fas fa-bullhorn"></i> StudentX Ads Manager</h1><button class="secondary" onclick="location.href='video.html'">Video Feed</button></div>
+
+<div class="card">
+<h2 style="font-size:16px">Create advertisement</h2>
+<label>Ad title</label><input id="title" placeholder="Example: StudentX Laptop Store">
+<label>Advert video</label><input id="videoFile" type="file" accept="video/*">
+<label>Caption</label><textarea id="caption" placeholder="Write your advert caption..."></textarea>
+<div class="row">
+<div><label>CTA text</label><input id="ctaText" value="Learn More"></div>
+<div><label>CTA URL</label><input id="ctaUrl" placeholder="https://example.com"></div>
+</div>
+<label>Interests / categories</label><input id="interests" placeholder="tech, education, football">
+<div class="row">
+<div><label>Start</label><input id="startAt" type="datetime-local"></div>
+<div><label>End</label><input id="endAt" type="datetime-local"></div>
+</div>
+<button id="publishBtn" onclick="createAd()">Publish Ad</button>
+<p id="msg" style="font-size:12px;color:#aaa;margin-top:10px"></p>
+</div>
+
+<div class="card"><h2 style="font-size:16px;margin-bottom:10px">Your ads</h2><div id="ads">Loading...</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+let user=null;
+const msg=x=>document.getElementById("msg").textContent=x;
+async function init(){
+ const r=await supabaseClient.auth.getUser(); user=r.data.user;
+ if(!user){location.href="login.html";return}
+ const p=await supabaseClient.from("profiles").select("is_admin").eq("id",user.id).maybeSingle();
+ if(!p.data?.is_admin){document.body.innerHTML='<div style="text-align:center;margin-top:80px">Admin access required.</div>';return}
+ loadAds();
+}
+async function createAd(){
+ const file=document.getElementById("videoFile").files[0];
+ const title=document.getElementById("title").value.trim();
+ if(!file||!title){msg("Title and video are required.");return}
+ const btn=document.getElementById("publishBtn");btn.disabled=true;btn.textContent="Uploading...";
+ try{
+   const ext=file.name.split(".").pop();
+   const path=`${user.id}/${Date.now()}.${ext}`;
+   const up=await supabaseClient.storage.from("ads").upload(path,file,{upsert:false});
+   if(up.error)throw up.error;
+   const pub=supabaseClient.storage.from("ads").getPublicUrl(path);
+   const start=document.getElementById("startAt").value?new Date(document.getElementById("startAt").value).toISOString():new Date().toISOString();
+   const end=document.getElementById("endAt").value?new Date(document.getElementById("endAt").value).toISOString():new Date(Date.now()+30*86400000).toISOString();
+   const r=await supabaseClient.from("ads").insert({
+     created_by:user.id,title,video_url:pub.data.publicUrl,
+     caption:document.getElementById("caption").value.trim(),
+     cta_text:document.getElementById("ctaText").value.trim()||"Learn More",
+     cta_url:document.getElementById("ctaUrl").value.trim()||null,
+     interests:document.getElementById("interests").value.trim(),
+     status:"active",start_at:start,end_at:end
+   });
+   if(r.error)throw r.error;
+   msg("Ad published successfully.");document.getElementById("videoFile").value="";loadAds();
+ }catch(e){console.error(e);msg(e.message||"Failed to publish ad.");}
+ finally{btn.disabled=false;btn.textContent="Publish Ad";}
+}
+async function loadAds(){
+ const r=await supabaseClient.from("ads").select("*").order("created_at",{ascending:false});
+ const el=document.getElementById("ads");
+ if(r.error){el.textContent=r.error.message;return}
+ el.innerHTML=(r.data||[]).map(a=>`<div class="ad">
+   <b>${esc(a.title)}</b> <span class="status ${esc(a.status)}">${esc(a.status)}</span>
+   <div style="margin-top:5px"><small>${esc(a.interests||"No interests")} · ${new Date(a.created_at).toLocaleString()}</small></div>
+   <button class="secondary" onclick="setStatus('${a.id}','${a.status==='active'?'paused':'active'}')">${a.status==='active'?'Pause':'Activate'}</button>
+   <button class="danger" onclick="deleteAd('${a.id}')">Delete</button>
+ </div>`).join("")||"<small>No ads yet.</small>";
+}
+async function setStatus(id,status){await supabaseClient.from("ads").update({status}).eq("id",id);loadAds()}
+async function deleteAd(id){if(!confirm("Delete this ad?"))return;await supabaseClient.from("ads").delete().eq("id",id);loadAds()}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+init();
+</script>
+</body>
+</html>
