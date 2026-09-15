@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Create Post</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:#0a0a0f;color:#fff;min-height:100vh;display:flex;flex-direction:column}
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(10,10,15,.95);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(255,255,255,.06)}
+.hdr-l{display:flex;align-items:center;gap:12px}
+.hdr-back{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:18px}
+.hdr-title{font-size:15px;font-weight:700}
+.hdr-post{padding:8px 20px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:13px;font-weight:700}
+.user-bar{display:flex;align-items:center;gap:12px;padding:16px 14px;border-bottom:1px solid rgba(255,255,255,.05)}
+.user-bar img{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.user-bar .nm{font-size:14px;font-weight:700}
+.user-bar .sc{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
+textarea{width:100%;min-height:200px;padding:16px 14px;background:transparent;border:none;color:#fff;font-size:15px;line-height:1.6;resize:none;font-family:Poppins,sans-serif}
+textarea:focus{outline:none}
+textarea::placeholder{color:rgba(255,255,255,.2)}
+.preview-area{padding:0 14px}
+.img-preview{position:relative;border-radius:14px;overflow:hidden;margin-bottom:10px}
+.img-preview img{width:100%;border-radius:14px;display:block}
+.img-preview .rm{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.file-preview{display:flex;align-items:center;gap:10px;padding:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:12px;margin-bottom:10px}
+.file-preview .ic{width:40px;height:40px;border-radius:10px;background:rgba(239,68,68,.1);color:#ef4444;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.file-preview .inf{flex:1;min-width:0}
+.file-preview .fn{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.file-preview .fs{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.file-preview .rm{color:rgba(255,255,255,.4);font-size:14px;padding:8px}
+.tools{padding:14px;border-top:1px solid rgba(255,255,255,.05);display:flex;gap:4px}
+.tool-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border-radius:12px;border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);transition:all .2s}
+.tool-btn:hover{border-color:rgba(124,58,237,.3);background:rgba(124,58,237,.06)}
+.tool-btn i{font-size:20px}
+.tool-btn span{font-size:10px;font-weight:600;color:rgba(255,255,255,.5)}
+.tool-btn.g i{color:#10b981}
+.tool-btn.r i{color:#ef4444}
+.tool-btn.y i{color:#f59e0b}
+.tool-btn.b i{color:#3b82f6}
+.tool-btn.p i{color:#a855f7}
+
+.modal-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.72);display:none;align-items:flex-end}
+.modal-backdrop.show{display:flex}
+.modal{width:100%;max-height:82vh;background:#101015;border-top:1px solid rgba(255,255,255,.08);border-radius:20px 20px 0 0;padding:16px 14px 24px;overflow:auto}
+.modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-title{font-size:15px;font-weight:700}
+.modal-close{width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55)}
+.option-row{display:flex;align-items:center;gap:12px;padding:13px 10px;border-radius:12px;margin-bottom:6px;border:1px solid transparent}
+.option-row.active{background:rgba(124,58,237,.10);border-color:rgba(124,58,237,.28)}
+.option-row i{width:22px;text-align:center;color:#a855f7}
+.option-row .oi{flex:1}
+.option-row .ot{font-size:12px;font-weight:600}
+.option-row .os{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+.check{width:20px;height:20px;border-radius:50%;border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:10px}
+.option-row.active .check{background:#8b5cf6;border-color:#8b5cf6}
+.switch-row{display:flex;align-items:center;justify-content:space-between;padding:14px 10px;border-top:1px solid rgba(255,255,255,.06);margin-top:8px}
+.switch-label{font-size:12px;font-weight:600}
+.switch-sub{font-size:10px;color:rgba(255,255,255,.35);margin-top:2px}
+.switch{width:42px;height:24px;border-radius:20px;background:#333;position:relative}
+.switch:after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s}
+.switch.on{background:#8b5cf6}
+.switch.on:after{left:21px}
+.selected-tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.tag-chip{display:flex;align-items:center;gap:6px;padding:6px 9px;border-radius:14px;background:rgba(124,58,237,.14);font-size:10px}
+.tag-chip i{font-size:9px}
+.tag-search{width:100%;padding:11px 12px;border-radius:11px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:#fff;outline:none;font-family:Poppins,sans-serif;font-size:12px;margin-bottom:8px}
+.people-list{display:flex;flex-direction:column;gap:4px}
+.person-row{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:11px}
+.person-row:active{background:rgba(255,255,255,.04)}
+.person-row img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#222}
+.person-info{flex:1;min-width:0}
+.person-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.person-user{font-size:9px;color:rgba(255,255,255,.32)}
+.person-check{width:20px;height:20px;border:1px solid rgba(255,255,255,.18);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px}
+.person-row.selected .person-check{background:#8b5cf6;border-color:#8b5cf6}
+.empty-people{text-align:center;padding:25px 10px;color:rgba(255,255,255,.35);font-size:11px}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+<header class="hdr">
+<div class="hdr-l">
+<div class="hdr-back" onclick="cancelPost()"><i class="fas fa-times"></i></div>
+<div class="hdr-title">Create Post</div>
+</div>
+<div class="hdr-post" onclick="publishPost()">Post</div>
+</header>
+
+<div class="user-bar" onclick="openVisibilityModal()">
+<img id="currentUserAvatar" src="" alt="">
+<div>
+<div class="nm" id="currentUserName">Loading...</div>
+<div class="sc" id="visibilityLabel"><i class="fas fa-globe-africa" style="margin-right:4px"></i> Public</div>
+</div>
+</div>
+</div>
+
+<textarea id="postText" placeholder="What's on your mind?"></textarea>
+
+<div class="preview-area" id="previewArea"></div>
+
+<div class="tools">
+<div class="tool-btn g" onclick="pickFile('image')">
+<i class="fas fa-image"></i>
+<span>Photo</span>
+</div>
+<div class="tool-btn r" onclick="pickFile('video')">
+<i class="fas fa-video"></i>
+<span>Video</span>
+</div>
+<div class="tool-btn b" onclick="pickFile('file')">
+<i class="fas fa-file-pdf"></i>
+<span>File</span>
+</div>
+<div class="tool-btn y" onclick="showMsg('Poll creation coming soon')">
+<i class="fas fa-poll"></i>
+<span>Poll</span>
+</div>
+<div class="tool-btn p" onclick="openTagModal()">
+<i class="fas fa-user-tag"></i>
+<span>Tag</span>
+</div>
+</div>
+
+
+<div class="modal-backdrop" id="visibilityModal" onclick="backdropClose(event,'visibilityModal')">
+<div class="modal">
+<div class="modal-head"><div class="modal-title">Post privacy</div><div class="modal-close" onclick="closeModal('visibilityModal')"><i class="fas fa-times"></i></div></div>
+<div class="option-row active" id="privacy-public" onclick="setVisibility('public')"><i class="fas fa-globe-africa"></i><div class="oi"><div class="ot">Public</div><div class="os">Anyone can see this post</div></div><div class="check"><i class="fas fa-check"></i></div></div>
+<div class="option-row" id="privacy-followers" onclick="setVisibility('followers')"><i class="fas fa-user-group"></i><div class="oi"><div class="ot">Only followers</div><div class="os">Only people who follow you can see it</div></div><div class="check"><i class="fas fa-check"></i></div></div>
+<div class="option-row" id="privacy-private" onclick="setVisibility('private')"><i class="fas fa-lock"></i><div class="oi"><div class="ot">Private</div><div class="os">Only you can see it</div></div><div class="check"><i class="fas fa-check"></i></div></div>
+<div class="switch-row" onclick="toggleAllowTag()"><div><div class="switch-label">Allow tags</div><div class="switch-sub">Let other people tag you in posts</div></div><div class="switch on" id="allowTagSwitch"></div></div>
+</div></div>
+
+<div class="modal-backdrop" id="tagModal" onclick="backdropClose(event,'tagModal')">
+<div class="modal">
+<div class="modal-head"><div class="modal-title">Tag students</div><div class="modal-close" onclick="closeModal('tagModal')"><i class="fas fa-times"></i></div></div>
+<div class="selected-tags" id="selectedTags"></div>
+<input class="tag-search" id="tagSearch" placeholder="Search students..." oninput="filterTagPeople()">
+<div class="people-list" id="tagPeopleList"><div class="empty-people">Loading students...</div></div>
+</div></div>
+
+<input type="file" id="fileInput" accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx" style="display:none" onchange="handleFile(this)">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+
+  
+<script>
+var hasFile = false;
+var selectedFile = null;
+var fileName = '';
+var fileSize = '';
+var fileType = '';
+var currentUserProfile = null;
+var postVisibility = 'public';
+var allowTag = true;
+var tagPeople = [];
+var selectedTagIds = [];
+
+function pickFile(type) {
+var input=document.getElementById('fileInput');
+input.accept=type==='image'?'image/*':type==='video'?'video/*':'.pdf,.doc,.docx,.ppt,.pptx,.txt';
+input.click();
+}
+
+function handleFile(input) {
+var file=input.files[0]; if(!file)return;
+var area=document.getElementById('previewArea');
+hasFile=true; selectedFile=file; fileName=file.name; fileSize=(file.size/(1024*1024)).toFixed(1)+' MB'; fileType=file.type||'';
+if(file.type.startsWith('image/')){
+var reader=new FileReader();
+reader.onload=function(e){area.innerHTML='<div class="img-preview"><img src="'+e.target.result+'" alt=""><div class="rm" onclick="removeFile()"><i class="fas fa-times"></i></div></div>';};
+reader.readAsDataURL(file);
+}else{
+var icon='fa-file',color='#3b82f6',n=file.name.toLowerCase();
+if(n.endsWith('.pdf')){icon='fa-file-pdf';color='#ef4444';}
+else if(n.endsWith('.doc')||n.endsWith('.docx')){icon='fa-file-word';color='#3b82f6';}
+else if(n.endsWith('.ppt')||n.endsWith('.pptx')){icon='fa-file-powerpoint';color='#f59e0b';}
+else if(file.type.startsWith('video/')){icon='fa-file-video';color='#ef4444';}
+area.innerHTML='<div class="file-preview"><div class="ic" style="background:'+color+'15;color:'+color+'"><i class="fas '+icon+'"></i></div><div class="inf"><div class="fn">'+escapeHtml(file.name)+'</div><div class="fs">'+fileSize+'</div></div><div class="rm" onclick="removeFile()"><i class="fas fa-times"></i></div></div>';
+}
+input.value='';
+}
+
+function removeFile(){hasFile=false;selectedFile=null;fileName='';fileSize='';fileType='';document.getElementById('previewArea').innerHTML='';}
+function escapeHtml(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];});}
+
+async function loadCurrentUser(){
+try{
+var result=await supabaseClient.auth.getUser(),user=result.data.user;
+if(!user){showMsg('You must be logged in');return null;}
+var pr=await supabaseClient.from('profiles').select('id,full_name,username,avatar_url').eq('id',user.id).maybeSingle();
+if(pr.error)console.warn('Profile load error:',pr.error);
+currentUserProfile=pr.data||{id:user.id,full_name:user.user_metadata&&user.user_metadata.full_name,username:user.email};
+var name=currentUserProfile.full_name||currentUserProfile.username||'Student';
+document.getElementById('currentUserName').textContent=name;
+var avatar=currentUserProfile.avatar_url||(user.user_metadata&&user.user_metadata.avatar_url);
+document.getElementById('currentUserAvatar').src=avatar||'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=7c3aed&color=fff';
+return user;
+}catch(e){console.error(e);showMsg('Could not load profile');return null;}
+}
+
+function openVisibilityModal(){document.getElementById('visibilityModal').classList.add('show');}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+function backdropClose(e,id){if(e.target.id===id)closeModal(id);}
+function setVisibility(value){
+postVisibility=value;
+['public','followers','private'].forEach(function(v){document.getElementById('privacy-'+v).classList.toggle('active',v===value);});
+var labels={public:['fa-globe-africa','Public'],followers:['fa-user-group','Only followers'],private:['fa-lock','Private']},x=labels[value];
+document.getElementById('visibilityLabel').innerHTML='<i class="fas '+x[0]+'" style="margin-right:4px"></i> '+x[1];
+closeModal('visibilityModal');
+}
+function toggleAllowTag(){allowTag=!allowTag;document.getElementById('allowTagSwitch').classList.toggle('on',allowTag);if(!allowTag){selectedTagIds=[];renderSelectedTags();}}
+
+async function openTagModal(){
+if(!allowTag){showMsg('Tagging is disabled for this post');return;}
+document.getElementById('tagModal').classList.add('show');
+if(!tagPeople.length)await loadTagPeople();
+renderTagPeople();
+}
+async function loadTagPeople(){
+var result=await supabaseClient.auth.getUser(),user=result.data.user;if(!user)return;
+var ids=new Set();
+try{
+var following=await supabaseClient.from('followers').select('following_id').eq('follower_id',user.id);
+if(!following.error)(following.data||[]).forEach(function(r){if(r.following_id&&r.following_id!==user.id)ids.add(r.following_id);});
+var followers=await supabaseClient.from('followers').select('follower_id').eq('following_id',user.id);
+if(!followers.error)(followers.data||[]).forEach(function(r){if(r.follower_id&&r.follower_id!==user.id)ids.add(r.follower_id);});
+var idList=Array.from(ids);if(!idList.length){tagPeople=[];return;}
+var profiles=await supabaseClient.from('profiles').select('id,full_name,username,avatar_url').in('id',idList).order('full_name',{ascending:true});
+if(profiles.error){console.error('Tag profiles error:',profiles.error);showMsg('Could not load students');tagPeople=[];return;}
+tagPeople=profiles.data||[];
+}catch(e){console.error('Tag people error:',e);tagPeople=[];}
+}
+function filterTagPeople(){renderTagPeople();}
+function renderTagPeople(){
+var list=document.getElementById('tagPeopleList'),q=(document.getElementById('tagSearch').value||'').trim().toLowerCase();
+var people=tagPeople.filter(function(p){return !q||String(p.full_name||'').toLowerCase().includes(q)||String(p.username||'').toLowerCase().includes(q);});
+if(!people.length){list.innerHTML='<div class="empty-people">No followers or following students found</div>';return;}
+list.innerHTML=people.map(function(p){
+var selected=selectedTagIds.indexOf(p.id)!==-1,name=p.full_name||p.username||'Student',username=p.username?'@'+p.username:'',avatar=p.avatar_url||'https://ui-avatars.com/api/?name='+encodeURIComponent(name)+'&background=7c3aed&color=fff';
+return '<div class="person-row '+(selected?'selected':'')+'" onclick="toggleTag('+JSON.stringify(p.id)+')"><img src="'+escapeHtml(avatar)+'" alt=""><div class="person-info"><div class="person-name">'+escapeHtml(name)+'</div><div class="person-user">'+escapeHtml(username)+'</div></div><div class="person-check"><i class="fas fa-check"></i></div></div>';
+}).join('');
+}
+function toggleTag(id){var i=selectedTagIds.indexOf(id);if(i===-1)selectedTagIds.push(id);else selectedTagIds.splice(i,1);renderSelectedTags();renderTagPeople();}
+function renderSelectedTags(){
+var box=document.getElementById('selectedTags');
+if(!selectedTagIds.length){box.innerHTML='';return;}
+box.innerHTML=selectedTagIds.map(function(id){var p=tagPeople.find(function(x){return x.id===id;});if(!p)return '';return '<div class="tag-chip">@'+escapeHtml(p.username||p.full_name||'student')+'<i class="fas fa-times" onclick="event.stopPropagation();toggleTag('+JSON.stringify(id)+')"></i></div>';}).join('');
+}
+
+async function uploadPostMedia(user,file){
+if(!file)return {url:null,type:null};
+var isImage=file.type.startsWith('image/'),isVideo=file.type.startsWith('video/');
+if(!isImage&&!isVideo)throw new Error('Only photo and video uploads are supported right now');
+var bucket=isImage?'photos':'videos',ext=(file.name.split('.').pop()||(isImage?'jpg':'mp4')).toLowerCase().replace(/[^a-z0-9]/g,'');
+var path=user.id+'/'+Date.now()+'_'+Math.random().toString(36).slice(2,8)+'.'+ext;
+var upload=await supabaseClient.storage.from(bucket).upload(path,file,{contentType:file.type||undefined,upsert:false});
+if(upload.error)throw upload.error;
+var pub=supabaseClient.storage.from(bucket).getPublicUrl(path);
+return {url:pub.data.publicUrl,type:isImage?'image':'video'};
+}
+
+async function publishPost(){
+var text=document.getElementById('postText').value.trim();
+if(!text&&!hasFile){showMsg('Write something or add a file');return;}
+var user=await loadCurrentUser();if(!user)return;
+var postData={User_id:user.id,content:text||null,image_url:null,visibility:postVisibility,allow_tag:allowTag};
+try{
+if(selectedFile){showMsg('Uploading...');var media=await uploadPostMedia(user,selectedFile);if(media.type==='image')postData.image_url=media.url;if(media.type==='video')postData.video_url=media.url;}
+var insertResult=await supabaseClient.from('posts').insert(postData).select('id').single();
+if(insertResult.error)throw insertResult.error;
+if(selectedTagIds.length&&insertResult.data&&insertResult.data.id){
+var rows=selectedTagIds.map(function(id){return {post_id:insertResult.data.id,user_id:id};});
+var tagInsert=await supabaseClient.from('post_tags').insert(rows);
+if(tagInsert.error)console.warn('Tag insert error:',tagInsert.error);
+}
+showMsg('Post published!');setTimeout(function(){window.location.href='home.html';},800);
+}catch(error){console.error('Publish error:',error);showMsg(error&&error.message?error.message:'Failed to publish post');}
+}
+
+function cancelPost() {
+  var text = document.getElementById('postText').value.trim();
+  if (text || hasFile) {
+    showMsg('Draft discarded');
+  }
+  window.location.href = 'home.html';
+}
+
+function showMsg(t) {
+  var d = document.createElement('div');
+  d.className = 'toast';
+  d.textContent = t;
+  document.body.appendChild(d);
+  setTimeout(function() { d.remove(); }, 2500);
+}
+
+document.addEventListener('DOMContentLoaded', function(){ loadCurrentUser(); });
+</script>
+</body>
+</html>
