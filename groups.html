@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Groups - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.04);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.72);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);padding-bottom:80px;max-width:500px;margin:0 auto;min-height:100vh}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;align-items:center;gap:8px;padding:10px 12px}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:16px;cursor:pointer;flex-shrink:0;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{flex:1;font-size:20px;font-weight:800}
+.hdr-create{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+
+.search{display:flex;align-items:center;gap:10px;margin:0 14px 12px;padding:0 14px;height:42px;border-radius:14px;background:var(--card);border:1px solid var(--border)}
+.search i{color:var(--muted);font-size:13px}
+.search input{flex:1;border:0;outline:0;background:none;color:var(--text);font-size:13px}
+.search input::placeholder{color:var(--muted)}
+
+.tabs{display:flex}
+.tab{flex:1;padding:12px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+.chips{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff}
+
+/* LIST */
+.list{padding:10px 14px}
+.sec-title{margin:14px 2px 8px;font-size:12px;font-weight:700;color:var(--muted)}
+.g-card{display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:10px;background:var(--card);border:1px solid var(--border);border-radius:16px;cursor:pointer}
+.g-card:active{background:var(--card-2)}
+.g-av{width:58px;height:58px;border-radius:16px;flex-shrink:0;overflow:hidden;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:22px}
+.g-av img{width:100%;height:100%;object-fit:cover}
+.g-info{flex:1;min-width:0}
+.g-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.g-meta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:11px;color:var(--muted);flex-wrap:wrap}
+.tag{display:inline-block;padding:2px 8px;border-radius:10px;background:var(--grad);color:#fff;font-size:9px;font-weight:700}
+.g-desc{margin-top:5px;font-size:11px;line-height:1.5;color:var(--text-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.g-act{padding:8px 16px;border-radius:18px;border:1px solid var(--border);background:var(--card-2);color:var(--text);font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.g-act.main{background:var(--grad);border-color:transparent;color:#fff}
+.g-act:disabled{opacity:.6}
+
+.center{text-align:center;padding:50px 24px;color:var(--muted);font-size:13px;line-height:1.6}
+.center i{display:block;font-size:36px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:15px;margin-bottom:4px}
+.center .cta{margin-top:16px;padding:11px 24px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.skeleton{height:82px;border-radius:16px;background:var(--card);margin-bottom:10px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* CREATE SHEET */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:92vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 4px;font-size:16px;font-weight:700}
+.form{padding:0 20px}
+.form label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:84px;resize:vertical}
+.seg{display:flex;gap:8px}
+.seg-opt{flex:1;padding:12px 10px;border-radius:14px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.1);cursor:pointer;text-align:center}
+.seg-opt b{display:block;font-size:13px}
+.seg-opt small{display:block;margin-top:3px;font-size:10px;color:var(--muted);line-height:1.4}
+.seg-opt.on{border-color:var(--accent);background:rgba(220,39,67,.12)}
+.upl{display:flex;align-items:center;gap:12px}
+.upl-prev{width:52px;height:52px;border-radius:14px;background:rgba(128,128,128,.15);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--muted);flex-shrink:0}
+.upl-prev img{width:100%;height:100%;object-fit:cover}
+.sm{padding:8px 14px;border-radius:16px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.btns{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn:disabled{opacity:.6}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-row">
+    <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+    <div class="hdr-title">Groups</div>
+    <button class="hdr-create" onclick="openCreate()"><i class="fas fa-plus"></i> Create</button>
+  </div>
+  <div class="search"><i class="fas fa-search"></i><input id="q" type="text" placeholder="Search groups and communities..." autocomplete="off"></div>
+  <div class="tabs">
+    <div class="tab on" id="tabMine" onclick="setTab('mine')">My groups</div>
+    <div class="tab" id="tabDiscover" onclick="setTab('discover')">Discover</div>
+  </div>
+</header>
+
+<div class="chips" id="chips" style="display:none">
+  <div class="chip on" data-type="all" onclick="setType('all')">All</div>
+  <div class="chip" data-type="group" onclick="setType('group')">Groups</div>
+  <div class="chip" data-type="community" onclick="setType('community')">Communities</div>
+</div>
+
+<div class="list" id="list"><div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div></div>
+
+<!-- CREATE -->
+<div class="ov" id="createOv" onclick="if(event.target===this)closeCreate()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">Create a group</div>
+    <div class="form">
+      <label>Type</label>
+      <div class="seg" id="segType">
+        <div class="seg-opt on" data-v="group" onclick="pickSeg('segType',this)"><b>Group</b><small>For friends and classmates</small></div>
+        <div class="seg-opt" data-v="community" onclick="pickSeg('segType',this)"><b>Community</b><small>For a school, department or interest</small></div>
+      </div>
+
+      <label>Name</label>
+      <input type="text" id="cName" maxlength="60" placeholder="e.g. CSC 301 Study Group">
+
+      <label>Description</label>
+      <textarea id="cDesc" maxlength="300" placeholder="What is this group about?"></textarea>
+
+      <label>School (optional)</label>
+      <input type="text" id="cUni" maxlength="80" placeholder="e.g. Federal University Dutse">
+
+      <label>Privacy</label>
+      <div class="seg" id="segPriv">
+        <div class="seg-opt on" data-v="public" onclick="pickSeg('segPriv',this)"><b><i class="fas fa-globe-africa"></i> Public</b><small>Anyone can join and see posts</small></div>
+        <div class="seg-opt" data-v="private" onclick="pickSeg('segPriv',this)"><b><i class="fas fa-lock"></i> Private</b><small>You approve each member</small></div>
+      </div>
+
+      <label>Photo (optional)</label>
+      <div class="upl">
+        <div class="upl-prev" id="cPrev"><i class="fas fa-users"></i></div>
+        <button class="sm" type="button" onclick="pickPhoto()">Choose photo</button>
+      </div>
+
+      <div class="btns">
+        <button class="btn" onclick="closeCreate()">Cancel</button>
+        <button class="btn main" id="cSave" onclick="createGroup()">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX GROUPS: my groups, discover, create
+========================================================= */
+var me = null, myProfile = null;
+var tab = "mine", typeFilter = "all", term = "";
+var myMap = {};          // group_id -> { status, role }
+var searchTimer = null;
+var newPhoto = null;
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function fmt(n){
+  n = Number(n) || 0;
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M";
+  if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K";
+  return String(n);
+}
+function toast(msg){
+  var old = document.querySelector(".toast"); if (old) old.remove();
+  var d = document.createElement("div"); d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(function(){ if (d.parentNode) d.remove(); }, 2600);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "home.html";
+}
+function openGroup(id){ location.href = "group.html?id=" + encodeURIComponent(id); }
+
+/* ---------- INIT ---------- */
+async function init(){
+  try {
+    var auth = await supabaseClient.auth.getUser();
+    me = auth.data && auth.data.user;
+    if (!me) { location.href = "login.html"; return; }
+
+    var p = await supabaseClient.from("profiles").select("id,university").eq("id", me.id).maybeSingle();
+    myProfile = p.data || {};
+
+    await loadMyMap();
+    render();
+  } catch (e) {
+    console.error(e);
+    $("list").innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Something went wrong</b>Please refresh the page.</div>';
+  }
+}
+
+async function loadMyMap(){
+  var r = await supabaseClient.from("group_members").select("group_id,status,role").eq("user_id", me.id);
+  myMap = {};
+  (r.data || []).forEach(function(m){ myMap[String(m.group_id)] = { status: m.status, role: m.role }; });
+}
+
+/* ---------- TABS / FILTERS ---------- */
+function setTab(t){
+  tab = t;
+  $("tabMine").classList.toggle("on", t === "mine");
+  $("tabDiscover").classList.toggle("on", t === "discover");
+  $("chips").style.display = t === "discover" ? "flex" : "none";
+  render();
+}
+
+function setType(t){
+  typeFilter = t;
+  document.querySelectorAll(".chip").forEach(function(c){ c.classList.toggle("on", c.getAttribute("data-type") === t); });
+  render();
+}
+
+$("q").addEventListener("input", function(){
+  var v = this.value.trim();
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(function(){ term = v; render(); }, 300);
+});
+
+function render(){
+  $("list").innerHTML = '<div class="skeleton"></div><div class="skeleton"></div><div class="skeleton"></div>';
+  if (tab === "mine") renderMine(); else renderDiscover();
+}
+
+/* ---------- DATA HELPERS ---------- */
+async function memberCounts(ids){
+  var counts = {};
+  if (!ids.length) return counts;
+  var r = await supabaseClient.from("group_members").select("group_id").in("group_id", ids).eq("status", "active");
+  (r.data || []).forEach(function(m){ var k = String(m.group_id); counts[k] = (counts[k] || 0) + 1; });
+  return counts;
+}
+
+function matchesTerm(g){
+  if (!term) return true;
+  var t = term.toLowerCase();
+  return String(g.name || "").toLowerCase().indexOf(t) !== -1 || String(g.university || "").toLowerCase().indexOf(t) !== -1;
+}
+
+/* ---------- MY GROUPS ---------- */
+async function renderMine(){
+  var ids = Object.keys(myMap);
+  var list = $("list");
+
+  if (!ids.length) {
+    list.innerHTML = '<div class="center"><i class="fas fa-users"></i><b>You have not joined any groups</b>' +
+      'Create one for your class, or find one to join.' +
+      '<br><button class="cta" onclick="setTab(\'discover\')">Discover groups</button></div>';
+    return;
+  }
+
+  var r = await supabaseClient.from("groups").select("*").in("id", ids);
+  if (r.error) { list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i>Could not load your groups.</div>'; return; }
+
+  var rows = (r.data || []).filter(matchesTerm);
+  var counts = await memberCounts(rows.map(function(g){ return g.id; }));
+
+  var joined = rows.filter(function(g){ return myMap[String(g.id)].status === "active"; });
+  var pending = rows.filter(function(g){ return myMap[String(g.id)].status === "pending"; });
+
+  joined.sort(function(a, b){
+    var ar = myMap[String(a.id)].role === "admin" ? 0 : 1, br = myMap[String(b.id)].role === "admin" ? 0 : 1;
+    return ar - br || String(a.name).localeCompare(String(b.name));
+  });
+
+  if (!joined.length && !pending.length) {
+    list.innerHTML = '<div class="center"><i class="fas fa-search"></i><b>No results</b>Nothing matches "' + esc(term) + '".</div>';
+    return;
+  }
+
+  var html = "";
+  if (joined.length) {
+    html += '<div class="sec-title">Joined (' + joined.length + ')</div>' + joined.map(function(g){ return card(g, counts); }).join("");
+  }
+  if (pending.length) {
+    html += '<div class="sec-title">Requests sent</div>' + pending.map(function(g){ return card(g, counts); }).join("");
+  }
+  list.innerHTML = html;
+}
+
+/* ---------- DISCOVER ---------- */
+async function renderDiscover(){
+  var list = $("list");
+
+  var q = supabaseClient.from("groups").select("*").order("created_at", { ascending: false }).limit(40);
+  if (typeFilter !== "all") q = q.eq("type", typeFilter);
+  if (term) {
+    var safe = term.replace(/[,()%*\\]/g, " ").trim();
+    if (safe) q = q.or("name.ilike.%" + safe + "%,university.ilike.%" + safe + "%");
+  }
+
+  var r = await q;
+  if (r.error) { console.error(r.error); list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i>Could not load groups.<br>' + esc(r.error.message) + '</div>'; return; }
+
+  var rows = r.data || [];
+  if (!rows.length) {
+    list.innerHTML = '<div class="center"><i class="fas fa-compass"></i><b>' + (term ? "No results" : "No groups yet") + '</b>' +
+      (term ? 'Try a different name or school.' : 'Be the first to start one.') +
+      '<br><button class="cta" onclick="openCreate()">Create a group</button></div>';
+    return;
+  }
+
+  var counts = await memberCounts(rows.map(function(g){ return g.id; }));
+  list.innerHTML = rows.map(function(g){ return card(g, counts); }).join("");
+}
+
+/* ---------- CARD ---------- */
+function card(g, counts){
+  var id = String(g.id);
+  var my = myMap[id];
+  var av = g.avatar_url ? '<img src="' + esc(g.avatar_url) + '" alt="" onerror="this.remove()">' : '<i class="fas fa-users"></i>';
+  var action;
+
+  if (my && my.status === "active") {
+    action = '<button class="g-act" onclick="event.stopPropagation();openGroup(\'' + esc(id) + '\')">Open</button>';
+  } else if (my && my.status === "pending") {
+    action = '<button class="g-act" disabled>Requested</button>';
+  } else {
+    action = '<button class="g-act main" onclick="event.stopPropagation();quickJoin(\'' + esc(id) + '\',this)">' + (g.privacy === "private" ? "Request" : "Join") + '</button>';
+  }
+
+  return '<div class="g-card" onclick="openGroup(\'' + esc(id) + '\')">' +
+    '<div class="g-av">' + av + '</div>' +
+    '<div class="g-info">' +
+      '<div class="g-name">' + esc(g.name) + '</div>' +
+      '<div class="g-meta"><span class="tag">' + (g.type === "community" ? "Community" : "Group") + '</span>' +
+        '<span><i class="fas ' + (g.privacy === "private" ? "fa-lock" : "fa-globe-africa") + '"></i> ' + (g.privacy === "private" ? "Private" : "Public") + '</span>' +
+        '<span>' + fmt(counts[id] || 0) + ' members</span></div>' +
+      (g.description ? '<div class="g-desc">' + esc(g.description) + '</div>' : "") +
+    '</div>' + action + '</div>';
+}
+
+/* ---------- JOIN FROM LIST ---------- */
+async function quickJoin(id, btn){
+  if (btn) btn.disabled = true;
+
+  var g = await supabaseClient.from("groups").select("id,name,privacy,created_by").eq("id", id).maybeSingle();
+  if (g.error || !g.data) { toast("This group no longer exists"); if (btn) btn.disabled = false; return; }
+
+  var status = g.data.privacy === "private" ? "pending" : "active";
+  var r = await supabaseClient.from("group_members").insert({ group_id: id, user_id: me.id, role: "member", status: status });
+
+  if (r.error) {
+    console.error(r.error);
+    toast(r.error.code === "23505" ? "You already joined or requested" : "Could not join. Try again.");
+    if (btn) btn.disabled = false;
+    await loadMyMap(); render();
+    return;
+  }
+
+  if (status === "pending" && g.data.created_by && g.data.created_by !== me.id) {
+    supabaseClient.from("notifications").insert({
+      recipient_id: g.data.created_by, actor_id: me.id, type: "system",
+      message: "Someone requested to join " + g.data.name, is_read: false
+    }).then(function(){});
+  }
+
+  toast(status === "pending" ? "Request sent" : "You joined " + g.data.name);
+  myMap[String(id)] = { status: status, role: "member" };
+  render();
+}
+
+/* =========================================================
+   CREATE GROUP
+========================================================= */
+function openCreate(){
+  newPhoto = null;
+  $("cName").value = ""; $("cDesc").value = "";
+  $("cUni").value = (myProfile && myProfile.university) || "";
+  $("cPrev").innerHTML = '<i class="fas fa-users"></i>';
+  resetSeg("segType"); resetSeg("segPriv");
+  $("createOv").classList.add("show");
+}
+function closeCreate(){ $("createOv").classList.remove("show"); }
+
+function resetSeg(id){
+  var opts = $(id).querySelectorAll(".seg-opt");
+  opts.forEach(function(o, i){ o.classList.toggle("on", i === 0); });
+}
+function pickSeg(id, el){
+  $(id).querySelectorAll(".seg-opt").forEach(function(o){ o.classList.remove("on"); });
+  el.classList.add("on");
+}
+function segValue(id){ return $(id).querySelector(".seg-opt.on").getAttribute("data-v"); }
+
+function pickPhoto(){
+  var inp = document.createElement("input");
+  inp.type = "file"; inp.accept = "image/*";
+  inp.onchange = function(){
+    var f = inp.files[0]; if (!f) return;
+    if (!f.type.startsWith("image/")) { toast("Choose an image"); return; }
+    if (f.size > 5 * 1024 * 1024) { toast("Image must be under 5 MB"); return; }
+    newPhoto = f;
+    $("cPrev").innerHTML = '<img src="' + URL.createObjectURL(f) + '" alt="">';
+  };
+  inp.click();
+}
+
+async function createGroup(){
+  var name = $("cName").value.trim();
+  if (name.length < 3) { toast("Enter a name with at least 3 letters"); return; }
+
+  var btn = $("cSave"); btn.disabled = true; btn.textContent = "Creating...";
+  var createdId = null;
+
+  try {
+    var avatarUrl = null;
+    if (newPhoto) {
+      var ext = (newPhoto.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      var path = me.id + "/group-new-" + Date.now() + "." + ext;
+      var up = await supabaseClient.storage.from("avatars").upload(path, newPhoto, { contentType: newPhoto.type, upsert: true });
+      if (up.error) throw up.error;
+      avatarUrl = supabaseClient.storage.from("avatars").getPublicUrl(path).data.publicUrl;
+    }
+
+    var g = await supabaseClient.from("groups").insert({
+      name: name,
+      description: $("cDesc").value.trim() || null,
+      type: segValue("segType"),
+      privacy: segValue("segPriv"),
+      university: $("cUni").value.trim() || null,
+      avatar_url: avatarUrl,
+      created_by: me.id
+    }).select("*").single();
+    if (g.error) throw g.error;
+    createdId = g.data.id;
+
+    // The creator becomes the first admin
+    var m = await supabaseClient.from("group_members").insert({
+      group_id: createdId, user_id: me.id, role: "admin", status: "active"
+    });
+    if (m.error) {
+      await supabaseClient.from("groups").delete().eq("id", createdId);
+      createdId = null;
+      throw m.error;
+    }
+
+    toast("Group created");
+    setTimeout(function(){ openGroup(g.data.id); }, 500);
+  } catch (e) {
+    console.error(e);
+    var msg = (e && e.message) || "Could not create group";
+    if (/row-level security|policy/i.test(msg)) msg = "Permission denied. Run the groups SQL in Supabase first.";
+    toast(msg);
+    btn.disabled = false; btn.textContent = "Create";
+  }
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>
