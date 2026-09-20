@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Group - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.04);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.72);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+  --ok:#22c55e;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);padding-bottom:80px;max-width:500px;margin:0 auto}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:16px;cursor:pointer;flex-shrink:0;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{flex:1;min-width:0;font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* COVER + IDENTITY */
+.cover{height:140px;background:linear-gradient(135deg,rgba(240,148,51,.35),rgba(188,24,136,.35)),#15151c;background-size:cover;background-position:center}
+.g-top{position:relative;padding:50px 16px 0}
+.g-av{position:absolute;top:-42px;left:16px;width:84px;height:84px;border-radius:22px;border:4px solid var(--bg);background:var(--card-2);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--accent)}
+.g-av img{width:100%;height:100%;object-fit:cover}
+.g-name{font-size:20px;font-weight:800;line-height:1.25;word-break:break-word}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:var(--card-2);color:var(--text-2);font-size:11px;font-weight:600}
+.chip i{font-size:10px}
+.chip.type{background:var(--grad);color:#fff}
+.g-desc{margin-top:12px;font-size:13px;line-height:1.6;color:var(--text-2);white-space:pre-wrap;word-break:break-word}
+.g-stats{display:flex;gap:18px;margin-top:12px;font-size:12px;color:var(--muted)}
+.g-stats b{color:var(--text);font-weight:700}
+.btns{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn:active{transform:scale(.98)}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.icon{flex:0 0 46px}
+.btn:disabled{opacity:.6}
+
+/* TABS */
+.tabs{display:flex;margin-top:18px;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;min-width:max-content;padding:13px 14px;text-align:center;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.tab .cnt{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;margin-left:5px;border-radius:9px;background:var(--danger);color:#fff;font-size:10px;font-weight:700}
+
+.content{padding:14px}
+
+/* COMPOSER */
+.composer{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;margin-bottom:14px}
+.cmp-row{display:flex;gap:10px}
+.cmp-row img{width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--card-2)}
+.cmp-row textarea{flex:1;min-height:54px;max-height:180px;resize:none;background:none;border:0;outline:0;color:var(--text);font-size:14px;line-height:1.5;padding-top:8px}
+.cmp-row textarea::placeholder{color:var(--muted)}
+.cmp-prev{position:relative;margin-top:8px;border-radius:12px;overflow:hidden}
+.cmp-prev img{width:100%;max-height:260px;object-fit:cover;display:block}
+.cmp-prev .rm{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer}
+.cmp-bar{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.cmp-photo{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#10b981;cursor:pointer;background:none;border:0}
+.cmp-post{padding:8px 22px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:13px;font-weight:700;cursor:pointer}
+.cmp-post:disabled{opacity:.5}
+
+/* POSTS */
+.post{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.p-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.p-av{width:40px;height:40px;border-radius:50%;object-fit:cover;cursor:pointer;flex-shrink:0;background:var(--card-2)}
+.p-info{flex:1;min-width:0}
+.p-nm{font-size:13px;font-weight:700;cursor:pointer;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.p-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.p-del{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;cursor:pointer;background:none;border:0}
+.p-del:active{background:var(--card-2);color:var(--danger)}
+.p-body{padding:0 14px 10px;font-size:13px;line-height:1.65;color:var(--text-2);white-space:pre-wrap;word-break:break-word}
+.p-img{display:block;width:100%;max-height:520px;object-fit:contain;background:#111;cursor:pointer}
+.p-acts{display:flex;align-items:center;padding:4px 8px 10px;border-top:1px solid var(--border)}
+.p-a{display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;background:none;border:0}
+.p-a:active{background:var(--card-2)}
+.p-a.on{color:var(--danger)}
+
+/* MEMBERS */
+.mem{display:flex;align-items:center;gap:12px;padding:10px 4px;border-bottom:1px solid var(--border)}
+.mem:last-child{border-bottom:0}
+.mem img{width:46px;height:46px;border-radius:50%;object-fit:cover;background:var(--card-2);flex-shrink:0;cursor:pointer}
+.mem-info{flex:1;min-width:0;cursor:pointer}
+.mem-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mem-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.role{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:10px;background:var(--grad);color:#fff;font-size:9px;font-weight:700;vertical-align:middle}
+.mem-acts{display:flex;gap:6px;flex-shrink:0}
+.sm{padding:7px 12px;border-radius:16px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:11px;font-weight:700;cursor:pointer}
+.sm.main{background:var(--grad);border-color:transparent;color:#fff}
+.sm.red{color:var(--danger)}
+
+/* ABOUT */
+.about-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px}
+.about-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
+.about-row:last-child{border-bottom:0}
+.about-row i{width:20px;text-align:center;color:var(--accent);margin-top:2px}
+.about-row small{display:block;color:var(--muted);font-size:11px;margin-bottom:2px}
+
+/* STATES */
+.center{text-align:center;padding:50px 20px;color:var(--muted);font-size:13px;line-height:1.6}
+.center i{display:block;font-size:34px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:15px;margin-bottom:4px}
+.more-btn{display:block;width:100%;padding:12px;margin-top:4px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
+
+/* SHEET + MODAL */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:88vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 24px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-item{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:13px;font-weight:500;cursor:pointer}
+.sheet-item:active{background:rgba(128,128,128,.15)}
+.sheet-item i{width:18px;text-align:center;color:var(--muted)}
+.sheet-item.dng{color:var(--danger)}
+.sheet-item.dng i{color:var(--danger)}
+.sheet-title{padding:6px 20px 12px;font-size:15px;font-weight:700}
+.form{padding:0 20px}
+.form label{display:block;margin:12px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form textarea,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:90px;resize:vertical}
+.form select option{color:#000}
+.upl{display:flex;align-items:center;gap:10px}
+.upl span{font-size:12px;color:var(--muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.img-ov{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.95);padding:16px}
+.img-ov.show{display:flex}
+.img-ov img{max-width:100%;max-height:92vh;object-fit:contain;border-radius:8px}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+
+.skeleton{height:90px;border-radius:16px;background:var(--card);margin-bottom:12px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+  <div class="hdr-title" id="hdrTitle">Group</div>
+  <button class="hdr-btn" id="menuBtn" onclick="openMenu()" aria-label="More" style="display:none"><i class="fas fa-ellipsis-h"></i></button>
+</header>
+
+<div id="page">
+  <div class="cover"></div>
+  <div class="content"><div class="skeleton"></div><div class="skeleton"></div></div>
+</div>
+
+<!-- SHEET (menu / edit) -->
+<div class="ov" id="sheetOv" onclick="if(event.target===this)closeSheet()">
+  <div class="sheet" id="sheetBody"></div>
+</div>
+
+<!-- IMAGE VIEWER -->
+<div class="img-ov" id="imgOv" onclick="this.classList.remove('show')"><img id="imgOvSrc" src="" alt=""></div>
+
+<input type="file" id="postPhoto" accept="image/*" style="display:none">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="studentx-badges.js"></script>
+<script>
+/* =========================================================
+   STUDENTX GROUP / COMMUNITY PAGE
+   URL: group.html?id=GROUP_ID
+========================================================= */
+
+var me = null, myProfile = null;
+var group = null, membership = null;
+var memberCount = 0, pendingCount = 0;
+var isMember = false, isAdmin = false;
+var tab = "posts";
+
+var PAGE_SIZE = 15;
+var posts = [], postsOffset = 0, hasMore = false;
+var likedSet = new Set(), likeCounts = {}, commentCounts = {};
+var pendingPhoto = null;
+
+var DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120"><rect width="120" height="120" fill="#20202a"/>' +
+  '<circle cx="60" cy="46" r="22" fill="#777"/><path d="M18 110c5-26 22-38 42-38s37 12 42 38" fill="#777"/></svg>');
+
+function $(id){ return document.getElementById(id); }
+
+function esc(v){
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function timeAgo(date){
+  if (!date) return "";
+  var t = new Date(date).getTime();
+  if (isNaN(t)) return "";
+  var s = Math.floor((Date.now() - t) / 1000);
+  if (s < 60) return "Just now";
+  if (s < 3600) return Math.floor(s/60) + "m ago";
+  if (s < 86400) return Math.floor(s/3600) + "h ago";
+  if (s < 604800) return Math.floor(s/86400) + "d ago";
+  return new Date(date).toLocaleDateString();
+}
+
+function fmt(n){
+  n = Number(n) || 0;
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M";
+  if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K";
+  return String(n);
+}
+
+function toast(msg){
+  var old = document.querySelector(".toast"); if (old) old.remove();
+  var d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(function(){ if (d.parentNode) d.remove(); }, 2600);
+}
+
+function nameHTML(p){
+  if (window.StudentXBadges && p) { try { return StudentXBadges.nameHTML(p); } catch(e){} }
+  return esc((p && (p.full_name || p.username)) || "StudentX User");
+}
+
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "home.html";
+}
+
+function openProfile(id){ if (id) location.href = "profile.html?id=" + encodeURIComponent(id); }
+function openImage(url){ $("imgOvSrc").src = url; $("imgOv").classList.add("show"); }
+function closeSheet(){ $("sheetOv").classList.remove("show"); }
+function openSheet(html){ $("sheetBody").innerHTML = html; $("sheetOv").classList.add("show"); }
+
+function canView(){ return group && (group.privacy === "public" || isMember); }
+function typeLabel(){ return group.type === "community" ? "Community" : "Group"; }
+
+function notify(recipientId, message){
+  if (!recipientId || recipientId === me.id) return;
+  supabaseClient.from("notifications").insert({
+    recipient_id: recipientId, actor_id: me.id, type: "system", message: message, is_read: false
+  }).then(function(r){ if (r.error) console.warn("Notify error:", r.error.message); });
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  try {
+    var auth = await supabaseClient.auth.getUser();
+    me = auth.data && auth.data.user;
+    if (!me) { location.href = "login.html"; return; }
+
+    var gid = new URLSearchParams(location.search).get("id");
+    if (!gid) { fatal("Group not found", "This link is missing a group ID."); return; }
+
+    var g = await supabaseClient.from("groups").select("*").eq("id", gid).maybeSingle();
+    if (g.error) { console.error(g.error); fatal("Could not load group", g.error.message); return; }
+    if (!g.data) { fatal("Group not found", "It may have been deleted."); return; }
+    group = g.data;
+
+    var mp = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan").eq("id", me.id).maybeSingle();
+    myProfile = mp.data || { id: me.id };
+
+    await refreshMembership();
+    renderAll();
+  } catch (e) {
+    console.error(e);
+    fatal("Something went wrong", "Please refresh the page.");
+  }
+}
+
+function fatal(title, text){
+  $("page").innerHTML = '<div class="center"><i class="fas fa-users-slash"></i><b>' + esc(title) + '</b>' + esc(text || "") +
+    '<br><br><button class="btn main" style="max-width:200px;margin:0 auto" onclick="goBack()">Go back</button></div>';
+}
+
+async function refreshMembership(){
+  var r = await supabaseClient.from("group_members").select("*").eq("group_id", group.id).eq("user_id", me.id).maybeSingle();
+  membership = r.data || null;
+  isMember = !!membership && membership.status === "active";
+  isAdmin = isMember && membership.role === "admin";
+
+  var c = await supabaseClient.from("group_members").select("id", { count: "exact", head: true }).eq("group_id", group.id).eq("status", "active");
+  memberCount = c.count || 0;
+
+  pendingCount = 0;
+  if (isAdmin) {
+    var p = await supabaseClient.from("group_members").select("id", { count: "exact", head: true }).eq("group_id", group.id).eq("status", "pending");
+    pendingCount = p.count || 0;
+  }
+}
+
+/* =========================================================
+   RENDER: HEADER + TABS
+========================================================= */
+function renderAll(){
+  $("hdrTitle").textContent = group.name || typeLabel();
+  document.title = (group.name || typeLabel()) + " - StudentX";
+  $("menuBtn").style.display = "flex";
+
+  var cover = group.cover_url ? ' style="background-image:url(\'' + esc(group.cover_url) + '\')"' : "";
+  var av = group.avatar_url ? '<img src="' + esc(group.avatar_url) + '" alt="" onerror="this.remove()">' : '<i class="fas fa-users"></i>';
+  var privIcon = group.privacy === "private" ? "fa-lock" : "fa-globe-africa";
+  var privText = group.privacy === "private" ? "Private" : "Public";
+
+  $("page").innerHTML =
+    '<div class="cover"' + cover + '></div>' +
+    '<div class="g-top">' +
+      '<div class="g-av">' + av + '</div>' +
+      '<div class="g-name">' + esc(group.name) + '</div>' +
+      '<div class="chips">' +
+        '<span class="chip type">' + typeLabel() + '</span>' +
+        '<span class="chip"><i class="fas ' + privIcon + '"></i>' + privText + '</span>' +
+        (group.university ? '<span class="chip"><i class="fas fa-graduation-cap"></i>' + esc(group.university) + '</span>' : "") +
+      '</div>' +
+      (group.description ? '<div class="g-desc">' + esc(group.description) + '</div>' : "") +
+      '<div class="g-stats"><span><b id="memCnt">' + fmt(memberCount) + '</b> members</span></div>' +
+      '<div class="btns" id="actionBtns"></div>' +
+    '</div>' +
+    '<div class="tabs" id="tabs"></div>' +
+    '<div class="content" id="content"></div>';
+
+  renderActions();
+  renderTabs();
+  showTab(tab);
+}
+
+function renderActions(){
+  var h = "";
+  if (isMember) {
+    h += '<button class="btn" onclick="leaveGroup()"><i class="fas fa-check"></i> Joined</button>';
+  } else if (membership && membership.status === "pending") {
+    h += '<button class="btn" onclick="cancelRequest()"><i class="fas fa-clock"></i> Requested · Cancel</button>';
+  } else {
+    var label = group.privacy === "private" ? "Request to join" : "Join " + typeLabel().toLowerCase();
+    h += '<button class="btn main" id="joinBtn" onclick="joinGroup()"><i class="fas fa-user-plus"></i> ' + label + '</button>';
+  }
+  if (isAdmin) h += '<button class="btn" onclick="openEdit()"><i class="fas fa-pen"></i> Edit</button>';
+  h += '<button class="btn icon" onclick="shareGroup()" aria-label="Share"><i class="fas fa-share"></i></button>';
+  $("actionBtns").innerHTML = h;
+}
+
+function renderTabs(){
+  var list = [["posts","Posts"],["members","Members"],["about","About"]];
+  if (isAdmin) list.splice(2, 0, ["requests","Requests"]);
+  $("tabs").innerHTML = list.map(function(t){
+    var cnt = (t[0] === "requests" && pendingCount > 0) ? '<span class="cnt">' + pendingCount + '</span>' : "";
+    return '<div class="tab ' + (tab === t[0] ? "on" : "") + '" onclick="showTab(\'' + t[0] + '\')">' + t[1] + cnt + '</div>';
+  }).join("");
+}
+
+function showTab(t){
+  if (t === "requests" && !isAdmin) t = "posts";
+  tab = t;
+  renderTabs();
+  if (t === "posts") return renderPostsTab();
+  if (t === "members") return renderMembersTab();
+  if (t === "requests") return renderRequestsTab();
+  return renderAboutTab();
+}
+
+function lockHTML(){
+  return '<div class="center"><i class="fas fa-lock"></i><b>This ' + typeLabel().toLowerCase() + ' is private</b>' +
+    'Join to see posts and members.</div>';
+}
+
+/* =========================================================
+   JOIN / LEAVE
+========================================================= */
+async function joinGroup(){
+  var btn = $("joinBtn"); if (btn) btn.disabled = true;
+  var status = group.privacy === "private" ? "pending" : "active";
+
+  var r = await supabaseClient.from("group_members").insert({
+    group_id: group.id, user_id: me.id, role: "member", status: status
+  });
+
+  if (r.error) {
+    console.error(r.error);
+    toast(r.error.code === "23505" ? "You already requested to join" : "Could not join. Try again.");
+    if (btn) btn.disabled = false;
+    return;
+  }
+
+  if (status === "pending") {
+    var name = (myProfile && (myProfile.full_name || myProfile.username)) || "Someone";
+    notify(group.created_by, name + " requested to join " + group.name);
+    toast("Request sent");
+  } else {
+    toast("You joined " + group.name);
+  }
+
+  await refreshMembership();
+  renderAll();
+}
+
+async function cancelRequest(){
+  var r = await supabaseClient.from("group_members").delete().eq("group_id", group.id).eq("user_id", me.id).select("id");
+  if (r.error || !(r.data && r.data.length)) { toast("Could not cancel request"); return; }
+  toast("Request cancelled");
+  await refreshMembership();
+  renderAll();
+}
+
+async function leaveGroup(){
+  if (isAdmin) {
+    var others = await supabaseClient.from("group_members").select("id", { count: "exact", head: true })
+      .eq("group_id", group.id).eq("role", "admin").eq("status", "active").neq("user_id", me.id);
+    if (!others.count) { toast("Make another member an admin before you leave"); return; }
+  }
+  if (!confirm("Leave " + group.name + "?")) return;
+
+  var r = await supabaseClient.from("group_members").delete().eq("group_id", group.id).eq("user_id", me.id).select("id");
+  if (r.error || !(r.data && r.data.length)) { toast("Could not leave. Try again."); return; }
+  toast("You left " + group.name);
+  await refreshMembership();
+  renderAll();
+}
+
+async function shareGroup(){
+  var url = location.origin + location.pathname + "?id=" + encodeURIComponent(group.id);
+  try {
+    if (navigator.share) { await navigator.share({ title: group.name, text: "Join " + group.name + " on StudentX", url: url }); return; }
+    await navigator.clipboard.writeText(url);
+    toast("Link copied");
+  } catch (e) { if (e && e.name !== "AbortError") toast("Could not share"); }
+}
+
+/* =========================================================
+   POSTS TAB
+========================================================= */
+function renderPostsTab(){
+  var c = $("content");
+  if (!canView()) { c.innerHTML = lockHTML(); return; }
+
+  var html = "";
+  if (isMember) {
+    html +=
+      '<div class="composer">' +
+        '<div class="cmp-row"><img src="' + esc((myProfile && myProfile.avatar_url) || DEFAULT_AVATAR) + '" alt="" onerror="this.src=DEFAULT_AVATAR">' +
+        '<textarea id="cmpText" maxlength="2000" placeholder="Write something to ' + esc(group.name) + '..." oninput="autoGrow(this)"></textarea></div>' +
+        '<div id="cmpPrev"></div>' +
+        '<div class="cmp-bar"><button class="cmp-photo" onclick="$(\'postPhoto\').click()"><i class="fas fa-image"></i> Photo</button>' +
+        '<button class="cmp-post" id="cmpPost" onclick="publishPost()">Post</button></div>' +
+      '</div>';
+  } else {
+    html += '<div class="composer" style="text-align:center;font-size:12px;color:var(--muted)">Join ' + esc(group.name) + ' to write posts.</div>';
+  }
+  html += '<div id="feed"><div class="skeleton"></div><div class="skeleton"></div></div><div id="moreWrap"></div>';
+  c.innerHTML = html;
+  loadPosts(true);
+}
+
+function autoGrow(el){ el.style.height = "auto"; el.style.height = Math.min(el.scrollHeight, 180) + "px"; }
+
+async function loadPosts(reset){
+  if (reset) { posts = []; postsOffset = 0; }
+
+  var r = await supabaseClient.from("posts").select("*").eq("group_id", group.id)
+    .order("Create_at", { ascending: false }).range(postsOffset, postsOffset + PAGE_SIZE - 1);
+
+  if (r.error) {
+    console.error(r.error);
+    if ($("feed")) $("feed").innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i>Could not load posts.<br>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  var rows = r.data || [];
+  hasMore = rows.length === PAGE_SIZE;
+  postsOffset += rows.length;
+
+  await Promise.all([attachProfiles(rows), loadReactions(rows)]);
+  posts = posts.concat(rows);
+  renderFeed();
+}
+
+async function attachProfiles(rows){
+  var ids = Array.from(new Set(rows.map(function(p){ return p.User_id; }).filter(Boolean)));
+  if (!ids.length) return;
+  var r = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan").in("id", ids);
+  var map = {};
+  (r.data || []).forEach(function(p){ map[p.id] = p; });
+  rows.forEach(function(p){ p.profile = map[p.User_id] || null; });
+}
+
+async function loadReactions(rows){
+  var ids = rows.map(function(p){ return p.id; });
+  if (!ids.length) return;
+
+  var results = await Promise.all([
+    supabaseClient.from("likes").select("post_id,user_id").in("post_id", ids),
+    supabaseClient.from("comments").select("post_id").in("post_id", ids)
+  ]);
+
+  ids.forEach(function(id){ likeCounts[String(id)] = 0; commentCounts[String(id)] = 0; });
+  (results[0].data || []).forEach(function(l){
+    var k = String(l.post_id);
+    likeCounts[k] = (likeCounts[k] || 0) + 1;
+    if (l.user_id === me.id) likedSet.add(k);
+  });
+  (results[1].data || []).forEach(function(c){
+    var k = String(c.post_id);
+    commentCounts[k] = (commentCounts[k] || 0) + 1;
+  });
+}
+
+function renderFeed(){
+  var feed = $("feed"); if (!feed) return;
+
+  if (!posts.length) {
+    feed.innerHTML = '<div class="center"><i class="far fa-newspaper"></i><b>No posts yet</b>' +
+      (isMember ? "Be the first to post in " + esc(group.name) + "." : "Posts from members will show up here.") + '</div>';
+    $("moreWrap").innerHTML = "";
+    return;
+  }
+
+  feed.innerHTML = posts.map(renderPost).join("");
+  $("moreWrap").innerHTML = hasMore ? '<button class="more-btn" onclick="loadPosts(false)">Load more posts</button>' : "";
+}
+
+function renderPost(p){
+  var id = String(p.id);
+  var u = p.profile || {};
+  var liked = likedSet.has(id);
+  var canDelete = p.User_id === me.id || isAdmin;
+
+  var image = p.image_url ? '<img class="p-img" src="' + esc(p.image_url) + '" alt="Post image" loading="lazy" onclick="openImage(this.src)" onerror="this.style.display=\'none\'">' : "";
+  var video = p.video_url ? '<video class="p-img" controls playsinline preload="metadata" src="' + esc(p.video_url) + '"></video>' : "";
+
+  return '<article class="post" id="post-' + esc(id) + '">' +
+    '<div class="p-hdr">' +
+      '<img class="p-av" src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" alt="" onclick="openProfile(\'' + esc(p.User_id) + '\')" onerror="this.src=DEFAULT_AVATAR">' +
+      '<div class="p-info">' +
+        '<div class="p-nm" onclick="openProfile(\'' + esc(p.User_id) + '\')">' + nameHTML(u) + '</div>' +
+        '<div class="p-meta">' + (u.username ? "@" + esc(u.username) + " · " : "") + timeAgo(p.Create_at) + '</div>' +
+      '</div>' +
+      (canDelete ? '<button class="p-del" onclick="deletePost(\'' + esc(id) + '\')" aria-label="Delete post"><i class="fas fa-trash"></i></button>' : "") +
+    '</div>' +
+    (p.content ? '<div class="p-body">' + esc(p.content) + '</div>' : "") +
+    image + video +
+    '<div class="p-acts">' +
+      '<button class="p-a ' + (liked ? "on" : "") + '" id="like-' + esc(id) + '" onclick="toggleLike(\'' + esc(id) + '\')">' +
+        '<i class="' + (liked ? "fas" : "far") + ' fa-heart"></i><span>' + fmt(likeCounts[id] || 0) + '</span></button>' +
+      '<button class="p-a" onclick="location.href=\'comment.html?post=' + encodeURIComponent(id) + '\'">' +
+        '<i class="far fa-comment"></i><span>' + fmt(commentCounts[id] || 0) + '</span></button>' +
+      '<button class="p-a" onclick="sharePost()"><i class="fas fa-share"></i></button>' +
+    '</div>' +
+  '</article>';
+}
+
+function sharePost(){ shareGroup(); }
+
+/* LIKE (updates only the button, no full re-render) */
+async function toggleLike(id){
+  var was = likedSet.has(id);
+  var btn = $("like-" + id);
+  if (btn) btn.style.pointerEvents = "none";
+
+  var r = was
+    ? await supabaseClient.from("likes").delete().eq("post_id", id).eq("user_id", me.id)
+    : await supabaseClient.from("likes").insert({ post_id: id, user_id: me.id });
+
+  if (btn) btn.style.pointerEvents = "";
+  if (r.error) { console.error(r.error); toast("Could not update like"); return; }
+
+  if (was) { likedSet.delete(id); likeCounts[id] = Math.max(0, (likeCounts[id] || 1) - 1); }
+  else { likedSet.add(id); likeCounts[id] = (likeCounts[id] || 0) + 1; }
+
+  if (btn) {
+    var now = likedSet.has(id);
+    btn.classList.toggle("on", now);
+    btn.innerHTML = '<i class="' + (now ? "fas" : "far") + ' fa-heart"></i><span>' + fmt(likeCounts[id]) + '</span>';
+  }
+}
+
+async function deletePost(id){
+  if (!confirm("Delete this post?")) return;
+  var r = await supabaseClient.from("posts").delete().eq("id", id).select("id");
+  if (r.error || !(r.data && r.data.length)) { console.error(r.error); toast("Could not delete post"); return; }
+  posts = posts.filter(function(p){ return String(p.id) !== String(id); });
+  renderFeed();
+  toast("Post deleted");
+}
+
+/* COMPOSER */
+$("postPhoto").addEventListener("change", function(e){
+  var f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  if (!f.type.startsWith("image/")) { toast("Choose an image"); return; }
+  if (f.size > 8 * 1024 * 1024) { toast("Image must be under 8 MB"); return; }
+  pendingPhoto = f;
+  var prev = $("cmpPrev"); if (!prev) return;
+  prev.innerHTML = '<div class="cmp-prev"><img src="' + URL.createObjectURL(f) + '" alt=""><div class="rm" onclick="removePhoto()"><i class="fas fa-times"></i></div></div>';
+});
+
+function removePhoto(){ pendingPhoto = null; if ($("cmpPrev")) $("cmpPrev").innerHTML = ""; }
+
+async function publishPost(){
+  if (!isMember) { toast("Join the " + typeLabel().toLowerCase() + " first"); return; }
+  var ta = $("cmpText");
+  var text = ta.value.trim();
+  if (!text && !pendingPhoto) { toast("Write something or add a photo"); return; }
+
+  var btn = $("cmpPost");
+  btn.disabled = true; btn.textContent = "Posting...";
+
+  try {
+    var imageUrl = "";
+    if (pendingPhoto) {
+      var ext = (pendingPhoto.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      var path = me.id + "/" + Date.now() + "_" + Math.random().toString(36).slice(2, 8) + "." + ext;
+      var up = await supabaseClient.storage.from("photos").upload(path, pendingPhoto, { contentType: pendingPhoto.type, upsert: false });
+      if (up.error) throw up.error;
+      imageUrl = supabaseClient.storage.from("photos").getPublicUrl(path).data.publicUrl;
+    }
+
+    // image_url is sent as "" (not null) so it also works if the column is NOT NULL
+    var ins = await supabaseClient.from("posts").insert({
+      User_id: me.id, content: text || null, image_url: imageUrl, group_id: group.id
+    }).select("*").single();
+    if (ins.error) throw ins.error;
+
+    var row = ins.data;
+    row.profile = myProfile;
+    likeCounts[String(row.id)] = 0;
+    commentCounts[String(row.id)] = 0;
+    posts.unshift(row);
+
+    ta.value = ""; ta.style.height = "auto";
+    removePhoto();
+    renderFeed();
+    toast("Posted");
+  } catch (e) {
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not post");
+  } finally {
+    btn.disabled = false; btn.textContent = "Post";
+  }
+}
+
+/* =========================================================
+   MEMBERS TAB
+========================================================= */
+async function renderMembersTab(){
+  var c = $("content");
+  if (!canView()) { c.innerHTML = lockHTML(); return; }
+  c.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+
+  var r = await supabaseClient.from("group_members").select("user_id,role,joined_at")
+    .eq("group_id", group.id).eq("status", "active").order("joined_at", { ascending: true }).limit(200);
+  if (r.error) { c.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i>Could not load members.</div>'; return; }
+
+  var rows = r.data || [];
+  var ids = rows.map(function(m){ return m.user_id; });
+  var map = {};
+  if (ids.length) {
+    var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,university,verified,premium_plan").in("id", ids);
+    (pr.data || []).forEach(function(p){ map[p.id] = p; });
+  }
+
+  rows.sort(function(a, b){ return (a.role === "admin" ? 0 : 1) - (b.role === "admin" ? 0 : 1); });
+
+  if (!rows.length) { c.innerHTML = '<div class="center"><i class="fas fa-users"></i>No members yet.</div>'; return; }
+
+  c.innerHTML = rows.map(function(m){
+    var u = map[m.user_id] || {};
+    var isCreator = m.user_id === group.created_by;
+    var acts = "";
+    if (isAdmin && m.user_id !== me.id && !isCreator) {
+      acts = '<div class="mem-acts">' +
+        '<button class="sm" onclick="setRole(\'' + esc(m.user_id) + '\',\'' + (m.role === "admin" ? "member" : "admin") + '\')">' + (m.role === "admin" ? "Remove admin" : "Make admin") + '</button>' +
+        '<button class="sm red" onclick="removeMember(\'' + esc(m.user_id) + '\')">Remove</button></div>';
+    }
+    return '<div class="mem">' +
+      '<img src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" alt="" onclick="openProfile(\'' + esc(m.user_id) + '\')" onerror="this.src=DEFAULT_AVATAR">' +
+      '<div class="mem-info" onclick="openProfile(\'' + esc(m.user_id) + '\')">' +
+        '<div class="mem-name">' + nameHTML(u) + (m.role === "admin" ? '<span class="role">' + (isCreator ? "Owner" : "Admin") + '</span>' : "") + '</div>' +
+        '<div class="mem-sub">' + (u.username ? "@" + esc(u.username) : "") + (u.university ? " · " + esc(u.university) : "") + '</div>' +
+      '</div>' + acts + '</div>';
+  }).join("");
+}
+
+async function setRole(userId, role){
+  var r = await supabaseClient.from("group_members").update({ role: role }).eq("group_id", group.id).eq("user_id", userId).select("id");
+  if (r.error || !(r.data && r.data.length)) { console.error(r.error); toast("Could not change role"); return; }
+  toast(role === "admin" ? "Now an admin" : "Admin removed");
+  if (role === "admin") notify(userId, "You are now an admin of " + group.name);
+  renderMembersTab();
+}
+
+async function removeMember(userId){
+  if (!confirm("Remove this member from " + group.name + "?")) return;
+  var r = await supabaseClient.from("group_members").delete().eq("group_id", group.id).eq("user_id", userId).select("id");
+  if (r.error || !(r.data && r.data.length)) { console.error(r.error); toast("Could not remove member"); return; }
+  toast("Member removed");
+  memberCount = Math.max(0, memberCount - 1);
+  if ($("memCnt")) $("memCnt").textContent = fmt(memberCount);
+  renderMembersTab();
+}
+
+/* =========================================================
+   REQUESTS TAB (admins)
+========================================================= */
+async function renderRequestsTab(){
+  var c = $("content");
+  c.innerHTML = '<div class="skeleton"></div>';
+
+  var r = await supabaseClient.from("group_members").select("user_id,joined_at")
+    .eq("group_id", group.id).eq("status", "pending").order("joined_at", { ascending: true });
+  if (r.error) { c.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i>Could not load requests.</div>'; return; }
+
+  var rows = r.data || [];
+  pendingCount = rows.length;
+  renderTabs();
+
+  if (!rows.length) { c.innerHTML = '<div class="center"><i class="fas fa-user-check"></i><b>No pending requests</b>New join requests will appear here.</div>'; return; }
+
+  var ids = rows.map(function(m){ return m.user_id; });
+  var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,university,verified,premium_plan").in("id", ids);
+  var map = {};
+  (pr.data || []).forEach(function(p){ map[p.id] = p; });
+
+  c.innerHTML = rows.map(function(m){
+    var u = map[m.user_id] || {};
+    return '<div class="mem">' +
+      '<img src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" alt="" onclick="openProfile(\'' + esc(m.user_id) + '\')" onerror="this.src=DEFAULT_AVATAR">' +
+      '<div class="mem-info" onclick="openProfile(\'' + esc(m.user_id) + '\')">' +
+        '<div class="mem-name">' + nameHTML(u) + '</div>' +
+        '<div class="mem-sub">' + (u.username ? "@" + esc(u.username) + " · " : "") + timeAgo(m.joined_at) + '</div>' +
+      '</div>' +
+      '<div class="mem-acts"><button class="sm main" onclick="handleRequest(\'' + esc(m.user_id) + '\',true)">Approve</button>' +
+      '<button class="sm" onclick="handleRequest(\'' + esc(m.user_id) + '\',false)">Decline</button></div></div>';
+  }).join("");
+}
+
+async function handleRequest(userId, approve){
+  var r = approve
+    ? await supabaseClient.from("group_members").update({ status: "active" }).eq("group_id", group.id).eq("user_id", userId).select("id")
+    : await supabaseClient.from("group_members").delete().eq("group_id", group.id).eq("user_id", userId).select("id");
+
+  if (r.error || !(r.data && r.data.length)) { console.error(r.error); toast("Could not update request"); return; }
+
+  if (approve) {
+    memberCount++;
+    if ($("memCnt")) $("memCnt").textContent = fmt(memberCount);
+    notify(userId, "Your request to join " + group.name + " was approved");
+    toast("Member approved");
+  } else {
+    toast("Request declined");
+  }
+  renderRequestsTab();
+}
+
+/* =========================================================
+   ABOUT TAB
+========================================================= */
+async function renderAboutTab(){
+  var c = $("content");
+  var creator = "";
+  if (group.created_by) {
+    var r = await supabaseClient.from("profiles").select("full_name,username").eq("id", group.created_by).maybeSingle();
+    if (r.data) creator = r.data.full_name || r.data.username || "";
+  }
+
+  var privText = group.privacy === "private"
+    ? "Private. Only members can see posts and members. New members need approval."
+    : "Public. Anyone can see posts and join.";
+
+  c.innerHTML = '<div class="about-card">' +
+    (group.description ? '<div class="about-row"><i class="fas fa-circle-info"></i><div><small>About</small>' + esc(group.description) + '</div></div>' : "") +
+    '<div class="about-row"><i class="fas ' + (group.privacy === "private" ? "fa-lock" : "fa-globe-africa") + '"></i><div><small>Privacy</small>' + privText + '</div></div>' +
+    '<div class="about-row"><i class="fas fa-users"></i><div><small>Type</small>' + typeLabel() + ' · ' + fmt(memberCount) + ' members</div></div>' +
+    (group.university ? '<div class="about-row"><i class="fas fa-graduation-cap"></i><div><small>School</small>' + esc(group.university) + '</div></div>' : "") +
+    (creator ? '<div class="about-row"><i class="fas fa-user-shield"></i><div><small>Created by</small>' + esc(creator) + '</div></div>' : "") +
+    '<div class="about-row"><i class="fas fa-calendar"></i><div><small>Created</small>' + (group.created_at ? new Date(group.created_at).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "") + '</div></div>' +
+  '</div>';
+}
+
+/* =========================================================
+   MENU (…)
+========================================================= */
+function openMenu(){
+  var h = '<div class="sheet-handle"></div>';
+  h += '<div class="sheet-item" onclick="closeSheet();shareGroup()"><i class="fas fa-share"></i>Share ' + typeLabel().toLowerCase() + '</div>';
+  h += '<div class="sheet-item" onclick="closeSheet();copyLink()"><i class="fas fa-link"></i>Copy link</div>';
+  if (isAdmin) h += '<div class="sheet-item" onclick="closeSheet();openEdit()"><i class="fas fa-pen"></i>Edit ' + typeLabel().toLowerCase() + '</div>';
+  if (isMember) h += '<div class="sheet-item dng" onclick="closeSheet();leaveGroup()"><i class="fas fa-right-from-bracket"></i>Leave ' + typeLabel().toLowerCase() + '</div>';
+  if (group.created_by === me.id) h += '<div class="sheet-item dng" onclick="closeSheet();deleteGroup()"><i class="fas fa-trash"></i>Delete ' + typeLabel().toLowerCase() + '</div>';
+  h += '<div class="sheet-item dng" onclick="closeSheet();toast(\'Report sent. Thank you.\')"><i class="fas fa-flag"></i>Report</div>';
+  openSheet(h);
+}
+
+async function copyLink(){
+  var url = location.origin + location.pathname + "?id=" + encodeURIComponent(group.id);
+  try { await navigator.clipboard.writeText(url); toast("Link copied"); } catch (e) { toast("Could not copy link"); }
+}
+
+async function deleteGroup(){
+  if (!confirm("Delete " + group.name + " and all its posts? This cannot be undone.")) return;
+  var r = await supabaseClient.from("groups").delete().eq("id", group.id).select("id");
+  if (r.error || !(r.data && r.data.length)) { console.error(r.error); toast("Could not delete. Only the owner can delete."); return; }
+  toast("Deleted");
+  setTimeout(function(){ location.href = "home.html"; }, 700);
+}
+
+/* =========================================================
+   EDIT GROUP (admins)
+========================================================= */
+var editAvatar = null, editCover = null;
+
+function openEdit(){
+  editAvatar = null; editCover = null;
+  openSheet(
+    '<div class="sheet-handle"></div><div class="sheet-title">Edit ' + typeLabel().toLowerCase() + '</div>' +
+    '<div class="form">' +
+      '<label>Name</label><input type="text" id="edName" maxlength="60" value="' + esc(group.name) + '">' +
+      '<label>Description</label><textarea id="edDesc" maxlength="300">' + esc(group.description || "") + '</textarea>' +
+      '<label>School (optional)</label><input type="text" id="edUni" maxlength="80" value="' + esc(group.university || "") + '">' +
+      '<label>Privacy</label><select id="edPriv">' +
+        '<option value="public"' + (group.privacy === "public" ? " selected" : "") + '>Public: anyone can join</option>' +
+        '<option value="private"' + (group.privacy === "private" ? " selected" : "") + '>Private: members are approved</option></select>' +
+      '<label>Photo</label><div class="upl"><button class="sm" type="button" onclick="pickEdit(\'avatar\')">Choose photo</button><span id="edAvName">No file chosen</span></div>' +
+      '<label>Cover</label><div class="upl"><button class="sm" type="button" onclick="pickEdit(\'cover\')">Choose cover</button><span id="edCvName">No file chosen</span></div>' +
+      '<div class="btns" style="margin-top:20px"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn main" id="edSave" onclick="saveEdit()">Save changes</button></div>' +
+    '</div>'
+  );
+}
+
+function pickEdit(kind){
+  var inp = document.createElement("input");
+  inp.type = "file"; inp.accept = "image/*";
+  inp.onchange = function(){
+    var f = inp.files[0]; if (!f) return;
+    if (!f.type.startsWith("image/")) { toast("Choose an image"); return; }
+    if (f.size > 5 * 1024 * 1024) { toast("Image must be under 5 MB"); return; }
+    if (kind === "avatar") { editAvatar = f; $("edAvName").textContent = f.name; }
+    else { editCover = f; $("edCvName").textContent = f.name; }
+  };
+  inp.click();
+}
+
+async function uploadEditImage(file, bucket, label){
+  var ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+  var path = me.id + "/group-" + group.id + "-" + label + "-" + Date.now() + "." + ext;
+  var up = await supabaseClient.storage.from(bucket).upload(path, file, { contentType: file.type, upsert: true });
+  if (up.error) throw up.error;
+  return supabaseClient.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+}
+
+async function saveEdit(){
+  var name = $("edName").value.trim();
+  if (!name) { toast("Name is required"); return; }
+
+  var btn = $("edSave"); btn.disabled = true; btn.textContent = "Saving...";
+  try {
+    var update = {
+      name: name,
+      description: $("edDesc").value.trim() || null,
+      university: $("edUni").value.trim() || null,
+      privacy: $("edPriv").value
+    };
+    if (editAvatar) update.avatar_url = await uploadEditImage(editAvatar, "avatars", "avatar");
+    if (editCover) update.cover_url = await uploadEditImage(editCover, "covers", "cover");
+
+    var r = await supabaseClient.from("groups").update(update).eq("id", group.id).select("*").single();
+    if (r.error) throw r.error;
+
+    group = r.data;
+    closeSheet();
+    renderAll();
+    toast("Saved");
+  } catch (e) {
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not save");
+    btn.disabled = false; btn.textContent = "Save changes";
+  }
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>
