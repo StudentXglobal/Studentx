@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:80px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-btn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;background:none;border:0;flex-shrink:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{flex:1;font-size:22px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* COVER + AVATAR */
+.cover{position:relative;height:150px;background:linear-gradient(90deg,#008751 33.33%,#ffffff 33.33%,#ffffff 66.66%,#008751 66.66%);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cover.grad{background:linear-gradient(135deg,rgba(240,148,51,.4),rgba(188,24,136,.4)),#15151c}
+.cover span{color:#008751;font-size:28px;font-weight:800;letter-spacing:2px}
+.cover.grad span{color:rgba(255,255,255,.8)}
+.cam{position:absolute;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-size:14px;cursor:pointer;border:2px solid rgba(255,255,255,.25)}
+.cover .cam{right:12px;bottom:12px}
+
+.top{position:relative;padding:52px 16px 0}
+.av{position:absolute;top:-44px;left:16px;width:88px;height:88px;border-radius:50%;border:4px solid var(--bg);background:var(--card-2);cursor:pointer}
+.av-img{width:100%;height:100%;border-radius:50%;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:28px;font-weight:800}
+.av-img img{width:100%;height:100%;object-fit:cover}
+.av .cam{right:-4px;bottom:-2px;width:28px;height:28px;font-size:11px;border-color:var(--bg)}
+
+.p-name{font-size:20px;font-weight:800;line-height:1.3;word-break:break-word}
+.p-name .studentx-name{display:inline}
+.p-user{margin-top:2px;font-size:13px;color:var(--muted)}
+.p-bio{margin-top:12px;font-size:13px;line-height:1.6;color:var(--text-2);white-space:pre-wrap;word-break:break-word}
+.info{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:12px}
+.info-i{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.info-i i{color:var(--accent);width:12px;text-align:center}
+
+.stats{display:flex;margin-top:16px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stat{flex:1;text-align:center;cursor:default}
+.stat.link{cursor:pointer}
+.stat:not(:last-child){border-right:1px solid var(--border)}
+.stat-n{font-size:17px;font-weight:800}
+.stat-l{margin-top:2px;font-size:10px;color:var(--muted);text-transform:uppercase}
+
+.btns{display:flex;gap:8px;margin-top:14px}
+.btn{flex:1;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}
+.btn:active{transform:scale(.98)}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.icon{flex:0 0 46px}
+.btn:disabled{opacity:.6}
+
+/* TABS */
+.tabs{display:flex;margin-top:16px;border-bottom:1px solid var(--border)}
+.tab{flex:1;padding:13px;text-align:center;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.content{padding:14px}
+
+/* POSTS */
+.post{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.p-hdr{display:flex;align-items:center;gap:10px;padding:12px 14px}
+.p-av{width:40px;height:40px;border-radius:50%;object-fit:cover;cursor:pointer;flex-shrink:0;background:var(--card-2)}
+.p-info{flex:1;min-width:0}
+.pn{font-size:13px;font-weight:700;cursor:pointer;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pm{font-size:10px;color:var(--muted);margin-top:2px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pm a{color:var(--accent);font-weight:600}
+.p-del{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;cursor:pointer;background:none;border:0}
+.p-del:active{background:var(--card-2);color:var(--danger)}
+.p-body{padding:0 14px 10px;font-size:13px;line-height:1.65;color:var(--text-2);white-space:pre-wrap;word-break:break-word}
+.p-body.clamp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.see-more{display:block;padding:0 14px 10px;font-size:12px;font-weight:700;color:var(--accent);cursor:pointer}
+.p-media{display:block;width:100%;max-height:620px;object-fit:contain;background:#111;cursor:pointer}
+.p-acts{display:flex;align-items:center;padding:4px 8px 10px;border-top:1px solid var(--border)}
+.p-a{display:flex;align-items:center;gap:6px;padding:8px 11px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;background:none;border:0}
+.p-a:active{background:var(--card-2)}
+.p-a.lk.on{color:var(--danger)}
+.p-a.rp.on,.p-a.sv.on{color:var(--accent)}
+.p-a-r{margin-left:auto}
+
+/* VIDEOS GRID */
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.vcell{position:relative;aspect-ratio:9/16;background:#111;border-radius:8px;overflow:hidden;cursor:pointer}
+.vcell video{width:100%;height:100%;object-fit:cover;display:block}
+.vcell i{position:absolute;left:6px;bottom:6px;color:#fff;font-size:12px;text-shadow:0 1px 4px rgba(0,0,0,.7)}
+
+/* STATES */
+.center{text-align:center;padding:45px 24px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:34px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:14px;padding:10px 22px;border-radius:20px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+.skeleton{height:120px;border-radius:16px;background:var(--card);margin-bottom:12px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+.more-btn{display:block;width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
+
+/* SHEET */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:90vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 24px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 8px;font-size:16px;font-weight:700}
+.sheet-item{display:flex;align-items:center;gap:12px;padding:14px 20px;font-size:13px;font-weight:500;cursor:pointer}
+.sheet-item:active{background:rgba(128,128,128,.15)}
+.sheet-item i{width:18px;text-align:center;color:var(--muted)}
+.sheet-item.dng,.sheet-item.dng i{color:var(--danger)}
+.form{padding:0 20px}
+.form label{display:block;margin:12px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input,.form textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:84px;resize:vertical}
+.row2{display:flex;gap:10px}
+.row2>div{flex:1}
+.mem{display:flex;align-items:center;gap:12px;padding:10px 20px}
+.mem img{width:46px;height:46px;border-radius:50%;object-fit:cover;background:var(--card-2);flex-shrink:0;cursor:pointer}
+.mem-info{flex:1;min-width:0;cursor:pointer}
+.mem-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mem-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.sm{padding:8px 16px;border-radius:18px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.14);color:inherit;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
+.sm.main{background:var(--grad);border-color:transparent;color:#fff}
+
+.img-ov{position:fixed;inset:0;z-index:600;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.95);padding:16px}
+.img-ov.show{display:flex}
+.img-ov img{max-width:100%;max-height:92vh;object-fit:contain;border-radius:8px}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <button class="hdr-btn" id="backBtn" onclick="goBack()" aria-label="Back" style="display:none"><i class="fas fa-arrow-left"></i></button>
+  <div class="hdr-title" id="hdrTitle">Profile</div>
+  <button class="hdr-btn" id="menuBtn" onclick="openMenu()" aria-label="More" style="display:none"><i class="fas fa-ellipsis-h"></i></button>
+</header>
+
+<div id="page">
+  <div class="cover grad"></div>
+  <div class="content"><div class="skeleton"></div><div class="skeleton"></div></div>
+</div>
+
+<div class="ov" id="sheetOv" onclick="if(event.target===this)closeSheet()"><div class="sheet" id="sheetBody"></div></div>
+<div class="img-ov" id="imgOv" onclick="this.classList.remove('show')"><img id="imgOvSrc" src="" alt=""></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="studentx-badges.js"></script>
+<script>
+/* =========================================================
+   STUDENTX PROFILE  (profile.html or profile.html?id=USER_ID)
+========================================================= */
+var PAGE = 15;
+
+var me = null, prof = null, viewedId = null, isOwn = false;
+var followingSet = new Set(), myGroupSet = new Set();
+var tab = "posts";
+
+var postsById = {}, feedOffset = 0, noMore = false, loading = false, postCount = 0;
+var likedSet = new Set(), repostedSet = new Set(), savedSet = new Set();
+var likeCounts = {}, commentCounts = {}, repostCounts = {};
+
+var DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#202027"/>' +
+  '<circle cx="100" cy="78" r="42" fill="#777"/><path d="M35 190c8-48 35-70 65-70s57 22 65 70" fill="#777"/></svg>');
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function fmt(n){
+  n = Number(n) || 0;
+  if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M";
+  if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K";
+  return String(n);
+}
+function timeAgo(date){
+  if (!date) return "";
+  var t = new Date(date).getTime();
+  if (isNaN(t)) return "";
+  var s = Math.floor((Date.now() - t) / 1000);
+  if (s < 60) return "Just now";
+  if (s < 3600) return Math.floor(s/60) + "m ago";
+  if (s < 86400) return Math.floor(s/3600) + "h ago";
+  if (s < 604800) return Math.floor(s/86400) + "d ago";
+  return new Date(date).toLocaleDateString();
+}
+function toast(msg){
+  var old = document.querySelector(".toast"); if (old) old.remove();
+  var d = document.createElement("div"); d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(function(){ if (d.parentNode) d.remove(); }, 2600);
+}
+function nameHTML(u){
+  if (window.StudentXBadges && u && u.id) { try { return StudentXBadges.nameHTML(u); } catch(e){} }
+  return esc((u && (u.full_name || u.username)) || "StudentX User");
+}
+function initials(name){
+  if (!name) return "--";
+  var w = name.trim().split(/\s+/).filter(Boolean);
+  if (w.length === 1) return w[0].substring(0, 2).toUpperCase();
+  return (w[0].charAt(0) + w[w.length - 1].charAt(0)).toUpperCase();
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "home.html";
+}
+function openProfile(id){ if (id && id !== viewedId) location.href = "profile.html?id=" + encodeURIComponent(id); }
+function openImage(url){ if (!url) return; $("imgOvSrc").src = url; $("imgOv").classList.add("show"); }
+function openSheet(html){ $("sheetBody").innerHTML = html; $("sheetOv").classList.add("show"); }
+function closeSheet(){ $("sheetOv").classList.remove("show"); }
+function profileUrl(){ return location.origin + location.pathname + "?id=" + encodeURIComponent(viewedId); }
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  try {
+    var au = await supabaseClient.auth.getUser();
+    me = au.data && au.data.user;
+    if (!me) { location.href = "login.html"; return; }
+
+    viewedId = new URLSearchParams(location.search).get("id") || me.id;
+    isOwn = viewedId === me.id;
+
+    var r = await supabaseClient.from("profiles").select(
+      "id,username,avatar_url,full_name,bio,university,department,faculty,level,graduation_year,country,state,city,verified,premium_plan,cover_url,profile_visibility,created_at"
+    ).eq("id", viewedId).maybeSingle();
+
+    if (r.error) { console.error(r.error); fatal("Could not load profile", r.error.message); return; }
+    if (!r.data) { fatal("Profile not found", "This account may have been removed."); return; }
+    prof = r.data;
+
+    var ctx = await Promise.all([
+      supabaseClient.from("followers").select("following_id").eq("follower_id", me.id),
+      supabaseClient.from("group_members").select("group_id").eq("user_id", me.id).eq("status", "active")
+    ]);
+    (ctx[0].data || []).forEach(function(x){ followingSet.add(x.following_id); });
+    (ctx[1].data || []).forEach(function(x){ myGroupSet.add(String(x.group_id)); });
+
+    $("backBtn").style.display = isOwn ? "none" : "flex";
+    $("menuBtn").style.display = "flex";
+    $("hdrTitle").textContent = isOwn ? "Profile" : (prof.full_name || "Profile");
+
+    renderHeader();
+    loadStats();
+    showTab("posts");
+  } catch (e) {
+    console.error(e);
+    fatal("Something went wrong", "Please refresh the page.");
+  }
+}
+
+function fatal(title, text){
+  $("page").innerHTML = '<div class="center"><i class="fas fa-user-slash"></i><b>' + esc(title) + '</b>' + esc(text || "") +
+    '<br><button class="cta" onclick="goBack()">Go back</button></div>';
+}
+
+function isLocked(){
+  return prof.profile_visibility === "private" && !isOwn && !followingSet.has(viewedId);
+}
+
+/* =========================================================
+   HEADER (cover, avatar, info, buttons)
+========================================================= */
+function renderHeader(){
+  var hasCover = !!prof.cover_url;
+  var isNg = !prof.country || /nigeria/i.test(prof.country);
+  var coverClass = hasCover ? "cover" : (isNg ? "cover" : "cover grad");
+  var coverStyle = hasCover ? ' style="background-image:url(\'' + esc(prof.cover_url) + '\')"' : "";
+  var coverText = hasCover ? "" : '<span>' + esc(prof.country || "Nigeria") + '</span>';
+
+  var av = prof.avatar_url
+    ? '<img src="' + esc(prof.avatar_url) + '" alt="" onerror="this.remove()">'
+    : esc(initials(prof.full_name));
+
+  var info = [];
+  if (prof.university) info.push(["fa-graduation-cap", prof.university]);
+  var study = [prof.department, prof.faculty, prof.level ? prof.level + (/^\d+$/.test(prof.level) ? "L" : "") : ""].filter(Boolean).join(" · ");
+  if (study) info.push(["fa-book-open", study]);
+  if (prof.graduation_year) info.push(["fa-user-graduate", "Class of " + prof.graduation_year]);
+  var loc = [prof.city, prof.state, prof.country].filter(Boolean).join(", ");
+  if (loc) info.push(["fa-location-dot", loc]);
+  if (prof.created_at) info.push(["fa-calendar", "Joined " + new Date(prof.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" })]);
+
+  var btns;
+  if (isOwn) {
+    btns = '<button class="btn main" onclick="openEdit()"><i class="fas fa-pen"></i> Edit profile</button>' +
+           '<button class="btn icon" onclick="shareProfile()" aria-label="Share"><i class="fas fa-share"></i></button>';
+  } else {
+    btns = '<button class="btn ' + (followingSet.has(viewedId) ? "" : "main") + '" id="followBtn" onclick="toggleFollowMain()">' + followLabel() + '</button>' +
+           '<button class="btn" onclick="location.href=\'chat.html?user=' + encodeURIComponent(viewedId) + '\'"><i class="fas fa-comment-dots"></i> Message</button>' +
+           '<button class="btn icon" onclick="shareProfile()" aria-label="Share"><i class="fas fa-share"></i></button>';
+  }
+
+  $("page").innerHTML =
+    '<div class="' + coverClass + '" id="cover"' + coverStyle + '>' + coverText +
+      (isOwn ? '<div class="cam" onclick="pickImage(\'cover\')" aria-label="Change cover"><i class="fas fa-camera"></i></div>' : "") +
+    '</div>' +
+    '<div class="top">' +
+      '<div class="av"><div class="av-img" onclick="openImage(' + (prof.avatar_url ? "'" + esc(prof.avatar_url) + "'" : "null") + ')">' + av + '</div>' +
+        (isOwn ? '<div class="cam" onclick="pickImage(\'avatar\')" aria-label="Change photo"><i class="fas fa-camera"></i></div>' : "") +
+      '</div>' +
+      '<div class="p-name">' + nameHTML(prof) + '</div>' +
+      '<div class="p-user">' + (prof.username ? "@" + esc(prof.username) : "") + '</div>' +
+      (prof.bio ? '<div class="p-bio">' + esc(prof.bio) + '</div>' : (isOwn ? '<div class="p-bio" style="color:var(--muted)">Add a bio so people know who you are.</div>' : "")) +
+      (info.length ? '<div class="info">' + info.map(function(i){ return '<div class="info-i"><i class="fas ' + i[0] + '"></i>' + esc(i[1]) + '</div>'; }).join("") + '</div>' : "") +
+      '<div class="stats">' +
+        '<div class="stat"><div class="stat-n" id="stPosts">0</div><div class="stat-l">Posts</div></div>' +
+        '<div class="stat link" onclick="openFollowList(\'followers\')"><div class="stat-n" id="stFollowers">0</div><div class="stat-l">Followers</div></div>' +
+        '<div class="stat link" onclick="openFollowList(\'following\')"><div class="stat-n" id="stFollowing">0</div><div class="stat-l">Following</div></div>' +
+        '<div class="stat"><div class="stat-n" id="stLikes">0</div><div class="stat-l">Likes</div></div>' +
+      '</div>' +
+      '<div class="btns">' + btns + '</div>' +
+    '</div>' +
+    '<div class="tabs" id="tabs"></div>' +
+    '<div class="content" id="content"></div>';
+
+  renderTabs();
+}
+
+function renderTabs(){
+  var list = [["posts", "Posts"], ["videos", "Videos"]];
+  if (isOwn) list.push(["saved", "Saved"]);
+  $("tabs").innerHTML = list.map(function(t){
+    return '<div class="tab ' + (tab === t[0] ? "on" : "") + '" onclick="showTab(\'' + t[0] + '\')">' + t[1] + '</div>';
+  }).join("");
+}
+
+function showTab(t){
+  tab = t;
+  renderTabs();
+  if (t === "posts") return renderPostsTab();
+  if (t === "videos") return renderVideosTab();
+  return renderSavedTab();
+}
+
+function lockHTML(){
+  return '<div class="center"><i class="fas fa-lock"></i><b>This profile is private</b>Follow ' + esc(prof.full_name || "this user") + ' to see their posts and videos.</div>';
+}
+
+/* Re-draw the header but keep the numbers already loaded */
+function redrawHeader(){
+  var keep = { p: $("stPosts").textContent, f: $("stFollowers").textContent, g: $("stFollowing").textContent, l: $("stLikes").textContent };
+  renderHeader();
+  $("stPosts").textContent = keep.p; $("stFollowers").textContent = keep.f;
+  $("stFollowing").textContent = keep.g; $("stLikes").textContent = keep.l;
+  showTab(tab);
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+async function loadStats(){
+  var res = await Promise.all([
+    supabaseClient.from("followers").select("id", { count: "exact", head: true }).eq("following_id", viewedId),
+    supabaseClient.from("followers").select("id", { count: "exact", head: true }).eq("follower_id", viewedId),
+    postsCount(),
+    likesReceived()
+  ]);
+  $("stFollowers").textContent = fmt(res[0].count || 0);
+  $("stFollowing").textContent = fmt(res[1].count || 0);
+  $("stPosts").textContent = fmt(res[2]);
+  $("stLikes").textContent = fmt(res[3]);
+}
+
+async function postsCount(){
+  var q = supabaseClient.from("posts").select("id", { count: "exact", head: true }).eq("User_id", viewedId);
+  if (!isOwn) q = q.is("group_id", null);
+  var r = await q;
+  if (r.error && /group_id/i.test(r.error.message || "")) {
+    r = await supabaseClient.from("posts").select("id", { count: "exact", head: true }).eq("User_id", viewedId);
+  }
+  return r.count || 0;
+}
+
+async function likesReceived(){
+  var p = await supabaseClient.from("posts").select("id").eq("User_id", viewedId).order("Create_at", { ascending: false }).limit(300);
+  var ids = (p.data || []).map(function(x){ return x.id; });
+  if (!ids.length) return 0;
+  var r = await supabaseClient.from("likes").select("id", { count: "exact", head: true }).in("post_id", ids);
+  return r.count || 0;
+}
+
+/* =========================================================
+   FOLLOW
+========================================================= */
+function followLabel(){
+  return followingSet.has(viewedId) ? '<i class="fas fa-check"></i> Following' : '<i class="fas fa-user-plus"></i> Follow';
+}
+
+async function setFollow(uid, follow){
+  var r = follow
+    ? await supabaseClient.from("followers").insert({ follower_id: me.id, following_id: uid })
+    : await supabaseClient.from("followers").delete().eq("follower_id", me.id).eq("following_id", uid);
+  if (r.error) { console.error(r.error); toast(follow ? "Could not follow" : "Could not unfollow"); return false; }
+  if (follow) followingSet.add(uid); else followingSet.delete(uid);
+  return true;
+}
+
+async function toggleFollowMain(){
+  var btn = $("followBtn"); if (btn) btn.disabled = true;
+  var follow = !followingSet.has(viewedId);
+  var ok = await setFollow(viewedId, follow);
+  if (btn) btn.disabled = false;
+  if (!ok) return;
+
+  var cnt = $("stFollowers");
+  var cur = parseInt(String(cnt.textContent).replace(/[^\d]/g, ""), 10) || 0;
+  cnt.textContent = fmt(Math.max(0, cur + (follow ? 1 : -1)));
+  btn.className = "btn " + (follow ? "" : "main");
+  btn.innerHTML = followLabel();
+  toast(follow ? "Following " + (prof.full_name || "user") : "Unfollowed");
+
+  if (prof.profile_visibility === "private") showTab(tab);
+}
+
+async function openFollowList(kind){
+  var col = kind === "followers" ? "following_id" : "follower_id";
+  var other = kind === "followers" ? "follower_id" : "following_id";
+  var title = '<div class="sheet-handle"></div><div class="sheet-title">' + (kind === "followers" ? "Followers" : "Following") + '</div>';
+  openSheet(title + '<div class="center" style="padding:30px">Loading...</div>');
+
+  var r = await supabaseClient.from("followers").select(other).eq(col, viewedId).limit(100);
+  if (r.error) { $("sheetBody").innerHTML = title + '<div class="center">Could not load list.</div>'; return; }
+
+  var ids = (r.data || []).map(function(x){ return x[other]; });
+  if (!ids.length) { $("sheetBody").innerHTML = title + '<div class="center"><i class="fas fa-user-group"></i>Nobody here yet.</div>'; return; }
+
+  var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan").in("id", ids);
+  var list = pr.data || [];
+
+  $("sheetBody").innerHTML = title + list.map(function(u){
+    var btn = "";
+    if (u.id !== me.id) {
+      var f = followingSet.has(u.id);
+      btn = '<button class="sm ' + (f ? "" : "main") + '" onclick="toggleListFollow(\'' + esc(u.id) + '\',this)">' + (f ? "Following" : "Follow") + '</button>';
+    }
+    return '<div class="mem">' +
+      '<img src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" alt="" onclick="openProfile(\'' + esc(u.id) + '\')" onerror="this.src=DEFAULT_AVATAR">' +
+      '<div class="mem-info" onclick="openProfile(\'' + esc(u.id) + '\')"><div class="mem-name">' + nameHTML(u) + '</div>' +
+      '<div class="mem-sub">' + (u.username ? "@" + esc(u.username) : "") + '</div></div>' + btn + '</div>';
+  }).join("");
+}
+
+async function toggleListFollow(uid, btn){
+  btn.disabled = true;
+  var follow = !followingSet.has(uid);
+  var ok = await setFollow(uid, follow);
+  btn.disabled = false;
+  if (!ok) return;
+  btn.textContent = follow ? "Following" : "Follow";
+  btn.classList.toggle("main", !follow);
+}
+
+/* =========================================================
+   POSTS
+========================================================= */
+function visibleToMe(p){
+  if (p.User_id === me.id) return true;
+  if (p.group_id && !myGroupSet.has(String(p.group_id))) return false;
+  if (p.visibility === "private") return false;
+  if (p.visibility === "followers" && !followingSet.has(p.User_id)) return false;
+  return true;
+}
+
+function renderPostsTab(){
+  var c = $("content");
+  if (isLocked()) { c.innerHTML = lockHTML(); return; }
+  c.innerHTML = '<div id="feed"><div class="skeleton"></div><div class="skeleton"></div></div><div id="moreWrap"></div>';
+  loadPosts(true);
+}
+
+async function loadPosts(reset){
+  if (loading) return;
+  loading = true;
+  if (reset) { feedOffset = 0; noMore = false; postsById = {}; postCount = 0; }
+
+  var shown = 0, tries = 0, failed = false;
+  while (tries < 3 && !noMore && shown === 0) {
+    var r = await supabaseClient.from("posts").select("*").eq("User_id", viewedId)
+      .order("Create_at", { ascending: false }).range(feedOffset, feedOffset + PAGE - 1);
+    if (r.error) { console.error(r.error); failed = true; break; }
+
+    var rows = r.data || [];
+    feedOffset += rows.length;
+    if (rows.length < PAGE) noMore = true;
+
+    var visible = rows.filter(visibleToMe);
+    if (visible.length) {
+      await enrich(visible);
+      var feed = $("feed");
+      if (!feed) { loading = false; return; }
+      if (postCount === 0) feed.innerHTML = "";
+      visible.forEach(function(p){ postsById[String(p.id)] = p; });
+      feed.insertAdjacentHTML("beforeend", visible.map(renderPost).join(""));
+      postCount += visible.length;
+      shown += visible.length;
+    }
+    tries++;
+  }
+
+  var feed2 = $("feed");
+  if (feed2 && !postCount) {
+    if (failed) feed2.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load posts</b>Check your connection and try again.<br><button class="cta" onclick="renderPostsTab()">Try again</button></div>';
+    else feed2.innerHTML = '<div class="center"><i class="far fa-newspaper"></i><b>No posts yet</b>' +
+      (isOwn ? 'Share your first post with your classmates.<br><button class="cta" onclick="location.href=\'create-post.html\'">Create a post</button>' : "Nothing to show here yet.") + '</div>';
+  }
+  var w = $("moreWrap");
+  if (w) w.innerHTML = (!noMore && postCount) ? '<button class="more-btn" onclick="loadPosts(false)">Load more posts</button>' : "";
+  loading = false;
+}
+
+async function enrich(rows){
+  var userIds = Array.from(new Set(rows.map(function(p){ return p.User_id; }).filter(Boolean)));
+  var groupIds = Array.from(new Set(rows.map(function(p){ return p.group_id; }).filter(Boolean)));
+  var postIds = rows.map(function(p){ return p.id; });
+
+  var res = await Promise.all([
+    supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan").in("id", userIds),
+    groupIds.length ? supabaseClient.from("groups").select("id,name").in("id", groupIds) : Promise.resolve({ data: [] }),
+    supabaseClient.from("likes").select("post_id,user_id").in("post_id", postIds),
+    supabaseClient.from("comments").select("post_id").in("post_id", postIds),
+    supabaseClient.from("reposts").select("post_id,user_id").in("post_id", postIds),
+    supabaseClient.from("bookmarks").select("post_id").eq("user_id", me.id).in("post_id", postIds)
+  ]);
+
+  var pmap = {}, gmap = {};
+  (res[0].data || []).forEach(function(u){ pmap[u.id] = u; });
+  (res[1].data || []).forEach(function(g){ gmap[g.id] = g; });
+  rows.forEach(function(p){ p.profile = pmap[p.User_id] || null; p.group = p.group_id ? (gmap[p.group_id] || null) : null; });
+
+  postIds.forEach(function(id){ var k = String(id); likeCounts[k] = 0; commentCounts[k] = 0; repostCounts[k] = 0; });
+  (res[2].data || []).forEach(function(l){ var k = String(l.post_id); likeCounts[k]++; if (l.user_id === me.id) likedSet.add(k); });
+  (res[3].data || []).forEach(function(c){ commentCounts[String(c.post_id)]++; });
+  (res[4].data || []).forEach(function(r){ var k = String(r.post_id); repostCounts[k]++; if (r.user_id === me.id) repostedSet.add(k); });
+  (res[5].data || []).forEach(function(b){ savedSet.add(String(b.post_id)); });
+}
+
+function normalizeMedia(value, bucket){
+  if (!value) return "";
+  var v = String(value).trim();
+  if (!v) return "";
+  if (/^(https?:|data:|blob:)/i.test(v)) return v;
+  try { return supabaseClient.storage.from(bucket).getPublicUrl(v.replace(/^\/+/, "")).data.publicUrl; } catch (e) { return v; }
+}
+
+function renderPost(p){
+  var id = String(p.id);
+  var u = p.profile || {};
+  var img = normalizeMedia(p.image_url, "photos");
+  var vid = normalizeMedia(p.video_url, "videos");
+  var text = p.content || "";
+  var long = text.length > 280 || (text.match(/\n/g) || []).length > 5;
+  var groupLabel = p.group ? ' · in <a href="group.html?id=' + encodeURIComponent(p.group_id) + '">' + esc(p.group.name) + '</a>' : "";
+  var privLabel = (isOwn && p.visibility && p.visibility !== "public") ? ' · <i class="fas ' + (p.visibility === "private" ? "fa-lock" : "fa-user-group") + '"></i>' : "";
+
+  return '<article class="post" id="post-' + esc(id) + '">' +
+    '<div class="p-hdr">' +
+      '<img class="p-av" src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" alt="" onclick="openProfile(\'' + esc(p.User_id) + '\')" onerror="this.src=DEFAULT_AVATAR">' +
+      '<div class="p-info"><div class="pn" onclick="openProfile(\'' + esc(p.User_id) + '\')">' + nameHTML(u) + '</div>' +
+      '<div class="pm">' + (u.username ? "@" + esc(u.username) + " · " : "") + timeAgo(p.Create_at) + groupLabel + privLabel + '</div></div>' +
+      (p.User_id === me.id ? '<button class="p-del" onclick="deletePost(\'' + esc(id) + '\')" aria-label="Delete post"><i class="fas fa-trash"></i></button>' : "") +
+    '</div>' +
+    (text ? '<div class="p-body' + (long ? " clamp" : "") + '" id="body-' + esc(id) + '">' + esc(text) + '</div>' +
+      (long ? '<span class="see-more" onclick="expandPost(\'' + esc(id) + '\',this)">See more</span>' : "") : "") +
+    (img ? '<img class="p-media" src="' + esc(img) + '" alt="Post image" loading="lazy" onclick="openImage(this.src)" onerror="this.style.display=\'none\'">' : "") +
+    (vid ? '<video class="p-media" controls playsinline preload="metadata" src="' + esc(vid) + '"></video>' : "") +
+    '<div class="p-acts">' +
+      '<button class="p-a lk ' + (likedSet.has(id) ? "on" : "") + '" id="lk-' + esc(id) + '" onclick="toggleLike(\'' + esc(id) + '\')">' +
+        '<i class="' + (likedSet.has(id) ? "fas" : "far") + ' fa-heart"></i><span>' + fmt(likeCounts[id]) + '</span></button>' +
+      '<button class="p-a" onclick="location.href=\'comment.html?post=' + encodeURIComponent(id) + '\'"><i class="far fa-comment"></i><span>' + fmt(commentCounts[id]) + '</span></button>' +
+      '<button class="p-a rp ' + (repostedSet.has(id) ? "on" : "") + '" id="rp-' + esc(id) + '" onclick="toggleRepost(\'' + esc(id) + '\')">' +
+        '<i class="fas fa-retweet"></i><span>' + fmt(repostCounts[id]) + '</span></button>' +
+      '<button class="p-a p-a-r sv ' + (savedSet.has(id) ? "on" : "") + '" id="sv-' + esc(id) + '" onclick="toggleSave(\'' + esc(id) + '\')">' +
+        '<i class="' + (savedSet.has(id) ? "fas" : "far") + ' fa-bookmark"></i></button>' +
+    '</div></article>';
+}
+
+function expandPost(id, link){
+  var b = $("body-" + id); if (b) b.classList.remove("clamp");
+  if (link) link.remove();
+}
+
+async function toggleLike(id){
+  var btn = $("lk-" + id), was = likedSet.has(id);
+  if (btn) btn.style.pointerEvents = "none";
+  var r = was
+    ? await supabaseClient.from("likes").delete().eq("post_id", id).eq("user_id", me.id)
+    : await supabaseClient.from("likes").insert({ post_id: id, user_id: me.id });
+  if (btn) btn.style.pointerEvents = "";
+  if (r.error) { console.error(r.error); toast("Could not update like"); return; }
+  if (was) { likedSet.delete(id); likeCounts[id] = Math.max(0, (likeCounts[id] || 1) - 1); }
+  else { likedSet.add(id); likeCounts[id] = (likeCounts[id] || 0) + 1; }
+  if (btn) {
+    var on = likedSet.has(id);
+    btn.classList.toggle("on", on);
+    btn.innerHTML = '<i class="' + (on ? "fas" : "far") + ' fa-heart"></i><span>' + fmt(likeCounts[id]) + '</span>';
+  }
+}
+
+async function toggleRepost(id){
+  var btn = $("rp-" + id), was = repostedSet.has(id);
+  if (btn) btn.style.pointerEvents = "none";
+  var r = was
+    ? await supabaseClient.from("reposts").delete().eq("post_id", id).eq("user_id", me.id)
+    : await supabaseClient.from("reposts").insert({ post_id: id, user_id: me.id });
+  if (btn) btn.style.pointerEvents = "";
+  if (r.error) { console.error(r.error); toast("Could not update repost"); return; }
+  if (was) { repostedSet.delete(id); repostCounts[id] = Math.max(0, (repostCounts[id] || 1) - 1); toast("Repost removed"); }
+  else { repostedSet.add(id); repostCounts[id] = (repostCounts[id] || 0) + 1; toast("Post reposted"); }
+  if (btn) {
+    btn.classList.toggle("on", repostedSet.has(id));
+    btn.innerHTML = '<i class="fas fa-retweet"></i><span>' + fmt(repostCounts[id]) + '</span>';
+  }
+}
+
+async function toggleSave(id){
+  var btn = $("sv-" + id), was = savedSet.has(id);
+  if (btn) btn.style.pointerEvents = "none";
+  var r = was
+    ? await supabaseClient.from("bookmarks").delete().eq("post_id", id).eq("user_id", me.id)
+    : await supabaseClient.from("bookmarks").insert({ post_id: id, user_id: me.id });
+  if (btn) btn.style.pointerEvents = "";
+  if (r.error) { console.error(r.error); toast("Could not save post"); return; }
+  if (was) { savedSet.delete(id); toast("Removed from saved"); } else { savedSet.add(id); toast("Post saved"); }
+  if (btn) {
+    var on = savedSet.has(id);
+    btn.classList.toggle("on", on);
+    btn.innerHTML = '<i class="' + (on ? "fas" : "far") + ' fa-bookmark"></i>';
+  }
+  // On the Saved tab, an unsaved post disappears
+  if (tab === "saved" && was) {
+    var el = $("post-" + id); if (el) el.remove();
+    if (!document.querySelector("#feed .post")) renderSavedTab();
+  }
+}
+
+async function deletePost(id){
+  if (!confirm("Delete this post?")) return;
+  var r = await supabaseClient.from("posts").delete().eq("id", id).eq("User_id", me.id).select("id");
+  if (r.error || !(r.data && r.data.length)) { console.error(r.error); toast("Could not delete post"); return; }
+  var el = $("post-" + id); if (el) el.remove();
+  delete postsById[id];
+  var n = $("stPosts");
+  if (n) n.textContent = fmt(Math.max(0, (parseInt(String(n.textContent).replace(/[^\d]/g, ""), 10) || 1) - 1));
+  toast("Post deleted");
+  if (!document.querySelector("#feed .post")) showTab(tab);
+}
+
+/* =========================================================
+   VIDEOS TAB
+========================================================= */
+async function renderVideosTab(){
+  var c = $("content");
+  if (isLocked()) { c.innerHTML = lockHTML(); return; }
+  c.innerHTML = '<div class="skeleton"></div>';
+
+  var r = await supabaseClient.from("videos").select("*").eq("user_id", viewedId).order("created_at", { ascending: false }).limit(30);
+  if (r.error) { c.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i>Could not load videos.</div>'; return; }
+
+  var rows = (r.data || []).filter(function(v){ return v.video_url; });
+  if (!rows.length) {
+    c.innerHTML = '<div class="center"><i class="fas fa-video"></i><b>No videos yet</b>' +
+      (isOwn ? 'Upload your first video.<br><button class="cta" onclick="location.href=\'video.html\'">Go to Video</button>' : "Videos will show up here.") + '</div>';
+    return;
+  }
+  c.innerHTML = '<div class="vgrid">' + rows.map(function(v){
+    return '<div class="vcell" onclick="location.href=\'video.html\'"><video muted playsinline preload="metadata" ' +
+      (v.thumbnail_url ? 'poster="' + esc(v.thumbnail_url) + '" ' : "") + 'src="' + esc(v.video_url) + '#t=0.1"></video><i class="fas fa-play"></i></div>';
+  }).join("") + '</div>';
+}
+
+/* =========================================================
+   SAVED TAB (own profile only)
+========================================================= */
+async function renderSavedTab(){
+  var c = $("content");
+  if (!isOwn) { showTab("posts"); return; }
+  c.innerHTML = '<div id="feed"><div class="skeleton"></div><div class="skeleton"></div></div>';
+
+  var b = await supabaseClient.from("bookmarks").select("post_id,created_at").eq("user_id", me.id).order("created_at", { ascending: false }).limit(50);
+  if (b.error) { $("feed").innerHTML = '<div class="center"><i class="far fa-bookmark"></i><b>Saved posts are not available</b>Check the bookmarks table in Supabase.</div>'; return; }
+
+  var marks = b.data || [];
+  if (!marks.length) { $("feed").innerHTML = '<div class="center"><i class="far fa-bookmark"></i><b>No saved posts</b>Tap the bookmark on any post to keep it here.</div>'; return; }
+
+  var ids = marks.map(function(m){ return m.post_id; });
+  var pr = await supabaseClient.from("posts").select("*").in("id", ids);
+  var map = {};
+  (pr.data || []).forEach(function(p){ map[String(p.id)] = p; });
+
+  var rows = marks.map(function(m){ return map[String(m.post_id)]; }).filter(function(p){ return p && visibleToMe(p); });
+  if (!rows.length) { $("feed").innerHTML = '<div class="center"><i class="far fa-bookmark"></i><b>No saved posts</b>Saved posts that were deleted or are no longer visible do not appear.</div>'; return; }
+
+  await enrich(rows);
+  rows.forEach(function(p){ postsById[String(p.id)] = p; });
+  $("feed").innerHTML = rows.map(renderPost).join("");
+}
+
+/* =========================================================
+   MENU
+========================================================= */
+function openMenu(){
+  var h = '<div class="sheet-handle"></div>';
+  if (isOwn) {
+    h += '<div class="sheet-item" onclick="closeSheet();openEdit()"><i class="fas fa-user-pen"></i>Edit profile</div>';
+    h += '<div class="sheet-item" onclick="closeSheet();pickImage(\'avatar\')"><i class="fas fa-camera"></i>Change profile photo</div>';
+    h += '<div class="sheet-item" onclick="closeSheet();pickImage(\'cover\')"><i class="fas fa-image"></i>Change cover photo</div>';
+    h += '<div class="sheet-item" onclick="location.href=\'premium.html\'"><i class="fas fa-crown"></i>StudentX Premium</div>';
+    h += '<div class="sheet-item" onclick="location.href=\'settings.html\'"><i class="fas fa-gear"></i>Settings</div>';
+  } else {
+    h += '<div class="sheet-item" onclick="location.href=\'chat.html?user=' + encodeURIComponent(viewedId) + '\'"><i class="fas fa-comment-dots"></i>Message</div>';
+  }
+  h += '<div class="sheet-item" onclick="closeSheet();copyProfileLink()"><i class="fas fa-link"></i>Copy profile link</div>';
+  h += '<div class="sheet-item" onclick="closeSheet();shareProfile()"><i class="fas fa-share"></i>Share profile</div>';
+  if (isOwn) h += '<div class="sheet-item dng" onclick="logoutUser()"><i class="fas fa-right-from-bracket"></i>Log out</div>';
+  openSheet(h);
+}
+
+async function copyProfileLink(){
+  try { await navigator.clipboard.writeText(profileUrl()); toast("Link copied"); } catch (e) { toast("Could not copy link"); }
+}
+
+async function shareProfile(){
+  try {
+    if (navigator.share) { await navigator.share({ title: (prof.full_name || "StudentX") + " on StudentX", url: profileUrl() }); return; }
+    await navigator.clipboard.writeText(profileUrl());
+    toast("Link copied");
+  } catch (e) { if (e && e.name !== "AbortError") toast("Could not share"); }
+}
+
+async function logoutUser(){
+  var r = await supabaseClient.auth.signOut();
+  if (r.error) { toast(r.error.message || "Could not log out"); return; }
+  location.href = "login.html";
+}
+
+/* =========================================================
+   PHOTO UPLOAD (cropped to a clean square / banner before upload)
+========================================================= */
+function loadImage(file){
+  return new Promise(function(resolve, reject){
+    var url = URL.createObjectURL(file);
+    var img = new Image();
+    img.onload = function(){ URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = function(){ URL.revokeObjectURL(url); reject(new Error("Could not read this image")); };
+    img.src = url;
+  });
+}
+
+async function cropToBlob(file, w, h){
+  var img = await loadImage(file);
+  var scale = Math.max(w / img.width, h / img.height);
+  var sw = w / scale, sh = h / scale;
+  var sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
+  var canvas = document.createElement("canvas");
+  canvas.width = w; canvas.height = h;
+  canvas.getContext("2d").drawImage(img, sx, sy, sw, sh, 0, 0, w, h);
+  return new Promise(function(resolve, reject){
+    canvas.toBlob(function(b){ b ? resolve(b) : reject(new Error("Could not process image")); }, "image/jpeg", 0.85);
+  });
+}
+
+function pickImage(kind){
+  if (!isOwn) return;
+  var inp = document.createElement("input");
+  inp.type = "file"; inp.accept = "image/*";
+  inp.onchange = function(){ var f = inp.files[0]; if (f) uploadImage(kind, f); };
+  inp.click();
+}
+
+async function uploadImage(kind, file){
+  if (!file.type.startsWith("image/")) { toast("Choose an image file"); return; }
+  if (file.size > 12 * 1024 * 1024) { toast("Image must be under 12 MB"); return; }
+
+  toast(kind === "avatar" ? "Updating photo..." : "Updating cover...");
+  try {
+    var blob = kind === "avatar" ? await cropToBlob(file, 512, 512) : await cropToBlob(file, 1200, 400);
+    var bucket = kind === "avatar" ? "avatars" : "covers";
+    var path = me.id + "/" + kind + "-" + Date.now() + ".jpg";
+
+    var up = await supabaseClient.storage.from(bucket).upload(path, blob, { contentType: "image/jpeg", upsert: true });
+    if (up.error) throw up.error;
+    var url = supabaseClient.storage.from(bucket).getPublicUrl(path).data.publicUrl;
+
+    var update = kind === "avatar" ? { avatar_url: url } : { cover_url: url };
+    var r = await supabaseClient.from("profiles").update(update).eq("id", me.id).select("*").single();
+    if (r.error) throw r.error;
+
+    if (kind === "avatar") prof.avatar_url = url; else prof.cover_url = url;
+    redrawHeader();
+    toast(kind === "avatar" ? "Profile photo updated" : "Cover photo updated");
+  } catch (e) {
+    console.error(e);
+    toast((e && e.message) || "Could not upload image");
+  }
+}
+
+/* =========================================================
+   EDIT PROFILE
+========================================================= */
+function openEdit(){
+  function f(id, label, val, extra){
+    extra = extra || {};
+    return '<label>' + label + '</label><input type="' + (extra.type || "text") + '" id="' + id + '" value="' + esc(val || "") + '"' + (extra.max ? ' maxlength="' + extra.max + '"' : "") + '>';
+  }
+  openSheet(
+    '<div class="sheet-handle"></div><div class="sheet-title">Edit profile</div><div class="form">' +
+      f("edName", "Full name", prof.full_name, { max: 80 }) +
+      f("edUser", "Username", prof.username, { max: 30 }) +
+      '<label>Bio</label><textarea id="edBio" maxlength="160">' + esc(prof.bio || "") + '</textarea>' +
+      f("edUni", "University", prof.university, { max: 80 }) +
+      '<div class="row2"><div>' + f("edDept", "Department", prof.department, { max: 60 }) + '</div><div>' + f("edFac", "Faculty", prof.faculty, { max: 60 }) + '</div></div>' +
+      '<div class="row2"><div>' + f("edLevel", "Level", prof.level, { max: 10 }) + '</div><div>' + f("edGrad", "Graduation year", prof.graduation_year, { type: "number" }) + '</div></div>' +
+      f("edCountry", "Country", prof.country, { max: 60 }) +
+      '<div class="row2"><div>' + f("edState", "State", prof.state, { max: 60 }) + '</div><div>' + f("edCity", "City", prof.city, { max: 60 }) + '</div></div>' +
+      '<div class="btns" style="margin-top:20px"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn main" id="edSave" onclick="saveEdit()">Save changes</button></div>' +
+    '</div>'
+  );
+}
+
+async function saveEdit(){
+  function v(id){ return ($(id).value || "").trim(); }
+  var name = v("edName");
+  if (!name) { toast("Full name is required"); return; }
+  var username = v("edUser").replace(/^@/, "");
+
+  var btn = $("edSave"); btn.disabled = true; btn.textContent = "Saving...";
+  try {
+    if (username && username !== prof.username) {
+      var taken = await supabaseClient.from("profiles").select("id").eq("username", username).neq("id", me.id).limit(1);
+      if (taken.data && taken.data.length) { toast("That username is already taken"); btn.disabled = false; btn.textContent = "Save changes"; return; }
+    }
+
+    var grad = v("edGrad");
+    var update = {
+      full_name: name,
+      username: username || null,
+      bio: v("edBio") || null,
+      university: v("edUni") || null,
+      department: v("edDept") || null,
+      faculty: v("edFac") || null,
+      level: v("edLevel") || null,
+      graduation_year: grad ? Number(grad) : null,
+      country: v("edCountry") || null,
+      state: v("edState") || null,
+      city: v("edCity") || null
+    };
+
+    var r = await supabaseClient.from("profiles").update(update).eq("id", me.id).select("*").single();
+    if (r.error) throw r.error;
+
+    prof = Object.assign(prof, r.data);
+    closeSheet();
+    $("hdrTitle").textContent = "Profile";
+    redrawHeader();
+    toast("Profile updated");
+  } catch (e) {
+    console.error(e);
+    toast(e && e.code === "23505" ? "That username is already taken" : ((e && e.message) || "Could not save"));
+    btn.disabled = false; btn.textContent = "Save changes";
+  }
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>
