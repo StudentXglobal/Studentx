@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - StudyHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#a855f7;
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;padding-bottom:80px}
+a{color:inherit;text-decoration:none}
+
+.hdr{position:sticky;top:0;z-index:100;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between}
+.hdr-title{font-size:20px;font-weight:800}
+.hdr-btn{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px;cursor:pointer;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+
+.banner{margin:14px;padding:24px 20px;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#6d28d9,#4f46e5);position:relative;overflow:hidden;cursor:pointer;color:#fff}
+.banner::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.banner::after{content:'';position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.04)}
+.banner h2{font-size:20px;font-weight:800;margin-bottom:4px;position:relative}
+.banner p{font-size:13px;opacity:.85;position:relative;line-height:1.4}
+.banner-btn{display:inline-flex;align-items:center;gap:6px;margin-top:16px;padding:9px 20px;border-radius:20px;background:rgba(255,255,255,.16);backdrop-filter:blur(8px);font-size:12px;font-weight:700;position:relative}
+
+.sec{padding:0 14px;margin-bottom:20px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:15px;font-weight:700}
+.sec-link{font-size:11px;color:var(--accent);font-weight:600;cursor:pointer}
+
+.course{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer}
+.course-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.course-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.course-info{flex:1;min-width:0}
+.course-name{font-size:13px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.course-code{font-size:11px;color:var(--muted);margin-top:2px}
+.course-pct{font-size:13px;font-weight:700;flex-shrink:0}
+.prog-bar{height:6px;background:var(--card-2);border-radius:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:6px;transition:width .8s ease}
+
+.resource{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px;cursor:pointer}
+.res-ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.res-info{flex:1;min-width:0}
+.res-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.res-dl{color:var(--accent);font-size:13px;flex-shrink:0}
+
+.deadline{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.deadline:last-child{border-bottom:none}
+.dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dl-info{flex:1;min-width:0}
+.dl-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl-course{font-size:11px;color:var(--muted);margin-top:2px}
+.dl-date{font-size:11px;font-weight:700;text-align:right;flex-shrink:0}
+.dl-days{font-size:9px;font-weight:500;text-align:right;margin-top:1px;opacity:.6}
+
+.center{text-align:center;padding:30px 16px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:26px;margin-bottom:10px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:13px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:12px;padding:9px 18px;border-radius:20px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+
+.skeleton{height:70px;border-radius:14px;background:var(--card);margin-bottom:10px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;padding:11px 20px;background:rgba(124,58,237,.92);backdrop-filter:blur(12px);color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.3);animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateX(-50%) translateY(-10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+<div class="hdr-row">
+<div class="hdr-title">StudyHub</div>
+<button class="hdr-btn" onclick="window.location.href='search.html'" aria-label="Search"><i class="fas fa-search"></i></button>
+</div>
+</header>
+
+<div class="banner" onclick="window.location.href='studyhub-progress.html'">
+<h2>Keep learning, keep growing!</h2>
+<p>Track your progress and access study resources</p>
+<div class="banner-btn"><i class="fas fa-chart-line"></i> View Progress</div>
+</div>
+
+<div class="sec">
+<div class="sec-head">
+<div class="sec-title">My Courses</div>
+<div class="sec-link" onclick="window.location.href='studyhub-courses.html'">See all</div>
+</div>
+<div id="courseList"><div class="skeleton"></div><div class="skeleton"></div></div>
+</div>
+
+<div class="sec">
+<div class="sec-head">
+<div class="sec-title">Recent Resources</div>
+<div class="sec-link" onclick="window.location.href='studyhub-resources.html'">See all</div>
+</div>
+<div id="resList"><div class="skeleton"></div></div>
+</div>
+
+<div class="sec">
+<div class="sec-head">
+<div class="sec-title">Upcoming Deadlines</div>
+</div>
+<div id="dlList"><div class="skeleton"></div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX STUDYHUB — live Supabase data
+========================================================= */
+var me = null;
+
+function $(id){ return document.getElementById(id); }
+
+function esc(v){
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+function formatSize(bytesLabel){
+  return bytesLabel || "";
+}
+
+function daysLeftLabel(dueDate){
+  var due = new Date(dueDate).getTime();
+  if (isNaN(due)) return "";
+  var diffMs = due - Date.now();
+  var days = Math.ceil(diffMs / 86400000);
+  if (days < 0) return "Overdue";
+  if (days === 0) return "Due today";
+  if (days === 1) return "1 day left";
+  return days + " days left";
+}
+
+function formatDueDate(dueDate){
+  var d = new Date(dueDate);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+function toast(msg){
+  var old = document.querySelector(".toast"); if (old) old.remove();
+  var d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(function(){ if (d.parentNode) d.remove(); }, 2500);
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  var auth = await supabaseClient.auth.getUser();
+  me = auth.data && auth.data.user;
+
+  if (!me){
+    window.location.href = "login.html";
+    return;
+  }
+
+  loadCourses();
+  loadResources();
+  loadDeadlines();
+}
+
+/* =========================================================
+   MY COURSES (course_enrollments joined with courses)
+========================================================= */
+async function loadCourses(){
+  var list = $("courseList");
+
+  var r = await supabaseClient
+    .from("course_enrollments")
+    .select("progress, course:courses(id,title,code,category,icon,color)")
+    .eq("user_id", me.id)
+    .order("created_at", { ascending: false })
+    .limit(6);
+
+  if (r.error){
+    console.error("Courses error:", r.error);
+    list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load courses</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  var rows = (r.data || []).filter(function(row){ return row.course; });
+
+  if (!rows.length){
+    list.innerHTML = '<div class="center"><i class="fas fa-graduation-cap"></i><b>No courses yet</b>Browse and enroll in courses to track your progress.<br><button class="cta" onclick="window.location.href=\'studyhub-courses.html\'">Browse courses</button></div>';
+    return;
+  }
+
+  list.innerHTML = rows.map(function(row){
+    var c = row.course;
+    var pct = Math.max(0, Math.min(100, Number(row.progress) || 0));
+    var color = c.color || "#7c3aed";
+    var icon = c.icon || "fa-book";
+
+    return '<div class="course" onclick="window.location.href=\'course.html?id=' + encodeURIComponent(c.id) + '\'">' +
+      '<div class="course-top">' +
+        '<div class="course-ic" style="background:' + esc(color) + '15;color:' + esc(color) + '"><i class="fas ' + esc(icon) + '"></i></div>' +
+        '<div class="course-info"><div class="course-name">' + esc(c.title) + '</div><div class="course-code">' + esc(c.code || c.category || "") + '</div></div>' +
+        '<div class="course-pct" style="color:' + esc(color) + '">' + pct + '%</div>' +
+      '</div>' +
+      '<div class="prog-bar"><div class="prog-fill" style="width:' + pct + '%;background:' + esc(color) + '"></div></div>' +
+    '</div>';
+  }).join("");
+}
+
+/* =========================================================
+   RECENT RESOURCES (shared study materials)
+========================================================= */
+async function loadResources(){
+  var list = $("resList");
+
+  var r = await supabaseClient
+    .from("studyhub_resources")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(3);
+
+  if (r.error){
+    console.error("Resources error:", r.error);
+    list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load resources</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  var rows = r.data || [];
+
+  if (!rows.length){
+    list.innerHTML = '<div class="center"><i class="fas fa-file-lines"></i><b>No resources yet</b>Shared notes and files will appear here.</div>';
+    return;
+  }
+
+  list.innerHTML = rows.map(function(res){
+    var color = res.color || "#3b82f6";
+    var icon = res.icon || "fa-file";
+    var onclickAction = res.file_url
+      ? "window.open('" + esc(res.file_url).replace(/'/g, "\\'") + "','_blank')"
+      : "toast('File not available yet')";
+
+    return '<div class="resource" onclick="' + onclickAction + '">' +
+      '<div class="res-ic" style="background:' + esc(color) + '15;color:' + esc(color) + '"><i class="fas ' + esc(icon) + '"></i></div>' +
+      '<div class="res-info"><div class="res-name">' + esc(res.title) + '</div><div class="res-meta">' + esc(res.file_type || "") + (res.file_size_label ? " · " + esc(res.file_size_label) : "") + '</div></div>' +
+      '<div class="res-dl"><i class="fas fa-download"></i></div>' +
+    '</div>';
+  }).join("");
+}
+
+/* =========================================================
+   UPCOMING DEADLINES (mine + global, future only)
+========================================================= */
+async function loadDeadlines(){
+  var list = $("dlList");
+  var now = new Date().toISOString();
+
+  var r = await supabaseClient
+    .from("studyhub_deadlines")
+    .select("*, course:courses(title,code)")
+    .gte("due_date", now)
+    .order("due_date", { ascending: true })
+    .limit(3);
+
+  if (r.error){
+    console.error("Deadlines error:", r.error);
+    list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load deadlines</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  var rows = r.data || [];
+
+  if (!rows.length){
+    list.innerHTML = '<div class="center"><i class="fas fa-calendar-check"></i><b>No upcoming deadlines</b>You are all caught up.</div>';
+    return;
+  }
+
+  list.innerHTML = rows.map(function(dl){
+    var color = dl.color || "#ef4444";
+    var courseLabel = dl.course ? (dl.course.code || dl.course.title) : "";
+
+    return '<div class="deadline">' +
+      '<div class="dl-dot" style="background:' + esc(color) + '"></div>' +
+      '<div class="dl-info"><div class="dl-name">' + esc(dl.title) + '</div><div class="dl-course">' + esc(courseLabel) + '</div></div>' +
+      '<div><div class="dl-date" style="color:' + esc(color) + '">' + esc(formatDueDate(dl.due_date)) + '</div><div class="dl-days">' + esc(daysLeftLabel(dl.due_date)) + '</div></div>' +
+    '</div>';
+  }).join("");
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
