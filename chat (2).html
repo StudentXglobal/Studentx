@@ -1,0 +1,3286 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1,user-scalable=no">
+
+<title>StudentX Chat</title>
+
+<link
+href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+rel="stylesheet">
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+:root{
+--bg:#0a0a0f;
+--card:rgba(255,255,255,.035);
+--card-2:rgba(255,255,255,.07);
+--border:rgba(255,255,255,.06);
+--text:#fff;
+--text-2:rgba(255,255,255,.82);
+--muted:rgba(255,255,255,.35);
+--accent:#a855f7;
+}
+
+:root.sx-light{
+--bg:#f0f2f5;
+--card:#ffffff;
+--card-2:#f0f2f5;
+--border:#e4e6eb;
+--text:#050505;
+--text-2:#3a3b3c;
+--muted:#65676b;
+}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+width:100%;
+height:100%;
+background:var(--bg);
+color:var(--text);
+font-family:Poppins,sans-serif;
+overflow:hidden;
+}
+
+button,
+input,
+textarea{
+font-family:Poppins,sans-serif;
+}
+
+.list-view{
+width:100%;
+height:100%;
+overflow-y:auto;
+padding-bottom:70px;
+}
+
+.hdr{
+position:sticky;
+top:0;
+z-index:50;
+padding:14px;
+background:var(--bg);
+border-bottom:1px solid var(--border);
+}
+
+.hdr-row{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:13px;
+}
+
+.hdr-title{
+font-size:24px;
+font-weight:800;
+}
+
+.hdr-btns{
+display:flex;
+gap:7px;
+}
+
+.hdr-btn{
+width:38px;
+height:38px;
+border-radius:11px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:var(--muted);
+background:var(--card-2);
+cursor:pointer;
+}
+
+.search{
+height:42px;
+display:flex;
+align-items:center;
+gap:9px;
+padding:0 13px;
+border-radius:13px;
+background:var(--card-2);
+border:1px solid var(--border);
+}
+
+.search i{
+color:var(--muted);
+font-size:13px;
+}
+
+.search input{
+width:100%;
+border:0;
+outline:0;
+background:transparent;
+color:var(--text);
+font-size:12px;
+}
+
+.search input::placeholder{
+color:var(--muted);
+}
+
+.tabs{
+display:flex;
+gap:7px;
+padding:12px 14px 8px;
+overflow-x:auto;
+scrollbar-width:none;
+}
+
+.tabs::-webkit-scrollbar{
+display:none;
+}
+
+.tab{
+padding:8px 15px;
+border-radius:20px;
+font-size:11px;
+font-weight:600;
+color:var(--muted);
+background:var(--card);
+white-space:nowrap;
+cursor:pointer;
+}
+
+.tab.on{
+color:#fff;
+background:linear-gradient(135deg,#7c3aed,#a855f7);
+}
+
+.ci{
+display:flex;
+align-items:center;
+gap:11px;
+padding:12px 14px;
+cursor:pointer;
+}
+
+.ci:active{
+background:var(--card-2);
+}
+
+.ci-aw{
+position:relative;
+width:49px;
+height:49px;
+flex-shrink:0;
+}
+
+.ci-av{
+width:49px;
+height:49px;
+border-radius:50%;
+object-fit:cover;
+border:1px solid var(--border);
+}
+
+.st-on,
+.st-off{
+position:absolute;
+right:0;
+bottom:1px;
+width:11px;
+height:11px;
+border-radius:50%;
+border:2px solid var(--bg);
+}
+
+.st-on{
+background:#22c55e;
+}
+
+.st-off{
+background:#52525b;
+}
+
+.ci-bd{
+flex:1;
+min-width:0;
+}
+
+.ci-nm{
+font-size:13px;
+font-weight:700;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+color:var(--text);
+}
+
+.ci-pv{
+margin-top:3px;
+font-size:10px;
+color:var(--muted);
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+}
+
+.ci-rt{
+display:flex;
+flex-direction:column;
+align-items:flex-end;
+gap:5px;
+}
+
+.ci-tm{
+font-size:9px;
+color:var(--muted);
+}
+
+.ci-ur{
+min-width:18px;
+height:18px;
+padding:0 5px;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:8px;
+font-weight:700;
+background:#a855f7;
+color:#fff;
+}
+
+/* The full-screen chat and call views stay dark, like the app's
+   other immersive screens (video, story, live) */
+
+.chat-view{
+position:fixed;
+inset:0;
+z-index:100;
+display:none;
+flex-direction:column;
+background:#0a0a0f;
+}
+
+.chat-view.show{
+display:flex;
+}
+
+.ch-hdr{
+height:65px;
+display:flex;
+align-items:center;
+gap:9px;
+padding:8px 12px;
+background:rgba(10,10,15,.96);
+border-bottom:1px solid rgba(255,255,255,.06);
+flex-shrink:0;
+}
+
+.ch-back{
+width:35px;
+height:35px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.55);
+cursor:pointer;
+}
+
+.ch-av-wrap{
+position:relative;
+width:39px;
+height:39px;
+flex-shrink:0;
+}
+
+.ch-av{
+width:39px;
+height:39px;
+border-radius:50%;
+object-fit:cover;
+}
+
+.ch-info{
+flex:1;
+min-width:0;
+}
+
+.ch-nm{
+font-size:12px;
+font-weight:700;
+white-space:nowrap;
+overflow:hidden;
+text-overflow:ellipsis;
+color:#fff;
+}
+
+.ch-st{
+font-size:9px;
+margin-top:2px;
+color:rgba(255,255,255,.3);
+}
+
+.ch-st.on{
+color:#22c55e;
+}
+
+.ch-acts{
+display:flex;
+gap:3px;
+}
+
+.ch-ab{
+width:36px;
+height:36px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.55);
+border-radius:10px;
+cursor:pointer;
+}
+
+.ch-ab:active{
+background:rgba(124,58,237,.15);
+color:#a855f7;
+}
+
+.msgs{
+flex:1;
+overflow-y:auto;
+padding:14px 12px 10px;
+scroll-behavior:smooth;
+}
+
+.msg{
+display:flex;
+align-items:flex-end;
+gap:6px;
+margin:5px 0;
+}
+
+.msg.in{
+justify-content:flex-start;
+}
+
+.msg.out{
+justify-content:flex-end;
+}
+
+.msg-av{
+width:27px;
+height:27px;
+border-radius:50%;
+object-fit:cover;
+flex-shrink:0;
+}
+
+.msg-bub{
+max-width:78%;
+padding:9px 11px;
+border-radius:15px;
+background:rgba(255,255,255,.06);
+font-size:12px;
+line-height:1.5;
+color:rgba(255,255,255,.82);
+word-break:break-word;
+}
+
+.msg.out .msg-bub{
+background:linear-gradient(135deg,#5b21b6,#7c3aed);
+color:#fff;
+border-bottom-right-radius:5px;
+}
+
+.msg.in .msg-bub{
+border-bottom-left-radius:5px;
+}
+
+.msg-time{
+font-size:8px;
+color:rgba(255,255,255,.28);
+margin-top:4px;
+text-align:right;
+}
+
+.msg.out .msg-time{
+color:rgba(255,255,255,.55);
+}
+
+.empty-chat{
+height:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.25);
+text-align:center;
+}
+
+.empty-chat i{
+font-size:28px;
+margin-bottom:10px;
+}
+
+.empty-chat p{
+font-size:11px;
+}
+
+.ch-input{
+display:flex;
+align-items:flex-end;
+gap:7px;
+padding:9px 12px;
+background:rgba(10,10,15,.97);
+border-top:1px solid rgba(255,255,255,.06);
+flex-shrink:0;
+}
+
+.ch-ib{
+width:38px;
+height:38px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+color:rgba(255,255,255,.4);
+font-size:16px;
+cursor:pointer;
+flex-shrink:0;
+}
+
+.ch-ib:active{
+background:rgba(255,255,255,.06);
+}
+
+.ch-ta{
+flex:1;
+min-height:38px;
+max-height:100px;
+padding:9px 13px;
+border-radius:20px;
+border:1px solid rgba(255,255,255,.08);
+background:rgba(255,255,255,.04);
+outline:none;
+resize:none;
+color:#fff;
+font-size:12px;
+line-height:1.4;
+}
+
+.ch-ta:focus{
+border-color:#7c3aed;
+}
+
+.ch-ta::placeholder{
+color:rgba(255,255,255,.22);
+}
+
+.ch-send{
+width:38px;
+height:38px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:linear-gradient(135deg,#7c3aed,#a855f7);
+color:#fff;
+font-size:13px;
+cursor:pointer;
+flex-shrink:0;
+}
+
+.file-input{
+display:none;
+}
+
+.toast{
+position:fixed;
+top:15px;
+left:50%;
+transform:translateX(-50%);
+z-index:9999;
+padding:10px 18px;
+border-radius:12px;
+background:rgba(124,58,237,.95);
+color:#fff;
+font-size:11px;
+font-weight:600;
+box-shadow:0 5px 25px rgba(0,0,0,.4);
+animation:fi .3s ease;
+}
+
+@keyframes fi{
+from{opacity:0;transform:translateX(-50%) translateY(-8px);}
+to{opacity:1;transform:translateX(-50%) translateY(0);}
+}
+
+/* CALL SCREEN */
+
+.call-screen{
+position:fixed;
+inset:0;
+z-index:1000;
+display:none;
+background:#050509;
+}
+
+.call-screen.show{
+display:block;
+}
+
+.remote-video{
+width:100%;
+height:100%;
+object-fit:cover;
+background:#09090d;
+}
+
+.local-video{
+position:absolute;
+right:14px;
+top:78px;
+width:105px;
+height:150px;
+object-fit:cover;
+border-radius:14px;
+background:#16161d;
+border:1px solid rgba(255,255,255,.14);
+display:none;
+}
+
+.voice-call-bg{
+position:absolute;
+inset:0;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+background:
+radial-gradient(circle at center,rgba(124,58,237,.18),transparent 45%),
+#07070b;
+}
+
+.voice-call-bg img{
+width:105px;
+height:105px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid rgba(168,85,247,.65);
+}
+
+.call-name{
+margin-top:16px;
+font-size:18px;
+font-weight:700;
+color:#fff;
+}
+
+.call-status{
+margin-top:5px;
+font-size:11px;
+color:rgba(255,255,255,.4);
+}
+
+.call-top{
+position:absolute;
+top:0;
+left:0;
+right:0;
+padding:18px;
+z-index:5;
+text-align:center;
+background:linear-gradient(rgba(0,0,0,.55),transparent);
+color:#fff;
+}
+
+.call-controls{
+position:absolute;
+bottom:30px;
+left:0;
+right:0;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:13px;
+z-index:10;
+}
+
+.call-btn{
+width:52px;
+height:52px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(10px);
+color:#fff;
+font-size:17px;
+cursor:pointer;
+}
+
+.call-btn.end{
+background:#dc2626;
+width:58px;
+height:58px;
+}
+
+.incoming{
+position:fixed;
+inset:0;
+z-index:1100;
+display:none;
+align-items:center;
+justify-content:center;
+background:rgba(0,0,0,.72);
+backdrop-filter:blur(15px);
+}
+
+.incoming.show{
+display:flex;
+}
+
+.incoming-card{
+width:calc(100% - 40px);
+max-width:360px;
+padding:28px 20px;
+border-radius:24px;
+background:#16161e;
+border:1px solid rgba(255,255,255,.08);
+text-align:center;
+color:#fff;
+}
+
+.incoming-card img{
+width:90px;
+height:90px;
+border-radius:50%;
+object-fit:cover;
+border:2px solid rgba(168,85,247,.65);
+}
+
+.incoming-name{
+margin-top:13px;
+font-size:17px;
+font-weight:700;
+}
+
+.incoming-type{
+margin-top:4px;
+font-size:10px;
+color:rgba(255,255,255,.35);
+}
+
+.incoming-actions{
+display:flex;
+justify-content:center;
+gap:25px;
+margin-top:25px;
+}
+
+.incoming-btn{
+width:55px;
+height:55px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:#fff;
+cursor:pointer;
+}
+
+.incoming-btn.accept{
+background:#16a34a;
+}
+
+.incoming-btn.decline{
+background:#dc2626;
+}
+
+.no-c{
+text-align:center;
+padding:60px 20px;
+color:var(--muted);
+font-size:11px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="list-view" id="listView">
+
+<header class="hdr">
+
+<div class="hdr-row">
+
+<div class="hdr-title">
+Chat
+</div>
+
+<div class="hdr-btns">
+
+<div
+class="hdr-btn"
+onclick="startNewChat()">
+<i class="fas fa-edit"></i>
+</div>
+
+<div
+class="hdr-btn"
+onclick="showMsg('Call history will appear here')">
+<i class="fas fa-phone"></i>
+</div>
+
+</div>
+
+</div>
+
+<div class="search">
+
+<i class="fas fa-search"></i>
+
+<input
+id="chatSearch"
+type="text"
+placeholder="Search conversations..."
+oninput="searchList(this.value)">
+
+</div>
+
+</header>
+
+<div
+class="tabs"
+id="tBar">
+</div>
+
+<div
+id="cList">
+</div>
+
+</div>
+
+
+<div
+class="chat-view"
+id="chatView">
+
+<div class="ch-hdr">
+
+<div
+class="ch-back"
+onclick="closeChat()">
+
+<i class="fas fa-arrow-left"></i>
+
+</div>
+
+<div
+class="ch-av-wrap"
+id="chAv">
+</div>
+
+<div class="ch-info">
+
+<div
+class="ch-nm"
+id="chNm">
+</div>
+
+<div
+class="ch-st"
+id="chSt">
+</div>
+
+</div>
+
+<div class="ch-acts">
+
+<div
+class="ch-ab"
+onclick="startVoiceCall()">
+
+<i class="fas fa-phone"></i>
+
+</div>
+
+<div
+class="ch-ab"
+onclick="startVideoCall()">
+
+<i class="fas fa-video"></i>
+
+</div>
+
+</div>
+
+</div>
+
+<div
+class="msgs"
+id="msgArea">
+</div>
+
+<div class="ch-input">
+
+<div
+class="ch-ib"
+onclick="pickFile()">
+
+<i class="fas fa-plus"></i>
+
+</div>
+
+<textarea
+class="ch-ta"
+id="chTa"
+placeholder="Message..."
+rows="1"
+oninput="autoGrow(this)"
+onkeydown="handleEnter(event)">
+</textarea>
+
+<div
+class="ch-ib"
+id="recBtn"
+onclick="toggleRec()">
+
+<i class="fas fa-microphone"></i>
+
+</div>
+
+<div
+class="ch-send"
+onclick="sendMsg()">
+
+<i class="fas fa-paper-plane"></i>
+
+</div>
+
+</div>
+
+</div>
+
+
+<input
+type="file"
+id="fileIn"
+class="file-input"
+accept="image/*,video/*,.pdf,.doc,.docx"
+onchange="handleFile(this)">
+
+
+<!-- CALL SCREEN -->
+
+<div
+class="call-screen"
+id="callScreen">
+
+<video
+id="remoteVideo"
+class="remote-video"
+autoplay
+playsinline></video>
+
+<video
+id="localVideo"
+class="local-video"
+autoplay
+muted
+playsinline></video>
+
+<div
+class="voice-call-bg"
+id="voiceCallBg">
+
+<img
+id="callAvatar"
+src="">
+
+<div
+class="call-name"
+id="callName">
+</div>
+
+<div
+class="call-status"
+id="callStatus">
+Connecting...
+</div>
+
+</div>
+
+<div
+class="call-top">
+
+<div
+id="callTopName">
+</div>
+
+</div>
+
+<div class="call-controls">
+
+<div
+class="call-btn"
+id="muteBtn"
+onclick="toggleMute()">
+
+<i class="fas fa-microphone"></i>
+
+</div>
+
+<div
+class="call-btn"
+id="cameraBtn"
+onclick="toggleCamera()"
+style="display:none">
+
+<i class="fas fa-video"></i>
+
+</div>
+
+<div
+class="call-btn"
+onclick="switchCamera()"
+style="display:none"
+id="switchBtn">
+
+<i class="fas fa-camera-rotate"></i>
+
+</div>
+
+<div
+class="call-btn end"
+onclick="endCall()">
+
+<i class="fas fa-phone-slash"></i>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- INCOMING CALL -->
+
+<div
+class="incoming"
+id="incomingCall">
+
+<div class="incoming-card">
+
+<img
+id="incomingAvatar"
+src="">
+
+<div
+class="incoming-name"
+id="incomingName">
+</div>
+
+<div
+class="incoming-type"
+id="incomingType">
+Incoming call
+</div>
+
+<div class="incoming-actions">
+
+<div
+class="incoming-btn decline"
+onclick="declineCall()">
+
+<i class="fas fa-phone-slash"></i>
+
+</div>
+
+<div
+class="incoming-btn accept"
+onclick="acceptCall()">
+
+<i class="fas fa-phone"></i>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script>
+
+let currentUser = null;
+let profile = null;
+
+let chats = [];
+let currentChat = null;
+let messages = [];
+
+let messageChannelOut = null;
+let messageChannelIn = null;
+let messageChannel = null;
+let callChannel = null;
+
+let pendingOffer = null;
+let pendingCaller = null;
+let pendingCallType = null;
+
+let peerConnection = null;
+let localStream = null;
+let remoteStream = null;
+
+let isMuted = false;
+let cameraEnabled = true;
+
+let activeFilter = "all"; // all | people | unread
+let searchTerm = "";
+
+
+const defaultAvatar =
+"data:image/svg+xml;charset=UTF-8," +
+encodeURIComponent(`
+<svg xmlns="http://www.w3.org/2000/svg"
+width="200"
+height="200">
+
+<rect width="200"
+height="200"
+fill="#202027"/>
+
+<circle
+cx="100"
+cy="75"
+r="42"
+fill="#777"/>
+
+<path
+d="M35 190c8-48 35-70 65-70s57 22 65 70"
+fill="#777"/>
+
+</svg>
+`);
+
+
+function escapeHTML(value){
+
+if(value === null || value === undefined){
+return "";
+}
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* Always returns a safe object, never null/undefined */
+function chatUser(chat){
+
+return (chat && chat.user) ? chat.user : {};
+
+}
+
+
+function timeAgo(date){
+
+const d =
+new Date(date);
+
+const seconds =
+Math.floor(
+(Date.now()-d.getTime())/1000
+);
+
+if(seconds < 60){
+return "now";
+}
+
+if(seconds < 3600){
+return Math.floor(seconds/60)+"m";
+}
+
+if(seconds < 86400){
+return Math.floor(seconds/3600)+"h";
+}
+
+if(seconds < 604800){
+return Math.floor(seconds/86400)+"d";
+}
+
+return d.toLocaleDateString();
+
+}
+
+
+async function initChat(){
+
+const result =
+await supabaseClient.auth.getUser();
+
+if(result.error ||
+!result.data.user){
+
+window.location.href="login.html";
+
+return;
+
+}
+
+currentUser =
+result.data.user;
+
+await loadMyProfile();
+
+await loadChats();
+
+subscribeMessages();
+
+subscribeCalls();
+
+checkRequestedUser();
+
+cleanupOldSignals();
+
+}
+
+
+async function loadMyProfile(){
+
+const result =
+await supabaseClient
+.from("profiles")
+.select(
+"id,full_name,username,avatar_url"
+)
+.eq("id",currentUser.id)
+.maybeSingle();
+
+if(result.error){
+
+console.error(result.error);
+return;
+
+}
+
+profile =
+result.data;
+
+}
+
+
+async function loadChats(){
+
+const result =
+await supabaseClient
+.from("messages")
+.select(`
+id,
+sender_id,
+receiver_id,
+content,
+message_type,
+file_url,
+file_name,
+created_at,
+read_at
+`)
+.or(
+"sender_id.eq."+currentUser.id+
+",receiver_id.eq."+currentUser.id
+)
+.order(
+"created_at",
+{ascending:false}
+)
+.limit(200);
+
+if(result.error){
+
+console.error(
+"Chat loading error:",
+result.error
+);
+
+renderNoChats(
+result.error.message
+);
+
+return;
+
+}
+
+const rows =
+result.data || [];
+
+const userIds = [
+...new Set(
+rows.map(function(row){
+
+return row.sender_id === currentUser.id
+? row.receiver_id
+: row.sender_id;
+
+})
+)
+];
+
+if(!userIds.length){
+
+chats=[];
+renderChats();
+return;
+
+}
+
+const usersResult =
+await supabaseClient
+.from("profiles")
+.select(
+"id,full_name,username,avatar_url"
+)
+.in("id",userIds);
+
+if(usersResult.error){
+
+console.error(
+usersResult.error
+);
+
+return;
+
+}
+
+const users =
+usersResult.data || [];
+
+const userMap = {};
+
+users.forEach(function(user){
+
+userMap[user.id]=user;
+
+});
+
+const map = {};
+
+rows.forEach(function(row){
+
+const otherId =
+row.sender_id === currentUser.id
+? row.receiver_id
+: row.sender_id;
+
+if(!map[otherId]){
+
+map[otherId]={
+id:otherId,
+user:userMap[otherId] || null,
+lastMessage:row,
+unread:0
+};
+
+}
+
+if(
+row.receiver_id === currentUser.id &&
+!row.read_at
+){
+
+map[otherId].unread++;
+
+}
+
+});
+
+chats =
+Object.values(map)
+.sort(function(a,b){
+
+return new Date(
+b.lastMessage.created_at
+) -
+new Date(
+a.lastMessage.created_at
+);
+
+});
+
+renderChats();
+
+}
+
+
+function renderNoChats(message){
+
+const list =
+document.getElementById("cList");
+
+list.innerHTML=`
+
+<div class="no-c">
+
+<i class="fas fa-triangle-exclamation"></i>
+
+<p>Unable to load conversations.</p>
+
+<p style="margin-top:6px;opacity:.6">${escapeHTML(message || "")}</p>
+
+</div>
+
+`;
+
+}
+
+
+/* =========================
+   FILTER + SEARCH (real, not placeholder)
+========================= */
+
+function initTabs(){
+
+const bar =
+document.getElementById(
+"tBar"
+);
+
+const tabs = [
+["all","All"],
+["people","People"],
+["unread","Unread"]
+];
+
+bar.innerHTML = tabs.map(function(t){
+
+return '<div class="tab ' +
+(activeFilter === t[0] ? "on" : "") +
+'" onclick="setFilter(\'' + t[0] + '\')">' +
+escapeHTML(t[1]) +
+'</div>';
+
+}).join("");
+
+}
+
+
+function setFilter(filterKey){
+
+activeFilter = filterKey;
+
+initTabs();
+
+renderChats();
+
+}
+
+
+function searchList(value){
+
+searchTerm =
+String(value || "")
+.toLowerCase()
+.trim();
+
+renderChats();
+
+}
+
+
+function getVisibleChats(){
+
+let data = chats;
+
+if(activeFilter === "unread"){
+
+data = data.filter(function(chat){
+
+return chat.unread > 0;
+
+});
+
+}
+
+// "people" is the same set as "all" in a 1:1-only chat system,
+// kept as its own tab so it is ready if group chats are added later.
+
+if(searchTerm){
+
+data = data.filter(function(chat){
+
+const user = chatUser(chat);
+
+const name =
+(user.full_name || "").toLowerCase();
+
+const username =
+(user.username || "").toLowerCase();
+
+const last =
+(chat.lastMessage.content || "")
+.toLowerCase();
+
+return (
+name.includes(searchTerm) ||
+username.includes(searchTerm) ||
+last.includes(searchTerm)
+);
+
+});
+
+}
+
+return data;
+
+}
+
+
+function renderChats(){
+
+const list =
+document.getElementById("cList");
+
+const data =
+getVisibleChats();
+
+if(!data.length){
+
+list.innerHTML=`
+
+<div class="no-c">
+
+<i class="far fa-comment-dots"></i>
+
+<p>No conversations found</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+list.innerHTML =
+data.map(function(chat){
+
+const user =
+chatUser(chat);
+
+const name =
+user.full_name ||
+user.username ||
+"StudentX User";
+
+const avatar =
+user.avatar_url ||
+defaultAvatar;
+
+const preview =
+chat.lastMessage.message_type === "text"
+? chat.lastMessage.content || ""
+: "Media";
+
+return `
+
+<div
+class="ci"
+onclick="openChat('${chat.id}')">
+
+<div class="ci-aw">
+
+<img
+class="ci-av"
+src="${escapeHTML(avatar)}"
+onerror="this.src=defaultAvatar">
+
+<div
+class="${chat.unread > 0
+? "st-on"
+: "st-off"}">
+</div>
+
+</div>
+
+<div class="ci-bd">
+
+<div class="ci-nm">
+
+${escapeHTML(name)}
+
+</div>
+
+<div class="ci-pv">
+
+${escapeHTML(preview)}
+
+</div>
+
+</div>
+
+<div class="ci-rt">
+
+<div class="ci-tm">
+
+${timeAgo(
+chat.lastMessage.created_at
+)}
+
+</div>
+
+${
+chat.unread > 0
+? `<div class="ci-ur">${chat.unread}</div>`
+: ""
+}
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+async function openChat(userId){
+
+const chat =
+chats.find(function(item){
+
+return String(item.id) ===
+String(userId);
+
+});
+
+if(chat){
+
+currentChat=chat;
+
+}else{
+
+const result =
+await supabaseClient
+.from("profiles")
+.select(
+"id,full_name,username,avatar_url"
+)
+.eq("id",userId)
+.maybeSingle();
+
+if(result.error ||
+!result.data){
+
+showMsg("User not found");
+
+return;
+
+}
+
+currentChat={
+id:userId,
+user:result.data,
+unread:0
+};
+
+}
+
+document.getElementById(
+"listView"
+).style.display="none";
+
+document.getElementById(
+"chatView"
+).classList.add("show");
+
+const user =
+chatUser(currentChat);
+
+const name =
+user.full_name ||
+user.username ||
+"StudentX User";
+
+const avatar =
+user.avatar_url ||
+defaultAvatar;
+
+document.getElementById(
+"chAv"
+).innerHTML=`
+
+<img
+class="ch-av"
+src="${escapeHTML(avatar)}"
+onerror="this.src=defaultAvatar">
+
+`;
+
+document.getElementById(
+"chNm"
+).textContent=name;
+
+document.getElementById(
+"chSt"
+).textContent="StudentX";
+
+await loadMessages();
+
+}
+
+
+function closeChat(){
+
+if(messageChannel){
+
+supabaseClient.removeChannel(
+messageChannel
+);
+
+messageChannel=null;
+
+}
+
+document.getElementById(
+"chatView"
+).classList.remove("show");
+
+document.getElementById(
+"listView"
+).style.display="block";
+
+currentChat=null;
+
+}
+
+
+async function loadMessages(){
+
+if(!currentChat){
+return;
+}
+
+const result =
+await supabaseClient
+.from("messages")
+.select(`
+id,
+sender_id,
+receiver_id,
+content,
+message_type,
+file_url,
+file_name,
+created_at,
+read_at
+`)
+.or(
+"and(sender_id.eq."+currentUser.id+
+",receiver_id.eq."+currentChat.id+
+"),and(sender_id.eq."+currentChat.id+
+",receiver_id.eq."+currentUser.id+")"
+)
+.order(
+"created_at",
+{ascending:true}
+);
+
+if(result.error){
+
+console.error(
+"Messages error:",
+result.error
+);
+
+showMsg(
+"Unable to load messages"
+);
+
+return;
+
+}
+
+messages =
+result.data || [];
+
+renderMessages();
+
+await markMessagesRead();
+
+subscribeCurrentChat();
+
+}
+
+
+function renderMessages(){
+
+const area =
+document.getElementById("msgArea");
+
+if(!messages.length){
+
+area.innerHTML=`
+
+<div class="empty-chat">
+
+<i class="far fa-comments"></i>
+
+<p>
+Start a conversation
+</p>
+
+</div>
+
+`;
+
+return;
+
+}
+
+const otherUser =
+chatUser(currentChat);
+
+const otherAvatar =
+otherUser.avatar_url ||
+defaultAvatar;
+
+area.innerHTML =
+messages.map(function(message){
+
+const outgoing =
+String(message.sender_id) ===
+String(currentUser.id);
+
+let content="";
+
+if(message.message_type === "text"){
+
+content =
+escapeHTML(
+message.content || ""
+);
+
+}else if(
+message.message_type === "image"
+){
+
+content=`
+
+<img
+src="${escapeHTML(message.file_url)}"
+style="
+max-width:100%;
+border-radius:10px;
+display:block;
+">
+
+`;
+
+}else{
+
+content=`
+
+<div>
+<i class="fas fa-file"></i>
+${escapeHTML(
+message.file_name ||
+"File"
+)}
+</div>
+
+`;
+
+}
+
+return `
+
+<div
+class="msg ${outgoing ? "out":"in"}">
+
+${
+!outgoing
+? `
+<img
+class="msg-av"
+src="${escapeHTML(otherAvatar)}"
+onerror="this.src=defaultAvatar">
+`
+:""
+}
+
+<div class="msg-bub">
+
+${content}
+
+<div class="msg-time">
+
+${new Date(
+message.created_at
+).toLocaleTimeString(
+[],
+{
+hour:"2-digit",
+minute:"2-digit"
+}
+)}
+
+${
+outgoing && message.read_at
+? " · Seen"
+: ""
+}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}).join("");
+
+area.scrollTop =
+area.scrollHeight;
+
+}
+
+
+async function markMessagesRead(){
+
+if(!currentChat){
+return;
+}
+
+await supabaseClient
+.from("messages")
+.update({
+read_at:new Date().toISOString()
+})
+.eq(
+"receiver_id",
+currentUser.id
+)
+.eq(
+"sender_id",
+currentChat.id
+)
+.is(
+"read_at",
+null
+);
+
+}
+
+
+function subscribeCurrentChat(){
+
+if(messageChannel){
+
+supabaseClient.removeChannel(
+messageChannel
+);
+
+}
+
+messageChannel =
+supabaseClient
+.channel(
+"messages-"+currentUser.id+
+"-"+currentChat.id
+)
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"messages",
+filter:
+"receiver_id=eq."+currentUser.id
+},
+async function(payload){
+
+const row =
+payload.new;
+
+if(
+String(row.sender_id) ===
+String(currentChat.id)
+){
+
+messages.push(row);
+
+renderMessages();
+
+await markMessagesRead();
+
+}
+
+}
+)
+.subscribe();
+
+}
+
+
+/*
+ * Only reload the chat list on messages that involve the
+ * currently logged-in user (either as sender or receiver),
+ * instead of on every message sent by anyone in the app.
+ */
+function subscribeMessages(){
+
+if(messageChannelOut){
+supabaseClient.removeChannel(messageChannelOut);
+}
+
+if(messageChannelIn){
+supabaseClient.removeChannel(messageChannelIn);
+}
+
+messageChannelOut =
+supabaseClient
+.channel(
+"studentx-chat-list-out-"+currentUser.id
+)
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"messages",
+filter:
+"sender_id=eq."+currentUser.id
+},
+async function(){
+
+await loadChats();
+
+}
+)
+.on(
+"postgres_changes",
+{
+event:"UPDATE",
+schema:"public",
+table:"messages",
+filter:
+"sender_id=eq."+currentUser.id
+},
+async function(){
+
+await loadChats();
+
+}
+)
+.subscribe();
+
+messageChannelIn =
+supabaseClient
+.channel(
+"studentx-chat-list-in-"+currentUser.id
+)
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"messages",
+filter:
+"receiver_id=eq."+currentUser.id
+},
+async function(){
+
+await loadChats();
+
+}
+)
+.on(
+"postgres_changes",
+{
+event:"UPDATE",
+schema:"public",
+table:"messages",
+filter:
+"receiver_id=eq."+currentUser.id
+},
+async function(){
+
+await loadChats();
+
+}
+)
+.subscribe();
+
+}
+
+
+async function sendMsg(){
+
+if(!currentChat){
+
+showMsg("Open a chat first");
+
+return;
+
+}
+
+const textarea =
+document.getElementById("chTa");
+
+const text =
+textarea.value.trim();
+
+if(!text){
+return;
+}
+
+const result =
+await supabaseClient
+.from("messages")
+.insert({
+
+sender_id:currentUser.id,
+
+receiver_id:currentChat.id,
+
+content:text,
+
+message_type:"text"
+
+})
+.select()
+.single();
+
+if(result.error){
+
+console.error(
+result.error
+);
+
+showMsg(
+"Message could not be sent"
+);
+
+return;
+
+}
+
+messages.push(
+result.data
+);
+
+textarea.value="";
+textarea.style.height="auto";
+
+renderMessages();
+
+}
+
+
+function autoGrow(el){
+
+el.style.height="auto";
+
+el.style.height =
+Math.min(
+el.scrollHeight,
+100
+)+"px";
+
+}
+
+
+function handleEnter(event){
+
+if(
+event.key === "Enter" &&
+!event.shiftKey
+){
+
+event.preventDefault();
+
+sendMsg();
+
+}
+
+}
+
+
+function pickFile(){
+
+document.getElementById(
+"fileIn"
+).click();
+
+}
+
+
+async function handleFile(input){
+
+const file =
+input.files[0];
+
+if(!file){
+return;
+}
+
+showMsg(
+"File upload will be connected to Storage next."
+);
+
+input.value="";
+
+}
+
+
+function toggleRec(){
+
+showMsg(
+"Voice message recording will be connected next."
+);
+
+}
+
+
+function startNewChat(){
+
+const username =
+prompt(
+"Enter username"
+);
+
+if(!username){
+return;
+}
+
+findUserAndOpen(
+username.trim()
+);
+
+}
+
+
+async function findUserAndOpen(username){
+
+const result =
+await supabaseClient
+.from("profiles")
+.select(
+"id,full_name,username,avatar_url"
+)
+.ilike(
+"username",
+username
+)
+.maybeSingle();
+
+if(result.error ||
+!result.data){
+
+showMsg(
+"User not found"
+);
+
+return;
+
+}
+
+openChat(
+result.data.id
+);
+
+}
+
+
+function checkRequestedUser(){
+
+const params =
+new URLSearchParams(
+window.location.search
+);
+
+const userId =
+params.get("user");
+
+if(userId){
+
+openChat(userId);
+
+}
+
+}
+
+
+function showMsg(message){
+
+const old =
+document.querySelector(".toast");
+
+if(old){
+old.remove();
+}
+
+const el =
+document.createElement("div");
+
+el.className="toast";
+
+el.textContent=message;
+
+document.body.appendChild(el);
+
+setTimeout(function(){
+
+if(el.parentNode){
+el.remove();
+}
+
+},2500);
+
+}
+   async function createPeerConnection(){
+
+peerConnection =
+new RTCPeerConnection({
+
+iceServers:[
+
+{
+urls:"stun:stun.l.google.com:19302"
+},
+
+{
+urls:"stun:stun1.l.google.com:19302"
+}
+
+]
+
+});
+
+
+remoteStream =
+new MediaStream();
+
+document.getElementById(
+"remoteVideo"
+).srcObject =
+remoteStream;
+
+
+peerConnection.ontrack =
+function(event){
+
+event.streams[0]
+.getTracks()
+.forEach(function(track){
+
+remoteStream.addTrack(track);
+
+});
+
+};
+
+
+peerConnection.onicecandidate =
+async function(event){
+
+if(!event.candidate){
+return;
+}
+
+await sendCallSignal(
+"ice",
+event.candidate
+);
+
+};
+
+
+peerConnection.onconnectionstatechange =
+function(){
+
+const state =
+peerConnection.connectionState;
+
+if(state === "connected"){
+
+document.getElementById(
+"callStatus"
+).textContent =
+"Connected";
+
+}
+
+if(
+state === "failed" ||
+state === "disconnected"
+){
+
+document.getElementById(
+"callStatus"
+).textContent =
+"Connection lost";
+
+}
+
+};
+
+}
+
+
+async function startVoiceCall(){
+
+if(!currentChat){
+
+showMsg(
+"Open a chat first"
+);
+
+return;
+
+}
+
+await startCall("voice");
+
+}
+
+
+async function startVideoCall(){
+
+if(!currentChat){
+
+showMsg(
+"Open a chat first"
+);
+
+return;
+
+}
+
+await startCall("video");
+
+}
+
+
+async function startCall(type){
+
+try{
+
+const constraints =
+type === "video"
+
+? {
+audio:true,
+video:true
+}
+
+: {
+audio:true,
+video:false
+};
+
+localStream =
+await navigator.mediaDevices
+.getUserMedia(
+constraints
+);
+
+await createPeerConnection();
+
+localStream
+.getTracks()
+.forEach(function(track){
+
+peerConnection.addTrack(
+track,
+localStream
+);
+
+});
+
+
+showCallScreen(type);
+
+const offer =
+await peerConnection
+.createOffer();
+
+await peerConnection
+.setLocalDescription(
+offer
+);
+
+await sendCallSignal(
+"offer",
+{
+type:offer.type,
+sdp:offer.sdp
+}
+);
+
+document.getElementById(
+"callStatus"
+).textContent =
+"Calling...";
+
+}catch(error){
+
+console.error(
+"Start call error:",
+error
+);
+
+showMsg(
+"Camera or microphone permission is required"
+);
+
+cleanupCall();
+
+}
+
+}
+
+
+async function sendCallSignal(
+signalType,
+payload
+){
+
+if(!currentChat){
+
+return;
+
+}
+
+const result =
+await supabaseClient
+.from("call_signals")
+.insert({
+
+caller_id:
+currentUser.id,
+
+receiver_id:
+currentChat.id,
+
+call_type:
+window.activeCallType || "voice",
+
+signal_type:
+signalType,
+
+payload:payload
+
+});
+
+if(result.error){
+
+console.error(
+"Call signal error:",
+result.error
+);
+
+}
+
+}
+
+
+function subscribeCalls(){
+
+callChannel =
+supabaseClient
+.channel(
+"calls-"+currentUser.id
+)
+.on(
+"postgres_changes",
+{
+event:"INSERT",
+schema:"public",
+table:"call_signals",
+filter:
+"receiver_id=eq."+currentUser.id
+},
+async function(payload){
+
+await handleIncomingSignal(
+payload.new
+);
+
+}
+)
+.subscribe();
+
+}
+
+
+async function handleIncomingSignal(signal){
+
+if(
+signal.signal_type === "offer"
+){
+
+/*
+ * Already on a call: tell the caller we are busy
+ * instead of leaving them ringing forever.
+ */
+if(peerConnection){
+
+await supabaseClient
+.from("call_signals")
+.insert({
+
+caller_id:currentUser.id,
+
+receiver_id:signal.caller_id,
+
+call_type:
+signal.call_type || "voice",
+
+signal_type:"hangup",
+
+payload:{}
+
+});
+
+return;
+
+}
+
+pendingOffer =
+signal.payload;
+
+pendingCaller =
+signal.caller_id;
+
+pendingCallType =
+signal.call_type;
+
+const result =
+await supabaseClient
+.from("profiles")
+.select(
+"id,full_name,username,avatar_url"
+)
+.eq(
+"id",
+pendingCaller
+)
+.maybeSingle();
+
+if(result.error ||
+!result.data){
+
+return;
+
+}
+
+showIncomingCall(
+result.data,
+pendingCallType
+);
+
+}
+
+else if(
+signal.signal_type === "answer"
+){
+
+if(!peerConnection){
+
+return;
+
+}
+
+await peerConnection
+.setRemoteDescription(
+new RTCSessionDescription(
+signal.payload
+)
+);
+
+}
+
+else if(
+signal.signal_type === "ice"
+){
+
+if(
+peerConnection &&
+peerConnection.remoteDescription
+){
+
+try{
+
+await peerConnection
+.addIceCandidate(
+new RTCIceCandidate(
+signal.payload
+)
+);
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+}
+
+else if(
+signal.signal_type === "hangup"
+){
+
+document.getElementById(
+"incomingCall"
+).classList.remove(
+"show"
+);
+
+pendingOffer=null;
+pendingCaller=null;
+pendingCallType=null;
+
+cleanupCall();
+
+}
+
+}
+
+
+function showIncomingCall(
+user,
+type
+){
+
+const avatar =
+user.avatar_url ||
+defaultAvatar;
+
+document.getElementById(
+"incomingAvatar"
+).src =
+avatar;
+
+document.getElementById(
+"incomingName"
+).textContent =
+user.full_name ||
+user.username ||
+"StudentX User";
+
+document.getElementById(
+"incomingType"
+).textContent =
+type === "video"
+? "Incoming video call"
+: "Incoming voice call";
+
+document.getElementById(
+"incomingCall"
+).classList.add(
+"show"
+);
+
+}
+
+
+async function acceptCall(){
+
+document.getElementById(
+"incomingCall"
+).classList.remove(
+"show"
+);
+
+if(!pendingOffer ||
+!pendingCaller
+){
+
+return;
+
+}
+
+try{
+
+currentChat = {
+id:pendingCaller,
+user:{
+full_name:
+document.getElementById(
+"incomingName"
+).textContent,
+
+avatar_url:
+document.getElementById(
+"incomingAvatar"
+).src
+}
+};
+
+window.activeCallType =
+pendingCallType;
+
+const constraints =
+pendingCallType === "video"
+
+? {
+audio:true,
+video:true
+}
+
+: {
+audio:true,
+video:false
+};
+
+localStream =
+await navigator.mediaDevices
+.getUserMedia(
+constraints
+);
+
+await createPeerConnection();
+
+localStream
+.getTracks()
+.forEach(function(track){
+
+peerConnection.addTrack(
+track,
+localStream
+);
+
+});
+
+await peerConnection
+.setRemoteDescription(
+new RTCSessionDescription(
+pendingOffer
+)
+);
+
+const answer =
+await peerConnection
+.createAnswer();
+
+await peerConnection
+.setLocalDescription(
+answer
+);
+
+await sendCallSignal(
+"answer",
+{
+type:answer.type,
+sdp:answer.sdp
+}
+);
+
+showCallScreen(
+pendingCallType
+);
+
+document.getElementById(
+"callStatus"
+).textContent =
+"Connected";
+
+pendingOffer=null;
+pendingCaller=null;
+pendingCallType=null;
+
+}catch(error){
+
+console.error(
+"Accept call error:",
+error
+);
+
+showMsg(
+"Unable to answer call"
+);
+
+cleanupCall();
+
+}
+
+}
+
+
+async function declineCall(){
+
+document.getElementById(
+"incomingCall"
+).classList.remove(
+"show"
+);
+
+if(pendingCaller){
+
+await supabaseClient
+.from("call_signals")
+.insert({
+
+caller_id:currentUser.id,
+
+receiver_id:pendingCaller,
+
+call_type:
+pendingCallType || "voice",
+
+signal_type:"hangup",
+
+payload:{}
+
+});
+
+}
+
+pendingOffer=null;
+pendingCaller=null;
+pendingCallType=null;
+
+}
+
+
+function showCallScreen(type){
+
+window.activeCallType =
+type;
+
+document.getElementById(
+"callScreen"
+).classList.add(
+"show"
+);
+
+const cUser =
+chatUser(currentChat);
+
+const displayName =
+cUser.full_name ||
+cUser.username ||
+"StudentX User";
+
+const displayAvatar =
+cUser.avatar_url ||
+defaultAvatar;
+
+document.getElementById(
+"callName"
+).textContent =
+displayName;
+
+document.getElementById(
+"callTopName"
+).textContent =
+displayName;
+
+document.getElementById(
+"callAvatar"
+).src =
+displayAvatar;
+
+const remote =
+document.getElementById(
+"remoteVideo"
+);
+
+const local =
+document.getElementById(
+"localVideo"
+);
+
+const voiceBg =
+document.getElementById(
+"voiceCallBg"
+);
+
+const cameraBtn =
+document.getElementById(
+"cameraBtn"
+);
+
+const switchBtn =
+document.getElementById(
+"switchBtn"
+);
+
+if(type === "video"){
+
+voiceBg.style.display="none";
+
+local.style.display="block";
+
+cameraBtn.style.display="flex";
+
+switchBtn.style.display="flex";
+
+if(localStream){
+
+local.srcObject =
+localStream;
+
+}
+
+}else{
+
+voiceBg.style.display="flex";
+
+local.style.display="none";
+
+cameraBtn.style.display="none";
+
+switchBtn.style.display="none";
+
+remote.style.display="none";
+
+}
+
+}
+
+
+function toggleMute(){
+
+if(!localStream){
+return;
+}
+
+const tracks =
+localStream.getAudioTracks();
+
+if(!tracks.length){
+return;
+}
+
+isMuted =
+!isMuted;
+
+tracks.forEach(function(track){
+
+track.enabled =
+!isMuted;
+
+});
+
+const btn =
+document.getElementById(
+"muteBtn"
+);
+
+btn.innerHTML =
+isMuted
+
+? '<i class="fas fa-microphone-slash"></i>'
+
+: '<i class="fas fa-microphone"></i>';
+
+}
+
+
+function toggleCamera(){
+
+if(!localStream){
+return;
+}
+
+const tracks =
+localStream.getVideoTracks();
+
+if(!tracks.length){
+return;
+}
+
+cameraEnabled =
+!cameraEnabled;
+
+tracks.forEach(function(track){
+
+track.enabled =
+cameraEnabled;
+
+});
+
+const btn =
+document.getElementById(
+"cameraBtn"
+);
+
+btn.innerHTML =
+cameraEnabled
+
+? '<i class="fas fa-video"></i>'
+
+: '<i class="fas fa-video-slash"></i>';
+
+}
+
+
+async function switchCamera(){
+
+if(!localStream){
+return;
+}
+
+const tracks =
+localStream.getVideoTracks();
+
+if(!tracks.length){
+return;
+}
+
+const current =
+tracks[0];
+
+const settings =
+(current.getSettings && current.getSettings()) || {};
+
+const facing =
+settings.facingMode;
+
+const nextFacing =
+facing === "environment"
+? "user"
+: "environment";
+
+try{
+
+const newStream =
+await navigator.mediaDevices
+.getUserMedia({
+
+audio:false,
+
+video:{
+facingMode:{
+ideal:nextFacing
+}
+}
+
+});
+
+const newTrack =
+newStream.getVideoTracks()[0];
+
+const sender =
+peerConnection
+.getSenders()
+.find(function(s){
+
+return s.track &&
+s.track.kind === "video";
+
+});
+
+if(sender){
+
+await sender.replaceTrack(
+newTrack
+);
+
+}
+
+localStream
+.removeTrack(current);
+
+current.stop();
+
+localStream
+.addTrack(newTrack);
+
+document.getElementById(
+"localVideo"
+).srcObject =
+localStream;
+
+}catch(error){
+
+console.error(
+"Switch camera error:",
+error
+);
+
+}
+
+}
+
+
+async function endCall(){
+
+if(currentChat){
+
+await sendCallSignal(
+"hangup",
+{}
+);
+
+}
+
+cleanupCall();
+
+}
+
+
+function cleanupCall(){
+
+if(peerConnection){
+
+peerConnection.close();
+
+peerConnection=null;
+
+}
+
+if(localStream){
+
+localStream
+.getTracks()
+.forEach(function(track){
+
+track.stop();
+
+});
+
+localStream=null;
+
+}
+
+remoteStream=null;
+
+const callScreen =
+document.getElementById(
+"callScreen"
+);
+
+callScreen.classList.remove(
+"show"
+);
+
+document.getElementById(
+"remoteVideo"
+).srcObject=null;
+
+document.getElementById(
+"localVideo"
+).srcObject=null;
+
+document.getElementById(
+"voiceCallBg"
+).style.display="flex";
+
+document.getElementById(
+"cameraBtn"
+).style.display="none";
+
+document.getElementById(
+"switchBtn"
+).style.display="none";
+
+document.getElementById(
+"remoteVideo"
+).style.display="block";
+
+isMuted=false;
+cameraEnabled=true;
+
+}
+
+
+window.addEventListener(
+"beforeunload",
+function(){
+
+if(peerConnection){
+
+peerConnection.close();
+
+}
+
+});
+
+   function cleanupOldSignals(){
+
+if(!currentUser){
+return;
+}
+
+supabaseClient
+.from("call_signals")
+.delete()
+.lt(
+"created_at",
+new Date(
+Date.now()-10*60*1000
+).toISOString()
+)
+.then(function(){
+
+})
+.catch(function(error){
+
+console.error(error);
+
+});
+
+}
+
+
+document.addEventListener(
+"visibilitychange",
+function(){
+
+if(
+document.visibilityState ===
+"visible" &&
+currentUser
+){
+
+loadChats();
+
+}
+
+});
+
+
+initTabs();
+
+initChat();
+
+</script>
+
+<script src="nav.js"></script>
+
+</body>
+</html>
