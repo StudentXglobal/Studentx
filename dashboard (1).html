@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - StudentX</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #121212;
+            color: #fff;
+            min-height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; }
+
+        .header {
+            position: sticky;
+            top: 0;
+            background-color: #121212;
+            padding: 40px 15px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #2c2c2c;
+            z-index: 100;
+        }
+        .back-btn { color: #fff; text-decoration: none; font-size: 20px; margin-right: 15px; }
+        .header-title { font-size: 20px; font-weight: bold; }
+
+        .dashboard-container { padding: 20px 15px 50px; }
+
+        .balance-card {
+            background: linear-gradient(135deg, #8A2BE2 0%, #572b9a 100%);
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+        .balance-label { font-size: 14px; opacity: 0.9; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .balance-amount { font-size: 36px; font-weight: bold; margin-bottom: 15px; }
+        .withdraw-btn {
+            background-color: #fff; color: #8A2BE2; border: none; padding: 12px 0; width: 100%;
+            border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer;
+            text-decoration: none; display: block; text-align: center;
+        }
+        .withdraw-btn:disabled, .withdraw-btn.disabled { opacity: .6; pointer-events: none; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .stat-card {
+            background-color: #1e1e1e; border: 1px solid #2c2c2c; border-radius: 12px; padding: 15px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+        .stat-icon { font-size: 20px; color: #8A2BE2; margin-bottom: 10px; }
+        .stat-value { font-size: 18px; font-weight: bold; margin-bottom: 4px; color: #fff; }
+        .stat-label { font-size: 12px; color: #888; }
+
+        .section-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between; }
+        .section-title span { font-size: 12px; color: #8A2BE2; font-weight: normal; }
+
+        .eligibility-card { background-color: #1e1e1e; border: 1px solid #2c2c2c; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
+        .eligibility-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; }
+        .eligibility-item:last-child { margin-bottom: 0; }
+        .eligibility-info { display: flex; align-items: center; gap: 10px; }
+        .eligibility-info i { font-size: 16px; }
+        .eligibility-info i.ok { color: #4caf50; }
+        .eligibility-info i.pending { color: #888; }
+        .eligibility-info p { font-size: 14px; }
+        .eligibility-info small { color: #888; font-size: 11px; }
+        .eligibility-status { font-size: 12px; font-weight: bold; }
+        .eligibility-status.ok { color: #4caf50; }
+        .eligibility-status.pending { color: #888; }
+
+        .chart-card { background-color: #1e1e1e; border: 1px solid #2c2c2c; border-radius: 12px; padding: 20px; margin-bottom: 30px; }
+        .chart-area { display: flex; align-items: flex-end; justify-content: space-between; height: 150px; gap: 10px; padding-top: 24px; border-bottom: 1px solid #2c2c2c; padding-bottom: 10px; }
+        .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+        .bar { width: 100%; max-width: 35px; background: linear-gradient(to top, #8A2BE2, #c29dff); border-radius: 6px 6px 0 0; position: relative; min-height: 3px; transition: height .6s ease; }
+        .bar::after { content: attr(data-val); position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 10px; color: #fff; font-weight: bold; white-space: nowrap; }
+        .bar-label { font-size: 11px; color: #888; }
+
+        .transaction-item { display: flex; align-items: center; gap: 15px; padding: 15px 0; border-bottom: 1px solid #2c2c2c; }
+        .transaction-item:last-child { border-bottom: none; }
+        .trans-icon { width: 40px; height: 40px; background-color: #2c1a40; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #8A2BE2; flex-shrink: 0; }
+        .trans-info { flex-grow: 1; min-width: 0; }
+        .trans-info h4 { font-size: 14px; margin-bottom: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .trans-info p { font-size: 12px; color: #888; }
+        .trans-amount { font-size: 14px; font-weight: bold; color: #4caf50; flex-shrink: 0; }
+
+        /* REFER & EARN */
+        .refer-card {
+            background: linear-gradient(135deg, #1e1330 0%, #241a3d 100%);
+            border: 1px solid #3a2a5c;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .refer-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .refer-icon { width: 42px; height: 42px; border-radius: 12px; background: rgba(138,43,226,.18); color: #c29dff; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .refer-title { font-size: 15px; font-weight: bold; }
+        .refer-sub { font-size: 12px; color: #b0a8c9; margin-top: 2px; }
+        .refer-desc { font-size: 12px; color: #b0a8c9; line-height: 1.5; margin: 14px 0; }
+        .refer-link-row { display: flex; gap: 8px; }
+        .refer-link-box {
+            flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+            border-radius: 10px; padding: 11px 12px; font-size: 12px; color: #ddd;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .refer-copy-btn {
+            background: #8A2BE2; color: #fff; border: none; padding: 0 16px; border-radius: 10px;
+            font-size: 12px; font-weight: bold; cursor: pointer; flex-shrink: 0;
+        }
+        .refer-stats { display: flex; gap: 12px; margin-top: 16px; }
+        .refer-stat { flex: 1; background: rgba(255,255,255,.04); border-radius: 10px; padding: 12px; text-align: center; }
+        .refer-stat-value { font-size: 17px; font-weight: bold; }
+        .refer-stat-label { font-size: 10px; color: #b0a8c9; margin-top: 3px; text-transform: uppercase; letter-spacing: .3px; }
+        .refer-list { margin-top: 14px; }
+        .refer-list-title { font-size: 11px; color: #b0a8c9; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px; }
+        .refer-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,.06); }
+        .refer-row img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #2c2c2c; flex-shrink: 0; }
+        .refer-row-name { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .refer-row-date { font-size: 10px; color: #888; margin-top: 1px; }
+        .refer-row-bonus { margin-left: auto; font-size: 12px; font-weight: bold; color: #4caf50; flex-shrink: 0; }
+
+        .empty-note { text-align: center; color: #888; font-size: 12px; padding: 10px 0; }
+        .skeleton { height: 60px; border-radius: 10px; background: #1e1e1e; margin-bottom: 10px; animation: pulse 1.2s ease infinite; }
+        @keyframes pulse { 50% { opacity: .5; } }
+
+        .toast {
+            position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 9999;
+            padding: 11px 20px; background: rgba(138,43,226,.92); color: #fff; border-radius: 12px;
+            font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.3); animation: fi .3s ease;
+        }
+        @keyframes fi { from { opacity: 0; transform: translateX(-50%) translateY(-10px); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">Dashboard</div>
+    </div>
+
+    <div class="dashboard-container">
+
+        <!-- BALANCE -->
+        <div class="balance-card">
+            <div class="balance-label"><i class="fas fa-wallet"></i> Available Balance</div>
+            <div class="balance-amount" id="balanceAmount">$0.00</div>
+            <a href="withdraw.html" class="withdraw-btn" id="withdrawBtn">Withdraw Funds</a>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-money-bill-trend-up"></i></div>
+                <div class="stat-value" id="statVideoAd">$0.00</div>
+                <div class="stat-label">Monetization</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-gift"></i></div>
+                <div class="stat-value" id="statLiveGift">$0.00</div>
+                <div class="stat-label">Live Gift</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="stat-value" id="statPostRevenue">$0.00</div>
+                <div class="stat-label">Post Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-value" id="statSubscription">$0.00</div>
+                <div class="stat-label">Subscription</div>
+            </div>
+        </div>
+
+        <!-- ELIGIBILITY -->
+        <h3 class="section-title">Monetization Eligibility</h3>
+        <div class="eligibility-card" id="eligibilityCard">
+            <div class="skeleton"></div>
+        </div>
+
+        <!-- REVENUE CHART -->
+        <h3 class="section-title">Revenue <span>Last 5 Months</span></h3>
+        <div class="chart-card">
+            <div class="chart-area" id="chartArea">
+                <div class="skeleton" style="width:100%;height:150px"></div>
+            </div>
+        </div>
+
+        <!-- REFER & EARN -->
+        <div class="refer-card">
+            <div class="refer-head">
+                <div class="refer-icon"><i class="fas fa-users-viewfinder"></i></div>
+                <div>
+                    <div class="refer-title">Refer &amp; Earn</div>
+                    <div class="refer-sub">Get $0.50 for every friend who joins</div>
+                </div>
+            </div>
+            <div class="refer-desc">Share your link. When a friend signs up on StudentX using it, you both get credited.</div>
+            <div class="refer-link-row">
+                <div class="refer-link-box" id="referLinkBox">Loading your link...</div>
+                <button class="refer-copy-btn" id="referCopyBtn" onclick="copyReferralLink()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+            <div class="refer-stats">
+                <div class="refer-stat">
+                    <div class="refer-stat-value" id="referCount">0</div>
+                    <div class="refer-stat-label">Referred</div>
+                </div>
+                <div class="refer-stat">
+                    <div class="refer-stat-value" id="referEarnings">$0.00</div>
+                    <div class="refer-stat-label">Earned</div>
+                </div>
+            </div>
+            <div class="refer-list" id="referListWrap" style="display:none">
+                <div class="refer-list-title">Recent referrals</div>
+                <div id="referList"></div>
+            </div>
+        </div>
+
+        <!-- RECENT EARNINGS -->
+        <h3 class="section-title">Recent Earnings</h3>
+        <div class="eligibility-card" id="transactionsCard">
+            <div class="skeleton"></div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+    /* =========================================================
+       STUDENTX DASHBOARD — fully live from Supabase
+    ========================================================= */
+    const REFERRAL_BONUS = 0.50;
+
+    let currentUser = null;
+    let myProfile = null;
+
+    const SOURCE_META = {
+        video_ad:      { label: "Video Ad Revenue",   icon: "fa-video" },
+        live_gift:     { label: "Live Stream Gift",   icon: "fa-bolt" },
+        post_revenue:  { label: "Post Revenue",       icon: "fa-file-invoice-dollar" },
+        subscription:  { label: "Subscription Split", icon: "fa-star" },
+        referral:      { label: "Referral Bonus",     icon: "fa-user-plus" },
+        other:         { label: "Earning",            icon: "fa-coins" }
+    };
+
+    function $(id){ return document.getElementById(id); }
+
+    function esc(v){
+        if (v == null) return "";
+        return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+
+    function money(n){
+        return "$" + (Number(n) || 0).toFixed(2);
+    }
+
+    function defaultAvatar(){
+        return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="#2c2c2c"/><circle cx="30" cy="23" r="12" fill="#777"/><path d="M10 54c3-14 11-19 20-19s17 5 20 19" fill="#777"/></svg>');
+    }
+
+    function toast(msg){
+        const old = document.querySelector(".toast"); if (old) old.remove();
+        const d = document.createElement("div");
+        d.className = "toast"; d.textContent = msg;
+        document.body.appendChild(d);
+        setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+    }
+
+    /* =========================================================
+       INIT
+    ========================================================= */
+    async function init(){
+        const auth = await supabaseClient.auth.getUser();
+        currentUser = auth.data && auth.data.user;
+        if (!currentUser){
+            window.location.href = "login.html";
+            return;
+        }
+
+        const p = await supabaseClient.from("profiles").select("*").eq("id", currentUser.id).maybeSingle();
+        if (p.error){ console.error(p.error); toast("Unable to load your profile"); return; }
+        myProfile = p.data || { id: currentUser.id };
+
+        await ensureReferralCode();
+
+        loadBalanceAndStats();
+        loadEligibility();
+        loadChart();
+        loadReferrals();
+        loadRecentEarnings();
+    }
+
+    /* =========================================================
+       REFERRAL CODE (generate once, then reuse)
+    ========================================================= */
+    function makeCode(){
+        const base = (myProfile.username || myProfile.full_name || "user").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8) || "user";
+        return base + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    async function ensureReferralCode(){
+        if (myProfile.referral_code){
+            renderReferralLink(myProfile.referral_code);
+            return;
+        }
+
+        for (let attempt = 0; attempt < 5; attempt++){
+            const code = makeCode();
+            const existing = await supabaseClient.from("profiles").select("id").eq("referral_code", code).maybeSingle();
+            if (existing.data) continue;
+
+            const upd = await supabaseClient.from("profiles").update({ referral_code: code }).eq("id", currentUser.id).select("referral_code").single();
+            if (!upd.error){
+                myProfile.referral_code = upd.data.referral_code;
+                renderReferralLink(myProfile.referral_code);
+                return;
+            }
+        }
+
+        $("referLinkBox").textContent = "Could not generate your link. Try refreshing.";
+    }
+
+    function renderReferralLink(code){
+        const link = window.location.origin + "/signup.html?ref=" + encodeURIComponent(code);
+        $("referLinkBox").textContent = link;
+        $("referLinkBox").dataset.link = link;
+    }
+
+    async function copyReferralLink(){
+        const link = $("referLinkBox").dataset.link;
+        if (!link) return;
+        try {
+            await navigator.clipboard.writeText(link);
+            toast("Referral link copied");
+        } catch (e){
+            toast("Could not copy link");
+        }
+    }
+
+    /* =========================================================
+       BALANCE + STAT CARDS (grouped by source, all time)
+    ========================================================= */
+    async function loadBalanceAndStats(){
+        const [earningsRes, withdrawalsRes] = await Promise.all([
+            supabaseClient.from("earnings").select("source,amount").eq("user_id", currentUser.id),
+            supabaseClient.from("withdrawals").select("amount").eq("user_id", currentUser.id)
+        ]);
+
+        if (earningsRes.error){ console.error("Earnings error:", earningsRes.error); }
+        if (withdrawalsRes.error){ console.error("Withdrawals error:", withdrawalsRes.error); }
+
+        const totals = { video_ad: 0, live_gift: 0, post_revenue: 0, subscription: 0, referral: 0, other: 0 };
+        let totalEarned = 0;
+
+        (earningsRes.data || []).forEach(row => {
+            const amt = Number(row.amount) || 0;
+            totalEarned += amt;
+            if (totals[row.source] !== undefined) totals[row.source] += amt;
+        });
+
+        const totalWithdrawn = (withdrawalsRes.data || []).reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+        const available = Math.max(0, totalEarned - totalWithdrawn);
+
+        $("balanceAmount").textContent = money(available);
+        $("statVideoAd").textContent = money(totals.video_ad);
+        $("statLiveGift").textContent = money(totals.live_gift);
+        $("statPostRevenue").textContent = money(totals.post_revenue);
+        $("statSubscription").textContent = money(totals.subscription);
+
+        const btn = $("withdrawBtn");
+        if (available <= 0){
+            btn.classList.add("disabled");
+            btn.addEventListener("click", e => { e.preventDefault(); toast("No balance available to withdraw yet"); });
+        }
+    }
+
+    /* =========================================================
+       ELIGIBILITY (real followers, views, account age)
+    ========================================================= */
+    async function loadEligibility(){
+        const card = $("eligibilityCard");
+
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+        const followersReq = supabaseClient.from("followers").select("id", { count: "exact", head: true }).eq("following_id", currentUser.id);
+        const videosReq = supabaseClient.from("videos").select("id").eq("user_id", currentUser.id);
+
+        const [followersRes, videosRes] = await Promise.all([followersReq, videosReq]);
+
+        const followerCount = followersRes.count || 0;
+        const videoIds = (videosRes.data || []).map(v => v.id);
+
+        let viewCount = 0;
+        if (videoIds.length){
+            const viewsRes = await supabaseClient
+                .from("video_views")
+                .select("id", { count: "exact", head: true })
+                .in("video_id", videoIds)
+                .gte("created_at", thirtyDaysAgo);
+            if (!viewsRes.error) viewCount = viewsRes.count || 0;
+        }
+
+        const joined = myProfile.created_at ? new Date(myProfile.created_at) : null;
+        const accountDays = joined ? Math.floor((Date.now() - joined.getTime()) / 86400000) : 0;
+
+        const items = [
+            { label: "1,000 Followers", have: followerCount, need: 1000, fmt: n => n.toLocaleString() },
+            { label: "10,000 Views (30 days)", have: viewCount, need: 10000, fmt: n => n.toLocaleString() },
+            { label: "Active Account Age", have: accountDays, need: 30, fmt: n => n + " Days" }
+        ];
+
+        card.innerHTML = items.map(item => {
+            const ok = item.have >= item.need;
+            return `<div class="eligibility-item">
+                <div class="eligibility-info">
+                    <i class="fas ${ok ? "fa-circle-check ok" : "fa-clock pending"}"></i>
+                    <div><p>${esc(item.label)}</p><small>${esc(item.fmt(item.have))} / ${esc(item.fmt(item.need))} ${ok ? "(Achieved)" : ""}</small></div>
+                </div>
+                <span class="eligibility-status ${ok ? "ok" : "pending"}">${ok ? "Active" : "Pending"}</span>
+            </div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       REVENUE CHART (last 5 months)
+    ========================================================= */
+    async function loadChart(){
+        const area = $("chartArea");
+
+        const now = new Date();
+        const months = [];
+        for (let i = 4; i >= 0; i--){
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            months.push({ key: d.getFullYear() + "-" + d.getMonth(), label: d.toLocaleDateString(undefined, { month: "short" }), total: 0 });
+        }
+
+        const rangeStart = new Date(now.getFullYear(), now.getMonth() - 4, 1).toISOString();
+
+        const r = await supabaseClient.from("earnings").select("amount,created_at").eq("user_id", currentUser.id).gte("created_at", rangeStart);
+        if (r.error){ console.error("Chart error:", r.error); }
+
+        (r.data || []).forEach(row => {
+            const d = new Date(row.created_at);
+            const key = d.getFullYear() + "-" + d.getMonth();
+            const m = months.find(x => x.key === key);
+            if (m) m.total += Number(row.amount) || 0;
+        });
+
+        const max = Math.max(1, ...months.map(m => m.total));
+
+        area.innerHTML = months.map(m => {
+            const pct = Math.max(3, Math.round((m.total / max) * 100));
+            return `<div class="bar-group">
+                <div class="bar" data-val="${esc(money(m.total))}" style="height:${pct}%"></div>
+                <span class="bar-label">${esc(m.label)}</span>
+            </div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       REFER & EARN — stats + recent referred users
+    ========================================================= */
+    async function loadReferrals(){
+        const r = await supabaseClient
+            .from("referrals")
+            .select("bonus_amount,created_at,referred:profiles!referrals_referred_id_fkey(id,full_name,username,avatar_url)")
+            .eq("referrer_id", currentUser.id)
+            .order("created_at", { ascending: false });
+
+        if (r.error){
+            console.error("Referrals error:", r.error);
+            return;
+        }
+
+        const rows = r.data || [];
+        const totalEarned = rows.reduce((sum, row) => sum + (Number(row.bonus_amount) || 0), 0);
+
+        $("referCount").textContent = rows.length;
+        $("referEarnings").textContent = money(totalEarned);
+
+        if (!rows.length){
+            $("referListWrap").style.display = "none";
+            return;
+        }
+
+        $("referListWrap").style.display = "block";
+        $("referList").innerHTML = rows.slice(0, 5).map(row => {
+            const u = row.referred || {};
+            const name = u.full_name || u.username || "StudentX User";
+            const date = new Date(row.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+            return `<div class="refer-row">
+                <img src="${esc(u.avatar_url || defaultAvatar())}" onerror="this.src=defaultAvatar()" alt="">
+                <div><div class="refer-row-name">${esc(name)}</div><div class="refer-row-date">Joined ${esc(date)}</div></div>
+                <div class="refer-row-bonus">+${esc(money(row.bonus_amount))}</div>
+            </div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       RECENT EARNINGS LIST
+    ========================================================= */
+    async function loadRecentEarnings(){
+        const card = $("transactionsCard");
+
+        const r = await supabaseClient
+            .from("earnings")
+            .select("*")
+            .eq("user_id", currentUser.id)
+            .order("created_at", { ascending: false })
+            .limit(6);
+
+        if (r.error){
+            console.error("Earnings list error:", r.error);
+            card.innerHTML = '<div class="empty-note">Unable to load earnings.</div>';
+            return;
+        }
+
+        const rows = r.data || [];
+        if (!rows.length){
+            card.innerHTML = '<div class="empty-note">No earnings yet. Keep posting and going live to start earning.</div>';
+            return;
+        }
+
+        card.innerHTML = rows.map(row => {
+            const meta = SOURCE_META[row.source] || SOURCE_META.other;
+            const date = new Date(row.created_at).toLocaleDateString(undefined, { month: "short", day: "2-digit", year: "numeric" });
+            return `<div class="transaction-item">
+                <div class="trans-icon"><i class="fas ${esc(meta.icon)}"></i></div>
+                <div class="trans-info"><h4>${esc(row.description || meta.label)}</h4><p>${esc(date)}</p></div>
+                <div class="trans-amount">+${esc(money(row.amount))}</div>
+            </div>`;
+        }).join("");
+    }
+
+    init();
+    </script>
+</body>
+</html>
