@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>StudentX Ads Manager</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{background:#0b0b10;color:#fff;font-family:Arial,sans-serif;padding:18px}
+.wrap{max-width:720px;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+h1{font-size:20px}.card{background:#15151d;border:1px solid #282833;border-radius:14px;padding:16px;margin-bottom:14px}
+label{display:block;font-size:12px;color:#aaa;margin:12px 0 6px}
+input,textarea,select{width:100%;background:#20202a;color:#fff;border:1px solid #343442;border-radius:8px;padding:11px;outline:none}
+textarea{min-height:80px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:8px;padding:11px 14px;background:#6d35ff;color:#fff;font-weight:700;cursor:pointer;margin-top:14px}
+button:disabled{opacity:.55;cursor:not-allowed}
+button.secondary{background:#25252e}.ad{border-top:1px solid #292933;padding:14px 0}.ad:first-child{border-top:0}
+.status{font-size:11px;padding:4px 7px;border-radius:5px;background:#282833;color:#bbb}
+.status.active{color:#72e6a5}.status.paused{color:#ffd166}.status.scheduled{color:#7dc4ff}.status.expired{color:#ff6b6b}
+small{color:#999}.danger{background:#b3263e}
+
+#authModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(11,11,16,.97);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px}
+.auth-card{background:#15151d;padding:28px 24px;border-radius:16px;border:1px solid #282833;width:100%;max-width:380px;text-align:center}
+.auth-card i{font-size:26px;color:#6d35ff;margin-bottom:10px}
+.auth-card h2{margin-bottom:8px;font-size:19px}
+.auth-card p{font-size:12px;color:#999;margin-bottom:16px;line-height:1.5}
+.auth-card input{margin-bottom:12px}
+.auth-error{font-size:12px;color:#ff6b6b;margin-top:6px;min-height:16px}
+#deniedScreen{display:none;text-align:center;margin-top:100px;color:#999}
+#deniedScreen i{font-size:32px;color:#ff6b6b;margin-bottom:12px;display:block}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD + ADMIN GATE -->
+<div id="authModal">
+  <div class="auth-card">
+    <i class="fas fa-shield-halved"></i>
+    <h2>Ads Manager Access</h2>
+    <p>This area is restricted. Enter the admin password to continue. Your account must also be registered as an admin.</p>
+    <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" onkeydown="if(event.key==='Enter')verifyAdminAccess()">
+    <button id="authSubmitBtn" onclick="verifyAdminAccess()" style="width:100%;margin-top:0">Unlock Ads Manager</button>
+    <div class="auth-error" id="authError"></div>
+  </div>
+</div>
+
+<div id="deniedScreen">
+  <i class="fas fa-lock"></i>
+  <div>Admin access required for this account.</div>
+</div>
+
+<div class="wrap" id="mainWrap" style="display:none">
+<div class="top"><h1><i class="fas fa-bullhorn"></i> StudentX Ads Manager</h1><button class="secondary" onclick="location.href='video.html'">Video Feed</button></div>
+
+<div class="card">
+<h2 style="font-size:16px">Create advertisement</h2>
+<label>Ad title</label><input id="title" placeholder="Example: StudentX Laptop Store">
+<label>Advert video</label><input id="videoFile" type="file" accept="video/*">
+<label>Caption</label><textarea id="caption" placeholder="Write your advert caption..."></textarea>
+<div class="row">
+<div><label>CTA text</label><input id="ctaText" value="Learn More"></div>
+<div><label>CTA URL</label><input id="ctaUrl" placeholder="https://example.com"></div>
+</div>
+<label>Interests / categories</label><input id="interests" placeholder="tech, education, football">
+<div class="row">
+<div><label>Start</label><input id="startAt" type="datetime-local"></div>
+<div><label>End</label><input id="endAt" type="datetime-local"></div>
+</div>
+<button id="publishBtn" onclick="createAd()">Publish Ad</button>
+<p id="msg" style="font-size:12px;color:#aaa;margin-top:10px"></p><p id="debug" style="font-size:11px;color:#777;margin-top:6px"></p>
+</div>
+
+<div class="card"><h2 style="font-size:16px;margin-bottom:10px">Your ads</h2><div id="ads">Loading...</div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   ADMIN GATE: password + admin_users table (both required)
+========================================================= */
+const ADMIN_PASSWORD = "adminpassword123"; // same password used by admin.html
+let user=null;
+let adminVerified=false;
+
+async function initGate(){
+  const r=await supabaseClient.auth.getUser();
+  user=r.data.user;
+  if(!user){ location.href="login.html"; return; }
+  document.getElementById("adminPasswordInput").focus();
+}
+
+async function verifyAdminAccess(){
+  const pwd=document.getElementById("adminPasswordInput").value;
+  const btn=document.getElementById("authSubmitBtn");
+  const errEl=document.getElementById("authError");
+  errEl.textContent="";
+
+  if(pwd!==ADMIN_PASSWORD){
+    errEl.textContent="Incorrect password.";
+    document.getElementById("adminPasswordInput").value="";
+    document.getElementById("adminPasswordInput").focus();
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent="Checking access...";
+
+  try{
+    // Password alone is not enough: the account's email must also be
+    // registered in admin_users (the same table admin.html manages).
+    const email=(user.email||"").toLowerCase();
+    const check=await supabaseClient
+      .from("admin_users")
+      .select("id")
+      .ilike("email", email)
+      .maybeSingle();
+
+    if(check.error){
+      errEl.textContent="Could not verify admin status: "+check.error.message;
+      btn.disabled=false;
+      btn.textContent="Unlock Ads Manager";
+      return;
+    }
+
+    if(!check.data){
+      document.getElementById("authModal").style.display="none";
+      document.getElementById("deniedScreen").style.display="block";
+      return;
+    }
+
+    adminVerified=true;
+    document.getElementById("authModal").style.display="none";
+    document.getElementById("mainWrap").style.display="block";
+    loadAds();
+
+  }catch(e){
+    errEl.textContent="Unexpected error. Please try again.";
+    btn.disabled=false;
+    btn.textContent="Unlock Ads Manager";
+  }
+}
+
+/* =========================================================
+   CREATE AD
+========================================================= */
+async function createAd(){
+ if(!adminVerified){ msg("Access not verified."); return; }
+
+ const file=document.getElementById("videoFile").files[0];
+ const title=document.getElementById("title").value.trim();
+ if(!file||!title){msg("Title and video are required.");return}
+ if(!file.type.startsWith("video/")){msg("Please choose a video file.");return}
+ if(file.size > 100 * 1024 * 1024){msg("Video is too large. Use a video under 100 MB.");return}
+
+ const startValue=document.getElementById("startAt").value;
+ const endValue=document.getElementById("endAt").value;
+ const start=startValue?new Date(startValue).toISOString():new Date().toISOString();
+ const end=endValue?new Date(endValue).toISOString():new Date(Date.now()+30*86400000).toISOString();
+ if(new Date(end) <= new Date(start)){ msg("End date must be after start date."); return; }
+
+ const btn=document.getElementById("publishBtn");
+ btn.disabled=true;btn.textContent="Uploading...";
+ document.getElementById("debug").textContent="Starting upload...";
+ let uploadedPath=null;
+
+ try{
+   if(!user){
+     const ur=await supabaseClient.auth.getUser();
+     user=ur.data.user;
+   }
+   if(!user) throw new Error("Your login session has expired. Please login again.");
+
+   const ext=(file.name.split(".").pop()||"mp4").toLowerCase();
+   const safeExt=/^[a-z0-9]+$/.test(ext)?ext:"mp4";
+   uploadedPath=`${user.id}/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${safeExt}`;
+
+   document.getElementById("debug").textContent="Uploading video to Supabase Storage...";
+   const up=await supabaseClient.storage.from("ads").upload(uploadedPath,file,{
+     cacheControl:"3600",
+     contentType:file.type || "video/mp4",
+     upsert:false
+   });
+   if(up.error) throw new Error("Storage upload failed: " + up.error.message);
+
+   const pub=supabaseClient.storage.from("ads").getPublicUrl(uploadedPath);
+   const publicUrl=pub?.data?.publicUrl;
+   if(!publicUrl) throw new Error("Could not create the public video URL.");
+
+   document.getElementById("debug").textContent="Saving advertisement details...";
+
+   const r=await supabaseClient.from("ads").insert({
+     created_by:user.id,
+     title:title,
+     video_url:publicUrl,
+     caption:document.getElementById("caption").value.trim() || null,
+     cta_text:document.getElementById("ctaText").value.trim() || "Learn More",
+     cta_url:document.getElementById("ctaUrl").value.trim() || null,
+     interests:document.getElementById("interests").value.trim() || null,
+     status:"active",
+     start_at:start,
+     end_at:end
+   });
+   if(r.error) throw new Error("Ads database failed: " + r.error.message);
+
+   msg("Ad published successfully.");
+   document.getElementById("debug").textContent="";
+   document.getElementById("videoFile").value="";
+   document.getElementById("title").value="";
+   document.getElementById("caption").value="";
+   document.getElementById("ctaUrl").value="";
+   document.getElementById("interests").value="";
+   document.getElementById("startAt").value="";
+   document.getElementById("endAt").value="";
+   await loadAds();
+ }catch(e){
+   console.error("Ads publish error:",e);
+   const detail=e?.message || String(e);
+   msg(detail === "Failed to fetch" ? "Failed to fetch Supabase. Check Storage bucket/policy or network." : detail);
+   document.getElementById("debug").textContent="Upload was not completed.";
+   if(uploadedPath){
+     try{ await supabaseClient.storage.from("ads").remove([uploadedPath]); }catch(cleanErr){ console.warn("Cleanup failed",cleanErr); }
+   }
+ }finally{
+   btn.disabled=false;btn.textContent="Publish Ad";
+ }
+}
+
+function msg(x){document.getElementById("msg").textContent=x;}
+
+/* =========================================================
+   COMPUTED STATUS (reflects real serving state, not just the
+   raw DB column) — Scheduled / Active / Expired / Paused
+========================================================= */
+function computeStatus(ad){
+  const now=Date.now();
+  const start=ad.start_at?new Date(ad.start_at).getTime():null;
+  const end=ad.end_at?new Date(ad.end_at).getTime():null;
+
+  if(ad.status==="paused") return {key:"paused",label:"Paused"};
+  if(end && now > end) return {key:"expired",label:"Expired"};
+  if(start && now < start) return {key:"scheduled",label:"Scheduled"};
+  if(ad.status==="active") return {key:"active",label:"Active"};
+  return {key:ad.status||"unknown",label:ad.status||"Unknown"};
+}
+
+/* =========================================================
+   LOAD / MANAGE ADS
+========================================================= */
+async function loadAds(){
+ const r=await supabaseClient.from("ads").select("*").order("created_at",{ascending:false});
+ const el=document.getElementById("ads");
+ if(r.error){el.textContent=r.error.message;return}
+
+ el.innerHTML=(r.data||[]).map(a=>{
+   const st=computeStatus(a);
+   const canToggle = st.key!=="expired";
+   const nextStatus = a.status==="active" ? "paused" : "active";
+   const toggleLabel = a.status==="active" ? "Pause" : "Activate";
+
+   return `<div class="ad" data-id="${esc(a.id)}">
+     <b>${esc(a.title)}</b> <span class="status ${esc(st.key)}">${esc(st.label)}</span>
+     <div style="margin-top:5px"><small>${esc(a.interests||"No interests")} · ${new Date(a.created_at).toLocaleString()}</small></div>
+     ${canToggle ? `<button class="secondary" onclick="setStatus('${esc(a.id)}','${nextStatus}',this)">${toggleLabel}</button>` : ""}
+     <button class="danger" onclick="deleteAd('${esc(a.id)}',this)">Delete</button>
+   </div>`;
+ }).join("")||"<small>No ads yet.</small>";
+}
+
+async function setStatus(id,status,btn){
+ if(btn){ btn.disabled=true; btn.textContent="Please wait..."; }
+ const r=await supabaseClient.from("ads").update({status}).eq("id",id);
+ if(r.error){ msg(r.error.message); }
+ await loadAds();
+}
+
+async function deleteAd(id,btn){
+ if(!confirm("Delete this ad?")) return;
+ if(btn){ btn.disabled=true; btn.textContent="Deleting..."; }
+ const r=await supabaseClient.from("ads").delete().eq("id",id);
+ if(r.error){ msg(r.error.message); }
+ await loadAds();
+}
+
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+
+initGate();
+</script>
+</body>
+</html>
