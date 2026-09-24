@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{--bg:#0a0a0f;--card:#12121a;--card2:#1a1a24;--border:rgba(255,255,255,.08);--text:#fff;--muted:rgba(255,255,255,.5);--sub:rgba(255,255,255,.76);--accent:#dc2743;--grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);--danger:#ef4444}
+:root.sx-light{--bg:#f0f2f5;--card:#fff;--card2:#f0f2f5;--border:#dfe1e6;--text:#050505;--muted:#65676b;--sub:#3a3b3c}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);color:var(--text)}
+body{font-family:Poppins,Arial,sans-serif;max-width:500px;margin:auto;min-height:100vh;padding-bottom:80px}
+button{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}
+.header{position:sticky;top:0;z-index:100;height:60px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-bottom:1px solid var(--border)}
+.header-left,.header-right{display:flex;align-items:center;gap:3px}.logo{font-size:20px;font-weight:900;margin-left:5px}.logo b{background:var(--grad);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.icon-btn{width:38px;height:38px;border:0;background:transparent;color:var(--text);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px}.icon-btn:active{background:var(--card2)}
+.bell-wrap{position:relative}.bell-badge{position:absolute;top:0;right:0;display:none;min-width:17px;height:17px;padding:0 4px;border-radius:10px;background:#ef4444;color:#fff;border:2px solid var(--bg);font-size:8px;font-weight:800;align-items:center;justify-content:center}
+.new-pill{position:fixed;top:65px;left:50%;transform:translateX(-50%);z-index:200;display:none;padding:8px 16px;border:0;border-radius:20px;background:var(--grad);color:#fff;font-size:11px;font-weight:800;box-shadow:0 5px 20px #0006}
+.stories{display:flex;gap:13px;overflow-x:auto;padding:13px 14px 10px;scrollbar-width:none}.stories::-webkit-scrollbar{display:none}
+.story{width:62px;flex:0 0 62px;text-align:center;cursor:pointer}.story-ring{width:58px;height:58px;margin:auto;border-radius:50%;padding:2px;background:var(--grad)}.story-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:2px solid var(--bg);background:var(--card2)}.story-add{width:58px;height:58px;margin:auto;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px dashed var(--accent);color:var(--accent);background:var(--card)}.story-name{margin-top:5px;font-size:9px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.create{margin:0 14px 12px;padding:11px;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:15px}.create-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--card2)}.create-main{flex:1;min-width:0}.create-name{font-size:12px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.create-placeholder{font-size:11px;color:var(--muted);margin-top:2px}.create-tools{display:flex;gap:10px}.create-tool{font-size:17px}.create-tool.photo{color:#10b981}.create-tool.video{color:#ef4444}.create-tool.poll{color:#f59e0b}
+.post,.ad-card{margin:0 14px 12px;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}.post-head,.ad-head{display:flex;align-items:center;gap:10px;padding:12px 14px}.avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--card2);flex:0 0 40px;cursor:pointer}.post-info{flex:1;min-width:0}.post-name{font-size:13px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}.post-meta{font-size:9px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.community-line{font-size:10px;color:var(--text);font-weight:700;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.community-line span{color:var(--muted);font-weight:500}
+.more{width:32px;height:32px;border:0;border-radius:9px;background:transparent;color:var(--muted)}.more:active{background:var(--card2)}
+.post-text{padding:0 14px 10px;color:var(--sub);font-size:13px;line-height:1.65;white-space:pre-wrap;word-break:break-word}.post-text.clamp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}.see-more{padding:0 14px 10px;color:var(--accent);font-size:11px;font-weight:800;cursor:pointer}.media{display:block;width:100%;max-height:620px;object-fit:contain;background:#000}
+.actions,.video-actions{display:flex;align-items:center;border-top:1px solid var(--border);padding:3px 6px 7px}.action,.video-action{border:0;background:transparent;color:var(--muted);padding:8px 9px;border-radius:20px;display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700}.action:active,.video-action:active{background:var(--card2)}.action.like.on,.video-action.like.on{color:var(--danger)}.action.repost.on,.action.save.on,.video-action.save.on{color:var(--accent)}.action.save,.video-action.save{margin-left:auto}
+.ad-title{font-size:13px;font-weight:800;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ad-sub{font-size:9px;color:var(--muted);margin-top:2px}.ad-label{font-size:9px;color:var(--muted);border:1px solid var(--border);border-radius:10px;padding:3px 8px}.ad-media{display:block;width:100%;max-height:600px;object-fit:cover;background:#000}.ad-caption{padding:10px 14px;color:var(--sub);font-size:13px;line-height:1.6;white-space:pre-wrap}.ad-cta{padding:6px 14px 13px}.cta{display:inline-flex;align-items:center;justify-content:center;padding:9px 17px;border:0;border-radius:11px;background:var(--grad);color:#fff;font-size:11px;font-weight:800}
+.video-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:9px;background:var(--grad);color:#fff;font-size:8px;font-weight:800}.home-video{display:block;width:100%;max-height:620px;object-fit:cover;background:#000;cursor:pointer}.video-caption{padding:9px 14px;color:var(--sub);font-size:12px;line-height:1.55}
+.skeleton{height:180px;margin:0 14px 12px;border-radius:16px;background:var(--card);animation:pulse 1.2s infinite}@keyframes pulse{50%{opacity:.5}}.center{text-align:center;color:var(--muted);padding:45px 25px;font-size:11px;line-height:1.6}.center i{display:block;font-size:30px;color:var(--accent);margin-bottom:10px}.center b{display:block;color:var(--text);font-size:14px;margin-bottom:5px}.end{text-align:center;color:var(--muted);font-size:10px;padding:15px}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:9999;padding:10px 17px;background:#222230;color:#fff;border-radius:11px;font-size:11px;font-weight:700;box-shadow:0 5px 20px #0007}
+</style>
+</head>
+<body>
+
+<header class="header">
+ <div class="header-left">
+  <button class="icon-btn" onclick="location.href='menu.html'"><i class="fas fa-bars"></i></button>
+  <div class="logo">Student<b>X</b></div>
+ </div>
+ <div class="header-right">
+  <button class="icon-btn" onclick="location.href='groups.html'"><i class="fas fa-user-group"></i></button>
+  <button class="icon-btn" onclick="location.href='search.html'"><i class="fas fa-search"></i></button>
+  <div class="bell-wrap"><button class="icon-btn" onclick="location.href='notification.html'"><i class="fas fa-bell"></i><span class="bell-badge" id="bellBadge">0</span></button></div>
+ </div>
+</header>
+
+<div class="new-pill" id="newPill" onclick="refreshFeed()"></div>
+<section class="stories" id="stories"></section>
+
+<section class="create" onclick="location.href='create-post.html'">
+ <img class="create-avatar" id="myAvatar" src="" alt="">
+ <div class="create-main"><div class="create-name" id="myName">Loading...</div><div class="create-placeholder">What's on your mind?</div></div>
+ <div class="create-tools">
+  <i class="fas fa-image create-tool photo" onclick="event.stopPropagation();location.href='create-post.html?type=photo'"></i>
+  <i class="fas fa-video create-tool video" onclick="event.stopPropagation();location.href='create-post.html?type=video'"></i>
+  <i class="fas fa-poll create-tool poll" onclick="event.stopPropagation();toast('Polls are coming soon')"></i>
+ </div>
+</section>
+
+<main id="feed"><div class="skeleton"></div><div class="skeleton"></div></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="studentx-badges.js"></script>
+
+<script>
+"use strict";
+
+var PAGE=15, me=null, profile=null;
+var following=new Set(), groupIds=new Set();
+var posts={}, liked=new Set(), saved=new Set(), reposted=new Set();
+var likeCount={}, commentCount={}, repostCount={};
+var offset=0,loading=false,noMore=false,postCounter=0,newPosts=0;
+var ads=[],adIndex=0,videos=[],videoIndex=0,adSeen=new Set();
+
+var DEFAULT_AVATAR="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200"><rect width="200" height="200" fill="#202027"/><circle cx="100" cy="78" r="42" fill="#777"/><path d="M35 190c8-48 35-70 65-70s57 22 65 70" fill="#777"/></svg>');
+
+function $(id){return document.getElementById(id)}
+function esc(v){return v==null?"":String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
+function fmt(n){n=Number(n)||0;if(n>=1e6)return(n/1e6).toFixed(1).replace(".0","")+"M";if(n>=1e3)return(n/1e3).toFixed(1).replace(".0","")+"K";return String(n)}
+function ago(v){if(!v)return"";var t=new Date(v).getTime();if(isNaN(t))return"";var s=Math.floor((Date.now()-t)/1000);if(s<60)return"Just now";if(s<3600)return Math.floor(s/60)+"m";if(s<86400)return Math.floor(s/3600)+"h";if(s<604800)return Math.floor(s/86400)+"d";return new Date(v).toLocaleDateString()}
+function toast(m){var o=document.querySelector(".toast");if(o)o.remove();var x=document.createElement("div");x.className="toast";x.textContent=m;document.body.appendChild(x);setTimeout(function(){x.remove()},2400)}
+function badgeName(u){try{if(window.StudentXBadges&&u&&u.id)return StudentXBadges.nameHTML(u)}catch(e){}return esc((u&&(u.full_name||u.username))||"StudentX User")}
+function goProfile(id){if(id)location.href="profile.html?id="+encodeURIComponent(id)}
+function postLink(id){return location.origin+location.pathname+"?post="+encodeURIComponent(id)}
+
+async function init(){
+ try{
+  var a=await supabaseClient.auth.getUser();
+  me=a.data&&a.data.user;
+  if(!me){location.href="login.html";return}
+
+  await loadProfile();
+  await loadFollowing();
+  await loadStories();
+  await loadNotifications();
+
+  /* Feed MUST wait for the real Supabase queries. */
+  await Promise.all([loadAds(),loadVideos()]);
+  await loadFeed(true);
+
+  subscribe();
+  openRequestedPost();
+ }catch(e){
+  console.error("HOME ERROR:",e);
+  $("feed").innerHTML='<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Home could not load</b><br>'+esc(e.message||"Unknown error")+'<br><br><button class="cta" onclick="location.reload()">Reload</button></div>';
+ }
+}
+
+async function loadProfile(){
+ var r=await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan").eq("id",me.id).maybeSingle();
+ if(r.error)throw new Error("Profile: "+r.error.message);
+ profile=r.data||{id:me.id};
+ $("myAvatar").src=profile.avatar_url||DEFAULT_AVATAR;
+ $("myAvatar").onerror=function(){this.src=DEFAULT_AVATAR};
+ $("myName").innerHTML=badgeName(profile);
+}
+
+async function loadFollowing(){
+ var r=await supabaseClient.from("followers").select("following_id").eq("follower_id",me.id);
+ if(r.error)console.warn("Followers:",r.error.message);
+ (r.data||[]).forEach(function(x){if(x.following_id)following.add(String(x.following_id))});
+
+ /* group_members is optional. If the table does not exist, do NOT stop the feed. */
+ var g=await supabaseClient.from("group_members").select("group_id").eq("user_id",me.id).eq("status","active");
+ if(!g.error)(g.data||[]).forEach(function(x){if(x.group_id)groupIds.add(String(x.group_id))});
+}
+
+async function loadStories(){
+ var html='<div class="story" onclick="location.href=\'story.html?create=1\'"><div class="story-add"><i class="fas fa-plus"></i></div><div class="story-name">Your Story</div></div>';
+ var r=await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").neq("id",me.id).order("created_at",{ascending:false}).limit(12);
+ if(r.error){console.warn("Stories:",r.error.message);$("stories").innerHTML=html;return}
+ (r.data||[]).forEach(function(u){
+  html+='<div class="story" onclick="goStory(\''+esc(u.id)+'\')"><div class="story-ring"><img src="'+esc(u.avatar_url||DEFAULT_AVATAR)+'" onerror="this.src=DEFAULT_AVATAR"></div><div class="story-name">'+esc((u.full_name||u.username||"Student").split(" ")[0])+'</div></div>';
+ });
+ $("stories").innerHTML=html;
+}
+function goStory(id){location.href="story.html?user="+encodeURIComponent(id)}
+
+async function loadNotifications(){
+ var r=await supabaseClient.from("notifications").select("id",{count:"exact",head:true}).eq("recipient_id",me.id).eq("is_read",false);
+ if(r.error){console.warn("Notifications:",r.error.message);return}
+ var b=$("bellBadge"),n=r.count||0;
+ b.textContent=n>99?"99+":n;b.style.display=n?"flex":"none";
+}
+
+/* ---------------- REAL POSTS ---------------- */
+async function fetchPosts(){
+ var base=supabaseClient.from("posts").select("*").order("Create_at",{ascending:false}).range(offset,offset+PAGE-1);
+
+ /*
+  IMPORTANT:
+  The old version used group_id filtering before checking whether group_id
+  exists and could leave the page on skeletons. This version first loads
+  the normal posts table and only uses group information if the returned
+  rows actually contain group_id.
+ */
+ var r=await base;
+ if(r.error)throw new Error("Posts: "+r.error.message);
+ return r.data||[];
+}
+
+function canSee(p){
+ if(!p||!p.id||!p.User_id)return false;
+ if(p.User_id===me.id)return true;
+ if(p.visibility==="private")return false;
+ if(p.visibility==="followers"&&!following.has(String(p.User_id)))return false;
+ return true;
+}
+
+async function enrich(rows){
+ var ids=rows.map(function(p){return p.id});
+ var users=[...new Set(rows.map(function(p){return p.User_id}).filter(Boolean))];
+ var profileMap={};
+
+ if(users.length){
+  var pr=await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan,university").in("id",users);
+  if(pr.error)throw new Error("Post profiles: "+pr.error.message);
+  (pr.data||[]).forEach(function(u){profileMap[u.id]=u});
+ }
+
+ var lr=await supabaseClient.from("likes").select("post_id,user_id").in("post_id",ids);
+ if(!lr.error)(lr.data||[]).forEach(function(x){likeCount[x.post_id]=(likeCount[x.post_id]||0)+1;if(x.user_id===me.id)liked.add(String(x.post_id))});
+
+ var cr=await supabaseClient.from("comments").select("post_id").in("post_id",ids);
+ if(!cr.error)(cr.data||[]).forEach(function(x){commentCount[x.post_id]=(commentCount[x.post_id]||0)+1});
+
+ /* These two tables are optional in the current database. */
+ var rr=await supabaseClient.from("reposts").select("post_id,user_id").in("post_id",ids);
+ if(!rr.error)(rr.data||[]).forEach(function(x){repostCount[x.post_id]=(repostCount[x.post_id]||0)+1;if(x.user_id===me.id)reposted.add(String(x.post_id))});
+
+ var br=await supabaseClient.from("bookmarks").select("post_id,user_id").in("post_id",ids);
+ if(!br.error)(br.data||[]).forEach(function(x){if(x.user_id===me.id)saved.add(String(x.post_id))});
+
+ rows.forEach(function(p){p.profile=profileMap[p.User_id]||{};posts[String(p.id)]=p});
+}
+
+async function loadFeed(reset){
+ if(loading)return;
+ loading=true;
+
+ if(reset){
+  offset=0;noMore=false;postCounter=0;
+  $("feed").innerHTML="";
+ }
+
+ try{
+  var rows=await fetchPosts();
+  offset+=rows.length;
+  if(rows.length<PAGE)noMore=true;
+
+  var visible=rows.filter(canSee);
+
+  if(visible.length){
+   await enrich(visible);
+   appendPosts(visible);
+  }
+
+  if(reset&&!visible.length){
+   $("feed").innerHTML='<div class="center"><i class="fas fa-newspaper"></i><b>No posts yet</b>Posts from students will appear here.</div>';
+  }
+
+  if(noMore&&visible.length) $("feed").insertAdjacentHTML("beforeend",'<div class="end">You reached the end of your feed.</div>');
+ }catch(e){
+  console.error("FEED ERROR:",e);
+  if(reset)$("feed").innerHTML='<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Feed error</b>'+esc(e.message)+'</div>';
+ }
+ loading=false;
+}
+
+function appendPosts(rows){
+ var html="";
+ rows.forEach(function(p){
+  html+=renderPost(p);
+  postCounter++;
+
+  if(postCounter%6===0){var a=nextAd();if(a)html+=renderAd(a)}
+  if(postCounter%8===0){var v=nextVideo();if(v)html+=renderVideo(v)}
+ });
+ $("feed").insertAdjacentHTML("beforeend",html);
+ observeMedia();
+}
+
+function renderPost(p){
+ var id=String(p.id),u=p.profile||{};
+ var groupName=p.group_name||p.group_title||p.community_name||p.community_title||"";
+ var groupLine=groupName?'<div class="community-line">'+esc(groupName)+' <span>›</span></div>':"";
+ var body=p.content?'<div class="post-text'+(String(p.content).length>500?" clamp":"")+'" id="body-'+esc(id)+'">'+esc(p.content)+'</div>':"";
+ if(String(p.content||"").length>500)body+='<div class="see-more" onclick="expandPost(\''+esc(id)+'\',this)">See more</div>';
+
+ var media="";
+ var image=p.image_url||p.image||"";
+ var video=p.video_url||p.video||"";
+ if(image)media='<img class="media" src="'+esc(image)+'" loading="lazy" onerror="this.style.display=\'none\'">';
+ else if(video)media='<video class="media" controls playsinline preload="metadata" src="'+esc(video)+'"></video>';
+
+ return '<article class="post" id="post-'+esc(id)+'">'+
+  '<div class="post-head"><img class="avatar" src="'+esc(u.avatar_url||DEFAULT_AVATAR)+'" onclick="goProfile(\''+esc(p.User_id)+'\')" onerror="this.src=DEFAULT_AVATAR">'+
+  '<div class="post-info">'+groupLine+
+  '<div class="post-name" onclick="goProfile(\''+esc(p.User_id)+'\')">'+badgeName(u)+'</div>'+
+  '<div class="post-meta">'+(u.username?"@"+esc(u.username)+" · ":"")+ago(p.Create_at)+'</div></div>'+
+  '<button class="more" onclick="openPostMenu(\''+esc(id)+'\')"><i class="fas fa-ellipsis-h"></i></button></div>'+
+  body+media+renderPostActions(id)+'</article>';
+}
+
+function renderPostActions(id){
+ return '<div class="actions">'+
+ '<button class="action like '+(liked.has(id)?"on":"")+'" id="like-'+esc(id)+'" onclick="toggleLike(\''+esc(id)+'\')"><i class="'+(liked.has(id)?"fas":"far")+' fa-heart"></i><span>'+fmt(likeCount[id])+'</span></button>'+
+ '<button class="action" onclick="location.href=\'comment.html?post='+encodeURIComponent(id)+'\'"><i class="far fa-comment"></i><span>'+fmt(commentCount[id])+'</span></button>'+
+ '<button class="action repost '+(reposted.has(id)?"on":"")+'" id="repost-'+esc(id)+'" onclick="toggleRepost(\''+esc(id)+'\')"><i class="fas fa-retweet"></i><span>'+fmt(repostCount[id])+'</span></button>'+
+ '<button class="action" onclick="sharePost(\''+esc(id)+'\')"><i class="fas fa-share"></i><span>Share</span></button>'+
+ '<button class="action save '+(saved.has(id)?"on":"")+'" id="save-'+esc(id)+'" onclick="toggleSave(\''+esc(id)+'\')"><i class="'+(saved.has(id)?"fas":"far")+' fa-bookmark"></i></button>'+
+ '</div>';
+}
+function expandPost(id,x){var b=$("body-"+id);if(b)b.classList.remove("clamp");if(x)x.remove()}
+
+/* ---------------- POST ACTIONS ---------------- */
+async function toggleLike(id){
+ var was=liked.has(id),btn=$("like-"+id);
+ var r=was?await supabaseClient.from("likes").delete().eq("post_id",id).eq("user_id",me.id):await supabaseClient.from("likes").insert({post_id:id,user_id:me.id});
+ if(r.error){toast("Could not update like");return}
+ if(was){liked.delete(id);likeCount[id]=Math.max(0,(likeCount[id]||1)-1)}else{liked.add(id);likeCount[id]=(likeCount[id]||0)+1}
+ if(btn){var on=liked.has(id);btn.classList.toggle("on",on);btn.innerHTML='<i class="'+(on?"fas":"far")+' fa-heart"></i><span>'+fmt(likeCount[id])+'</span>'}
+}
+async function toggleRepost(id){
+ var was=reposted.has(id),btn=$("repost-"+id);
+ var r=was?await supabaseClient.from("reposts").delete().eq("post_id",id).eq("user_id",me.id):await supabaseClient.from("reposts").insert({post_id:id,user_id:me.id});
+ if(r.error){toast("Repost is not available yet");return}
+ if(was){reposted.delete(id);repostCount[id]=Math.max(0,(repostCount[id]||1)-1)}else{reposted.add(id);repostCount[id]=(repostCount[id]||0)+1}
+ if(btn)btn.innerHTML='<i class="fas fa-retweet"></i><span>'+fmt(repostCount[id])+'</span>';
+ if(btn)btn.classList.toggle("on",reposted.has(id));
+}
+async function toggleSave(id){
+ var was=saved.has(id),btn=$("save-"+id);
+ var r=was?await supabaseClient.from("bookmarks").delete().eq("post_id",id).eq("user_id",me.id):await supabaseClient.from("bookmarks").insert({post_id:id,user_id:me.id});
+ if(r.error){toast("Save is not available yet");return}
+ if(was)saved.delete(id);else saved.add(id);
+ if(btn){var on=saved.has(id);btn.classList.toggle("on",on);btn.innerHTML='<i class="'+(on?"fas":"far")+' fa-bookmark"></i>'}
+}
+async function sharePost(id){
+ var p=posts[id]||{},url=postLink(id);
+ try{if(navigator.share){await navigator.share({title:"StudentX post",text:String(p.content||"Check out this post on StudentX").slice(0,120),url:url});return}await navigator.clipboard.writeText(url);toast("Link copied")}catch(e){}
+}
+
+/* ---------------- ADS ---------------- */
+async function loadAds(){
+ var r=await supabaseClient.from("ads").select("id,title,username,avatar_url,video_url,thumbnail_url,image_url,caption,cta_text,cta_url,status,start_at,end_at,created_at").eq("status","active").order("created_at",{ascending:false}).limit(10);
+ if(r.error){console.warn("Ads unavailable:",r.error.message);ads=[];return}
+ var now=Date.now();
+ ads=(r.data||[]).filter(function(a){
+  var s=a.start_at?new Date(a.start_at).getTime():-Infinity,e=a.end_at?new Date(a.end_at).getTime():Infinity;
+  return s<=now&&e>=now;
+ });
+}
+function nextAd(){if(!ads.length)return null;return ads[adIndex++%ads.length]}
+function renderAd(a){
+ if(!a)return"";
+ var media=a.video_url?'<video class="ad-media ad-video" muted loop playsinline preload="metadata"'+(a.thumbnail_url?' poster="'+esc(a.thumbnail_url)+'"':"")+' src="'+esc(a.video_url)+'"></video>':(a.image_url||a.thumbnail_url)?'<img class="ad-media" src="'+esc(a.image_url||a.thumbnail_url)+'" loading="lazy">':"";
+ return '<article class="ad-card" data-ad-id="'+esc(a.id)+'"><div class="ad-head"><img class="avatar" src="'+esc(a.avatar_url||DEFAULT_AVATAR)+'" onerror="this.src=DEFAULT_AVATAR"><div class="post-info"><div class="ad-title">'+esc(a.title||"Sponsored")+'</div><div class="ad-sub">Sponsored'+(a.username?" · "+esc(a.username):"")+'</div></div><span class="ad-label">Ad</span></div>'+
+ media+(a.caption?'<div class="ad-caption">'+esc(a.caption)+'</div>':"")+
+ '<div class="actions"><button class="action" onclick="adAction(\''+esc(a.id)+'\',\'like\')"><i class="far fa-heart"></i><span>Like</span></button><button class="action" onclick="adAction(\''+esc(a.id)+'\',\'comment\')"><i class="far fa-comment"></i><span>Comment</span></button><button class="action" onclick="adAction(\''+esc(a.id)+'\',\'share\')"><i class="fas fa-share"></i><span>Share</span></button><button class="action save" onclick="adAction(\''+esc(a.id)+'\',\'save\')"><i class="far fa-bookmark"></i></button></div>'+
+ '<div class="ad-cta">'+(a.cta_url?'<a class="cta" href="'+esc(a.cta_url)+'" target="_blank" rel="noopener" onclick="trackAd(\''+esc(a.id)+'\',\'click\')">'+esc(a.cta_text||"Learn more")+'</a>':'<button class="cta" onclick="trackAd(\''+esc(a.id)+'\',\'click\')">'+esc(a.cta_text||"Learn more")+'</button>')+'</div></article>';
+}
+function adAction(id,type){if(type==="share"){var a=ads.find(function(x){return String(x.id)===String(id)});var u=a&&a.cta_url||location.href;navigator.share?navigator.share({title:"StudentX",url:u}).catch(function(){}):navigator.clipboard.writeText(u).then(function(){toast("Link copied")});return}toast(type==="like"?"Ad liked":type==="comment"?"Ad comment":"Ad saved");trackAd(id,type)}
+function trackAd(id,type){if(!id||!me)return;if(type==="impression"&&adSeen.has(id))return;if(type==="impression")adSeen.add(id);supabaseClient.from("ad_events").insert({ad_id:id,user_id:me.id,event_type:type}).then(function(r){if(r.error)console.warn("Ad event:",r.error.message)})}
+
+/* ---------------- VIDEOS ---------------- */
+async function loadVideos(){
+ var r=await supabaseClient.from("videos").select("id,user_id,video_url,thumbnail_url,caption,created_at").order("created_at",{ascending:false}).limit(20);
+ if(r.error){console.warn("Videos unavailable:",r.error.message);videos=[];return}
+ var ids=[...new Set((r.data||[]).map(function(v){return v.user_id}).filter(Boolean))],map={};
+ if(ids.length){var p=await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,verified,premium_plan").in("id",ids);(p.data||[]).forEach(function(u){map[u.id]=u})}
+ videos=(r.data||[]).map(function(v){v.profile=map[v.user_id]||{};return v})
+}
+function nextVideo(){if(!videos.length)return null;return videos[videoIndex++%videos.length]}
+function renderVideo(v){
+ if(!v)return"";
+ var u=v.profile||{};
+ return '<article class="post home-video-card"><div class="post-head"><img class="avatar" src="'+esc(u.avatar_url||DEFAULT_AVATAR)+'" onclick="goProfile(\''+esc(v.user_id)+'\')" onerror="this.src=DEFAULT_AVATAR"><div class="post-info"><div class="post-name" onclick="goProfile(\''+esc(v.user_id)+'\')">'+badgeName(u)+'</div><div class="post-meta">'+(u.username?"@"+esc(u.username)+" · ":"")+ago(v.created_at)+'</div></div><span class="video-tag"><i class="fas fa-video"></i> Video</span></div><video class="home-video" muted loop playsinline preload="metadata"'+(v.thumbnail_url?' poster="'+esc(v.thumbnail_url)+'"':"")+' src="'+esc(v.video_url)+'"></video>'+(v.caption?'<div class="video-caption">'+esc(v.caption)+'</div>':"")+
+ '<div class="video-actions"><button class="video-action like" onclick="toast(\'Video like will be connected to video_likes\')"><i class="far fa-heart"></i><span>Like</span></button><button class="video-action" onclick="location.href=\'video-comments.html?video='+encodeURIComponent(v.id)+'\'"><i class="far fa-comment"></i><span>Comment</span></button><button class="video-action" onclick="shareVideo(\''+esc(v.id)+'\')"><i class="fas fa-share"></i><span>Share</span></button><button class="video-action save" onclick="toast(\'Video save will be connected to video_saves\')"><i class="far fa-bookmark"></i></button></div></article>';
+}
+async function shareVideo(id){var u=location.origin+"/video.html?video="+encodeURIComponent(id);try{if(navigator.share){await navigator.share({title:"StudentX video",url:u})}else{await navigator.clipboard.writeText(u);toast("Link copied")}}catch(e){}}
+
+/* ---------------- MENU ---------------- */
+function openPostMenu(id){
+ var p=posts[id];if(!p)return;
+ var mine=p.User_id===me.id;
+ var h=mine?'<div class="sheet-item danger" onclick="deletePost(\''+esc(id)+'\')"><i class="fas fa-trash"></i>Delete post</div>':'<div class="sheet-item" onclick="closeMenu();goProfile(\''+esc(p.User_id)+'\')"><i class="fas fa-user"></i>View profile</div>';
+ h+='<div class="sheet-item" onclick="sharePost(\''+esc(id)+'\');closeMenu()"><i class="fas fa-share"></i>Share post</div>';
+ var wrap=document.createElement("div");wrap.innerHTML='<div class="toast">Menu: '+(mine?"Delete post":"View profile")+'</div>';toast(mine?"Use Delete post from this menu":"Use View profile from this menu");
+}
+async function deletePost(id){if(!confirm("Delete this post?"))return;var r=await supabaseClient.from("posts").delete().eq("id",id).eq("User_id",me.id);if(r.error){toast("Could not delete post");return}var e=$("post-"+id);if(e)e.remove();delete posts[id];toast("Post deleted")}
+
+/* ---------------- AUTOPLAY ---------------- */
+var observer=new IntersectionObserver(function(es){
+ es.forEach(function(e){
+  if(!e.target.classList.contains("home-video-card")&&!e.target.classList.contains("ad-card"))return;
+  var v=e.target.querySelector("video");if(!v)return;
+  if(e.isIntersecting&&e.intersectionRatio>=.55){v.muted=true;v.play().catch(function(){})}else v.pause();
+ });
+},{threshold:[0,.55,1]});
+function observeMedia(){document.querySelectorAll(".home-video-card:not([data-o]),.ad-card:not([data-o])").forEach(function(e){e.dataset.o="1";observer.observe(e)})}
+
+/* ---------------- REALTIME ---------------- */
+function subscribe(){
+ supabaseClient.channel("home-posts-"+me.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"posts"},function(p){if(p.new&&p.new.User_id!==me.id){newPosts++;$("newPill").textContent="↑ "+newPosts+" new post"+(newPosts>1?"s":"");$("newPill").style.display="block"}}).subscribe();
+ supabaseClient.channel("home-notifications-"+me.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"notifications",filter:"recipient_id=eq."+me.id},function(){loadNotifications()}).subscribe();
+}
+async function refreshFeed(){await loadFeed(true)}
+async function openRequestedPost(){var id=new URLSearchParams(location.search).get("post");if(!id)return;var e=$("post-"+id);if(e)e.scrollIntoView({behavior:"smooth",block:"center"})}
+
+init();
+</script>
+
+<!-- nav.js is the ONLY source of the bottom navigation -->
+<script src="nav.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>
