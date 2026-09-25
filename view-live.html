@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>StudentX Live</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif;overflow:hidden}
+.live-page{position:relative;width:100%;height:100dvh;background:#000}
+#remoteVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.loading,.error{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:#050505;z-index:30}
+.error{display:none}.loading i{font-size:36px;color:#8a2be2;margin-bottom:12px}.loading span,.error p{font-size:13px;color:#aaa;line-height:1.5}
+.error i{font-size:42px;color:#ff304f;margin-bottom:15px}.error h2{font-size:19px;margin-bottom:8px}
+.top{position:absolute;top:0;left:0;width:100%;padding:18px 15px;padding-top:calc(18px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;z-index:20;background:linear-gradient(to bottom,rgba(0,0,0,.72),transparent)}
+.back,.action{width:42px;height:42px;border:0;border-radius:50%;background:rgba(0,0,0,.58);color:#fff;font-size:16px}.live-badge{padding:7px 11px;border-radius:8px;background:#ff304f;font-size:11px;font-weight:700}
+.viewer-box{position:absolute;top:20px;right:15px;z-index:21;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.6);font-size:12px}
+.info{position:absolute;left:15px;right:15px;bottom:82px;z-index:20;display:none;text-shadow:0 1px 4px #000}.streamer{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.avatar{width:43px;height:43px;border-radius:50%;object-fit:cover;border:2px solid #fff;background:#222}.name{font-size:14px;font-weight:700}.username{font-size:11px;color:#ccc;margin-top:2px}.title{font-size:16px;font-weight:600;margin-bottom:5px}.category{font-size:12px;color:#bbb}
+.controls{position:absolute;bottom:18px;left:0;right:0;padding-bottom:env(safe-area-inset-bottom);z-index:25;display:flex;justify-content:center;gap:14px}.leave,.mute{width:55px;height:55px;border:0;border-radius:50%;color:#fff;font-size:18px}.leave{background:#e52b45}.mute{background:rgba(0,0,0,.62)}
+.toast{position:absolute;left:50%;bottom:95px;transform:translateX(-50%);z-index:50;background:rgba(0,0,0,.8);padding:9px 13px;border-radius:8px;font-size:12px;display:none}
+</style>
+</head>
+<body>
+<div class="live-page">
+<video id="remoteVideo" autoplay playsinline></video>
+<div id="loading" class="loading"><i class="fas fa-circle-notch fa-spin"></i><span id="loadingText">Connecting to live...</span></div>
+<div id="error" class="error"><i class="fas fa-video-slash"></i><h2 id="errorTitle">Live unavailable</h2><p id="errorMessage">This live stream is no longer available.</p></div>
+<div class="top"><button class="back" onclick="leaveLive()"><i class="fas fa-arrow-left"></i></button><div class="live-badge">LIVE</div></div>
+<div class="viewer-box"><i class="fas fa-eye"></i> <span id="viewerCount">0</span></div>
+<div id="liveInfo" class="info"><div class="streamer"><img id="avatar" class="avatar" src="" alt=""><div><div id="streamerName" class="name">StudentX User</div><div id="streamerUsername" class="username"></div></div></div><div id="liveTitle" class="title">StudentX Live</div><div id="liveCategory" class="category">General</div></div>
+<div class="controls"><button id="muteBtn" class="mute" onclick="toggleMute()"><i class="fas fa-volume-high"></i></button><button class="leave" onclick="leaveLive()"><i class="fas fa-phone-slash"></i></button></div>
+<div id="toast" class="toast"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+(function(){
+"use strict";
+const video=document.getElementById("remoteVideo"),loading=document.getElementById("loading"),loadingText=document.getElementById("loadingText"),errorBox=document.getElementById("error"),errorTitle=document.getElementById("errorTitle"),errorMessage=document.getElementById("errorMessage"),viewerCount=document.getElementById("viewerCount");
+let currentUser=null,liveSession=null,peerConnection=null,signalChannel=null,sessionChannel=null,viewerJoined=false,muted=false,candidateQueue=[];
+const rtcConfig={iceServers:[{urls:"stun:stun.l.google.com:19302"},{urls:"stun:stun1.l.google.com:19302"}]};
+function sessionId(){return new URLSearchParams(location.search).get("id")||new URLSearchParams(location.search).get("session")||new URLSearchParams(location.search).get("room")}
+function showError(t,m){loading.style.display="none";errorBox.style.display="flex";errorTitle.textContent=t;errorMessage.textContent=m}
+function setLoading(t){loading.style.display="flex";loadingText.textContent=t}
+function toast(m){const e=document.getElementById("toast");e.textContent=m;e.style.display="block";clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.style.display="none",1800)}
+async function loadUser(){const r=await supabaseClient.auth.getUser();if(r.error)throw r.error;if(!r.data.user){showError("Login required","Please login before watching this live.");return false}currentUser=r.data.user;return true}
+async function loadLive(){const id=sessionId();if(!id){showError("Invalid live link","No live session ID was provided.");return false}const r=await supabaseClient.from("live_sessions").select("*").eq("id",id).eq("status","live").maybeSingle();if(r.error){showError("Unable to load live",r.error.message);return false}if(!r.data){showError("Live has ended","This live stream is no longer available.");return false}liveSession=r.data;return true}
+async function loadStreamer(){const r=await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").eq("id",liveSession.broadcaster_id).maybeSingle();if(r.error){console.error(r.error);return}if(r.data){document.getElementById("streamerName").textContent=r.data.full_name||"StudentX User";document.getElementById("streamerUsername").textContent=r.data.username?"@"+r.data.username:"";document.getElementById("avatar").src=r.data.avatar_url||""}document.getElementById("liveTitle").textContent=liveSession.title||"StudentX Live";document.getElementById("liveCategory").textContent=liveSession.category||"General";document.getElementById("liveInfo").style.display="block"}
+async function refreshViewerCount(){if(!liveSession)return;const r=await supabaseClient.from("live_viewers").select("id",{count:"exact",head:true}).eq("session_id",liveSession.id).is("left_at",null);if(!r.error)viewerCount.textContent=String(r.count||0)}
+function createPeer(){if(peerConnection)peerConnection.close();peerConnection=new RTCPeerConnection(rtcConfig);peerConnection.ontrack=e=>{if(e.streams&&e.streams[0]){video.srcObject=e.streams[0];video.play().catch(()=>{})}loading.style.display="none"};peerConnection.onicecandidate=async e=>{if(e.candidate)await sendSignal("candidate",e.candidate.toJSON())};peerConnection.onconnectionstatechange=()=>{if(!peerConnection)return;const s=peerConnection.connectionState;if(s==="connected")loading.style.display="none";if(s==="failed")showError("Connection failed","Unable to connect to the streamer.");if(s==="disconnected")setLoading("Reconnecting to live...")}}
+async function sendSignal(type,payload){if(!currentUser||!liveSession)return;const r=await supabaseClient.from("live_signals").insert({session_id:liveSession.id,sender_id:currentUser.id,receiver_id:liveSession.broadcaster_id,signal_type:type,payload:payload});if(r.error)console.error("SIGNAL ERROR",r.error)}
+async function handleSignal(row){if(!row||!liveSession||!currentUser)return;if(row.session_id!==liveSession.id||row.receiver_id!==currentUser.id||row.sender_id!==liveSession.broadcaster_id)return;if(row.signal_type==="offer"){try{if(!peerConnection)createPeer();await peerConnection.setRemoteDescription(new RTCSessionDescription(row.payload));for(const c of candidateQueue){try{await peerConnection.addIceCandidate(new RTCIceCandidate(c))}catch(e){}}candidateQueue=[];const a=await peerConnection.createAnswer();await peerConnection.setLocalDescription(a);await sendSignal("answer",{type:a.type,sdp:a.sdp})}catch(e){console.error(e);showError("Connection failed",e.message||"WebRTC error")}}else if(row.signal_type==="candidate"){if(!peerConnection||!peerConnection.remoteDescription){candidateQueue.push(row.payload);return}try{await peerConnection.addIceCandidate(new RTCIceCandidate(row.payload))}catch(e){console.error(e)}}}
+function subscribeSignals(){signalChannel=supabaseClient.channel("viewer-signals-"+liveSession.id+"-"+currentUser.id).on("postgres_changes",{event:"INSERT",schema:"public",table:"live_signals",filter:"session_id=eq."+liveSession.id},p=>handleSignal(p.new)).subscribe(s=>console.log("Signal:",s))}
+function subscribeSession(){sessionChannel=supabaseClient.channel("viewer-session-"+liveSession.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"live_sessions",filter:"id=eq."+liveSession.id},p=>{liveSession=p.new;if(p.new.status!=="live"){showError("Live has ended","The streamer has ended this live.");setTimeout(leaveLive,2200)}else viewerCount.textContent=String(p.new.viewer_count||0)}).subscribe()}
+async function joinLive(){if(currentUser.id===liveSession.broadcaster_id){showError("You are the streamer","Use another account to watch this live.");return}const existing=await supabaseClient.from("live_viewers").select("id").eq("session_id",liveSession.id).eq("user_id",currentUser.id).maybeSingle();if(existing.data)await supabaseClient.from("live_viewers").update({left_at:null}).eq("id",existing.data.id);else await supabaseClient.from("live_viewers").insert({session_id:liveSession.id,user_id:currentUser.id,joined_at:new Date().toISOString(),left_at:null});viewerJoined=true;await refreshViewerCount();await sendSignal("join",{viewer_id:currentUser.id})}
+async function leaveLive(){try{if(currentUser&&liveSession&&viewerJoined)await supabaseClient.from("live_viewers").update({left_at:new Date().toISOString()}).eq("session_id",liveSession.id).eq("user_id",currentUser.id)}catch(e){console.error(e)}viewerJoined=false;if(peerConnection){try{peerConnection.close()}catch(e){}peerConnection=null}if(signalChannel){try{await supabaseClient.removeChannel(signalChannel)}catch(e){}signalChannel=null}if(sessionChannel){try{await supabaseClient.removeChannel(sessionChannel)}catch(e){}sessionChannel=null}location.href="video.html"}
+function toggleMute(){muted=!muted;video.muted=muted;document.getElementById("muteBtn").innerHTML=muted?'<i class="fas fa-volume-xmark"></i>':'<i class="fas fa-volume-high"></i>';toast(muted?"Sound off":"Sound on");if(!muted)video.play().catch(()=>{})}
+window.leaveLive=leaveLive;window.toggleMute=toggleMute;
+async function init(){try{setLoading("Loading live...");if(!await loadUser())return;if(!await loadLive())return;await loadStreamer();createPeer();subscribeSignals();subscribeSession();await joinLive();setLoading("Waiting for the streamer...")}catch(e){console.error(e);showError("Live error",e.message||"Unable to connect to this live.")}}
+init();
+window.addEventListener("pagehide",()=>{if(peerConnection)peerConnection.close()});
+})();
+</script>
+</body>
+</html>
