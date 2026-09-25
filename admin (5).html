@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - StudentX</title>
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #0f0f1a;
+            color: #fff;
+            height: 100%;
+            width: 100%;
+            display: flex;
+        }
+
+        /* --- AUTH MODAL --- */
+        #authModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 15, 26, 0.95); z-index: 9999;
+            display: none; align-items: center; justify-content: center;
+        }
+        #authModal.show { display: flex; }
+        .auth-card {
+            background: #1a1a2e; padding: 30px; border-radius: 15px;
+            border: 1px solid #2c2c3e; width: 100%; max-width: 400px; text-align: center;
+        }
+        .auth-card h2 { margin-bottom: 8px; color: #fff; font-size: 22px; }
+        .auth-card p { font-size: 12px; color: #888; margin-bottom: 18px; }
+        .auth-card input {
+            width: 100%; padding: 12px 15px; background: #0f0f1a; border: 1px solid #2c2c3e;
+            color: #fff; border-radius: 8px; margin-bottom: 15px; font-size: 14px; outline: none;
+        }
+        .auth-card button {
+            width: 100%; padding: 12px; background: #8A2BE2; color: #fff; border: none;
+            border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 15px;
+        }
+        #deniedBox {
+            display: none; text-align: center; margin: 100px auto; color: #888;
+            max-width: 400px;
+        }
+        #deniedBox i { font-size: 32px; display: block; margin-bottom: 14px; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 260px;
+            background-color: #1a1a2e;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #2c2c3e;
+            position: sticky;
+            top: 0;
+        }
+        .sidebar-header {
+            padding: 25px 20px;
+            font-size: 22px;
+            font-weight: bold;
+            border-bottom: 1px solid #2c2c3e;
+            color: #fff;
+        }
+        .sidebar-header span { color: #8A2BE2; }
+        
+        .sidebar-nav {
+            flex-grow: 1;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            overflow-y: auto;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: #b0b3b8;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .nav-item:hover { background-color: #2c2c3e; color: #fff; }
+        .nav-item.active {
+            background-color: #8A2BE2;
+            color: #fff;
+        }
+        .nav-item i { width: 20px; text-align: center; }
+
+        .sidebar-footer {
+            padding: 20px;
+            border-top: 1px solid #2c2c3e;
+        }
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #ff4b4b;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            background: none; border: none; width: 100%; text-align: left;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .top-bar h1 { font-size: 24px; }
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #1a1a2e;
+            padding: 8px 15px;
+            border-radius: 25px;
+            border: 1px solid #2c2c3e;
+        }
+        .admin-profile img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; background: #2c2c3e; }
+        .admin-profile span { font-size: 14px; font-weight: 600; }
+
+        /* --- STATS GRID --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+        .stat-card {
+            background-color: #1a1a2e;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #2c2c3e;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background-color: #2c1a40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A2BE2;
+            font-size: 20px;
+        }
+        .stat-info h3 { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+        .stat-info p { font-size: 13px; color: #888; }
+
+        /* --- SECTIONS --- */
+        .dashboard-section { display: none; }
+        .dashboard-section.active { display: block; }
+
+        .card {
+            background-color: #1a1a2e;
+            border: 1px solid #2c2c3e;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .card-header h3 { font-size: 17px; }
+
+        /* --- TABLES --- */
+        .table-container { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14px; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid #2c2c3e; }
+        th { background-color: #22223b; color: #b0b3b8; font-weight: 600; }
+        tr:hover { background-color: rgba(255,255,255,0.02); }
+
+        .btn {
+            padding: 6px 12px; border-radius: 6px; border: none; font-size: 12px; font-weight: 600; cursor: pointer; margin-right: 5px;
+        }
+        .btn:disabled { opacity: .5; cursor: not-allowed; }
+        .btn-danger { background-color: #ff4b4b; color: #fff; }
+        .btn-success { background-color: #4caf50; color: #fff; }
+        .btn-primary { background-color: #8A2BE2; color: #fff; }
+        .btn-warning { background-color: #fbbf24; color: #000; }
+
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 13px; color: #b0b3b8; margin-bottom: 6px; }
+        .form-control {
+            width: 100%; padding: 10px 14px; background: #0f0f1a; border: 1px solid #2c2c3e;
+            color: #fff; border-radius: 8px; font-size: 14px; outline: none;
+        }
+
+        .warn-note {
+            font-size: 12px; color: #fbbf24; background: rgba(251,191,36,.08);
+            border: 1px solid rgba(251,191,36,.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            html, body { flex-direction: column; }
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .sidebar-nav { flex-direction: row; overflow-x: auto; }
+            .main-content { height: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="authModal">
+        <div class="auth-card">
+            <h2>Admin Authentication</h2>
+            <p>Enter admin password to access control panel.</p>
+            <input type="password" id="adminPasswordInput" placeholder="Enter Admin Password" onkeydown="if(event.key==='Enter')verifyAdminPassword()">
+            <button onclick="verifyAdminPassword()">Login to Dashboard</button>
+        </div>
+    </div>
+
+    <div id="deniedBox">
+        <i class="fas fa-lock"></i>
+        This StudentX account is not registered as an admin.
+        <div style="margin-top:16px"><button class="btn btn-primary" onclick="location.href='home.html'">Back to Home</button></div>
+    </div>
+
+    <div class="sidebar" id="sidebar" style="display:none">
+        <div class="sidebar-header">Student<span>X</span> Admin</div>
+        
+        <div class="sidebar-nav">
+            <a class="nav-item active" onclick="switchSection('dashboard', this)"><i class="fas fa-gauge"></i> Dashboard</a>
+            <a class="nav-item" onclick="switchSection('users', this)"><i class="fas fa-users"></i> Users &amp; Suspensions</a>
+            <a class="nav-item" onclick="switchSection('content', this)"><i class="fas fa-video"></i> Content Moderation</a>
+            <a class="nav-item" onclick="switchSection('approvals', this)"><i class="fas fa-clipboard-check"></i> Ad Approvals</a>
+            <a class="nav-item" onclick="switchSection('studyhub', this)"><i class="fas fa-book"></i> StudyHub Courses</a>
+            <a class="nav-item" onclick="switchSection('broadcast', this)"><i class="fas fa-bullhorn"></i> Broadcast Alerts</a>
+            <a class="nav-item" onclick="switchSection('admins', this)"><i class="fas fa-shield-halved"></i> Admin Management</a>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="logout-btn" onclick="adminLogout()"><i class="fas fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </div>
+
+    <div class="main-content" id="mainContent" style="display:none">
+        
+        <div class="top-bar">
+            <h1 id="pageTitle">Dashboard Overview</h1>
+            <div class="admin-profile">
+                <img id="adminAvatarImg" src="" alt="Admin">
+                <span id="adminNameLabel">Loading...</span>
+            </div>
+        </div>
+
+        <div id="section-dashboard" class="dashboard-section active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-info"><h3 id="statTotalUsers">0</h3><p>Total Users</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-video"></i></div>
+                    <div class="stat-info"><h3 id="statTotalVideos">0</h3><p>Total Videos</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-flag"></i></div>
+                    <div class="stat-info"><h3 id="statPendingReports">0</h3><p>Pending Ad Approvals</p></div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-user-slash"></i></div>
+                    <div class="stat-info"><h3 id="statSuspended">0</h3><p>Suspended Users</p></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header"><h3>System Status</h3></div>
+                <p style="color: #888; font-size: 14px;">All Supabase database connections, storage buckets, and auth services are running smoothly.</p>
+            </div>
+        </div>
+
+        <!-- 2. USERS & SUSPENSIONS -->
+        <div id="section-users" class="dashboard-section">
+            <div class="warn-note"><i class="fas fa-triangle-exclamation"></i> Suspending a user here only marks their profile. Make sure <code>login.js</code> checks <code>is_suspended</code> and blocks sign-in, or this has no real effect.</div>
+            <div class="card">
+                <div class="card-header"><h3>Manage All Users (Students &amp; Non-Students)</h3></div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name / Username</th>
+                                <th>Email</th>
+                                <th>Verified Status</th>
+                                <th>Premium Status</th>
+                                <th>Account Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr><td colspan="6" style="text-align:center; color:#888;">Loading users...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. CONTENT MODERATION -->
+        <div id="section-content" class="dashboard-section">
+            <div class="card">
+                <div class="card-header"><h3>Videos, Posts &amp; Comments Moderation</h3></div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Author ID</th>
+                                <th>Content / Caption</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contentTableBody">
+                            <tr><td colspan="4" style="text-align:center; color:#888;">Loading content...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. AD APPROVALS (campaigns table, submitted from ads.html) -->
+        <div id="section-approvals" class="dashboard-section">
+            <div class="card">
+                <div class="card-header"><h3>Pending Ad Campaigns</h3></div>
+                <p style="color:#888;font-size:12px;margin-bottom:15px">Submitted by students from their own Ads Manager. Job and scholarship postings are not moderated here — those pages are not yet connected to the database.</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Details</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approvalsTableBody">
+                            <tr><td colspan="4" style="text-align:center; color:#888;">Loading pending approvals...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. STUDYHUB COURSES -->
+        <div id="section-studyhub" class="dashboard-section">
+            <div class="card">
+                <div class="card-header"><h3>StudyHub Courses Management</h3></div>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Course Title</th>
+                                <th>Category</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coursesTableBody">
+                            <tr><td colspan="3" style="text-align:center; color:#888;">Loading courses...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. BROADCAST ALERTS -->
+        <div id="section-broadcast" class="dashboard-section">
+            <div class="card">
+                <div class="card-header"><h3>Send Direct Notification to All StudentX Users</h3></div>
+                <div class="form-group">
+                    <label>Notification Title</label>
+                    <input type="text" id="broadcastTitle" class="form-control" placeholder="e.g. Important Update">
+                </div>
+                <div class="form-group">
+                    <label>Notification Message</label>
+                    <textarea id="broadcastMsg" class="form-control" rows="4" placeholder="Write your message here..."></textarea>
+                </div>
+                <button class="btn btn-primary" id="broadcastBtn" onclick="sendBroadcastNotification()">Send to All Users</button>
+            </div>
+        </div>
+
+        <!-- 7. ADMIN MANAGEMENT -->
+        <div id="section-admins" class="dashboard-section">
+            <div class="card">
+                <div class="card-header"><h3>Admin Team Management</h3></div>
+                <div class="form-group">
+                    <label>Add New Admin Email</label>
+                    <input type="text" id="newAdminInput" class="form-control" placeholder="Enter the user's account email">
+                    <button class="btn btn-primary" style="margin-top: 10px;" onclick="addNewAdmin()">Add Admin</button>
+                </div>
+                <div class="table-container" style="margin-top: 20px;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Admin Email</th>
+                                <th>Added Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminsTableBody">
+                            <tr><td colspan="3" style="text-align:center; color:#888;">Loading admins...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- SUPABASE SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        const ADMIN_PASSWORD = "adminpassword123";
+        let adminAuthenticated = false;
+        let currentAdminUser = null;
+
+        function escapeAdminHTML(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        /* =========================================================
+           GATE 1: must be a real, logged-in Supabase user whose
+           email is listed in admin_users.
+           GATE 2: must know the admin password.
+        ========================================================= */
+        async function initGate() {
+            const r = await supabaseClient.auth.getUser();
+            currentAdminUser = r.data && r.data.user;
+
+            if (!currentAdminUser) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            const email = (currentAdminUser.email || "").toLowerCase();
+            const chk = await supabaseClient.from("admin_users").select("id").ilike("email", email).maybeSingle();
+
+            if (chk.error || !chk.data) {
+                document.getElementById("deniedBox").style.display = "block";
+                return;
+            }
+
+            // Show the real logged-in admin's name/photo, not a placeholder
+            const p = await supabaseClient.from("profiles").select("full_name,username,avatar_url").eq("id", currentAdminUser.id).maybeSingle();
+            const label = (p.data && (p.data.full_name || p.data.username)) || currentAdminUser.email;
+            document.getElementById("adminNameLabel").textContent = label;
+            if (p.data && p.data.avatar_url) document.getElementById("adminAvatarImg").src = p.data.avatar_url;
+
+            document.getElementById("authModal").classList.add("show");
+            document.getElementById("adminPasswordInput").focus();
+        }
+
+        function verifyAdminPassword() {
+            const pwd = document.getElementById("adminPasswordInput").value;
+
+            if (pwd === ADMIN_PASSWORD) {
+                adminAuthenticated = true;
+                document.getElementById("authModal").classList.remove("show");
+                document.getElementById("adminPasswordInput").value = "";
+                document.getElementById("sidebar").style.display = "flex";
+                document.getElementById("mainContent").style.display = "block";
+                initAdminDashboard();
+            } else {
+                adminAuthenticated = false;
+                alert("Incorrect Admin Password!");
+                document.getElementById("adminPasswordInput").value = "";
+                document.getElementById("adminPasswordInput").focus();
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            initGate();
+        });
+
+        async function adminLogout() {
+            adminAuthenticated = false;
+            await supabaseClient.auth.signOut();
+            window.location.href = "login.html";
+        }
+
+        function switchSection(sectionId, el) {
+            document.querySelectorAll(".dashboard-section").forEach(sec => sec.classList.remove("active"));
+            document.querySelectorAll(".sidebar-nav .nav-item").forEach(item => item.classList.remove("active"));
+            
+            document.getElementById("section-" + sectionId).classList.add("active");
+            el.classList.add("active");
+            document.getElementById("pageTitle").textContent = el.textContent.trim();
+        }
+
+        async function initAdminDashboard() {
+            loadDashboardStats();
+            loadAllUsers();
+            loadAllContent();
+            loadApprovals();
+            loadStudyHubCourses();
+            loadAdminList();
+        }
+
+        async function loadDashboardStats() {
+            try {
+                const usersRes = await supabaseClient.from("profiles").select("*", { count: "exact", head: true });
+                document.getElementById("statTotalUsers").textContent = usersRes.count || 0;
+
+                const vidRes = await supabaseClient.from("videos").select("*", { count: "exact", head: true });
+                document.getElementById("statTotalVideos").textContent = vidRes.count || 0;
+
+                const pendingRes = await supabaseClient.from("campaigns").select("*", { count: "exact", head: true }).eq("status", "pending");
+                document.getElementById("statPendingReports").textContent = pendingRes.count || 0;
+
+                const suspendedRes = await supabaseClient.from("profiles").select("*", { count: "exact", head: true }).eq("is_suspended", true);
+                document.getElementById("statSuspended").textContent = suspendedRes.count || 0;
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadAllUsers() {
+            const tbody = document.getElementById("usersTableBody");
+            try {
+                const { data, error } = await supabaseClient.from("profiles").select("*");
+                if (error) throw error;
+
+                if (!data || data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">No users found.</td></tr>`;
+                    return;
+                }
+
+                let html = "";
+                data.forEach(u => {
+                    const isVerified = u.verified === true || u.is_verified === true;
+                    const verifiedStatus = isVerified
+                        ? '<span style="color:#4caf50;">Verified</span>'
+                        : '<span style="color:#888;">Unverified</span>';
+
+                    const premiumPlan = String(u.premium_plan || "").toLowerCase();
+                    let premiumStatus = '<span style="color:#888;">None</span>';
+                    if (premiumPlan === "plus") {
+                        premiumStatus = '<span style="color:#f5b700; font-weight:700;">Premium Plus ✓</span>';
+                    } else if (premiumPlan === "standard") {
+                        premiumStatus = '<span style="color:#9b4dff; font-weight:700;">Premium ✓</span>';
+                    }
+
+                    const isSuspended = u.is_suspended
+                        ? '<span style="color:#ff4b4b;">Suspended</span>'
+                        : '<span style="color:#4caf50;">Active</span>';
+
+                    html += `<tr>
+                        <td><b>${escapeAdminHTML(u.full_name || 'User')}</b><br><small style="color:#888;">@${escapeAdminHTML(u.username || 'username')}</small></td>
+                        <td>${escapeAdminHTML(u.email || 'N/A')}</td>
+                        <td>
+                            ${verifiedStatus}
+                            <button class="btn btn-primary" style="margin-left:5px;" onclick="toggleVerify('${u.id}', ${!isVerified})">
+                                ${isVerified ? 'Unverify' : 'Verify'}
+                            </button>
+                        </td>
+                        <td>
+                            ${premiumStatus}
+                            <br>
+                            <button class="btn btn-primary" onclick="setPremiumPlan('${u.id}', 'standard')">Give Premium</button>
+                            <button class="btn btn-warning" onclick="setPremiumPlan('${u.id}', 'plus')">Give Premium Plus</button>
+                            <button class="btn btn-danger" onclick="setPremiumPlan('${u.id}', null)">Remove Premium</button>
+                        </td>
+                        <td>${isSuspended}</td>
+                        <td>
+                            <button class="btn ${u.is_suspended ? 'btn-success' : 'btn-warning'}" onclick="toggleSuspendUser('${u.id}', ${!u.is_suspended})">
+                                ${u.is_suspended ? 'Unsuspend' : 'Suspend'}
+                            </button>
+                            <button class="btn btn-danger" onclick="deleteUser('${u.id}')">Delete</button>
+                        </td>
+                    </tr>`;
+                });
+                tbody.innerHTML = html;
+            } catch(e) {
+                console.error("Error loading users:", e);
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ff4b4b;">Error loading users.</td></tr>`;
+            }
+        }
+
+        async function toggleVerify(userId, status) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            try {
+                const { error } = await supabaseClient.from("profiles").update({ verified: status }).eq("id", userId);
+                if (error) throw error;
+                await loadAllUsers();
+            } catch (e) {
+                console.error("Verify update error:", e);
+                alert("Could not update verified status: " + (e.message || "Unknown error"));
+            }
+        }
+
+        async function setPremiumPlan(userId, plan) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+
+            const label = plan === "plus" ? "StudentX Premium Plus" : plan === "standard" ? "StudentX Premium" : "No Premium";
+            if (!confirm(`Set this user's premium status to "${label}"?`)) return;
+
+            try {
+                const { error } = await supabaseClient.from("profiles").update({ premium_plan: plan }).eq("id", userId);
+                if (error) throw error;
+                await loadAllUsers();
+            } catch (e) {
+                console.error("Premium update error:", e);
+                alert("Could not update premium status: " + (e.message || "Unknown error"));
+            }
+        }
+
+        async function toggleSuspendUser(userId, status) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            const { error } = await supabaseClient.from("profiles").update({ is_suspended: status }).eq("id", userId);
+            if (error) {
+                console.error(error);
+                alert("Could not update account status: " + (error.message || "Unknown error"));
+                return;
+            }
+            loadAllUsers();
+            loadDashboardStats();
+        }
+
+        async function deleteUser(userId) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            if(!confirm("Are you sure you want to delete this user's profile? This does not delete their login account.")) return;
+            const { error } = await supabaseClient.from("profiles").delete().eq("id", userId);
+            if (error) {
+                console.error(error);
+                alert("Could not delete user: " + (error.message || "Unknown error"));
+                return;
+            }
+            loadAllUsers();
+            loadDashboardStats();
+        }
+
+        async function loadAllContent() {
+            const tbody = document.getElementById("contentTableBody");
+            try {
+                const [postsRes, videosRes, repostsRes] = await Promise.all([
+                    supabaseClient.from("posts").select("id, User_id, content, image_url, Create_at").order("Create_at", { ascending: false }).limit(30),
+                    supabaseClient.from("videos").select("id, user_id, caption, created_at").order("created_at", { ascending: false }).limit(30),
+                    supabaseClient.from("reposts").select("id, user_id, post_id, created_at").order("created_at", { ascending: false }).limit(30)
+                ]);
+
+                let html = "";
+
+                if (postsRes.data) {
+                    postsRes.data.forEach(p => {
+                        html += `<tr>
+                            <td>Photo/Post</td>
+                            <td>${escapeAdminHTML(p.User_id)}</td>
+                            <td>${escapeAdminHTML(p.content || (p.image_url ? 'Photo post' : 'No content'))}</td>
+                            <td><button class="btn btn-danger" onclick="deleteContent('posts', '${escapeAdminHTML(p.id)}')">Delete Post</button></td>
+                        </tr>`;
+                    });
+                }
+
+                if (videosRes.data) {
+                    videosRes.data.forEach(v => {
+                        html += `<tr>
+                            <td>Video</td>
+                            <td>${escapeAdminHTML(v.user_id)}</td>
+                            <td>${escapeAdminHTML(v.caption || 'No caption')}</td>
+                            <td><button class="btn btn-danger" onclick="deleteContent('videos', '${escapeAdminHTML(v.id)}')">Delete Video</button></td>
+                        </tr>`;
+                    });
+                }
+
+                if (repostsRes.data) {
+                    repostsRes.data.forEach(r => {
+                        html += `<tr>
+                            <td>Repost</td>
+                            <td>${escapeAdminHTML(r.user_id)}</td>
+                            <td>Reposted Post ID: ${escapeAdminHTML(r.post_id)}</td>
+                            <td><button class="btn btn-danger" onclick="deleteContent('reposts', '${escapeAdminHTML(r.id)}')">Remove Repost</button></td>
+                        </tr>`;
+                    });
+                }
+
+                tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center; color:#888;">No content found.</td></tr>`;
+            } catch(e) {
+                console.error("Error loading content:", e);
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ff4b4b;">Error loading content.</td></tr>`;
+            }
+        }
+
+        async function deleteContent(table, id) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            if(!confirm("Delete this content?")) return;
+            const { error } = await supabaseClient.from(table).delete().eq("id", id);
+            if (error) { alert("Could not delete: " + error.message); return; }
+            loadAllContent();
+        }
+
+        /* =========================================================
+           AD APPROVALS — reads the "campaigns" table (from ads.html),
+           not the "ads" table (which is for admin-created video ads
+           in adsmanager.html and is never "pending").
+        ========================================================= */
+        async function loadApprovals() {
+            const tbody = document.getElementById("approvalsTableBody");
+            try {
+                const { data: campaigns, error } = await supabaseClient
+                    .from("campaigns")
+                    .select("*")
+                    .eq("status", "pending")
+                    .order("created_at", { ascending: false });
+                if (error) throw error;
+
+                const rows = campaigns || [];
+                const userIds = [...new Set(rows.map(c => c.user_id).filter(Boolean))];
+                let profileMap = {};
+                if (userIds.length) {
+                    const profRes = await supabaseClient.from("profiles").select("id,full_name,username,email").in("id", userIds);
+                    (profRes.data || []).forEach(p => { profileMap[p.id] = p; });
+                }
+
+                let html = "";
+                rows.forEach(c => {
+                    const owner = profileMap[c.user_id];
+                    const ownerLabel = owner ? (owner.full_name || owner.username || owner.email) : "Unknown user";
+
+                    html += `<tr>
+                        <td>Ad Campaign</td>
+                        <td>
+                            <b>${escapeAdminHTML(c.title)}</b><br>
+                            <small style="color:#888">
+                                ${escapeAdminHTML(ownerLabel)} · goal: ${escapeAdminHTML(c.campaign_type)} ·
+                                $${Number(c.budget || 0).toFixed(2)} · ${escapeAdminHTML(c.duration_days || 0)} days
+                            </small>
+                        </td>
+                        <td>Pending</td>
+                        <td>
+                            <button class="btn btn-success" onclick="approveCampaign('${escapeAdminHTML(c.id)}')">Approve</button>
+                            <button class="btn btn-danger" onclick="rejectCampaign('${escapeAdminHTML(c.id)}')">Reject</button>
+                        </td>
+                    </tr>`;
+                });
+
+                tbody.innerHTML = html || `<tr><td colspan="4" style="text-align:center; color:#888;">No pending approvals.</td></tr>`;
+            } catch(e) {
+                console.error("Approvals error:", e);
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#ff4b4b;">Unable to load approvals: ${escapeAdminHTML(e.message || "")}</td></tr>`;
+            }
+        }
+
+        async function approveCampaign(id) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            const { error } = await supabaseClient
+                .from("campaigns")
+                .update({ status: "active", started_date: new Date().toISOString() })
+                .eq("id", id);
+            if (error) { alert("Could not approve: " + error.message); return; }
+            loadApprovals();
+            loadDashboardStats();
+        }
+
+        async function rejectCampaign(id) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            if (!confirm("Reject this ad campaign?")) return;
+            const { error } = await supabaseClient
+                .from("campaigns")
+                .update({ status: "rejected" })
+                .eq("id", id);
+            if (error) { alert("Could not reject: " + error.message); return; }
+            loadApprovals();
+            loadDashboardStats();
+        }
+
+        async function loadStudyHubCourses() {
+            const tbody = document.getElementById("coursesTableBody");
+            try {
+                const { data } = await supabaseClient.from("courses").select("*");
+                let html = "";
+                if(data) {
+                    data.forEach(c => {
+                        html += `<tr>
+                            <td>${escapeAdminHTML(c.title)}</td>
+                            <td>${escapeAdminHTML(c.category || 'General')}</td>
+                            <td><button class="btn btn-danger" onclick="deleteCourse('${escapeAdminHTML(c.id)}')">Delete Course</button></td>
+                        </tr>`;
+                    });
+                }
+                tbody.innerHTML = html || `<tr><td colspan="3" style="text-align:center; color:#888;">No courses found.</td></tr>`;
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#888;">Courses table ready.</td></tr>`; }
+        }
+
+        async function deleteCourse(id) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            if(!confirm("Delete this course?")) return;
+            const { error } = await supabaseClient.from("courses").delete().eq("id", id);
+            if (error) { alert("Could not delete: " + error.message); return; }
+            loadStudyHubCourses();
+        }
+
+        async function sendBroadcastNotification() {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+
+            const title = document.getElementById("broadcastTitle").value.trim();
+            const message = document.getElementById("broadcastMsg").value.trim();
+
+            if(!title || !message) {
+                alert("Please enter both title and message.");
+                return;
+            }
+
+            const btn = document.getElementById("broadcastBtn");
+            btn.disabled = true;
+            btn.textContent = "Sending...";
+
+            try {
+                const { data: users, error: usersError } = await supabaseClient.from("profiles").select("id");
+                if (usersError) throw usersError;
+
+                if (!users || users.length === 0) {
+                    alert("No users found.");
+                    return;
+                }
+
+                // Only fields that actually exist on the notifications table.
+                // ("target" was removed — it isn't a real column and was
+                // silently failing every broadcast.)
+                const notifications = users.map(user => ({
+                    recipient_id: user.id,
+                    title: title,
+                    message: message,
+                    type: "broadcast",
+                    is_read: false
+                }));
+
+                const { error: notificationError } = await supabaseClient.from("notifications").insert(notifications);
+                if (notificationError) throw notificationError;
+
+                alert(`Notification sent successfully to ${users.length} users!`);
+                document.getElementById("broadcastTitle").value = "";
+                document.getElementById("broadcastMsg").value = "";
+
+            } catch(e) {
+                console.error("Broadcast notification error:", e);
+                alert("Detailed Error: " + (e.message || JSON.stringify(e)));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Send to All Users";
+            }
+        }
+
+        async function loadAdminList() {
+            const tbody = document.getElementById("adminsTableBody");
+            try {
+                const { data } = await supabaseClient.from("admin_users").select("*").order("created_at", { ascending: true });
+                let html = "";
+                if(data) {
+                    data.forEach(adm => {
+                        html += `<tr>
+                            <td>${escapeAdminHTML(adm.email || adm.user_id)}</td>
+                            <td>${adm.created_at ? new Date(adm.created_at).toLocaleDateString() : "—"}</td>
+                            <td><button class="btn btn-danger" onclick="removeAdmin('${escapeAdminHTML(adm.id)}')">Revoke Admin</button></td>
+                        </tr>`;
+                    });
+                }
+                tbody.innerHTML = html || `<tr><td colspan="3" style="text-align:center; color:#888;">No additional admins.</td></tr>`;
+            } catch(e) { tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:#888;">Admin management table ready.</td></tr>`; }
+        }
+
+        async function addNewAdmin() {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            const val = document.getElementById("newAdminInput").value.trim().toLowerCase();
+            if(!val) return;
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) { alert("Enter a valid email address."); return; }
+            try {
+                const { error } = await supabaseClient.from("admin_users").insert({ email: val });
+                if (error) throw error;
+                alert("Admin added successfully!");
+                document.getElementById("newAdminInput").value = "";
+                loadAdminList();
+            } catch(e) { alert("Error adding admin: " + (e.message || "Unknown error")); }
+        }
+
+        async function removeAdmin(id) {
+            if (!adminAuthenticated) { alert("Admin password is required."); return; }
+            if(!confirm("Revoke admin access?")) return;
+            const { error } = await supabaseClient.from("admin_users").delete().eq("id", id);
+            if (error) { alert("Could not revoke: " + error.message); return; }
+            loadAdminList();
+        }
+    </script>
+</body>
+</html>
