@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Go Live - StudentX</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#09090d;--card:#12121a;--text:#fff;--muted:#92929d;--border:rgba(255,255,255,.09);--primary:#8a2be2;--danger:#ff315c}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;min-height:100%;background:var(--bg);color:var(--text)}
+body{padding-bottom:70px}.page{width:100%;max-width:500px;margin:auto;min-height:100dvh}
+.header{height:62px;padding:0 15px;display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(9,9,13,.96);backdrop-filter:blur(12px);z-index:20}
+.back{border:0;background:none;color:#fff;font-size:20px;width:38px;height:38px}.title{font-size:19px;font-weight:700}
+.preview{margin:14px;border-radius:18px;overflow:hidden;background:#000;position:relative;aspect-ratio:9/16;border:1px solid var(--border)}
+#preview{width:100%;height:100%;object-fit:cover;display:block;background:#000}.preview-cover{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#111;color:#777;flex-direction:column;gap:10px}.preview-cover i{font-size:34px}.preview-cover.hidden{display:none}
+.live-dot{position:absolute;top:12px;left:12px;background:var(--danger);padding:6px 10px;border-radius:7px;font-size:11px;font-weight:800;display:none}.live-dot.show{display:block}
+.camera-tools{position:absolute;right:12px;bottom:12px;display:flex;gap:8px}.tool{width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(0,0,0,.6);color:#fff}.tool.off{color:#ff667d}
+.form{padding:0 14px}.label{display:block;color:#aaa;font-size:12px;margin:14px 0 7px}.input,.select{width:100%;height:48px;border:1px solid var(--border);background:var(--card);color:#fff;border-radius:12px;padding:0 13px;outline:none}.input:focus,.select:focus{border-color:var(--primary)}
+textarea.input{height:88px;padding:12px;resize:none}.actions{display:flex;gap:10px;margin-top:18px}.btn{flex:1;height:48px;border:0;border-radius:12px;font-weight:700;font-size:14px}.start{background:linear-gradient(135deg,#8a2be2,#5d3fd3);color:#fff}.end{background:#24121a;color:#ff5c78;border:1px solid rgba(255,49,92,.25);display:none}.btn:disabled{opacity:.45}
+.status{margin:14px;padding:12px 13px;border:1px solid var(--border);border-radius:12px;background:var(--card);font-size:12px;color:var(--muted);line-height:1.5}.status.ok{color:#71e6a4}.status.err{color:#ff7188}
+.notice{padding:0 14px;color:#777;font-size:11px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="page">
+<header class="header"><button class="back" onclick="history.back()"><i class="fas fa-arrow-left"></i></button><div class="title">Go Live</div></header>
+<section class="preview">
+<video id="preview" autoplay playsinline muted></video>
+<div id="cover" class="preview-cover"><i class="fas fa-video"></i><span>Camera preview</span></div>
+<div id="liveDot" class="live-dot">LIVE</div>
+<div class="camera-tools"><button id="flipBtn" class="tool" title="Switch camera"><i class="fas fa-camera-rotate"></i></button><button id="muteBtn" class="tool" title="Mute microphone"><i class="fas fa-microphone"></i></button></div>
+</section>
+<div class="form">
+<label class="label">Live title</label><input id="title" class="input" maxlength="100" placeholder="What are you going live about?">
+<label class="label">Category</label><select id="category" class="select"><option value="general">General</option><option value="education">Education</option><option value="gaming">Gaming</option><option value="music">Music</option><option value="sports">Sports</option><option value="technology">Technology</option></select>
+<label class="label">Description</label><textarea id="description" class="input" maxlength="500" placeholder="Tell viewers what this live is about..."></textarea>
+<div class="actions"><button id="startBtn" class="btn start"><i class="fas fa-broadcast-tower"></i> Start Live</button><button id="endBtn" class="btn end"><i class="fas fa-stop"></i> End Live</button></div>
+</div>
+<div id="status" class="status">Preparing camera and microphone...</div>
+<div class="notice">StudentX Live uses your device camera and microphone. Keep this page open while broadcasting.</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="nav.js"></script>
+<script>
+(function(){
+'use strict';
+const preview=document.getElementById('preview'),cover=document.getElementById('cover'),statusBox=document.getElementById('status'),startBtn=document.getElementById('startBtn'),endBtn=document.getElementById('endBtn'),muteBtn=document.getElementById('muteBtn'),flipBtn=document.getElementById('flipBtn');
+let user=null,stream=null,sessionId=null,channel=null,facing='user',muted=false;
+function status(msg,type){statusBox.textContent=msg;statusBox.className='status'+(type?' '+type:'')}
+async function getUser(){const r=await supabaseClient.auth.getUser();if(r.error)throw r.error;if(!r.data.user)throw new Error('Please login before going live.');user=r.data.user}
+async function camera(){if(stream)stream.getTracks().forEach(t=>t.stop());stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}},audio:true});preview.srcObject=stream;preview.muted=true;cover.classList.add('hidden');status('Camera and microphone are ready.','ok')}
+async function startLive(){if(!user)await getUser();const title=document.getElementById('title').value.trim()||'StudentX Live';const category=document.getElementById('category').value;const description=document.getElementById('description').value.trim();startBtn.disabled=true;try{if(!stream)await camera();const {data,error}=await supabaseClient.from('live_sessions').insert({broadcaster_id:user.id,title,description,category,status:'live',viewer_count:0}).select('id').single();if(error)throw error;sessionId=data.id;channel=supabaseClient.channel('live-signal-'+sessionId);channel.on('postgres_changes',{event:'INSERT',schema:'public',table:'live_signals',filter:'session_id=eq.'+sessionId},()=>{}).subscribe();document.getElementById('liveDot').classList.add('show');startBtn.style.display='none';endBtn.style.display='block';status('You are live. The next step connects viewers to this broadcast with WebRTC.','ok')}catch(e){console.error(e);status(e.message||'Unable to start live stream.','err');startBtn.disabled=false}}
+async function endLive(){if(!sessionId)return;endBtn.disabled=true;try{await supabaseClient.from('live_sessions').update({status:'ended',ended_at:new Date().toISOString()}).eq('id',sessionId).eq('broadcaster_id',user.id)}catch(e){console.error(e)}finally{if(channel)supabaseClient.removeChannel(channel);if(stream)stream.getTracks().forEach(t=>t.stop());sessionId=null;document.getElementById('liveDot').classList.remove('show');endBtn.style.display='none';startBtn.style.display='block';startBtn.disabled=false;status('Live stream ended.','ok');preview.srcObject=null;cover.classList.remove('hidden')}}
+muteBtn.onclick=()=>{if(!stream)return;muted=!muted;stream.getAudioTracks().forEach(t=>t.enabled=!muted);muteBtn.classList.toggle('off',muted);muteBtn.innerHTML=muted?'<i class="fas fa-microphone-slash"></i>':'<i class="fas fa-microphone"></i>'};
+flipBtn.onclick=async()=>{if(sessionId)return;facing=facing==='user'?'environment':'user';try{await camera()}catch(e){status(e.message||'Unable to switch camera.','err')}};
+startBtn.onclick=startLive;endBtn.onclick=endLive;
+window.addEventListener('beforeunload',()=>{if(stream)stream.getTracks().forEach(t=>t.stop())});
+(async()=>{try{await getUser();await camera()}catch(e){console.error(e);status(e.message||'Camera access failed.','err');startBtn.disabled=true}})();
+})();
+</script>
+</body>
+</html>
