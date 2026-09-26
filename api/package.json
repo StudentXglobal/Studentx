@@ -1,8 +1,7 @@
 {
-  "name": "studentx",
-  "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "@google/genai": "latest"
+    "livekit-server-sdk": "^2.19.1",
+    "@supabase/supabase-js": "^2.117.2"
   }
 }
