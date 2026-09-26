@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Jobs - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:80px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{font-size:19px;font-weight:800}
+.hdr-post{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+
+.search{display:flex;align-items:center;gap:10px;padding:0 14px;height:44px;border-radius:12px;background:var(--card);border:1px solid var(--border)}
+.search i{color:var(--muted);font-size:14px}
+.search input{flex:1;border:0;outline:0;background:none;color:var(--text);font-size:13px}
+.search input::placeholder{color:var(--muted)}
+
+/* CHIPS */
+.chips{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--border);white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff}
+
+/* LIST */
+.list{padding:14px}
+
+.job-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer}
+.job-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.job-logo{width:46px;height:46px;border-radius:12px;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:20px;flex-shrink:0}
+.job-info h3{font-size:15px;margin-bottom:3px;line-height:1.3}
+.job-info p{font-size:12px;color:var(--muted)}
+
+.job-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tag{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);background:var(--card-2);padding:5px 11px;border-radius:8px}
+.tag i{color:var(--accent);font-size:11px}
+.tag.salary{color:#4caf50}
+.tag.salary i{color:#4caf50}
+
+.job-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:12px}
+.job-time{font-size:11px;color:var(--muted)}
+.apply-btn{background:var(--grad);color:#fff;border:0;padding:8px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer}
+.apply-btn.done{background:var(--card-2);color:var(--muted)}
+.job-manage{display:flex;gap:8px}
+.manage-btn{background:var(--card-2);color:var(--text-2);border:1px solid var(--border);padding:8px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer}
+
+/* STATES */
+.center{text-align:center;padding:60px 24px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:34px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:14px;padding:10px 22px;border-radius:20px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+.skeleton{height:150px;border-radius:16px;background:var(--card);margin-bottom:12px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* SHEET */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:92vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 4px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.sheet-title i{color:var(--muted);cursor:pointer;font-size:15px}
+.form{padding:0 20px}
+.form label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form textarea,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:84px;resize:vertical}
+.form select option{color:#000}
+.row2{display:flex;gap:10px}
+.row2>div{flex:1}
+.btns{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.danger{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.3)}
+.btn:disabled{opacity:.6}
+
+/* DETAILS */
+.det-tags{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 6px}
+.det-desc{padding:10px 20px;font-size:13px;line-height:1.65;color:var(--text-2);white-space:pre-wrap}
+
+/* APPLICANTS */
+.app-row{display:flex;align-items:flex-start;gap:10px;padding:10px 20px;border-top:1px solid rgba(128,128,128,.15)}
+.app-row img{width:36px;height:36px;border-radius:50%;object-fit:cover;background:var(--card-2);flex-shrink:0}
+.app-name{font-size:13px;font-weight:700}
+.app-msg{font-size:12px;color:var(--text-2);margin-top:2px}
+.app-time{font-size:10px;color:var(--muted);margin-top:3px}
+.empty-list{text-align:center;padding:24px 20px;color:var(--muted);font-size:12px}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-l">
+      <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+      <div class="hdr-title">Jobs</div>
+    </div>
+    <button class="hdr-post" onclick="openCreate()"><i class="fas fa-plus"></i> Post</button>
+  </div>
+  <div class="search">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search jobs, internships..." oninput="onSearch(this.value)">
+  </div>
+</header>
+
+<div class="chips" id="chips">
+  <div class="chip on" data-type="all" onclick="setType('all')">All</div>
+  <div class="chip" data-type="Full-time" onclick="setType('Full-time')">Full-time</div>
+  <div class="chip" data-type="Part-time" onclick="setType('Part-time')">Part-time</div>
+  <div class="chip" data-type="Internship" onclick="setType('Internship')">Internship</div>
+  <div class="chip" data-type="Remote" onclick="setType('Remote')">Remote</div>
+  <div class="chip" data-type="Contract" onclick="setType('Contract')">Contract</div>
+</div>
+
+<div class="list" id="list"><div class="skeleton"></div><div class="skeleton"></div></div>
+
+<!-- CREATE / EDIT JOB SHEET -->
+<div class="ov" id="formOv" onclick="if(event.target===this)closeForm()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="formTitle">Post a job</span><i class="fas fa-times" onclick="closeForm()"></i></div>
+    <div class="form">
+      <label>Job title</label>
+      <input type="text" id="fTitle" maxlength="100" placeholder="e.g. Junior Frontend Developer">
+
+      <label>Company / Organization</label>
+      <input type="text" id="fCompany" maxlength="100" placeholder="e.g. Tech Innovations Ltd">
+
+      <div class="row2">
+        <div><label>Job type</label>
+          <select id="fType">
+            <option>Full-time</option>
+            <option>Part-time</option>
+            <option>Internship</option>
+            <option>Remote</option>
+            <option>Contract</option>
+          </select>
+        </div>
+        <div><label>Location</label>
+          <input type="text" id="fLocation" maxlength="80" placeholder="e.g. Lagos, NG"></div>
+      </div>
+
+      <label>Salary / Pay (optional)</label>
+      <input type="text" id="fSalary" maxlength="60" placeholder="e.g. ₦150,000 - ₦200,000">
+
+      <label>Description</label>
+      <textarea id="fDesc" maxlength="800" placeholder="Responsibilities, requirements, how to apply..."></textarea>
+
+      <div class="btns">
+        <button class="btn" onclick="closeForm()">Cancel</button>
+        <button class="btn main" id="saveBtn" onclick="saveJob()">Post Job</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILS SHEET -->
+<div class="ov" id="detailsOv" onclick="if(event.target===this)closeDetails()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="detTitle">Job details</span><i class="fas fa-times" onclick="closeDetails()"></i></div>
+    <div class="det-tags" id="detTags"></div>
+    <div class="det-desc" id="detDesc"></div>
+    <div class="form">
+      <div class="btns" id="detApplyBtns"></div>
+      <div class="btns" id="detOwnerBtns" style="display:none">
+        <button class="btn" onclick="startEditFromDetails()"><i class="fas fa-pen"></i> Edit</button>
+        <button class="btn danger" onclick="deleteJobFromDetails()"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPLY SHEET -->
+<div class="ov" id="applyOv" onclick="if(event.target===this)closeApply()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Apply for this job</span><i class="fas fa-times" onclick="closeApply()"></i></div>
+    <div class="form">
+      <label>Short note to the poster (optional)</label>
+      <textarea id="applyMsg" maxlength="400" placeholder="Introduce yourself, mention relevant experience..."></textarea>
+      <div class="btns">
+        <button class="btn" onclick="closeApply()">Cancel</button>
+        <button class="btn main" id="applySubmitBtn" onclick="submitApplication()">Send Application</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- APPLICANTS SHEET (job owner) -->
+<div class="ov" id="applicantsOv" onclick="if(event.target===this)closeApplicants()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Applicants</span><i class="fas fa-times" onclick="closeApplicants()"></i></div>
+    <div id="applicantsList"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX JOBS — fully live from Supabase
+========================================================= */
+
+let me = null, myProfile = null;
+let jobs = [];
+let appliedSet = new Set();
+let currentType = "all";
+let searchTerm = "";
+let editingJobId = null;
+let detailsJobId = null;
+let applyJobId = null;
+let searchDebounce = null;
+
+const DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="#2c2c2c"/><circle cx="30" cy="23" r="12" fill="#777"/><path d="M10 54c3-14 11-19 20-19s17 5 20 19" fill="#777"/></svg>');
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v == null) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function toast(msg){
+  const old = document.querySelector(".toast"); if (old) old.remove();
+  const d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+}
+function timeAgo(date){
+  const s = Math.floor((Date.now() - new Date(date).getTime()) / 1000);
+  if (isNaN(s)) return "";
+  if (s < 60) return "Posted just now";
+  if (s < 3600) return "Posted " + Math.floor(s/60) + "m ago";
+  if (s < 86400) return "Posted " + Math.floor(s/3600) + "h ago";
+  if (s < 604800) return "Posted " + Math.floor(s/86400) + "d ago";
+  return "Posted " + new Date(date).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "home.html";
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  const auth = await supabaseClient.auth.getUser();
+  me = auth.data && auth.data.user;
+  if (!me){ location.href = "login.html"; return; }
+
+  const p = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").eq("id", me.id).maybeSingle();
+  myProfile = p.data || { id: me.id };
+
+  await loadJobs();
+}
+
+async function loadJobs(){
+  const list = $("list");
+  list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+
+  const r = await supabaseClient.from("jobs").select("*").order("created_at", { ascending: false });
+  if (r.error){
+    console.error("Jobs error:", r.error);
+    list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load jobs</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  jobs = r.data || [];
+
+  const myApps = await supabaseClient.from("job_applications").select("job_id").eq("user_id", me.id);
+  appliedSet = new Set((myApps.data || []).map(a => a.job_id));
+
+  renderList();
+}
+
+/* =========================================================
+   FILTER + SEARCH
+========================================================= */
+function setType(type){
+  currentType = type;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.type === type));
+  renderList();
+}
+
+function onSearch(value){
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    searchTerm = value.trim().toLowerCase();
+    renderList();
+  }, 250);
+}
+
+function getVisible(){
+  let rows = jobs;
+  if (currentType !== "all") rows = rows.filter(j => j.job_type === currentType);
+  if (searchTerm){
+    rows = rows.filter(j =>
+      (j.title || "").toLowerCase().includes(searchTerm) ||
+      (j.company || "").toLowerCase().includes(searchTerm) ||
+      (j.location || "").toLowerCase().includes(searchTerm)
+    );
+  }
+  return rows;
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+function renderList(){
+  const list = $("list");
+  const rows = getVisible();
+
+  if (!rows.length){
+    list.innerHTML = `<div class="center"><i class="fas fa-briefcase"></i><b>No jobs found</b>Be the first to post an opportunity for students.<br><button class="cta" onclick="openCreate()">Post a job</button></div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(renderCard).join("");
+}
+
+function renderCard(j){
+  const isMine = j.created_by === me.id;
+  const applied = appliedSet.has(j.id);
+
+  let footer;
+  if (isMine){
+    footer = `<div class="job-manage">
+      <button class="manage-btn" onclick="event.stopPropagation();openApplicants('${esc(j.id)}')"><i class="fas fa-users"></i> Applicants</button>
+      <button class="manage-btn" onclick="event.stopPropagation();startEdit('${esc(j.id)}')"><i class="fas fa-pen"></i></button>
+      <button class="manage-btn" onclick="event.stopPropagation();confirmDelete('${esc(j.id)}')"><i class="fas fa-trash"></i></button>
+    </div>`;
+  } else {
+    footer = `<button class="apply-btn ${applied ? "done" : ""}" onclick="event.stopPropagation();${applied ? "" : `openApply('${esc(j.id)}')`}">${applied ? "Applied" : "Apply Now"}</button>`;
+  }
+
+  return `<div class="job-card" id="job-${esc(j.id)}" onclick="openDetails('${esc(j.id)}')">
+    <div class="job-top">
+      <div class="job-logo"><i class="fas fa-building"></i></div>
+      <div class="job-info">
+        <h3>${esc(j.title)}</h3>
+        <p>${esc(j.company)}</p>
+      </div>
+    </div>
+    <div class="job-tags">
+      ${j.location ? `<div class="tag"><i class="fas fa-location-dot"></i>${esc(j.location)}</div>` : ""}
+      <div class="tag"><i class="fas fa-briefcase"></i>${esc(j.job_type)}</div>
+      ${j.salary_text ? `<div class="tag salary"><i class="fas fa-money-bill-wave"></i>${esc(j.salary_text)}</div>` : ""}
+    </div>
+    <div class="job-footer">
+      <span class="job-time">${esc(timeAgo(j.created_at))}</span>
+      ${footer}
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   CREATE / EDIT
+========================================================= */
+function openCreate(){
+  editingJobId = null;
+  $("formTitle").textContent = "Post a job";
+  $("saveBtn").textContent = "Post Job";
+  $("fTitle").value = "";
+  $("fCompany").value = "";
+  $("fType").value = "Full-time";
+  $("fLocation").value = "";
+  $("fSalary").value = "";
+  $("fDesc").value = "";
+  $("formOv").classList.add("show");
+}
+
+function startEdit(id){
+  const j = jobs.find(x => String(x.id) === String(id));
+  if (!j || j.created_by !== me.id) return;
+
+  editingJobId = j.id;
+  $("formTitle").textContent = "Edit job";
+  $("saveBtn").textContent = "Save changes";
+  $("fTitle").value = j.title || "";
+  $("fCompany").value = j.company || "";
+  $("fType").value = j.job_type || "Full-time";
+  $("fLocation").value = j.location || "";
+  $("fSalary").value = j.salary_text || "";
+  $("fDesc").value = j.description || "";
+  $("formOv").classList.add("show");
+}
+
+function startEditFromDetails(){
+  closeDetails();
+  startEdit(detailsJobId);
+}
+
+function closeForm(){
+  $("formOv").classList.remove("show");
+}
+
+async function saveJob(){
+  const title = $("fTitle").value.trim();
+  const company = $("fCompany").value.trim();
+
+  if (!title){ toast("Enter a job title"); return; }
+  if (!company){ toast("Enter a company or organization name"); return; }
+
+  const payload = {
+    title,
+    company,
+    job_type: $("fType").value,
+    location: $("fLocation").value.trim() || null,
+    salary_text: $("fSalary").value.trim() || null,
+    description: $("fDesc").value.trim() || null
+  };
+
+  const btn = $("saveBtn");
+  btn.disabled = true; btn.textContent = "Saving...";
+
+  try {
+    if (editingJobId){
+      const r = await supabaseClient.from("jobs").update(payload).eq("id", editingJobId).eq("created_by", me.id);
+      if (r.error) throw r.error;
+      toast("Job updated");
+    } else {
+      payload.created_by = me.id;
+      const r = await supabaseClient.from("jobs").insert(payload);
+      if (r.error) throw r.error;
+      toast("Job posted");
+    }
+    closeForm();
+    await loadJobs();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not save job");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingJobId ? "Save changes" : "Post Job";
+  }
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+async function confirmDelete(id){
+  if (!confirm("Delete this job posting? Applications to it will also be removed.")) return;
+  const r = await supabaseClient.from("jobs").delete().eq("id", id).eq("created_by", me.id);
+  if (r.error){ console.error(r.error); toast("Could not delete job"); return; }
+  toast("Job deleted");
+  await loadJobs();
+}
+
+function deleteJobFromDetails(){
+  const id = detailsJobId;
+  closeDetails();
+  confirmDelete(id);
+}
+
+/* =========================================================
+   DETAILS SHEET
+========================================================= */
+function openDetails(id){
+  const j = jobs.find(x => String(x.id) === String(id));
+  if (!j) return;
+  detailsJobId = j.id;
+
+  $("detTitle").textContent = j.title;
+  $("detTags").innerHTML = `
+    <div class="tag"><i class="fas fa-building"></i>${esc(j.company)}</div>
+    ${j.location ? `<div class="tag"><i class="fas fa-location-dot"></i>${esc(j.location)}</div>` : ""}
+    <div class="tag"><i class="fas fa-briefcase"></i>${esc(j.job_type)}</div>
+    ${j.salary_text ? `<div class="tag salary"><i class="fas fa-money-bill-wave"></i>${esc(j.salary_text)}</div>` : ""}
+  `;
+  $("detDesc").textContent = j.description || "No description provided.";
+
+  const isMine = j.created_by === me.id;
+  $("detOwnerBtns").style.display = isMine ? "flex" : "none";
+  $("detApplyBtns").style.display = isMine ? "none" : "flex";
+
+  const applied = appliedSet.has(j.id);
+  $("detApplyBtns").innerHTML = `<button class="btn main" ${applied ? "disabled" : ""} onclick="${applied ? "" : `closeDetails();openApply('${esc(j.id)}')`}">${applied ? "Already Applied" : "Apply Now"}</button>`;
+
+  $("detailsOv").classList.add("show");
+}
+
+function closeDetails(){
+  $("detailsOv").classList.remove("show");
+  detailsJobId = null;
+}
+
+/* =========================================================
+   APPLY
+========================================================= */
+function openApply(jobId){
+  applyJobId = jobId;
+  $("applyMsg").value = "";
+  $("applyOv").classList.add("show");
+}
+
+function closeApply(){
+  $("applyOv").classList.remove("show");
+  applyJobId = null;
+}
+
+async function submitApplication(){
+  if (!applyJobId) return;
+  const job = jobs.find(x => String(x.id) === String(applyJobId));
+  if (!job) return;
+
+  const btn = $("applySubmitBtn");
+  btn.disabled = true; btn.textContent = "Sending...";
+
+  try {
+    const r = await supabaseClient.from("job_applications").insert({
+      job_id: applyJobId,
+      user_id: me.id,
+      message: $("applyMsg").value.trim() || null
+    });
+    if (r.error) throw r.error;
+
+    appliedSet.add(applyJobId);
+
+    if (job.created_by && job.created_by !== me.id){
+      const applicantName = myProfile.full_name || myProfile.username || "A student";
+      supabaseClient.from("notifications").insert({
+        recipient_id: job.created_by,
+        actor_id: me.id,
+        type: "job_application",
+        message: applicantName + " applied for your job posting: \"" + job.title + "\"",
+        is_read: false
+      }).then(res => { if (res.error) console.warn("Notify error:", res.error.message); });
+    }
+
+    toast("Application sent");
+    closeApply();
+    renderList();
+  } catch (e){
+    console.error(e);
+    if (e && e.code === "23505"){
+      toast("You already applied to this job");
+      appliedSet.add(applyJobId);
+      closeApply();
+      renderList();
+    } else {
+      toast(e && e.message ? e.message : "Could not send application");
+    }
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Send Application";
+  }
+}
+
+/* =========================================================
+   APPLICANTS (job owner only)
+========================================================= */
+async function openApplicants(jobId){
+  const job = jobs.find(x => String(x.id) === String(jobId));
+  if (!job || job.created_by !== me.id) return;
+
+  $("applicantsOv").classList.add("show");
+  $("applicantsList").innerHTML = '<div class="empty-list">Loading...</div>';
+
+  const r = await supabaseClient.from("job_applications").select("user_id,message,created_at").eq("job_id", jobId).order("created_at", { ascending: false });
+  if (r.error){
+    console.error(r.error);
+    $("applicantsList").innerHTML = '<div class="empty-list">Unable to load applicants.</div>';
+    return;
+  }
+
+  const rows = r.data || [];
+  if (!rows.length){
+    $("applicantsList").innerHTML = '<div class="empty-list">No applicants yet.</div>';
+    return;
+  }
+
+  const ids = [...new Set(rows.map(a => a.user_id))];
+  const profRes = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").in("id", ids);
+  const profileMap = {};
+  (profRes.data || []).forEach(p => { profileMap[p.id] = p; });
+
+  $("applicantsList").innerHTML = rows.map(a => {
+    const u = profileMap[a.user_id] || {};
+    return `<div class="app-row">
+      <img src="${esc(u.avatar_url || DEFAULT_AVATAR)}" onerror="this.src='${DEFAULT_AVATAR}'" alt="">
+      <div>
+        <div class="app-name">${esc(u.full_name || u.username || "StudentX User")}</div>
+        ${a.message ? `<div class="app-msg">${esc(a.message)}</div>` : ""}
+        <div class="app-time">${esc(new Date(a.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }))}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+function closeApplicants(){
+  $("applicantsOv").classList.remove("show");
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
