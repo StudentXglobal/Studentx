@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Events - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:80px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{font-size:19px;font-weight:800}
+.hdr-create{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+
+/* TABS */
+.tabs{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--border);white-space:nowrap;cursor:pointer}
+.tab.on{background:var(--grad);border-color:transparent;color:#fff}
+
+/* LIST */
+.list{padding:14px}
+
+/* EVENT CARD — matches home.html's inline event card styling */
+.ev-card{background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:14px;overflow:hidden;cursor:pointer}
+.ev-banner{display:block;width:100%;height:150px;object-fit:cover;background:var(--card-2)}
+.ev-body{padding:14px}
+.ev-tag{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:10px;background:var(--grad);color:#fff;font-size:10px;font-weight:700;margin-bottom:8px}
+.ev-date{font-size:11px;font-weight:700;color:var(--accent)}
+.ev-title{margin-top:4px;font-size:16px;font-weight:700;line-height:1.35}
+.ev-loc{margin-top:6px;font-size:12px;color:var(--muted)}
+.ev-loc i{width:14px;color:var(--accent)}
+.ev-count{margin-top:6px;font-size:11px;color:var(--muted)}
+.ev-btns{display:flex;gap:8px;margin-top:12px}
+.ev-btn{flex:1;padding:10px;border-radius:12px;border:1px solid var(--border);background:var(--card-2);color:var(--text);font-size:12px;font-weight:700;cursor:pointer}
+.ev-btn.on{background:var(--grad);border-color:transparent;color:#fff}
+.ev-btn.manage{background:var(--card-2);color:var(--text-2)}
+.ev-mine-badge{font-size:10px;color:var(--muted);margin-top:4px}
+
+/* STATES */
+.center{text-align:center;padding:60px 24px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:34px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:14px;padding:10px 22px;border-radius:20px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+.skeleton{height:170px;border-radius:16px;background:var(--card);margin-bottom:14px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* SHEET (create/edit + details) */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:92vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 4px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.sheet-title i{color:var(--muted);cursor:pointer;font-size:15px}
+.form{padding:0 20px}
+.form label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form input[type=datetime-local],.form textarea,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:84px;resize:vertical}
+.form select option{color:#000}
+.upl{display:flex;align-items:center;gap:10px}
+.upl-prev{width:60px;height:44px;border-radius:10px;background:rgba(128,128,128,.15);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--muted);flex-shrink:0}
+.upl-prev img{width:100%;height:100%;object-fit:cover}
+.sm{padding:8px 14px;border-radius:16px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.btns{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.danger{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.3)}
+.btn:disabled{opacity:.6}
+
+/* DETAILS SHEET */
+.det-banner{width:100%;height:180px;object-fit:cover;background:var(--card-2);border-radius:14px;margin:0 20px 14px;width:calc(100% - 40px)}
+.det-row{display:flex;gap:12px;padding:9px 20px;font-size:13px}
+.det-row i{width:20px;text-align:center;color:var(--accent);margin-top:2px}
+.det-desc{padding:0 20px;font-size:13px;line-height:1.6;color:var(--text-2);white-space:pre-wrap}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-l">
+    <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+    <div class="hdr-title">Events</div>
+  </div>
+  <button class="hdr-create" onclick="openCreate()"><i class="fas fa-plus"></i> Create</button>
+</header>
+
+<div class="tabs">
+  <div class="tab on" id="tab-all" onclick="setTab('all')">All</div>
+  <div class="tab" id="tab-going" onclick="setTab('going')">Going</div>
+  <div class="tab" id="tab-interested" onclick="setTab('interested')">Interested</div>
+  <div class="tab" id="tab-mine" onclick="setTab('mine')">My Events</div>
+</div>
+
+<div class="list" id="list"><div class="skeleton"></div><div class="skeleton"></div></div>
+
+<!-- CREATE / EDIT SHEET -->
+<div class="ov" id="formOv" onclick="if(event.target===this)closeForm()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="formTitle">Create event</span><i class="fas fa-times" onclick="closeForm()"></i></div>
+    <div class="form">
+      <label>Title</label>
+      <input type="text" id="fTitle" maxlength="100" placeholder="e.g. FUD Tech Hackathon 2024">
+
+      <label>Category</label>
+      <select id="fCategory">
+        <option value="Academic">Academic</option>
+        <option value="Tech">Tech</option>
+        <option value="Career">Career</option>
+        <option value="Social">Social</option>
+        <option value="Sports">Sports</option>
+        <option value="Other">Other</option>
+      </select>
+
+      <label>Date &amp; time</label>
+      <input type="datetime-local" id="fStarts">
+
+      <label>Location</label>
+      <input type="text" id="fLocation" maxlength="120" placeholder="e.g. Main Library, Room 2">
+
+      <label>Description</label>
+      <textarea id="fDesc" maxlength="600" placeholder="What should people know about this event?"></textarea>
+
+      <label>Banner photo (optional)</label>
+      <div class="upl">
+        <div class="upl-prev" id="fBannerPrev"><i class="fas fa-image"></i></div>
+        <button class="sm" type="button" onclick="pickBanner()">Choose photo</button>
+      </div>
+
+      <div class="btns">
+        <button class="btn" onclick="closeForm()">Cancel</button>
+        <button class="btn main" id="saveBtn" onclick="saveEvent()">Create Event</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILS SHEET -->
+<div class="ov" id="detailsOv" onclick="if(event.target===this)closeDetails()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Event details</span><i class="fas fa-times" onclick="closeDetails()"></i></div>
+    <img class="det-banner" id="detBanner" src="" alt="" style="display:none">
+    <div class="det-row"><i class="fas fa-tag"></i><span id="detCategory"></span></div>
+    <div class="det-row"><i class="fas fa-calendar"></i><span id="detDate"></span></div>
+    <div class="det-row" id="detLocRow"><i class="fas fa-location-dot"></i><span id="detLocation"></span></div>
+    <div class="det-desc" id="detDesc"></div>
+    <div class="form">
+      <div class="btns" id="detRsvpBtns"></div>
+      <div class="btns" id="detOwnerBtns" style="display:none">
+        <button class="btn" onclick="startEditFromDetails()"><i class="fas fa-pen"></i> Edit</button>
+        <button class="btn danger" onclick="deleteEventFromDetails()"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="bannerInput" accept="image/*" style="display:none">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX EVENTS — fully live from Supabase
+========================================================= */
+
+let me = null, myProfile = null;
+let events = [];
+let rsvpMap = {};
+let currentTab = "all";
+let editingEventId = null;
+let detailsEventId = null;
+let pendingBanner = null;
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v == null) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function fmt(n){
+  n = Number(n) || 0;
+  if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K";
+  return String(n);
+}
+function toast(msg){
+  const old = document.querySelector(".toast"); if (old) old.remove();
+  const d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "menu.html";
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  const auth = await supabaseClient.auth.getUser();
+  me = auth.data && auth.data.user;
+  if (!me){ location.href = "login.html"; return; }
+
+  const p = await supabaseClient.from("profiles").select("id,full_name,username").eq("id", me.id).maybeSingle();
+  myProfile = p.data || { id: me.id };
+
+  await loadEvents();
+}
+
+async function loadEvents(){
+  const list = $("list");
+  list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+
+  const r = await supabaseClient.from("events").select("*").order("starts_at", { ascending: true });
+  if (r.error){
+    console.error("Events error:", r.error);
+    list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load events</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  events = r.data || [];
+  const ids = events.map(e => e.id);
+  rsvpMap = {};
+  events.forEach(e => rsvpMap[e.id] = { going: 0, interested: 0, mine: null });
+
+  if (ids.length){
+    const rs = await supabaseClient.from("event_rsvps").select("event_id,user_id,status").in("event_id", ids);
+    (rs.data || []).forEach(row => {
+      const s = rsvpMap[row.event_id];
+      if (!s) return;
+      if (row.status === "going") s.going++; else if (row.status === "interested") s.interested++;
+      if (row.user_id === me.id) s.mine = row.status;
+    });
+  }
+
+  renderList();
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+function setTab(tab){
+  currentTab = tab;
+  ["all","going","interested","mine"].forEach(t => $("tab-" + t).classList.toggle("on", t === tab));
+  renderList();
+}
+
+function getVisible(){
+  const now = Date.now();
+
+  if (currentTab === "mine"){
+    return events.filter(e => e.created_by === me.id);
+  }
+
+  const upcoming = events.filter(e => new Date(e.starts_at).getTime() >= now);
+
+  if (currentTab === "going") return upcoming.filter(e => rsvpMap[e.id] && rsvpMap[e.id].mine === "going");
+  if (currentTab === "interested") return upcoming.filter(e => rsvpMap[e.id] && rsvpMap[e.id].mine === "interested");
+  return upcoming;
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+function eventDateLabel(iso){
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" }) + " · " +
+    d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+}
+
+function renderList(){
+  const list = $("list");
+  const rows = getVisible();
+
+  if (!rows.length){
+    const emptyMsgs = {
+      all: ["fa-calendar-days", "No upcoming events", "Be the first to create one for your campus."],
+      going: ["fa-calendar-check", "No events yet", "RSVP as Going to events you plan to attend."],
+      interested: ["fa-star", "Nothing here yet", "Mark events as Interested to keep track of them."],
+      mine: ["fa-calendar-plus", "You haven't created any events", "Tap Create to post one."]
+    };
+    const m = emptyMsgs[currentTab] || emptyMsgs.all;
+    list.innerHTML = `<div class="center"><i class="fas ${m[0]}"></i><b>${esc(m[1])}</b>${esc(m[2])}<br><button class="cta" onclick="openCreate()">Create an event</button></div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(renderCard).join("");
+}
+
+function renderCard(e){
+  const s = rsvpMap[e.id] || { going: 0, interested: 0, mine: null };
+  const isMine = e.created_by === me.id;
+  const isPast = new Date(e.starts_at).getTime() < Date.now();
+
+  const banner = e.banner_url
+    ? `<img class="ev-banner" src="${esc(e.banner_url)}" alt="" loading="lazy" onerror="this.style.display='none'">`
+    : "";
+
+  let actions;
+  if (isMine){
+    actions = `<div class="ev-btns">
+      <button class="ev-btn manage" onclick="event.stopPropagation();startEdit('${esc(e.id)}')"><i class="fas fa-pen"></i> Edit</button>
+      <button class="ev-btn manage" onclick="event.stopPropagation();confirmDelete('${esc(e.id)}')"><i class="fas fa-trash"></i> Delete</button>
+    </div>
+    <div class="ev-mine-badge">Your event · ${fmt(s.going)} going · ${fmt(s.interested)} interested</div>`;
+  } else {
+    actions = `<div class="ev-btns">
+      <button class="ev-btn ${s.mine === "going" ? "on" : ""}" onclick="event.stopPropagation();rsvp('${esc(e.id)}','going')">${s.mine === "going" ? "✓ Going" : "Going"}</button>
+      <button class="ev-btn ${s.mine === "interested" ? "on" : ""}" onclick="event.stopPropagation();rsvp('${esc(e.id)}','interested')">${s.mine === "interested" ? "★ Interested" : "Interested"}</button>
+    </div>
+    <div class="ev-count">${fmt(s.going)} going · ${fmt(s.interested)} interested</div>`;
+  }
+
+  return `<div class="ev-card" id="ev-${esc(e.id)}" onclick="openDetails('${esc(e.id)}')">
+    ${banner}
+    <div class="ev-body">
+      <span class="ev-tag">${esc(e.category || "Event")}</span>
+      ${isPast ? '<span class="ev-tag" style="background:var(--card-2);color:var(--muted);margin-left:6px">Past</span>' : ""}
+      <div class="ev-date">${esc(eventDateLabel(e.starts_at))}</div>
+      <div class="ev-title">${esc(e.title)}</div>
+      ${e.location ? `<div class="ev-loc"><i class="fas fa-location-dot"></i>${esc(e.location)}</div>` : ""}
+      ${actions}
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   RSVP
+========================================================= */
+async function rsvp(eventId, status){
+  const s = rsvpMap[eventId];
+  if (!s) return;
+  const same = s.mine === status;
+
+  const r = same
+    ? await supabaseClient.from("event_rsvps").delete().eq("event_id", eventId).eq("user_id", me.id)
+    : await supabaseClient.from("event_rsvps").upsert({ event_id: eventId, user_id: me.id, status: status }, { onConflict: "event_id,user_id" });
+
+  if (r.error){ console.error(r.error); toast("Could not save your response"); return; }
+
+  if (s.mine === "going") s.going--; else if (s.mine === "interested") s.interested--;
+  if (same){ s.mine = null; } else { s.mine = status; if (status === "going") s.going++; else s.interested++; }
+
+  renderList();
+  if (detailsEventId === eventId) renderDetailsRsvpButtons();
+}
+
+/* =========================================================
+   CREATE / EDIT FORM
+========================================================= */
+function openCreate(){
+  editingEventId = null;
+  pendingBanner = null;
+  $("formTitle").textContent = "Create event";
+  $("saveBtn").textContent = "Create Event";
+  $("fTitle").value = "";
+  $("fCategory").value = "Academic";
+  $("fStarts").value = "";
+  $("fLocation").value = "";
+  $("fDesc").value = "";
+  $("fBannerPrev").innerHTML = '<i class="fas fa-image"></i>';
+  $("formOv").classList.add("show");
+}
+
+function startEdit(id){
+  const e = events.find(x => String(x.id) === String(id));
+  if (!e || e.created_by !== me.id) return;
+
+  editingEventId = e.id;
+  pendingBanner = null;
+  $("formTitle").textContent = "Edit event";
+  $("saveBtn").textContent = "Save changes";
+  $("fTitle").value = e.title || "";
+  $("fCategory").value = e.category || "Academic";
+
+  const d = new Date(e.starts_at);
+  if (!isNaN(d.getTime())){
+    const pad = n => String(n).padStart(2, "0");
+    $("fStarts").value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  } else {
+    $("fStarts").value = "";
+  }
+
+  $("fLocation").value = e.location || "";
+  $("fDesc").value = e.description || "";
+  $("fBannerPrev").innerHTML = e.banner_url ? `<img src="${esc(e.banner_url)}" alt="">` : '<i class="fas fa-image"></i>';
+
+  $("formOv").classList.add("show");
+}
+
+function startEditFromDetails(){
+  closeDetails();
+  startEdit(detailsEventId);
+}
+
+function closeForm(){
+  $("formOv").classList.remove("show");
+}
+
+function pickBanner(){
+  $("bannerInput").click();
+}
+
+$("bannerInput").addEventListener("change", function(e){
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  if (!f.type.startsWith("image/")){ toast("Choose an image"); return; }
+  if (f.size > 6 * 1024 * 1024){ toast("Image must be under 6 MB"); return; }
+  pendingBanner = f;
+  $("fBannerPrev").innerHTML = `<img src="${URL.createObjectURL(f)}" alt="">`;
+});
+
+async function saveEvent(){
+  const title = $("fTitle").value.trim();
+  const startsRaw = $("fStarts").value;
+
+  if (!title){ toast("Enter an event title"); return; }
+  if (!startsRaw){ toast("Choose a date and time"); return; }
+
+  const startsIso = new Date(startsRaw).toISOString();
+  const btn = $("saveBtn");
+  btn.disabled = true; btn.textContent = "Saving...";
+
+  try {
+    let bannerUrl = null;
+    if (pendingBanner){
+      const ext = (pendingBanner.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const path = me.id + "/" + Date.now() + "." + ext;
+      const up = await supabaseClient.storage.from("events").upload(path, pendingBanner, { contentType: pendingBanner.type, upsert: false });
+      if (up.error) throw up.error;
+      bannerUrl = supabaseClient.storage.from("events").getPublicUrl(path).data.publicUrl;
+    }
+
+    const payload = {
+      title,
+      category: $("fCategory").value,
+      starts_at: startsIso,
+      location: $("fLocation").value.trim() || null,
+      description: $("fDesc").value.trim() || null
+    };
+    if (bannerUrl) payload.banner_url = bannerUrl;
+
+    if (editingEventId){
+      const r = await supabaseClient.from("events").update(payload).eq("id", editingEventId).eq("created_by", me.id);
+      if (r.error) throw r.error;
+      toast("Event updated");
+    } else {
+      payload.created_by = me.id;
+      const r = await supabaseClient.from("events").insert(payload);
+      if (r.error) throw r.error;
+      toast("Event created");
+    }
+
+    closeForm();
+    await loadEvents();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not save event");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingEventId ? "Save changes" : "Create Event";
+  }
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+async function confirmDelete(id){
+  if (!confirm("Delete this event? This cannot be undone.")) return;
+  const r = await supabaseClient.from("events").delete().eq("id", id).eq("created_by", me.id);
+  if (r.error){ console.error(r.error); toast("Could not delete event"); return; }
+  toast("Event deleted");
+  await loadEvents();
+}
+
+function deleteEventFromDetails(){
+  const id = detailsEventId;
+  closeDetails();
+  confirmDelete(id);
+}
+
+/* =========================================================
+   DETAILS SHEET
+========================================================= */
+function openDetails(id){
+  const e = events.find(x => String(x.id) === String(id));
+  if (!e) return;
+  detailsEventId = e.id;
+
+  const banner = $("detBanner");
+  if (e.banner_url){ banner.src = e.banner_url; banner.style.display = "block"; }
+  else { banner.style.display = "none"; }
+
+  $("detCategory").textContent = e.category || "Event";
+  $("detDate").textContent = eventDateLabel(e.starts_at);
+
+  if (e.location){ $("detLocRow").style.display = "flex"; $("detLocation").textContent = e.location; }
+  else { $("detLocRow").style.display = "none"; }
+
+  $("detDesc").textContent = e.description || "No description provided.";
+
+  const isMine = e.created_by === me.id;
+  $("detOwnerBtns").style.display = isMine ? "flex" : "none";
+  $("detRsvpBtns").style.display = isMine ? "none" : "flex";
+
+  renderDetailsRsvpButtons();
+
+  $("detailsOv").classList.add("show");
+}
+
+function renderDetailsRsvpButtons(){
+  if (!detailsEventId) return;
+  const s = rsvpMap[detailsEventId] || { going: 0, interested: 0, mine: null };
+  $("detRsvpBtns").innerHTML = `
+    <button class="btn ${s.mine === "going" ? "main" : ""}" onclick="rsvp('${esc(detailsEventId)}','going')">${s.mine === "going" ? "✓ Going" : "Going"}</button>
+    <button class="btn ${s.mine === "interested" ? "main" : ""}" onclick="rsvp('${esc(detailsEventId)}','interested')">${s.mine === "interested" ? "★ Interested" : "Interested"}</button>
+  `;
+}
+
+function closeDetails(){
+  $("detailsOv").classList.remove("show");
+  detailsEventId = null;
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
