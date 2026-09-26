@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>StudentX - Go Live</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.22.3/dist/livekit-client.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#050509;color:#fff;font-family:Arial,sans-serif}body{padding-bottom:80px}.page{max-width:760px;margin:auto;padding:16px 12px 35px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.top h1{font-size:21px;margin:0}.back,.tool{border:1px solid #292933;background:#111119;color:#fff;cursor:pointer}.back{width:42px;height:42px;border-radius:50%}.status{padding:9px 12px;border-radius:13px;background:#111119;color:#aaa;font-size:12px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#777;margin-right:6px}.status.live{color:#fff}.status.live .dot{background:#ff3155;box-shadow:0 0 9px #ff3155}.preview{position:relative;width:100%;aspect-ratio:9/16;max-height:72vh;background:#0d0d14;border-radius:21px;overflow:hidden;border:1px solid #252530}.preview video{width:100%;height:100%;object-fit:cover;background:#08080d}.shade{position:absolute;inset:0;background:linear-gradient(#0008,transparent 30%,transparent 65%,#000b);pointer-events:none}.tools{position:absolute;top:12px;right:12px;display:flex;gap:8px}.tool{width:42px;height:42px;border-radius:50%;background:#0009;backdrop-filter:blur(10px)}.tool.off{background:#a71939}.live-label{display:none;position:absolute;top:13px;left:13px;background:#f21f49;padding:8px 11px;border-radius:11px;font-size:11px;font-weight:bold}.live-label.show{display:block}.info{position:absolute;left:14px;right:14px;bottom:14px}.info strong{display:block;font-size:16px;margin-bottom:4px}.info small{font-size:12px;color:#ccc}.viewers{display:none;position:absolute;right:13px;bottom:14px;background:#0009;padding:8px 10px;border-radius:10px;font-size:11px}.viewers.show{display:block}.form{display:grid;gap:11px;margin-top:15px}.input,.select,.textarea{width:100%;border:1px solid #292933;background:#111119;color:#fff;border-radius:14px;padding:14px;outline:0;font-size:14px}.textarea{min-height:85px;resize:vertical}.input:focus,.select:focus,.textarea:focus{border-color:#713dff}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}.btn{min-height:50px;border:0;border-radius:14px;color:#fff;font-weight:800;font-size:14px;cursor:pointer}.primary{background:linear-gradient(135deg,#7035ff,#3f8cff)}.danger{background:#a71939}.dark{background:#171720;border:1px solid #292933}.btn:disabled{opacity:.5}.hidden{display:none}.msg{text-align:center;min-height:20px;color:#aaa;font-size:13px}.msg.error{color:#ff6c84}.msg.success{color:#6effb0}.note{text-align:center;color:#666;font-size:11px;line-height:1.5}
+</style>
+</head>
+<body>
+<main class="page">
+<div class="top"><button class="back" onclick="goBack()"><i class="fas fa-arrow-left"></i></button><h1>Go Live</h1><div id="status" class="status"><span class="dot"></span><span id="statusText">Ready</span></div></div>
+<section class="preview">
+<video id="preview" autoplay playsinline muted></video><div class="shade"></div>
+<div id="liveLabel" class="live-label">LIVE</div>
+<div class="tools"><button id="cameraBtn" class="tool"><i class="fas fa-camera-rotate"></i></button><button id="micBtn" class="tool"><i class="fas fa-microphone"></i></button></div>
+<div class="info"><strong id="previewTitle">Your Live Stream</strong><small id="previewCategory">StudentX Live</small></div>
+<div id="viewers" class="viewers"><i class="fas fa-eye"></i> <span id="viewerNumber">0</span></div>
+</section>
+<section class="form">
+<input id="title" class="input" maxlength="120" placeholder="Live title">
+<select id="category" class="select"><option>General</option><option>Education</option><option>Technology</option><option>Business</option><option>Entertainment</option><option>Sports</option><option>Gaming</option><option>Music</option><option>News</option></select>
+<textarea id="description" class="textarea" maxlength="500" placeholder="Describe your live stream (optional)"></textarea>
+<div class="buttons"><button id="start" class="btn primary"><i class="fas fa-video"></i> Start Live</button><button id="end" class="btn danger hidden"><i class="fas fa-stop"></i> End Live</button></div>
+<button id="prepare" class="btn dark"><i class="fas fa-camera"></i> Enable Camera</button>
+<div id="msg" class="msg"></div><div class="note">StudentX uses LiveKit for live media. The LiveKit API secret is never exposed in this page.</div>
+</section>
+</main>
+<script src="supabase.js"></script><script src="nav.js"></script>
+<script>
+(()=>{
+'use strict';
+const URL='https://acragelglvdnqhvbjcgx.supabase.co',KEY='sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH';
+const $=id=>document.getElementById(id);
+const preview=$('preview'),title=$('title'),category=$('category'),description=$('description');
+const start=$('start'),end=$('end'),prepare=$('prepare'),cameraBtn=$('cameraBtn'),micBtn=$('micBtn');
+const msg=$('msg'),status=$('status'),statusText=$('statusText'),liveLabel=$('liveLabel'),viewers=$('viewers'),viewerNumber=$('viewerNumber');
+const previewTitle=$('previewTitle'),previewCategory=$('previewCategory');
+let sb,session,user,room,videoTrack,audioTrack,sessionId,facing='user',mic=true,countTimer;
+function message(t,type=''){msg.textContent=t||'';msg.className='msg '+type}
+function setStatus(t,isLive=false){statusText.textContent=t;status.classList.toggle('live',isLive)}
+function client(){if(window.supabaseClient&&typeof window.supabaseClient.from==='function')return window.supabaseClient;if(window.supabase?.createClient)return window.supabase.createClient(URL,KEY);throw Error('Supabase client could not be initialized.')}
+async function auth(){sb=sb||client();let r=await sb.auth.getSession();session=r.data?.session||null;if(!session){r=await sb.auth.refreshSession();session=r.data?.session||null}if(!session){location.href='login.html';return false}r=await sb.auth.getUser();user=r.data?.user||null;if(!user){location.href='login.html';return false}return true}
+async function refresh(){let r=await sb.auth.refreshSession();session=r.data?.session||session;if(!session?.access_token)throw Error('Your StudentX login session has expired.');}
+function stopTracks(){if(videoTrack){try{videoTrack.stop()}catch(e){}videoTrack=null}if(audioTrack){try{audioTrack.stop()}catch(e){}audioTrack=null}preview.srcObject=null}
+async function media(){if(!window.LivekitClient)throw Error('LiveKit library did not load.');stopTracks();message('Opening camera and microphone...');let tracks=await LivekitClient.createLocalTracks({video:{facingMode:facing},audio:true});tracks.forEach(t=>{if(t.kind==='video')videoTrack=t;if(t.kind==='audio')audioTrack=t});if(!videoTrack)throw Error('Camera could not be opened.');videoTrack.attach(preview);if(audioTrack)await (mic?audioTrack.unmute():audioTrack.mute());preview.muted=true;prepare.innerHTML='<i class="fas fa-check"></i> Camera Ready';message('Camera ready.','success');updateMic()}
+function updateMic(){micBtn.classList.toggle('off',!mic);micBtn.innerHTML=mic?'<i class="fas fa-microphone"></i>':'<i class="fas fa-microphone-slash"></i>'}
+async function token(id){await refresh();let r=await fetch('/api/livekit-token',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},body:JSON.stringify({liveSessionId:id,role:'broadcaster'})});let d={};try{d=await r.json()}catch(e){}if(!r.ok)throw Error(d.error||'Unable to connect to StudentX Live.');if(!d.serverUrl||!d.participantToken||!d.roomName)throw Error('LiveKit token response is incomplete.');return d}
+async function insertSession(){let r=await sb.from('live_sessions').insert({user_id:user.id,broadcaster_id:user.id,title:title.value.trim()||'StudentX Live',description:description.value.trim(),category:category.value,status:'live',viewer_count:0,started_at:new Date().toISOString()}).select('id').single();if(r.error)throw Error(r.error.message);return r.data.id}
+async function startRoom(id){let d=await token(id);room=new LivekitClient.Room({adaptiveStream:true,dynacast:true,disconnectOnPageLeave:true});room.on(LivekitClient.RoomEvent.Reconnecting,()=>setStatus('Reconnecting...',true));room.on(LivekitClient.RoomEvent.Reconnected,()=>setStatus('LIVE',true));room.on(LivekitClient.RoomEvent.Disconnected,()=>{if(sessionId)setStatus('Disconnected',false)});await room.connect(d.serverUrl,d.participantToken);if(videoTrack)await room.localParticipant.publishTrack(videoTrack,{name:'camera',source:LivekitClient.Track.Source.Camera,simulcast:true});if(audioTrack)await room.localParticipant.publishTrack(audioTrack,{name:'microphone',source:LivekitClient.Track.Source.Microphone})}
+async function endDb(){if(!sessionId)return;await sb.from('live_sessions').update({status:'ended',ended_at:new Date().toISOString()}).eq('id',sessionId)}
+async function startLive(){if(sessionId)return;start.disabled=true;prepare.disabled=true;try{if(!await auth())return;if(!videoTrack||!audioTrack)await media();previewTitle.textContent=title.value.trim()||'Your Live Stream';previewCategory.textContent=category.value;message('Starting your live stream...');setStatus('Creating live...');let id=await insertSession();sessionId=id;try{await startRoom(id)}catch(e){await endDb();sessionId=null;throw e}history.replaceState(null,'','go-live.html?id='+encodeURIComponent(id));setStatus('LIVE',true);liveLabel.classList.add('show');viewers.classList.add('show');start.classList.add('hidden');end.classList.remove('hidden');title.disabled=category.disabled=description.disabled=true;message('You are live now.','success');startCount()}catch(e){console.error(e);setStatus('Ready');message(e.message||'Unable to start live stream.','error');start.disabled=false;prepare.disabled=false}}
+async function endLive(){if(!sessionId)return;end.disabled=true;setStatus('Ending...');message('Ending live stream...');try{await endDb();if(room){try{room.disconnect()}catch(e){}room=null}stopTracks();stopCount();sessionId=null;liveLabel.classList.remove('show');viewers.classList.remove('show');end.classList.add('hidden');start.classList.remove('hidden');start.disabled=false;prepare.disabled=false;title.disabled=category.disabled=description.disabled=false;viewerNumber.textContent='0';history.replaceState(null,'','go-live.html');setStatus('Ended');message('Live stream ended.','success')}catch(e){message(e.message||'Unable to end live stream.','error')}finally{end.disabled=false}}
+function startCount(){stopCount();let refreshCount=async()=>{if(!sessionId)return;let r=await sb.from('live_viewers').select('user_id',{count:'exact',head:true}).eq('session_id',sessionId).is('left_at',null);if(typeof r.count==='number')viewerNumber.textContent=String(r.count)};refreshCount();countTimer=setInterval(refreshCount,5000)}
+function stopCount(){if(countTimer){clearInterval(countTimer);countTimer=null}}
+async function switchCamera(){if(!videoTrack){await media();return}facing=facing==='user'?'environment':'user';try{await videoTrack.restartTrack({facingMode:facing});videoTrack.attach(preview);message(facing==='environment'?'Back camera selected.':'Front camera selected.','success')}catch(e){facing=facing==='user'?'environment':'user';message(e.message||'Unable to switch camera.','error')}}
+async function toggleMic(){if(!audioTrack){message('Enable the camera first.','error');return}mic=!mic;try{if(mic)await audioTrack.unmute();else await audioTrack.mute();updateMic()}catch(e){mic=!mic;updateMic();message(e.message||'Unable to change microphone.','error')}}
+function goBack(){if(sessionId){if(confirm('You are currently live. End the live stream before leaving?'))endLive().then(()=>location.href='video.html');return}history.length>1?history.back():location.href='video.html'}
+title.oninput=()=>previewTitle.textContent=title.value.trim()||'Your Live Stream';category.onchange=()=>previewCategory.textContent=category.value;
+prepare.onclick=async()=>{prepare.disabled=true;try{if(await auth())await media()}catch(e){message(e.message||'Unable to open camera.','error');prepare.innerHTML='<i class="fas fa-camera"></i> Enable Camera'}finally{prepare.disabled=false}};
+cameraBtn.onclick=switchCamera;micBtn.onclick=toggleMic;start.onclick=startLive;end.onclick=endLive;
+window.addEventListener('beforeunload',()=>{try{room?.disconnect()}catch(e){}stopTracks();stopCount()});window.addEventListener('pagehide',()=>{try{room?.disconnect()}catch(e){}stopTracks();stopCount()});window.goBack=goBack;
+(async()=>{try{if(await auth()){previewTitle.textContent=title.value.trim()||'Your Live Stream';previewCategory.textContent=category.value}}catch(e){setStatus('Error');message(e.message||'Unable to initialize Go Live.','error')}})();
+})();
+</script>
+</body>
+</html>
