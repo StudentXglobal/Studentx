@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>E-Market - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:82px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{font-size:19px;font-weight:800}
+.hdr-sell{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+
+.search{display:flex;align-items:center;gap:10px;padding:0 14px;height:44px;border-radius:12px;background:var(--card);border:1px solid var(--border)}
+.search i{color:var(--muted);font-size:14px}
+.search input{flex:1;border:0;outline:0;background:none;color:var(--text);font-size:13px}
+.search input::placeholder{color:var(--muted)}
+
+/* CHIPS */
+.chips{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--border);white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff}
+
+/* BANNER */
+.banner{margin:14px;padding:20px;border-radius:16px;background:linear-gradient(135deg,rgba(240,148,51,.18),rgba(188,24,136,.18));border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.banner-text h3{font-size:15px;margin-bottom:4px}
+.banner-text p{font-size:12px;color:var(--text-2)}
+.banner-text .hl{color:var(--accent);font-weight:700}
+.banner i{font-size:34px;color:var(--accent)}
+
+/* GRID */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px 14px}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer}
+.pimg-wrap{position:relative;width:100%;height:120px;background:var(--card-2)}
+.pimg-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.pimg-wrap .noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:26px}
+.sold-badge{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;letter-spacing:1px}
+.pinfo{padding:10px}
+.pprice{font-size:14px;font-weight:800;color:var(--accent)}
+.ptitle{font-size:11.5px;color:var(--text);margin-top:3px;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:31px}
+.pmeta{display:flex;align-items:center;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--muted)}
+.wa-btn{width:100%;margin-top:8px;padding:7px;border-radius:8px;border:0;background:#25D366;color:#fff;font-size:11px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.wa-btn:disabled{background:var(--card-2);color:var(--muted)}
+.manage-mini{display:flex;gap:6px;margin-top:8px}
+.manage-mini button{flex:1;padding:6px;border-radius:8px;border:1px solid var(--border);background:var(--card-2);color:var(--text-2);font-size:10px;cursor:pointer}
+
+/* STATES */
+.center{grid-column:1/-1;text-align:center;padding:60px 24px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:34px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:14px;padding:10px 22px;border-radius:20px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+.skeleton{height:190px;border-radius:14px;background:var(--card);animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* SHEET */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:92vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 4px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.sheet-title i{color:var(--muted);cursor:pointer;font-size:15px}
+.form{padding:0 20px}
+.form label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form input[type=number],.form textarea,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:84px;resize:vertical}
+.form select option{color:#000}
+.row2{display:flex;gap:10px}
+.row2>div{flex:1}
+.hint{font-size:10px;color:var(--muted);margin-top:5px}
+.upl{display:flex;align-items:center;gap:10px}
+.upl-prev{width:60px;height:44px;border-radius:10px;background:rgba(128,128,128,.15);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--muted);flex-shrink:0}
+.upl-prev img{width:100%;height:100%;object-fit:cover}
+.sm{padding:8px 14px;border-radius:16px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.btns{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.wa{background:#25D366;border-color:transparent;color:#fff}
+.btn.danger{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.3)}
+.btn:disabled{opacity:.6}
+
+/* DETAILS */
+.det-img{width:100%;height:220px;object-fit:cover;background:var(--card-2)}
+.det-body{padding:16px 20px}
+.det-price{font-size:22px;font-weight:800;color:var(--accent)}
+.det-title{font-size:16px;font-weight:700;margin-top:6px}
+.det-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.det-tag{font-size:11px;color:var(--text-2);background:var(--card-2);padding:5px 11px;border-radius:8px;display:flex;align-items:center;gap:5px}
+.det-tag i{color:var(--accent)}
+.det-desc{margin-top:12px;font-size:13px;line-height:1.65;color:var(--text-2);white-space:pre-wrap}
+
+/* BOTTOM NAV (hardcoded, no nav.js) */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;height:62px;display:flex;align-items:center;justify-content:space-around;background:var(--bg);border-top:1px solid var(--border);z-index:300}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:500;color:var(--muted);cursor:pointer}
+.nb i{font-size:19px}
+.nb.on{color:var(--accent)}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-l">
+      <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+      <div class="hdr-title">E-Market</div>
+    </div>
+    <button class="hdr-sell" onclick="openCreate()"><i class="fas fa-plus"></i> Sell</button>
+  </div>
+  <div class="search">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search books, electronics, supplies..." oninput="onSearch(this.value)">
+  </div>
+</header>
+
+<div class="chips" id="chips">
+  <div class="chip on" data-cat="all" onclick="setCategory('all')">All</div>
+  <div class="chip" data-cat="Textbooks" onclick="setCategory('Textbooks')">Textbooks</div>
+  <div class="chip" data-cat="Electronics" onclick="setCategory('Electronics')">Electronics</div>
+  <div class="chip" data-cat="Furniture" onclick="setCategory('Furniture')">Furniture</div>
+  <div class="chip" data-cat="Fashion" onclick="setCategory('Fashion')">Fashion</div>
+  <div class="chip" data-cat="Supplies" onclick="setCategory('Supplies')">Supplies</div>
+  <div class="chip" data-cat="Services" onclick="setCategory('Services')">Services</div>
+</div>
+
+<div class="banner">
+  <div class="banner-text">
+    <h3>Buy &amp; sell with classmates</h3>
+    <p>Contact sellers directly on <span class="hl">WhatsApp</span></p>
+  </div>
+  <i class="fas fa-graduation-cap"></i>
+</div>
+
+<div class="grid" id="grid">
+  <div class="skeleton"></div><div class="skeleton"></div>
+</div>
+
+<!-- CREATE / EDIT PRODUCT SHEET -->
+<div class="ov" id="formOv" onclick="if(event.target===this)closeForm()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="formTitle">Sell an item</span><i class="fas fa-times" onclick="closeForm()"></i></div>
+    <div class="form">
+      <label>Photo</label>
+      <div class="upl">
+        <div class="upl-prev" id="fImgPrev"><i class="fas fa-image"></i></div>
+        <button class="sm" type="button" onclick="pickImage()">Choose photo</button>
+      </div>
+
+      <label>Item title</label>
+      <input type="text" id="fTitle" maxlength="100" placeholder="e.g. Data Structures Textbook (CSC 301)">
+
+      <div class="row2">
+        <div><label>Price (₦)</label>
+          <input type="number" id="fPrice" min="0" placeholder="e.g. 4500"></div>
+        <div><label>Category</label>
+          <select id="fCategory">
+            <option>Textbooks</option>
+            <option>Electronics</option>
+            <option>Furniture</option>
+            <option>Fashion</option>
+            <option>Supplies</option>
+            <option>Services</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <label>Location (optional)</label>
+      <input type="text" id="fLocation" maxlength="80" placeholder="e.g. FUD Campus">
+
+      <label>Description</label>
+      <textarea id="fDesc" maxlength="600" placeholder="Condition, details, why you're selling..."></textarea>
+
+      <label>Your WhatsApp number</label>
+      <input type="text" id="fWhatsapp" placeholder="e.g. 2348012345678">
+      <div class="hint">Include your country code, no spaces or plus sign needed. Buyers will message you directly on WhatsApp.</div>
+
+      <div class="btns">
+        <button class="btn" onclick="closeForm()">Cancel</button>
+        <button class="btn main" id="saveBtn" onclick="saveProduct()">Post Listing</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILS SHEET -->
+<div class="ov" id="detailsOv" onclick="if(event.target===this)closeDetails()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Item details</span><i class="fas fa-times" onclick="closeDetails()"></i></div>
+    <img class="det-img" id="detImg" src="" alt="" style="display:none">
+    <div class="det-body">
+      <div class="det-price" id="detPrice"></div>
+      <div class="det-title" id="detTitle"></div>
+      <div class="det-tags" id="detTags"></div>
+      <div class="det-desc" id="detDesc"></div>
+      <div class="btns" id="detBuyerBtns"></div>
+      <div class="btns" id="detOwnerBtns" style="display:none">
+        <button class="btn" id="detSoldBtn" onclick="toggleSoldFromDetails()">Mark as Sold</button>
+        <button class="btn" onclick="startEditFromDetails()"><i class="fas fa-pen"></i></button>
+        <button class="btn danger" onclick="deleteProductFromDetails()"><i class="fas fa-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="imageInput" accept="image/*" style="display:none">
+
+<!-- BOTTOM NAVIGATION BAR -->
+<nav class="bnav">
+  <div class="nb" onclick="window.location.href='home.html'">
+    <i class="fas fa-home"></i>
+    <span>Home</span>
+  </div>
+  <div class="nb" onclick="window.location.href='video.html'">
+    <i class="fas fa-video"></i>
+    <span>Video</span>
+  </div>
+  <div class="nb" onclick="window.location.href='chat.html'">
+    <i class="fas fa-comment-dots"></i>
+    <span>Chat</span>
+  </div>
+  <div class="nb" onclick="window.location.href='studyhub.html'">
+    <i class="fas fa-book-open"></i>
+    <span>StudyHub</span>
+  </div>
+  <div class="nb on" onclick="window.location.href='profile.html'">
+    <i class="fas fa-user"></i>
+    <span>Profile</span>
+  </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX E-MARKET — fully live from Supabase
+========================================================= */
+
+let me = null, myProfile = null;
+let products = [];
+let currentCategory = "all";
+let searchTerm = "";
+let editingProductId = null;
+let detailsProductId = null;
+let pendingImage = null;
+let searchDebounce = null;
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v == null) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function money(n){
+  n = Number(n);
+  if (!n && n !== 0) return "Price on request";
+  return "₦" + n.toLocaleString();
+}
+function toast(msg){
+  const old = document.querySelector(".toast"); if (old) old.remove();
+  const d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "home.html";
+}
+
+/* Turns a phone number into a wa.me link with a pre-filled message */
+function buildWhatsAppLink(product){
+  const digits = String(product.whatsapp_number || "").replace(/[^\d]/g, "");
+  const text = encodeURIComponent(`Hi! I'm interested in your "${product.title}" listed on StudentX Marketplace.`);
+  return `https://wa.me/${digits}?text=${text}`;
+}
+
+function sanitizeWhatsApp(value){
+  return String(value || "").replace(/[^\d]/g, "");
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  const auth = await supabaseClient.auth.getUser();
+  me = auth.data && auth.data.user;
+  if (!me){ location.href = "login.html"; return; }
+
+  const p = await supabaseClient.from("profiles").select("id,full_name,username").eq("id", me.id).maybeSingle();
+  myProfile = p.data || { id: me.id };
+
+  await loadProducts();
+}
+
+async function loadProducts(){
+  const grid = $("grid");
+  grid.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+
+  const r = await supabaseClient.from("products").select("*").order("created_at", { ascending: false });
+  if (r.error){
+    console.error("Products error:", r.error);
+    grid.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load listings</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  products = r.data || [];
+  renderGrid();
+}
+
+/* =========================================================
+   FILTER + SEARCH
+========================================================= */
+function setCategory(cat){
+  currentCategory = cat;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.cat === cat));
+  renderGrid();
+}
+
+function onSearch(value){
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    searchTerm = value.trim().toLowerCase();
+    renderGrid();
+  }, 250);
+}
+
+function getVisible(){
+  let rows = products;
+  if (currentCategory !== "all") rows = rows.filter(p => p.category === currentCategory);
+  if (searchTerm){
+    rows = rows.filter(p =>
+      (p.title || "").toLowerCase().includes(searchTerm) ||
+      (p.description || "").toLowerCase().includes(searchTerm)
+    );
+  }
+  return rows;
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+function renderGrid(){
+  const grid = $("grid");
+  const rows = getVisible();
+
+  if (!rows.length){
+    grid.innerHTML = `<div class="center"><i class="fas fa-store-slash"></i><b>No listings found</b>Be the first to sell something here.<br><button class="cta" onclick="openCreate()">Sell an item</button></div>`;
+    return;
+  }
+
+  grid.innerHTML = rows.map(renderCard).join("");
+}
+
+function renderCard(p){
+  const isMine = p.seller_id === me.id;
+  const isSold = p.status === "sold";
+
+  const imgHTML = p.image_url
+    ? `<img src="${esc(p.image_url)}" alt="" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'noimg\\'><i class=\\'fas fa-image\\'></i></div>'">`
+    : `<div class="noimg"><i class="fas fa-image"></i></div>`;
+
+  let footer;
+  if (isMine){
+    footer = `<div class="manage-mini">
+      <button onclick="event.stopPropagation();startEdit('${esc(p.id)}')"><i class="fas fa-pen"></i></button>
+      <button onclick="event.stopPropagation();confirmDelete('${esc(p.id)}')"><i class="fas fa-trash"></i></button>
+    </div>`;
+  } else {
+    footer = `<button class="wa-btn" ${isSold ? "disabled" : ""} onclick="event.stopPropagation();${isSold ? "" : `contactSeller('${esc(p.id)}')`}"><i class="fab fa-whatsapp"></i> ${isSold ? "Sold" : "Contact Seller"}</button>`;
+  }
+
+  return `<div class="pcard" onclick="openDetails('${esc(p.id)}')">
+    <div class="pimg-wrap">
+      ${imgHTML}
+      ${isSold ? '<div class="sold-badge">SOLD</div>' : ""}
+    </div>
+    <div class="pinfo">
+      <div class="pprice">${esc(money(p.price))}</div>
+      <div class="ptitle">${esc(p.title)}</div>
+      <div class="pmeta">
+        <span><i class="fas fa-location-dot"></i> ${esc(p.location || "—")}</span>
+      </div>
+      ${footer}
+    </div>
+  </div>`;
+}
+
+/* =========================================================
+   CONTACT SELLER (opens WhatsApp directly)
+========================================================= */
+function contactSeller(id){
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p) return;
+  window.open(buildWhatsAppLink(p), "_blank", "noopener");
+}
+
+/* =========================================================
+   CREATE / EDIT
+========================================================= */
+function openCreate(){
+  editingProductId = null;
+  pendingImage = null;
+  $("formTitle").textContent = "Sell an item";
+  $("saveBtn").textContent = "Post Listing";
+  $("fImgPrev").innerHTML = '<i class="fas fa-image"></i>';
+  $("fTitle").value = "";
+  $("fPrice").value = "";
+  $("fCategory").value = "Textbooks";
+  $("fLocation").value = "";
+  $("fDesc").value = "";
+  $("fWhatsapp").value = "";
+  $("formOv").classList.add("show");
+}
+
+function startEdit(id){
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p || p.seller_id !== me.id) return;
+
+  editingProductId = p.id;
+  pendingImage = null;
+  $("formTitle").textContent = "Edit listing";
+  $("saveBtn").textContent = "Save changes";
+  $("fImgPrev").innerHTML = p.image_url ? `<img src="${esc(p.image_url)}" alt="">` : '<i class="fas fa-image"></i>';
+  $("fTitle").value = p.title || "";
+  $("fPrice").value = p.price != null ? p.price : "";
+  $("fCategory").value = p.category || "Textbooks";
+  $("fLocation").value = p.location || "";
+  $("fDesc").value = p.description || "";
+  $("fWhatsapp").value = p.whatsapp_number || "";
+  $("formOv").classList.add("show");
+}
+
+function startEditFromDetails(){
+  closeDetails();
+  startEdit(detailsProductId);
+}
+
+function closeForm(){
+  $("formOv").classList.remove("show");
+}
+
+function pickImage(){
+  $("imageInput").click();
+}
+
+$("imageInput").addEventListener("change", function(e){
+  const f = e.target.files[0];
+  e.target.value = "";
+  if (!f) return;
+  if (!f.type.startsWith("image/")){ toast("Choose an image"); return; }
+  if (f.size > 6 * 1024 * 1024){ toast("Image must be under 6 MB"); return; }
+  pendingImage = f;
+  $("fImgPrev").innerHTML = `<img src="${URL.createObjectURL(f)}" alt="">`;
+});
+
+async function saveProduct(){
+  const title = $("fTitle").value.trim();
+  const whatsapp = sanitizeWhatsApp($("fWhatsapp").value);
+  const priceRaw = $("fPrice").value;
+
+  if (!title){ toast("Enter an item title"); return; }
+  if (whatsapp.length < 10){ toast("Enter a valid WhatsApp number with country code"); return; }
+
+  const btn = $("saveBtn");
+  btn.disabled = true; btn.textContent = "Saving...";
+
+  try {
+    let imageUrl = null;
+    if (pendingImage){
+      const ext = (pendingImage.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+      const path = me.id + "/" + Date.now() + "." + ext;
+      const up = await supabaseClient.storage.from("products").upload(path, pendingImage, { contentType: pendingImage.type, upsert: false });
+      if (up.error) throw up.error;
+      imageUrl = supabaseClient.storage.from("products").getPublicUrl(path).data.publicUrl;
+    }
+
+    const payload = {
+      title,
+      price: priceRaw !== "" ? Number(priceRaw) : null,
+      category: $("fCategory").value,
+      location: $("fLocation").value.trim() || null,
+      description: $("fDesc").value.trim() || null,
+      whatsapp_number: whatsapp
+    };
+    if (imageUrl) payload.image_url = imageUrl;
+
+    if (editingProductId){
+      const r = await supabaseClient.from("products").update(payload).eq("id", editingProductId).eq("seller_id", me.id);
+      if (r.error) throw r.error;
+      toast("Listing updated");
+    } else {
+      payload.seller_id = me.id;
+      const r = await supabaseClient.from("products").insert(payload);
+      if (r.error) throw r.error;
+      toast("Listing posted");
+    }
+
+    closeForm();
+    await loadProducts();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not save listing");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingProductId ? "Save changes" : "Post Listing";
+  }
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+async function confirmDelete(id){
+  if (!confirm("Delete this listing?")) return;
+  const r = await supabaseClient.from("products").delete().eq("id", id).eq("seller_id", me.id);
+  if (r.error){ console.error(r.error); toast("Could not delete listing"); return; }
+  toast("Listing deleted");
+  await loadProducts();
+}
+
+function deleteProductFromDetails(){
+  const id = detailsProductId;
+  closeDetails();
+  confirmDelete(id);
+}
+
+/* =========================================================
+   MARK AS SOLD / ACTIVE AGAIN
+========================================================= */
+async function toggleSold(id){
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p || p.seller_id !== me.id) return;
+  const newStatus = p.status === "sold" ? "active" : "sold";
+
+  const r = await supabaseClient.from("products").update({ status: newStatus }).eq("id", id).eq("seller_id", me.id);
+  if (r.error){ toast("Could not update listing"); return; }
+
+  toast(newStatus === "sold" ? "Marked as sold" : "Listing reactivated");
+  await loadProducts();
+}
+
+function toggleSoldFromDetails(){
+  toggleSold(detailsProductId);
+  closeDetails();
+}
+
+/* =========================================================
+   DETAILS SHEET
+========================================================= */
+function openDetails(id){
+  const p = products.find(x => String(x.id) === String(id));
+  if (!p) return;
+  detailsProductId = p.id;
+
+  const img = $("detImg");
+  if (p.image_url){ img.src = p.image_url; img.style.display = "block"; }
+  else { img.style.display = "none"; }
+
+  $("detPrice").textContent = money(p.price);
+  $("detTitle").textContent = p.title;
+  $("detTags").innerHTML = `
+    <div class="det-tag"><i class="fas fa-tag"></i>${esc(p.category)}</div>
+    ${p.location ? `<div class="det-tag"><i class="fas fa-location-dot"></i>${esc(p.location)}</div>` : ""}
+    ${p.status === "sold" ? `<div class="det-tag"><i class="fas fa-circle-check"></i>Sold</div>` : ""}
+  `;
+  $("detDesc").textContent = p.description || "No description provided.";
+
+  const isMine = p.seller_id === me.id;
+  $("detOwnerBtns").style.display = isMine ? "flex" : "none";
+  $("detBuyerBtns").style.display = isMine ? "none" : "flex";
+
+  if (isMine){
+    $("detSoldBtn").textContent = p.status === "sold" ? "Reactivate Listing" : "Mark as Sold";
+  } else {
+    const sold = p.status === "sold";
+    $("detBuyerBtns").innerHTML = `<button class="btn wa" ${sold ? "disabled" : ""} onclick="${sold ? "" : `contactSeller('${esc(p.id)}')`}"><i class="fab fa-whatsapp"></i> ${sold ? "This item is sold" : "Message on WhatsApp"}</button>`;
+  }
+
+  $("detailsOv").classList.add("show");
+}
+
+function closeDetails(){
+  $("detailsOv").classList.remove("show");
+  detailsProductId = null;
+}
+
+init();
+</script>
+</body>
+</html>
