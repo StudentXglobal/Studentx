@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>StudentX Live</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.22.3/dist/livekit-client.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#000;color:#fff;font-family:Arial,sans-serif;overflow:hidden}
+.live-page{position:relative;width:100%;height:100dvh;background:#000}
+#remoteVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000}
+.loading,.error{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;background:#050505;z-index:30}
+.error{display:none}.loading i{font-size:36px;color:#8a2be2;margin-bottom:12px}.loading span,.error p{font-size:13px;color:#aaa;line-height:1.5}
+.error i{font-size:42px;color:#ff304f;margin-bottom:15px}.error h2{font-size:19px;margin-bottom:8px}
+.top{position:absolute;top:0;left:0;width:100%;padding:18px 15px;padding-top:calc(18px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;z-index:20;background:linear-gradient(to bottom,rgba(0,0,0,.72),transparent)}
+.back,.action{width:42px;height:42px;border:0;border-radius:50%;background:rgba(0,0,0,.58);color:#fff;font-size:16px}.live-badge{padding:7px 11px;border-radius:8px;background:#ff304f;font-size:11px;font-weight:700}
+.viewer-box{position:absolute;top:20px;right:15px;z-index:21;padding:7px 10px;border-radius:8px;background:rgba(0,0,0,.6);font-size:12px}
+.info{position:absolute;left:15px;right:15px;bottom:82px;z-index:20;display:none;text-shadow:0 1px 4px #000}.streamer{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.avatar{width:43px;height:43px;border-radius:50%;object-fit:cover;border:2px solid #fff;background:#222}.name{font-size:14px;font-weight:700}.username{font-size:11px;color:#ccc;margin-top:2px}.title{font-size:16px;font-weight:600;margin-bottom:5px}.category{font-size:12px;color:#bbb}
+.controls{position:absolute;bottom:18px;left:0;right:0;padding-bottom:env(safe-area-inset-bottom);z-index:25;display:flex;justify-content:center;gap:14px}.leave,.mute{width:55px;height:55px;border:0;border-radius:50%;color:#fff;font-size:18px}.leave{background:#e52b45}.mute{background:rgba(0,0,0,.62)}
+.toast{position:absolute;left:50%;bottom:95px;transform:translateX(-50%);z-index:50;background:rgba(0,0,0,.8);padding:9px 13px;border-radius:8px;font-size:12px;display:none;white-space:nowrap}
+</style>
+</head>
+<body>
+<div class="live-page">
+<video id="remoteVideo" autoplay playsinline></video>
+<div id="loading" class="loading"><i class="fas fa-circle-notch fa-spin"></i><span id="loadingText">Finding live stream...</span></div>
+<div id="error" class="error"><i class="fas fa-video-slash"></i><h2 id="errorTitle">Live unavailable</h2><p id="errorMessage">This live stream is no longer available.</p></div>
+<div class="top"><button class="back" onclick="leaveLive()"><i class="fas fa-arrow-left"></i></button><div class="live-badge">LIVE</div></div>
+<div class="viewer-box"><i class="fas fa-eye"></i> <span id="viewerCount">0</span></div>
+<div id="liveInfo" class="info"><div class="streamer"><img id="avatar" class="avatar" src="" alt=""><div><div id="streamerName" class="name">StudentX User</div><div id="streamerUsername" class="username"></div></div></div><div id="liveTitle" class="title">StudentX Live</div><div id="liveCategory" class="category">General</div></div>
+<div class="controls"><button id="muteBtn" class="mute" onclick="toggleMute()"><i class="fas fa-volume-high"></i></button><button class="leave" onclick="leaveLive()"><i class="fas fa-phone-slash"></i></button></div>
+<div id="toast" class="toast"></div>
+</div>
+<script src="supabase.js"></script><script src="nav.js"></script>
+<script>
+(function(){
+"use strict";
+const SUPABASE_URL="https://acragelglvdnqhvbjcgx.supabase.co";
+const SUPABASE_KEY="sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+const $=id=>document.getElementById(id);
+const video=$("remoteVideo"),loading=$("loading"),loadingText=$("loadingText"),errorBox=$("error"),errorTitle=$("errorTitle"),errorMessage=$("errorMessage"),viewerCount=$("viewerCount");
+let sxClient=null,currentUser=null,liveSession=null,room=null,viewerRowId=null,joined=false,leaving=false,muted=false,countTimer=null;
+
+function client(){
+ if(window.supabaseClient&&typeof window.supabaseClient.from==="function")return window.supabaseClient;
+ if(window.supabase&&typeof window.supabase.createClient==="function")return window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+ throw new Error("StudentX Supabase client could not be initialized.");
+}
+function setLoading(t){errorBox.style.display="none";loading.style.display="flex";loadingText.textContent=t}
+function showError(t,m){loading.style.display="none";errorBox.style.display="flex";errorTitle.textContent=t;errorMessage.textContent=m}
+function toast(m){const e=$("toast");e.textContent=m;e.style.display="block";clearTimeout(window.__sxToast);window.__sxToast=setTimeout(()=>e.style.display="none",1800)}
+function rawSessionId(){const p=new URLSearchParams(location.search);const id=(p.get("id")||p.get("session")||p.get("room")||"").trim();return(!id||id.toLowerCase()==="null"||id.toLowerCase()==="undefined")?null:id}
+function looksLikeUuid(v){return/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(v)}
+
+async function loadUser(){
+ let r=await sxClient.auth.getSession(),s=r.data?.session||null;
+ if(!s){r=await sxClient.auth.refreshSession();s=r.data?.session||null}
+ if(!s){showError("Login required","Please login before watching this live.");return false}
+ r=await sxClient.auth.getUser();
+ if(r.error||!r.data?.user){showError("Login required","Your StudentX login session has expired.");return false}
+ currentUser=r.data.user;return true;
+}
+async function loadLive(){
+ const requested=rawSessionId();let r;
+ if(requested){
+  if(!looksLikeUuid(requested)){showError("Invalid live link","The live session ID is not a valid UUID.");return false}
+  r=await sxClient.from("live_sessions").select("*").eq("id",requested).eq("status","live").maybeSingle();
+ }else{
+  r=await sxClient.from("live_sessions").select("*").eq("status","live").order("started_at",{ascending:false}).limit(1).maybeSingle();
+ }
+ if(r.error){showError("Unable to load live",r.error.message||"Could not load the live stream.");return false}
+ if(!r.data){showError("No live stream","There is currently no active live stream.");return false}
+ liveSession=r.data;
+ history.replaceState({}, "", location.pathname+"?id="+encodeURIComponent(liveSession.id));
+ return true;
+}
+async function loadStreamer(){
+ const id=liveSession.broadcaster_id||liveSession.user_id;
+ if(!id){showError("Live configuration error","This live session has no broadcaster.");return false}
+ const r=await sxClient.from("profiles").select("id,full_name,username,avatar_url").eq("id",id).maybeSingle();
+ if(r.data){
+  $("streamerName").textContent=r.data.full_name||"StudentX User";
+  $("streamerUsername").textContent=r.data.username?"@"+r.data.username:"";
+  if(r.data.avatar_url)$("avatar").src=r.data.avatar_url;
+ }
+ $("liveTitle").textContent=liveSession.title||"StudentX Live";
+ $("liveCategory").textContent=liveSession.category||"General";
+ $("liveInfo").style.display="block";return true;
+}
+async function refreshViewerCount(){
+ if(!liveSession)return;
+ const r=await sxClient.from("live_viewers").select("id",{count:"exact",head:true}).eq("session_id",liveSession.id).is("left_at",null);
+ if(!r.error)viewerCount.textContent=String(r.count||0);
+}
+async function requestToken(){
+ const r=await sxClient.auth.getSession(),s=r.data?.session;
+ if(!s?.access_token)throw new Error("Your StudentX login session has expired.");
+ const endpoint=new URL("/api/livekit-token",window.location.origin).href;
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+ let response;
+ try{
+  response=await fetch(endpoint,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json","Authorization":"Bearer "+s.access_token},body:JSON.stringify({liveSessionId:liveSession.id,role:"viewer"}),cache:"no-store",credentials:"same-origin",signal:controller.signal});
+ }catch(e){
+  if(e.name==="AbortError")throw new Error("Live server timed out after 15 seconds.");
+  throw new Error("Cannot reach the StudentX live server. Check your internet connection.");
+ }finally{clearTimeout(timer)}
+ const text=await response.text();let data={};try{data=text?JSON.parse(text):{}}catch(e){}
+ if(!response.ok)throw new Error(data.error||("Live server returned HTTP "+response.status+"."));
+ if(!data.serverUrl||!data.participantToken||!data.roomName)throw new Error("Live server returned an incomplete LiveKit response.");
+ return data;
+}
+async function joinViewerRow(){
+ const r=await sxClient.from("live_viewers").select("id").eq("session_id",liveSession.id).eq("user_id",currentUser.id).maybeSingle();
+ if(r.data){
+  viewerRowId=r.data.id;
+  const u=await sxClient.from("live_viewers").update({joined_at:new Date().toISOString(),left_at:null}).eq("id",viewerRowId);
+  if(u.error)throw new Error(u.error.message);
+ }else{
+  const i=await sxClient.from("live_viewers").insert({session_id:liveSession.id,user_id:currentUser.id,joined_at:new Date().toISOString(),left_at:null}).select("id").single();
+  if(i.error)throw new Error(i.error.message);
+  viewerRowId=i.data.id;
+ }
+ joined=true;await refreshViewerCount();
+}
+function attachTrack(track){
+ if(!track)return;
+ if(track.kind==="video"){
+  const stream=new MediaStream([track.mediaStreamTrack]);
+  video.srcObject=stream;video.muted=muted;video.volume=muted?0:1;
+  video.play().then(()=>loading.style.display="none").catch(()=>{loading.style.display="none";toast("Tap the screen to start the live video.")});
+ }else if(track.kind==="audio"){
+  let audio=$("livekit-audio");
+  if(!audio){audio=document.createElement("audio");audio.id="livekit-audio";audio.autoplay=true;audio.playsInline=true;audio.style.display="none";document.body.appendChild(audio)}
+  audio.srcObject=new MediaStream([track.mediaStreamTrack]);audio.muted=muted;audio.volume=muted?0:1;audio.play().catch(()=>toast("Tap the screen to start audio."));
+ }
+}
+function removeTrack(track){try{track.detach().forEach(e=>e.remove())}catch(e){}}
+async function connectLiveKit(){
+ if(!window.LivekitClient)throw new Error("LiveKit library did not load.");
+ setLoading("Getting secure live connection...");
+ const d=await requestToken();
+ setLoading("Connecting to streamer...");
+ room=new LivekitClient.Room({adaptiveStream:true,dynacast:true,disconnectOnPageLeave:true});
+ room.on(LivekitClient.RoomEvent.TrackSubscribed,(track)=>attachTrack(track));
+ room.on(LivekitClient.RoomEvent.TrackUnsubscribed,(track)=>removeTrack(track));
+ room.on(LivekitClient.RoomEvent.ParticipantActive,()=>{loading.style.display="none";toast("Live connection active.")});
+ room.on(LivekitClient.RoomEvent.Reconnecting,()=>setLoading("Reconnecting to live..."));
+ room.on(LivekitClient.RoomEvent.Reconnected,()=>{loading.style.display="none";video.play().catch(()=>{})});
+ room.on(LivekitClient.RoomEvent.TrackSubscriptionFailed,()=>toast("Unable to receive the live video."));
+ room.on(LivekitClient.RoomEvent.Disconnected,()=>{if(!leaving)showError("Live disconnected","The connection to the live stream was lost.")});
+ try{
+  if(typeof room.prepareConnection==="function")room.prepareConnection(d.serverUrl,d.participantToken);
+  const connect=room.connect(d.serverUrl,d.participantToken,{autoSubscribe:true,websocketTimeout:10000,peerConnectionTimeout:15000,maxRetries:2});
+  await Promise.race([connect,new Promise((_,reject)=>setTimeout(()=>reject(new Error("LiveKit connection timed out after 20 seconds.")),20000))]);
+ }catch(e){try{await room.disconnect()}catch(x){}room=null;throw e}
+ for(const participant of room.remoteParticipants.values()){
+  for(const publication of participant.trackPublications.values()){
+   if(publication.track)attachTrack(publication.track);
+  }
+ }
+ if(room.remoteParticipants.size===0)setLoading("Waiting for streamer video...");
+}
+async function subscribeStatus(){
+ const ch=sxClient.channel("live-status-"+liveSession.id+"-"+currentUser.id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"live_sessions",filter:"id=eq."+liveSession.id},p=>{
+  liveSession=p.new;
+  if(p.new.status!=="live"){showError("Live has ended","The streamer has ended this live.");setTimeout(leaveLive,1500)}
+  refreshViewerCount();
+ });
+ ch.subscribe(status=>console.log("Live status:",status));window.__sxLiveStatus=ch;
+}
+function startCount(){if(countTimer)clearInterval(countTimer);refreshViewerCount();countTimer=setInterval(refreshViewerCount,5000)}
+function stopCount(){if(countTimer){clearInterval(countTimer);countTimer=null}}
+async function leaveLive(){
+ if(leaving)return;leaving=true;stopCount();
+ try{if(joined&&viewerRowId)await sxClient.from("live_viewers").update({left_at:new Date().toISOString()}).eq("id",viewerRowId)}catch(e){}
+ try{if(room){await room.disconnect();room=null}}catch(e){}
+ try{if(window.__sxLiveStatus)await sxClient.removeChannel(window.__sxLiveStatus)}catch(e){}
+ location.href="video.html";
+}
+window.leaveLive=leaveLive;
+window.toggleMute=function(){
+ muted=!muted;video.muted=muted;video.volume=muted?0:1;
+ const audio=$("livekit-audio");if(audio){audio.muted=muted;audio.volume=muted?0:1}
+ $("muteBtn").innerHTML=muted?'<i class="fas fa-volume-xmark"></i>':'<i class="fas fa-volume-high"></i>';
+ if(!muted){video.play().catch(()=>{});if(audio)audio.play().catch(()=>{})}
+};
+video.addEventListener("click",()=>{muted=false;video.muted=false;video.volume=1;const a=$("livekit-audio");if(a){a.muted=false;a.volume=1;a.play().catch(()=>{})}video.play().catch(()=>{});$("muteBtn").innerHTML='<i class="fas fa-volume-high"></i>'});
+window.addEventListener("pagehide",()=>{stopCount();try{if(room)room.disconnect()}catch(e){}});
+(async function(){
+ try{
+  setLoading("Checking StudentX account...");
+  sxClient=client();
+  if(!(await loadUser()))return;
+  setLoading("Finding live stream...");
+  if(!(await loadLive()))return;
+  if(!(await loadStreamer()))return;
+  const broadcaster=liveSession.broadcaster_id||liveSession.user_id;
+  if(currentUser.id===broadcaster){showError("You are the streamer","Use another account or browser to watch this live.");return}
+  await joinViewerRow();
+  startCount();
+  await subscribeStatus();
+  await connectLiveKit();
+  if(room)loading.style.display="none";
+ }catch(e){
+  console.error("StudentX view-live error:",e);
+  showError("Unable to connect",e.message||"Unable to connect to the live stream.");
+ }
+})();
+})();
+</script>
+</body>
+</html>
