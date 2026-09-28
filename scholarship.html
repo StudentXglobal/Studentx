@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Scholarships - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+  --gold:#fbbf24;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:82px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+/* HEADER */
+.hdr{position:sticky;top:0;z-index:100;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hdr-l{display:flex;align-items:center;gap:10px}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{font-size:19px;font-weight:800}
+.hdr-post{display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:12px;font-weight:700;cursor:pointer}
+
+.search{display:flex;align-items:center;gap:10px;padding:0 14px;height:44px;border-radius:12px;background:var(--card);border:1px solid var(--border)}
+.search i{color:var(--muted);font-size:14px}
+.search input{flex:1;border:0;outline:0;background:none;color:var(--text);font-size:13px}
+.search input::placeholder{color:var(--muted)}
+
+/* CHIPS */
+.chips{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{padding:7px 15px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--border);white-space:nowrap;cursor:pointer}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff}
+
+/* LIST */
+.list{padding:14px}
+.sc-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px;cursor:pointer;position:relative}
+.sc-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.sc-icon{width:46px;height:46px;border-radius:12px;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:20px;flex-shrink:0}
+.sc-info h3{font-size:15px;margin-bottom:3px;line-height:1.3;padding-right:26px}
+.sc-info p{font-size:12px;color:var(--muted)}
+.sc-save{position:absolute;top:14px;right:14px;font-size:17px;color:var(--muted);cursor:pointer}
+.sc-save.on{color:var(--gold)}
+
+.sc-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.tag{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-2);background:var(--card-2);padding:5px 11px;border-radius:8px}
+.tag i{color:var(--accent);font-size:11px}
+.tag.amount{color:#4caf50}
+.tag.amount i{color:#4caf50}
+.tag.deadline.soon{color:var(--danger)}
+.tag.deadline.soon i{color:var(--danger)}
+.tag.deadline.expired{color:var(--muted)}
+.tag.deadline.expired i{color:var(--muted)}
+
+.sc-footer{display:flex;align-items:center;gap:8px;border-top:1px solid var(--border);padding-top:12px}
+.apply-btn{flex:1;background:var(--grad);color:#fff;border:0;padding:9px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;text-align:center}
+.apply-btn:disabled{background:var(--card-2);color:var(--muted)}
+.manage-mini{display:flex;gap:8px;flex:1}
+.manage-mini button{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--card-2);color:var(--text-2);font-size:11px;cursor:pointer}
+
+/* STATES */
+.center{text-align:center;padding:60px 24px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:34px;margin-bottom:12px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:14px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:14px;padding:10px 22px;border-radius:20px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+.skeleton{height:170px;border-radius:16px;background:var(--card);margin-bottom:12px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* SHEET */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:92vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 4px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.sheet-title i{color:var(--muted);cursor:pointer;font-size:15px}
+.form{padding:0 20px}
+.form label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form input[type=datetime-local],.form input[type=url],.form textarea,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form textarea{min-height:84px;resize:vertical}
+.form select option{color:#000}
+.row2{display:flex;gap:10px}
+.row2>div{flex:1}
+.btns{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.danger{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.3)}
+.btn:disabled{opacity:.6}
+
+/* DETAILS */
+.det-tags{display:flex;flex-wrap:wrap;gap:8px;padding:0 20px 6px}
+.det-desc{padding:10px 20px;font-size:13px;line-height:1.65;color:var(--text-2);white-space:pre-wrap}
+
+/* BOTTOM NAV (hardcoded, no nav.js) */
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;height:62px;display:flex;align-items:center;justify-content:space-around;background:var(--bg);border-top:1px solid var(--border);z-index:300}
+.nb{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:9px;font-weight:500;color:var(--muted);cursor:pointer}
+.nb i{font-size:19px}
+.nb.on{color:var(--accent)}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-row">
+    <div class="hdr-l">
+      <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+      <div class="hdr-title">Scholarships</div>
+    </div>
+    <button class="hdr-post" onclick="openCreate()"><i class="fas fa-plus"></i> Post</button>
+  </div>
+  <div class="search">
+    <i class="fas fa-search"></i>
+    <input type="text" id="searchInput" placeholder="Search scholarships..." oninput="onSearch(this.value)">
+  </div>
+</header>
+
+<div class="chips" id="chips">
+  <div class="chip on" data-level="all" onclick="setLevel('all')">All</div>
+  <div class="chip" data-level="Undergraduate" onclick="setLevel('Undergraduate')">Undergraduate</div>
+  <div class="chip" data-level="Postgraduate" onclick="setLevel('Postgraduate')">Postgraduate</div>
+  <div class="chip" data-level="International" onclick="setLevel('International')">International</div>
+  <div class="chip" data-level="Local" onclick="setLevel('Local')">Local</div>
+  <div class="chip" data-level="PhD" onclick="setLevel('PhD')">PhD</div>
+</div>
+
+<div class="list" id="list"><div class="skeleton"></div><div class="skeleton"></div></div>
+
+<!-- CREATE / EDIT SHEET -->
+<div class="ov" id="formOv" onclick="if(event.target===this)closeForm()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="formTitle">Post a scholarship</span><i class="fas fa-times" onclick="closeForm()"></i></div>
+    <div class="form">
+      <label>Scholarship title</label>
+      <input type="text" id="fTitle" maxlength="120" placeholder="e.g. MTN Foundation Scholarship">
+
+      <label>Provider / Organization</label>
+      <input type="text" id="fProvider" maxlength="100" placeholder="e.g. MTN Nigeria">
+
+      <div class="row2">
+        <div><label>Level</label>
+          <select id="fLevel">
+            <option>Undergraduate</option>
+            <option>Postgraduate</option>
+            <option>International</option>
+            <option>Local</option>
+            <option>PhD</option>
+          </select>
+        </div>
+        <div><label>Amount (optional)</label>
+          <input type="text" id="fAmount" maxlength="60" placeholder="e.g. ₦200,000/yr"></div>
+      </div>
+
+      <label>Application deadline</label>
+      <input type="datetime-local" id="fDeadline">
+
+      <label>Application link (optional)</label>
+      <input type="url" id="fLink" placeholder="https://...">
+
+      <label>Description</label>
+      <textarea id="fDesc" maxlength="800" placeholder="Eligibility, requirements, how to apply..."></textarea>
+
+      <div class="btns">
+        <button class="btn" onclick="closeForm()">Cancel</button>
+        <button class="btn main" id="saveBtn" onclick="saveScholarship()">Post Scholarship</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DETAILS SHEET -->
+<div class="ov" id="detailsOv" onclick="if(event.target===this)closeDetails()">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="detTitle">Scholarship details</span><i class="fas fa-times" onclick="closeDetails()"></i></div>
+    <div class="det-tags" id="detTags"></div>
+    <div class="det-desc" id="detDesc"></div>
+    <div class="form">
+      <div class="btns" id="detApplyBtns"></div>
+      <div class="btns" id="detOwnerBtns" style="display:none">
+        <button class="btn" onclick="startEditFromDetails()"><i class="fas fa-pen"></i> Edit</button>
+        <button class="btn danger" onclick="deleteScholarshipFromDetails()"><i class="fas fa-trash"></i> Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAVIGATION BAR -->
+<nav class="bnav">
+  <div class="nb" onclick="window.location.href='home.html'">
+    <i class="fas fa-home"></i>
+    <span>Home</span>
+  </div>
+  <div class="nb" onclick="window.location.href='video.html'">
+    <i class="fas fa-video"></i>
+    <span>Video</span>
+  </div>
+  <div class="nb" onclick="window.location.href='chat.html'">
+    <i class="fas fa-comment-dots"></i>
+    <span>Chat</span>
+  </div>
+  <div class="nb on" onclick="window.location.href='studyhub.html'">
+    <i class="fas fa-book-open"></i>
+    <span>StudyHub</span>
+  </div>
+  <div class="nb" onclick="window.location.href='profile.html'">
+    <i class="fas fa-user"></i>
+    <span>Profile</span>
+  </div>
+</nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX SCHOLARSHIPS — fully live from Supabase
+========================================================= */
+
+let me = null, myProfile = null;
+let scholarships = [];
+let savedSet = new Set();
+let currentLevel = "all";
+let searchTerm = "";
+let editingId = null;
+let detailsId = null;
+let searchDebounce = null;
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v == null) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function toast(msg){
+  const old = document.querySelector(".toast"); if (old) old.remove();
+  const d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "home.html";
+}
+
+function deadlineInfo(iso){
+  if (!iso) return { label: "No deadline", cls: "" };
+  const days = Math.ceil((new Date(iso).getTime() - Date.now()) / 86400000);
+  if (days < 0) return { label: "Expired", cls: "expired" };
+  if (days === 0) return { label: "Due today", cls: "soon" };
+  if (days === 1) return { label: "1 day left", cls: "soon" };
+  if (days <= 14) return { label: days + " days left", cls: "soon" };
+  return { label: new Date(iso).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" }), cls: "" };
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  const auth = await supabaseClient.auth.getUser();
+  me = auth.data && auth.data.user;
+  if (!me){ location.href = "login.html"; return; }
+
+  const p = await supabaseClient.from("profiles").select("id,full_name,username").eq("id", me.id).maybeSingle();
+  myProfile = p.data || { id: me.id };
+
+  await loadScholarships();
+}
+
+async function loadScholarships(){
+  const list = $("list");
+  list.innerHTML = '<div class="skeleton"></div><div class="skeleton"></div>';
+
+  const r = await supabaseClient.from("scholarships").select("*").order("deadline", { ascending: true, nullsFirst: false });
+  if (r.error){
+    console.error("Scholarships error:", r.error);
+    list.innerHTML = '<div class="center"><i class="fas fa-triangle-exclamation"></i><b>Unable to load scholarships</b>' + esc(r.error.message) + '</div>';
+    return;
+  }
+
+  scholarships = r.data || [];
+
+  const savesRes = await supabaseClient.from("scholarship_saves").select("scholarship_id").eq("user_id", me.id);
+  savedSet = new Set((savesRes.data || []).map(s => s.scholarship_id));
+
+  renderList();
+}
+
+/* =========================================================
+   FILTER + SEARCH
+========================================================= */
+function setLevel(level){
+  currentLevel = level;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c.dataset.level === level));
+  renderList();
+}
+
+function onSearch(value){
+  clearTimeout(searchDebounce);
+  searchDebounce = setTimeout(() => {
+    searchTerm = value.trim().toLowerCase();
+    renderList();
+  }, 250);
+}
+
+function getVisible(){
+  let rows = scholarships;
+  if (currentLevel !== "all") rows = rows.filter(s => s.level === currentLevel);
+  if (searchTerm){
+    rows = rows.filter(s =>
+      (s.title || "").toLowerCase().includes(searchTerm) ||
+      (s.provider || "").toLowerCase().includes(searchTerm)
+    );
+  }
+  return rows;
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+function renderList(){
+  const list = $("list");
+  const rows = getVisible();
+
+  if (!rows.length){
+    list.innerHTML = `<div class="center"><i class="fas fa-award"></i><b>No scholarships found</b>Know of one? Share it with other students.<br><button class="cta" onclick="openCreate()">Post a scholarship</button></div>`;
+    return;
+  }
+
+  list.innerHTML = rows.map(renderCard).join("");
+}
+
+function renderCard(s){
+  const isMine = s.created_by === me.id;
+  const isSaved = savedSet.has(s.id);
+  const dl = deadlineInfo(s.deadline);
+
+  let footer;
+  if (isMine){
+    footer = `<div class="manage-mini">
+      <button onclick="event.stopPropagation();startEdit('${esc(s.id)}')"><i class="fas fa-pen"></i> Edit</button>
+      <button onclick="event.stopPropagation();confirmDelete('${esc(s.id)}')"><i class="fas fa-trash"></i> Delete</button>
+    </div>`;
+  } else {
+    const expired = dl.label === "Expired";
+    footer = `<button class="apply-btn" ${expired ? "disabled" : ""} onclick="event.stopPropagation();${expired ? "" : `applyScholarship('${esc(s.id)}')`}">${expired ? "Deadline passed" : "Apply Now"}</button>`;
+  }
+
+  return `<div class="sc-card" onclick="openDetails('${esc(s.id)}')">
+    <i class="fas fa-bookmark sc-save ${isSaved ? "on" : ""}" onclick="event.stopPropagation();toggleSave('${esc(s.id)}')"></i>
+    <div class="sc-top">
+      <div class="sc-icon"><i class="fas fa-graduation-cap"></i></div>
+      <div class="sc-info">
+        <h3>${esc(s.title)}</h3>
+        <p>${esc(s.provider)}</p>
+      </div>
+    </div>
+    <div class="sc-tags">
+      ${s.amount_text ? `<div class="tag amount"><i class="fas fa-money-bill-wave"></i>${esc(s.amount_text)}</div>` : ""}
+      <div class="tag"><i class="fas fa-layer-group"></i>${esc(s.level)}</div>
+      <div class="tag deadline ${dl.cls}"><i class="fas fa-clock"></i>${esc(dl.label)}</div>
+    </div>
+    <div class="sc-footer">${footer}</div>
+  </div>`;
+}
+
+/* =========================================================
+   SAVE / BOOKMARK
+========================================================= */
+async function toggleSave(id){
+  const isSaved = savedSet.has(id);
+
+  const r = isSaved
+    ? await supabaseClient.from("scholarship_saves").delete().eq("scholarship_id", id).eq("user_id", me.id)
+    : await supabaseClient.from("scholarship_saves").insert({ scholarship_id: id, user_id: me.id });
+
+  if (r.error){ console.error(r.error); toast("Could not update saved list"); return; }
+
+  if (isSaved) savedSet.delete(id); else savedSet.add(id);
+  renderList();
+  if (detailsId === id) renderDetailsButtons();
+}
+
+/* =========================================================
+   APPLY
+========================================================= */
+function applyScholarship(id){
+  const s = scholarships.find(x => String(x.id) === String(id));
+  if (!s) return;
+  if (s.external_link){
+    window.open(s.external_link, "_blank", "noopener");
+  } else {
+    toast("No application link provided — check the description for how to apply.");
+  }
+}
+
+/* =========================================================
+   CREATE / EDIT
+========================================================= */
+function openCreate(){
+  editingId = null;
+  $("formTitle").textContent = "Post a scholarship";
+  $("saveBtn").textContent = "Post Scholarship";
+  $("fTitle").value = "";
+  $("fProvider").value = "";
+  $("fLevel").value = "Undergraduate";
+  $("fAmount").value = "";
+  $("fDeadline").value = "";
+  $("fLink").value = "";
+  $("fDesc").value = "";
+  $("formOv").classList.add("show");
+}
+
+function startEdit(id){
+  const s = scholarships.find(x => String(x.id) === String(id));
+  if (!s || s.created_by !== me.id) return;
+
+  editingId = s.id;
+  $("formTitle").textContent = "Edit scholarship";
+  $("saveBtn").textContent = "Save changes";
+  $("fTitle").value = s.title || "";
+  $("fProvider").value = s.provider || "";
+  $("fLevel").value = s.level || "Undergraduate";
+  $("fAmount").value = s.amount_text || "";
+
+  if (s.deadline){
+    const d = new Date(s.deadline);
+    const pad = n => String(n).padStart(2, "0");
+    $("fDeadline").value = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  } else {
+    $("fDeadline").value = "";
+  }
+
+  $("fLink").value = s.external_link || "";
+  $("fDesc").value = s.description || "";
+  $("formOv").classList.add("show");
+}
+
+function startEditFromDetails(){
+  closeDetails();
+  startEdit(detailsId);
+}
+
+function closeForm(){
+  $("formOv").classList.remove("show");
+}
+
+async function saveScholarship(){
+  const title = $("fTitle").value.trim();
+  const provider = $("fProvider").value.trim();
+
+  if (!title){ toast("Enter a scholarship title"); return; }
+  if (!provider){ toast("Enter the provider or organization name"); return; }
+
+  const deadlineRaw = $("fDeadline").value;
+  const payload = {
+    title,
+    provider,
+    level: $("fLevel").value,
+    amount_text: $("fAmount").value.trim() || null,
+    deadline: deadlineRaw ? new Date(deadlineRaw).toISOString() : null,
+    external_link: $("fLink").value.trim() || null,
+    description: $("fDesc").value.trim() || null
+  };
+
+  const btn = $("saveBtn");
+  btn.disabled = true; btn.textContent = "Saving...";
+
+  try {
+    if (editingId){
+      const r = await supabaseClient.from("scholarships").update(payload).eq("id", editingId).eq("created_by", me.id);
+      if (r.error) throw r.error;
+      toast("Scholarship updated");
+    } else {
+      payload.created_by = me.id;
+      const r = await supabaseClient.from("scholarships").insert(payload);
+      if (r.error) throw r.error;
+      toast("Scholarship posted");
+    }
+    closeForm();
+    await loadScholarships();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not save scholarship");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = editingId ? "Save changes" : "Post Scholarship";
+  }
+}
+
+/* =========================================================
+   DELETE
+========================================================= */
+async function confirmDelete(id){
+  if (!confirm("Delete this scholarship listing?")) return;
+  const r = await supabaseClient.from("scholarships").delete().eq("id", id).eq("created_by", me.id);
+  if (r.error){ console.error(r.error); toast("Could not delete listing"); return; }
+  toast("Scholarship deleted");
+  await loadScholarships();
+}
+
+function deleteScholarshipFromDetails(){
+  const id = detailsId;
+  closeDetails();
+  confirmDelete(id);
+}
+
+/* =========================================================
+   DETAILS SHEET
+========================================================= */
+function openDetails(id){
+  const s = scholarships.find(x => String(x.id) === String(id));
+  if (!s) return;
+  detailsId = s.id;
+
+  $("detTitle").textContent = s.title;
+  const dl = deadlineInfo(s.deadline);
+  $("detTags").innerHTML = `
+    <div class="tag"><i class="fas fa-building-columns"></i>${esc(s.provider)}</div>
+    <div class="tag"><i class="fas fa-layer-group"></i>${esc(s.level)}</div>
+    ${s.amount_text ? `<div class="tag amount"><i class="fas fa-money-bill-wave"></i>${esc(s.amount_text)}</div>` : ""}
+    <div class="tag deadline ${dl.cls}"><i class="fas fa-clock"></i>${esc(dl.label)}</div>
+  `;
+  $("detDesc").textContent = s.description || "No description provided.";
+
+  const isMine = s.created_by === me.id;
+  $("detOwnerBtns").style.display = isMine ? "flex" : "none";
+  $("detApplyBtns").style.display = isMine ? "none" : "flex";
+
+  renderDetailsButtons();
+
+  $("detailsOv").classList.add("show");
+}
+
+function renderDetailsButtons(){
+  if (!detailsId) return;
+  const s = scholarships.find(x => String(x.id) === String(detailsId));
+  if (!s) return;
+  const dl = deadlineInfo(s.deadline);
+  const expired = dl.label === "Expired";
+  const isSaved = savedSet.has(s.id);
+
+  $("detApplyBtns").innerHTML = `
+    <button class="btn" onclick="toggleSave('${esc(s.id)}')"><i class="fas fa-bookmark" style="color:${isSaved ? "var(--gold)" : "inherit"}"></i> ${isSaved ? "Saved" : "Save"}</button>
+    <button class="btn main" ${expired ? "disabled" : ""} onclick="${expired ? "" : `applyScholarship('${esc(s.id)}')`}">${expired ? "Deadline passed" : "Apply Now"}</button>
+  `;
+}
+
+function closeDetails(){
+  $("detailsOv").classList.remove("show");
+  detailsId = null;
+}
+
+init();
+</script>
+</body>
+</html>
