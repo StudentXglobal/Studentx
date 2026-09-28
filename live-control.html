@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>StudentX — Live Control Room</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.22.3/dist/livekit-client.umd.min.js"></script>
+<style>
+:root{--bg:#05050a;--card:#11101a;--line:#292638;--muted:#9793a5;--pink:#ff0f91;--violet:#9b35ff;--orange:#ff8a2b;--green:#25df9a}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
+body{min-height:100vh}
+.page{width:min(760px,100%);margin:auto;padding-bottom:24px}
+.top{height:58px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;background:#05050ae8;backdrop-filter:blur(14px)}
+.top h1{font-size:17px;margin:0;font-weight:800}
+.top-left{display:flex;align-items:center;gap:10px}
+.icon{width:39px;height:39px;border:1px solid var(--line);background:#11101a;color:#fff;border-radius:50%}
+.live-pill{display:flex;align-items:center;gap:7px;background:#251022;border:1px solid #ff248f55;padding:7px 10px;border-radius:12px;font-size:10px;font-weight:800}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#ff237f}
+.video-wrap{position:relative;background:#090810;width:100%;aspect-ratio:9/13;max-height:64vh;overflow:hidden}
+#hostVideo{width:100%;height:100%;object-fit:cover;background:#0b0a11}
+.overlay{position:absolute;inset:0;background:linear-gradient(#000b 0%,transparent 23%,transparent 65%,#000d 100%);pointer-events:none}
+.video-top{position:absolute;top:13px;left:13px;right:13px;display:flex;justify-content:space-between;z-index:2}
+.host-info{display:flex;align-items:center;gap:8px}
+.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #ff2a9b;background:#30283d}
+.host-name{font-size:12px;font-weight:800}
+.host-name small{display:block;color:#b8b4c0;font-weight:500;margin-top:3px}
+.stat-row{display:flex;gap:6px}
+.stat{padding:8px 9px;background:#0009;border:1px solid #ffffff17;border-radius:11px;font-size:10px}
+.video-bottom{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;display:flex;justify-content:space-between;align-items:end}
+.live-title{font-size:13px;font-weight:800;max-width:70%}
+.live-title small{display:block;color:#bbb6c4;font-weight:500;margin-top:4px}
+.control-row{display:flex;gap:8px;padding:11px;background:#090810;border-bottom:1px solid var(--line)}
+.control{flex:1;min-height:54px;border:1px solid var(--line);border-radius:15px;background:var(--card);color:#fff}
+.control i{display:block;font-size:15px;margin-bottom:5px}
+.control span{font-size:9px;color:#aaa6b4}
+.control.active{border-color:#ff2094;background:#211021}
+.tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;padding:10px 12px 0}
+.tab{border:1px solid var(--line);background:#0e0d15;color:#a9a5b3;padding:12px 5px;border-radius:13px;font-size:10px;font-weight:800}
+.tab.active{background:linear-gradient(100deg,#ff0f91,#7f2cff);color:#fff;border-color:transparent}
+.panel{margin:10px 12px 0;border:1px solid var(--line);border-radius:17px;background:var(--card);overflow:hidden}
+.panel-head{padding:13px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.panel-head strong{font-size:13px}.panel-head span{font-size:10px;color:var(--muted)}
+.comment{display:flex;gap:9px;padding:11px 13px;border-bottom:1px solid #211f2b}
+.comment img{width:31px;height:31px;border-radius:50%;object-fit:cover;background:#292437}
+.comment-body{flex:1;font-size:11px;line-height:1.4}
+.comment-body b{font-size:10px}.comment-body p{margin:3px 0;color:#c8c4ce}
+.comment-body time{font-size:9px;color:#666273}
+.input-row{display:flex;gap:7px;padding:10px;border-top:1px solid var(--line)}
+.input-row input{flex:1;min-width:0;background:#0b0a10;border:1px solid var(--line);color:#fff;border-radius:13px;padding:11px;font-size:11px;outline:0}
+.send{width:43px;border:0;border-radius:13px;color:#fff;background:linear-gradient(120deg,var(--pink),var(--violet))}
+.request{padding:12px;border-bottom:1px solid #211f2b;display:flex;align-items:center;gap:9px}
+.request-info{flex:1}.request-info b{font-size:11px}.request-info small{display:block;color:#777384;margin-top:3px}
+.accept,.decline{border:0;border-radius:10px;padding:8px 10px;color:#fff;font-size:9px;font-weight:800}
+.accept{background:var(--pink)}.decline{background:#292633;margin-left:4px}
+.gift{display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #211f2b}
+.gift-icon{width:42px;height:42px;border-radius:13px;background:#21142a;display:grid;place-items:center;color:#ff39a8;font-size:18px}
+.gift-info{flex:1}.gift-info b{font-size:11px}.gift-info small{display:block;color:#777384;margin-top:3px}
+.more-list .setting{display:flex;align-items:center;gap:11px;padding:12px;border-bottom:1px solid #211f2b}
+.more-list .setting:last-child{border:0}
+.setting i{width:35px;height:35px;border-radius:11px;background:#211d2d;display:grid;place-items:center;color:#ff32a5}
+.setting-main{flex:1}.setting-main b{font-size:11px}.setting-main small{display:block;color:#777384;font-size:9px;margin-top:3px}
+.end{margin:12px;width:calc(100% - 24px);height:54px;border:0;border-radius:17px;background:linear-gradient(100deg,#e90068,#ff3d42);color:#fff;font-size:14px;font-weight:900}
+.empty{padding:28px;text-align:center;color:#777384;font-size:11px}
+.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%);background:#201d29;border:1px solid #393445;color:#fff;padding:11px 15px;border-radius:13px;font-size:11px;z-index:99;display:none}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="top">
+  <div class="top-left">
+    <button class="icon" onclick="history.back()"><i class="fa-solid fa-chevron-left"></i></button>
+    <div>
+      <h1>Live Control Room</h1>
+      <div class="live-pill"><span class="live-dot"></span> LIVE <span id="headerViewers">0</span></div>
+    </div>
+  </div>
+  <button class="icon" onclick="shareLive()"><i class="fa-solid fa-share-nodes"></i></button>
+</header>
+
+<section class="video-wrap">
+  <video id="hostVideo" autoplay playsinline muted></video>
+  <div class="overlay"></div>
+
+  <div class="video-top">
+    <div class="host-info">
+      <img id="hostAvatar" class="avatar" src="" alt="">
+      <div class="host-name" id="hostName">StudentX Host<small id="hostHandle">@studentx</small></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><i class="fa-solid fa-eye"></i> <span id="videoViewers">0</span></div>
+      <div class="stat"><i class="fa-solid fa-gift"></i> <span id="videoGifts">0</span></div>
+    </div>
+  </div>
+
+  <div class="video-bottom">
+    <div class="live-title" id="liveTitle">StudentX Live<small id="liveCategory">Education</small></div>
+    <div class="live-pill"><span class="live-dot"></span> LIVE</div>
+  </div>
+</section>
+
+<div class="control-row">
+  <button class="control" id="micBtn" onclick="toggleMic()"><i class="fa-solid fa-microphone"></i><span>Mic ON</span></button>
+  <button class="control" id="camBtn" onclick="toggleCamera()"><i class="fa-solid fa-video"></i><span>Camera ON</span></button>
+  <button class="control" onclick="switchCamera()"><i class="fa-solid fa-camera-rotate"></i><span>Flip</span></button>
+  <button class="control" onclick="shareLive()"><i class="fa-solid fa-share-nodes"></i><span>Share</span></button>
+</div>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="comments">Comments</button>
+  <button class="tab" data-tab="cohost">Co-host</button>
+  <button class="tab" data-tab="gifts">Gifts</button>
+  <button class="tab" data-tab="more">More</button>
+</nav>
+
+<section id="commentsPanel" class="panel">
+  <div class="panel-head"><strong>Live comments</strong><span id="commentCount">0</span></div>
+  <div id="commentsList"><div class="empty">Waiting for comments...</div></div>
+  <div class="input-row">
+    <input id="commentInput" placeholder="Add a comment...">
+    <button class="send" onclick="sendComment()"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</section>
+
+<section id="cohostPanel" class="panel hidden">
+  <div class="panel-head"><strong>Co-host requests</strong><span id="cohostCount">0</span></div>
+  <div id="cohostList"><div class="empty">No co-host requests yet.</div></div>
+</section>
+
+<section id="giftsPanel" class="panel hidden">
+  <div class="panel-head"><strong>Gifts received</strong><span id="giftCount">0</span></div>
+  <div id="giftList"><div class="empty">No gifts yet.</div></div>
+</section>
+
+<section id="morePanel" class="panel hidden">
+  <div class="more-list">
+    <div class="setting" onclick="toggleMic()"><i class="fa-solid fa-microphone-slash"></i><div class="setting-main"><b>Mute microphone</b><small>Turn your microphone on or off</small></div></div>
+    <div class="setting" onclick="toggleCamera()"><i class="fa-solid fa-video-slash"></i><div class="setting-main"><b>Camera</b><small>Turn your camera on or off</small></div></div>
+    <div class="setting" onclick="shareLive()"><i class="fa-solid fa-share-nodes"></i><div class="setting-main"><b>Share live</b><small>Share this live with your friends</small></div></div>
+    <div class="setting"><i class="fa-solid fa-chart-simple"></i><div class="setting-main"><b>Live analytics</b><small>Viewers, gifts, comments and duration</small></div></div>
+    <div class="setting"><i class="fa-solid fa-square-poll-vertical"></i><div class="setting-main"><b>Live poll</b><small>Create a poll for your audience</small></div></div>
+  </div>
+</section>
+
+<button class="end" id="endLiveBtn"><i class="fa-solid fa-stop"></i>&nbsp; END LIVE</button>
+
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const SUPABASE_URL="https://acragelglvdnqhvbjcgx.supabase.co";
+const SUPABASE_KEY="sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let sessionId=new URLSearchParams(location.search).get("id")||sessionStorage.getItem("studentx_live_session_id");
+let session=null,user=null,room=null,tracks=[];
+let facingMode="user",micOn=true,cameraOn=true;
+let channels=[];
+
+const $=id=>document.getElementById(id);
+function toast(t){$("toast").textContent=t;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",2200)}
+function setText(id,v){if($(id))$(id).textContent=v}
+
+async function getSession(){
+  let r=await supabaseClient.auth.getSession();
+  if(r.data?.session)return r.data.session;
+  r=await supabaseClient.auth.refreshSession();
+  return r.data?.session||null;
+}
+
+async function loadLive(){
+  if(!sessionId)throw new Error("Live session ID is missing.");
+  const s=await getSession();
+  if(!s?.user)throw new Error("Please login again.");
+  user=s.user;
+
+  const {data,error}=await supabaseClient.from("live_sessions")
+    .select("id,status,title,description,category,viewer_count,broadcaster_id,user_id,started_at")
+    .eq("id",sessionId).maybeSingle();
+
+  if(error)throw new Error(error.message);
+  if(!data)throw new Error("Live session not found.");
+  if(data.status!=="live")throw new Error("This live session has already ended.");
+  session=data;
+
+  if((data.broadcaster_id||data.user_id)!==user.id)throw new Error("This live control room belongs to another account.");
+
+  setText("liveTitle",data.title||"StudentX Live");
+  setText("liveCategory",data.category||"Education");
+  setText("headerViewers",data.viewer_count||0);
+  setText("videoViewers",data.viewer_count||0);
+
+  await loadProfile(data.broadcaster_id||data.user_id);
+  await connectLiveKit(s.access_token);
+  subscribeRealtime();
+}
+
+async function loadProfile(uid){
+  const {data}=await supabaseClient.from("profiles").select("full_name,username,avatar_url").eq("id",uid).maybeSingle();
+  if(data){
+    setText("hostName",data.full_name||data.username||"StudentX Host");
+    setText("hostHandle",data.username?"@"+data.username:"@studentx");
+    if(data.avatar_url)$("hostAvatar").src=data.avatar_url;
+  }
+}
+
+async function connectLiveKit(accessToken){
+  if(!window.LivekitClient)throw new Error("LiveKit client failed to load.");
+
+  const r=await fetch("/api/livekit-token",{
+    method:"POST",
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+accessToken},
+    body:JSON.stringify({liveSessionId:sessionId,role:"broadcaster"})
+  });
+  const info=await r.json();
+  if(!r.ok)throw new Error(info.error||"Unable to connect to LiveKit.");
+
+  room=new LivekitClient.Room({adaptiveStream:true,dynacast:true});
+  room.on(LivekitClient.RoomEvent.Disconnected,()=>toast("Live connection ended."));
+  await room.connect(info.serverUrl,info.participantToken);
+
+  tracks=Array.from(room.localParticipant.trackPublications.values())
+    .map(p=>p.track).filter(Boolean);
+
+  renderLocalTracks();
+
+  if(!tracks.length){
+    const local=await LivekitClient.createLocalTracks({
+      audio:true,video:{facingMode}
+    });
+    for(const t of local){
+      tracks.push(t);
+      await room.localParticipant.publishTrack(t);
+    }
+    renderLocalTracks();
+  }
+}
+
+function renderLocalTracks(){
+  const video=tracks.find(t=>t.kind==="video");
+  if(video){
+    const el=video.attach();
+    el.autoplay=true;el.playsInline=true;el.muted=true;
+    $("hostVideo").replaceWith(el);
+    el.id="hostVideo";
+    el.style.width="100%";el.style.height="100%";el.style.objectFit="cover";
+  }
+}
+
+function findTrack(kind){
+  return tracks.find(t=>t&&t.kind===kind);
+}
+
+function toggleMic(){
+  const t=findTrack("audio");
+  if(t){micOn=!micOn;t.enable(micOn);setText("micBtn",micOn?"Mic ON":"Mic OFF");toast(micOn?"Microphone on":"Microphone off");}
+}
+
+function toggleCamera(){
+  const t=findTrack("video");
+  if(t){cameraOn=!cameraOn;t.enable(cameraOn);setText("camBtn",cameraOn?"Camera ON":"Camera OFF");toast(cameraOn?"Camera on":"Camera off");}
+}
+
+async function switchCamera(){
+  const t=findTrack("video");
+  if(!t||!room)return;
+  facingMode=facingMode==="user"?"environment":"user";
+  try{
+    const newTrack=await LivekitClient.createLocalVideoTrack({facingMode});
+    await room.localParticipant.publishTrack(newTrack);
+    if(t.stop)t.stop();
+    tracks=tracks.filter(x=>x!==t);tracks.push(newTrack);renderLocalTracks();
+    toast("Camera switched");
+  }catch(e){toast(e.message||"Could not switch camera")}
+}
+
+async function sendComment(){
+  const input=$("commentInput"),text=input.value.trim();
+  if(!text)return;
+  const {error}=await supabaseClient.from("live_comments").insert({
+    session_id:sessionId,user_id:user.id,content:text
+  });
+  if(error){toast(error.message);return}
+  input.value="";
+}
+
+$("commentInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendComment()});
+
+function addComment(row){
+  const list=$("commentsList");
+  if(list.querySelector(".empty"))list.innerHTML="";
+  const div=document.createElement("div");div.className="comment";
+  div.innerHTML='<img src="'+(row.avatar_url||"")+'"><div class="comment-body"><b>'+escapeHtml(row.full_name||row.username||"User")+'</b><p>'+escapeHtml(row.content||"")+'</p><time>'+new Date(row.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"})+'</time></div>';
+  list.prepend(div);
+  setText("commentCount",list.children.length);
+}
+
+function addGift(row){
+  const list=$("giftList");
+  if(list.querySelector(".empty"))list.innerHTML="";
+  const div=document.createElement("div");div.className="gift";
+  div.innerHTML='<div class="gift-icon"><i class="fa-solid fa-gift"></i></div><div class="gift-info"><b>'+escapeHtml(row.sender_name||"Viewer")+' sent '+escapeHtml(row.gift_name||"Gift")+'</b><small>Quantity × '+(row.quantity||1)+' · '+(row.total_coins||0)+' coins</small></div>';
+  list.prepend(div);
+  setText("giftCount",list.children.length);
+  setText("videoGifts",list.children.length);
+}
+
+function addCohost(row){
+  const list=$("cohostList");
+  if(list.querySelector(".empty"))list.innerHTML="";
+  const div=document.createElement("div");div.className="request";
+  div.innerHTML='<img class="avatar" src="'+(row.avatar_url||"")+'"><div class="request-info"><b>'+escapeHtml(row.full_name||row.username||"Viewer")+'</b><small>Wants to join as co-host</small></div><button class="accept" onclick="acceptCohost(\''+row.id+'\')">Accept</button><button class="decline" onclick="declineCohost(\''+row.id+'\')">Decline</button>';
+  list.prepend(div);
+  setText("cohostCount",list.children.length);
+}
+
+async function acceptCohost(id){
+  const {error}=await supabaseClient.from("live_cohosts").update({status:"accepted",responded_at:new Date().toISOString()}).eq("id",id);
+  if(error)toast(error.message);else toast("Co-host accepted");
+}
+async function declineCohost(id){
+  const {error}=await supabaseClient.from("live_cohosts").update({status:"declined",responded_at:new Date().toISOString()}).eq("id",id);
+  if(error)toast(error.message);else toast("Request declined");
+}
+
+function subscribeRealtime(){
+  const c1=supabaseClient.channel("live-comments-"+sessionId)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"live_comments",filter:"session_id=eq."+sessionId},
+      async payload=>{
+        const r=payload.new;
+        const p=await supabaseClient.from("profiles").select("full_name,username,avatar_url").eq("id",r.user_id).maybeSingle();
+        addComment({...r,...(p.data||{})});
+      }).subscribe();
+
+  const c2=supabaseClient.channel("live-gifts-"+sessionId)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"live_gifts",filter:"session_id=eq."+sessionId},
+      payload=>addGift(payload.new)).subscribe();
+
+  const c3=supabaseClient.channel("live-cohosts-"+sessionId)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"live_cohosts",filter:"session_id=eq."+sessionId},
+      async payload=>{
+        const r=payload.new;
+        if(r.status!=="pending")return;
+        const p=await supabaseClient.from("profiles").select("full_name,username,avatar_url").eq("id",r.cohost_id||r.user_id).maybeSingle();
+        addCohost({...r,...(p.data||{})});
+      }).subscribe();
+
+  const c4=supabaseClient.channel("live-session-"+sessionId)
+    .on("postgres_changes",{event:"UPDATE",schema:"public",table:"live_sessions",filter:"id=eq."+sessionId},
+      payload=>{
+        if(payload.new.status!=="live")location.href="video.html";
+        setText("headerViewers",payload.new.viewer_count||0);
+        setText("videoViewers",payload.new.viewer_count||0);
+      }).subscribe();
+
+  channels=[c1,c2,c3,c4];
+}
+
+function shareLive(){
+  const url=location.origin+"/view-live.html?id="+encodeURIComponent(sessionId);
+  if(navigator.share)navigator.share({title:"StudentX Live",url}).catch(()=>{});
+  else if(navigator.clipboard)navigator.clipboard.writeText(url).then(()=>toast("Live link copied"));
+  else toast(url);
+}
+
+async function endLive(){
+  if(!confirm("End this live?"))return;
+  $("endLiveBtn").disabled=true;
+  const {error}=await supabaseClient.from("live_sessions").update({status:"ended",ended_at:new Date().toISOString()}).eq("id",sessionId);
+  if(error){toast(error.message);$("endLiveBtn").disabled=false;return}
+  if(room)room.disconnect();
+  tracks.forEach(t=>{try{t.stop()}catch(e){}});
+  sessionStorage.removeItem("studentx_live_session_id");
+  location.href="video.html";
+}
+$("endLiveBtn").onclick=endLive;
+
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.onclick=()=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    tab.classList.add("active");
+    ["comments","cohost","gifts","more"].forEach(x=>$(x+"Panel").classList.add("hidden"));
+    $(tab.dataset.tab+"Panel").classList.remove("hidden");
+  };
+});
+
+function escapeHtml(v){
+  return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+
+window.addEventListener("pagehide",()=>{if(room)room.disconnect()});
+
+loadLive().catch(e=>{
+  console.error(e);
+  alert(e.message||"Unable to open live control room.");
+  location.href="video.html";
+});
+</script>
+</body>
+</html>
