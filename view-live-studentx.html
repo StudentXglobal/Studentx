@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>StudentX Live</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2.22.3/dist/livekit-client.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial,sans-serif}
+#app{position:fixed;inset:0;background:#000}
+#remote{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#09080d}
+.top{position:absolute;z-index:5;top:0;left:0;right:0;padding:calc(12px + env(safe-area-inset-top)) 12px 18px;display:flex;justify-content:space-between;background:linear-gradient(#000c,transparent)}
+.host{display:flex;align-items:center;gap:8px}.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;border:2px solid #ff2097;background:#292333}
+.name{font-size:13px;font-weight:800}.handle{font-size:10px;color:#bbb6c4;margin-top:3px}
+.follow{margin-left:5px;border:0;border-radius:10px;padding:8px 11px;background:#fff;color:#111;font-size:10px;font-weight:800}
+.round{width:38px;height:38px;border-radius:50%;border:1px solid #ffffff22;background:#0009;color:#fff}
+.top-right{display:flex;gap:7px}.meta{position:absolute;z-index:5;top:calc(68px + env(safe-area-inset-top));left:12px;display:flex;gap:7px}
+.pill{padding:7px 10px;border-radius:11px;background:#0009;border:1px solid #ffffff18;font-size:9px;font-weight:800}
+.dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#ff248b;margin-right:5px}
+.bottom{position:absolute;z-index:5;left:0;right:0;bottom:0;padding:30px 12px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,#000e 35%,#000)}
+.title{font-size:14px;font-weight:800}.category{font-size:10px;color:#bbb6c4;margin-top:4px}
+.comments{margin-top:10px;width:78%;max-height:190px;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+.comment{width:max-content;max-width:100%;padding:7px 10px;border-radius:13px;background:#0009;font-size:10px}
+.comment b{color:#fff}.comment span{color:#ddd}
+.compose{display:flex;gap:7px;width:78%;margin-top:8px}.compose input{flex:1;min-width:0;background:#0009;border:1px solid #ffffff22;color:#fff;border-radius:18px;padding:10px 12px;font-size:11px;outline:0}
+.send,.gift,.cohost{width:42px;height:42px;border-radius:50%;border:1px solid #ffffff18;color:#fff;background:#191620e8}.gift{background:linear-gradient(135deg,#ff0f91,#ff7d25)}
+.actions{position:absolute;z-index:6;right:10px;bottom:calc(82px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:12px;text-align:center;font-size:9px}
+.action button{display:block;margin:auto}.gift-icon{font-size:16px}
+.sheet{position:absolute;z-index:20;left:0;right:0;bottom:0;padding:14px 14px calc(18px + env(safe-area-inset-bottom));background:#12101a;border-radius:22px 22px 0 0;border-top:1px solid #332e3d;transform:translateY(110%);transition:.25s}
+.sheet.open{transform:translateY(0)}.sheet-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.sheet-head b{font-size:14px}
+.close{width:34px;height:34px;border:0;border-radius:50%;background:#292532;color:#fff}
+.gifts{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.gift-item{border:1px solid #2b2735;border-radius:13px;background:#191721;color:#fff;padding:10px 3px}.gift-item i{display:block;color:#ff3ca8;font-size:21px;margin-bottom:6px}.gift-item b{display:block;font-size:9px}.gift-item small{font-size:8px;color:#817c8c}
+#status{position:absolute;z-index:30;inset:0;display:grid;place-items:center;text-align:center;background:radial-gradient(circle,#26112a,#000 65%);padding:30px}
+#status.hidden{display:none}.loader{width:40px;height:40px;border:3px solid #ffffff22;border-top-color:#ff1997;border-radius:50%;animation:s .8s linear infinite;margin:auto auto 15px}@keyframes s{to{transform:rotate(360deg)}}
+#giftBurst{position:absolute;z-index:25;inset:0;display:none;place-items:center;text-align:center;pointer-events:none}.burst{animation:g .55s ease-out}.burst-icon{font-size:80px;filter:drop-shadow(0 0 20px #ff209b)}.burst b{display:block;font-size:19px}.burst small{color:#ffd7ed}@keyframes g{0%{transform:scale(.2);opacity:0}65%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+.notice{position:absolute;z-index:40;left:50%;bottom:100px;transform:translateX(-50%);background:#211d29;border:1px solid #393342;border-radius:14px;padding:11px 15px;font-size:11px;display:none;max-width:85%;text-align:center}.notice.show{display:block}
+</style>
+</head>
+<body>
+<div id="app">
+<video id="remote" autoplay playsinline></video>
+
+<div id="status"><div><div class="loader"></div><b id="statusTitle">Connecting to live...</b><p id="statusText" style="font-size:11px;color:#aaa6b3">Connecting to StudentX Live.</p></div></div>
+
+<div class="top">
+<div class="host"><img id="avatar" class="avatar"><div><div id="name" class="name">StudentX Host</div><div id="handle" class="handle">@studentx</div></div><button id="follow" class="follow">Follow</button></div>
+<div class="top-right"><button class="round" onclick="shareLive()"><i class="fa-solid fa-share-nodes"></i></button><button class="round" onclick="openMore()"><i class="fa-solid fa-ellipsis"></i></button></div>
+</div>
+
+<div class="meta"><div class="pill"><span class="dot"></span>LIVE</div><div class="pill"><i class="fa-solid fa-eye"></i> <span id="viewers">0</span></div></div>
+
+<div class="actions">
+<div class="action"><button class="gift" onclick="openGifts()"><i class="fa-solid fa-gift"></i></button><div>Gift</div></div>
+<div class="action"><button class="cohost" onclick="requestCohost()"><i class="fa-solid fa-user-plus"></i></button><div>Co-host</div></div>
+</div>
+
+<div class="bottom">
+<div id="title" class="title">StudentX Live</div><div id="category" class="category">Education</div>
+<div id="comments" class="comments"></div>
+<div class="compose"><input id="commentInput" placeholder="Say something..."><button class="send" onclick="sendComment()"><i class="fa-solid fa-paper-plane"></i></button></div>
+</div>
+
+<div id="giftBurst"><div class="burst"><div id="burstIcon" class="burst-icon">🌹</div><b id="burstText">Gift received</b><small id="burstSub">Rose ×1</small></div></div>
+
+<div id="giftSheet" class="sheet"><div class="sheet-head"><b>Send a Gift</b><button class="close" onclick="closeSheets()"><i class="fa-solid fa-xmark"></i></button></div><div class="gifts">
+<button class="gift-item" onclick="sendGift('Rose', '🌹')"><i class="fa-solid fa-rose"></i><b>Rose</b><small>10 coins</small></button>
+<button class="gift-item" onclick="sendGift('Star', '⭐')"><i class="fa-solid fa-star"></i><b>Star</b><small>500 coins</small></button>
+<button class="gift-item" onclick="sendGift('Crown', '👑')"><i class="fa-solid fa-crown"></i><b>Crown</b><small>1,000 coins</small></button>
+<button class="gift-item" onclick="sendGift('Rocket', '🚀')"><i class="fa-solid fa-rocket"></i><b>Rocket</b><small>10,000 coins</small></button>
+</div></div>
+
+<div id="moreSheet" class="sheet"><div class="sheet-head"><b>Live Options</b><button class="close" onclick="closeSheets()"><i class="fa-solid fa-xmark"></i></button></div><div class="gifts" style="grid-template-columns:1fr">
+<button class="gift-item" onclick="shareLive()"><i class="fa-solid fa-share-nodes"></i><b>Share Live</b></button>
+<button class="gift-item" onclick="requestCohost()"><i class="fa-solid fa-user-plus"></i><b>Request to join as co-host</b></button>
+<button class="gift-item" onclick="leaveLive()"><i class="fa-solid fa-right-from-bracket"></i><b>Leave Live</b></button>
+</div></div>
+
+<div id="notice" class="notice"></div>
+</div>
+
+<script>
+const SUPABASE_URL="https://acragelglvdnqhvbjcgx.supabase.co";
+const SUPABASE_KEY="sb_publishable_O2kgvCZ8CxPKghH7MJn7nw_R-l61YuH";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const id=new URLSearchParams(location.search).get("id")||new URLSearchParams(location.search).get("session");
+let user=null,live=null,room=null,viewerRow=null,channels=[];
+const $=x=>document.getElementById(x);
+
+async function auth(){
+let r=await supabaseClient.auth.getSession();if(r.data?.session)return r.data.session;
+r=await supabaseClient.auth.refreshSession();return r.data?.session||null;
+}
+function esc(v){return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function notice(t){$("notice").textContent=t;$("notice").classList.add("show");setTimeout(()=>$("notice").classList.remove("show"),2400)}
+function status(a,b){$("statusTitle").textContent=a;$("statusText").textContent=b}
+function hideStatus(){$("status").classList.add("hidden")}
+async function start(){
+if(!id)throw Error("No live session ID.");
+const s=await auth();if(!s?.user)throw Error("Please login first.");user=s.user;
+const q=await supabaseClient.from("live_sessions").select("id,status,title,category,viewer_count,broadcaster_id,user_id").eq("id",id).maybeSingle();
+if(q.error)throw Error(q.error.message);if(!q.data)throw Error("Live session not found.");if(q.data.status!=="live")throw Error("This live has ended.");
+live=q.data;$("title").textContent=live.title||"StudentX Live";$("category").textContent=live.category||"Education";$("viewers").textContent=live.viewer_count||0;
+const host=live.broadcaster_id||live.user_id;const p=await supabaseClient.from("profiles").select("full_name,username,avatar_url").eq("id",host).maybeSingle();
+if(p.data){$("name").textContent=p.data.full_name||p.data.username||"StudentX Host";$("handle").textContent=p.data.username?"@"+p.data.username:"@studentx";if(p.data.avatar_url)$("avatar").src=p.data.avatar_url}
+const v=await supabaseClient.from("live_viewers").insert({session_id:id,user_id:user.id,joined_at:new Date().toISOString()}).select("id").maybeSingle();if(!v.error)viewerRow=v.data;
+const r=await fetch("/api/livekit-token",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+s.access_token},body:JSON.stringify({liveSessionId:id,role:"viewer"})});
+let info={};try{info=await r.json()}catch(e){}if(!r.ok)throw Error(info.error||"Could not connect to LiveKit.");
+room=new LivekitClient.Room({adaptiveStream:true,dynacast:true});
+room.on(LivekitClient.RoomEvent.TrackSubscribed,track=>attach(track));
+room.on(LivekitClient.RoomEvent.TrackUnsubscribed,track=>{try{track.detach()}catch(e){}});
+await room.connect(info.serverUrl,info.participantToken);
+for(const p of room.remoteParticipants.values())for(const pub of p.trackPublications.values())if(pub.track)attach(pub.track);
+hideStatus();subscribe();
+}
+function attach(track){
+if(track.kind==="video"){const e=track.attach();e.id="remote";e.autoplay=true;e.playsInline=true;e.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#09080d";$("remote").replaceWith(e)}
+else if(track.kind==="audio"){const e=track.attach();e.autoplay=true;document.body.appendChild(e)}
+}
+function subscribe(){
+channels.push(supabaseClient.channel("c-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"live_comments",filter:"session_id=eq."+id},async p=>{const x=await supabaseClient.from("profiles").select("full_name,username").eq("id",p.new.user_id).maybeSingle();addComment(x.data?.username||x.data?.full_name||"User",p.new.content)}).subscribe());
+channels.push(supabaseClient.channel("g-"+id).on("postgres_changes",{event:"INSERT",schema:"public",table:"live_gifts",filter:"session_id=eq."+id},p=>gift(p.new)).subscribe());
+channels.push(supabaseClient.channel("s-"+id).on("postgres_changes",{event:"UPDATE",schema:"public",table:"live_sessions",filter:"id=eq."+id},p=>{ $("viewers").textContent=p.new.viewer_count||0;if(p.new.status!=="live"){status("Live ended","The host has ended this live.");setTimeout(()=>location.href="video.html",1800)}}).subscribe());
+}
+function addComment(n,t){const e=document.createElement("div");e.className="comment";e.innerHTML="<b>"+esc(n)+":</b> <span>"+esc(t)+"</span>";$("comments").appendChild(e);while($("comments").children.length>8)$("comments").firstChild.remove()}
+async function sendComment(){const i=$("commentInput"),t=i.value.trim();if(!t)return;const r=await supabaseClient.from("live_comments").insert({session_id:id,user_id:user.id,content:t});if(r.error)notice(r.error.message);else i.value=""}
+$("commentInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendComment()})
+function openGifts(){$("giftSheet").classList.add("open");$("moreSheet").classList.remove("open")}function openMore(){$("moreSheet").classList.add("open");$("giftSheet").classList.remove("open")}function closeSheets(){$("giftSheet").classList.remove("open");$("moreSheet").classList.remove("open")}
+async function sendGift(name,icon){closeSheets();const g=await supabaseClient.from("live_gift_catalog").select("id").eq("name",name).maybeSingle();if(g.error||!g.data){notice("Gift is unavailable.");return}const r=await supabaseClient.rpc("send_live_gift",{p_session_id:id,p_gift_id:g.data.id,p_receiver_id:live.broadcaster_id||live.user_id,p_quantity:1});if(r.error){notice(r.error.message);return}notice(name+" sent")}
+function gift(r){$("burstIcon").textContent=r.gift_icon||({Rose:"🌹",Star:"⭐",Crown:"👑",Rocket:"🚀"}[r.gift_name]||"🎁");$("burstText").textContent=(r.sender_name||"Someone")+" sent a gift";$("burstSub").textContent=(r.gift_name||"Gift")+" ×"+(r.quantity||1);const b=$("giftBurst");b.style.display="grid";setTimeout(()=>b.style.display="none",3200)}
+async function requestCohost(){closeSheets();const r=await supabaseClient.from("live_cohosts").insert({session_id:id,host_id:live.broadcaster_id||live.user_id,cohost_id:user.id,status:"pending",requested_at:new Date().toISOString()});notice(r.error?r.error.message:"Co-host request sent.")}
+function shareLive(){const u=location.href;if(navigator.share)navigator.share({title:live?.title||"StudentX Live",url:u}).catch(()=>{});else navigator.clipboard?.writeText(u).then(()=>notice("Live link copied."))}
+async function leaveLive(){if(viewerRow?.id)await supabaseClient.from("live_viewers").update({left_at:new Date().toISOString()}).eq("id",viewerRow.id);if(room)room.disconnect();location.href="video.html"}
+$("follow").onclick=async()=>{const r=await supabaseClient.from("followers").insert({follower_id:user.id,following_id:live.broadcaster_id||live.user_id});if(r.error)notice(r.error.code==="23505"?"Already following.":r.error.message);else{$("follow").textContent="Following";notice("Following")}}
+window.addEventListener("pagehide",()=>{if(viewerRow?.id)supabaseClient.from("live_viewers").update({left_at:new Date().toISOString()}).eq("id",viewerRow.id);if(room)room.disconnect()});
+start().catch(e=>{console.error(e);status("Unable to open live",e.message);});
+</script>
+</body>
+</html>
