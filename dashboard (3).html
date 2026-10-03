@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard - StudentX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root{
+            --bg:#0a0a0f;
+            --card:rgba(255,255,255,.035);
+            --card-2:rgba(255,255,255,.07);
+            --border:rgba(255,255,255,.07);
+            --text:#fff;
+            --text-2:rgba(255,255,255,.75);
+            --muted:rgba(255,255,255,.42);
+            --accent:#dc2743;
+            --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+            --danger:#ef4444;
+            --gold:#fbbf24;
+            --gold-grad:linear-gradient(135deg,#fbbf24,#f59e0b);
+        }
+        :root.sx-light{
+            --bg:#f0f2f5;
+            --card:#ffffff;
+            --card-2:#f0f2f5;
+            --border:#e4e6eb;
+            --text:#050505;
+            --text-2:#3a3b3c;
+            --muted:#65676b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: Poppins, sans-serif; }
+        html, body { background-color: var(--bg); color: var(--text); min-height: 100%; width: 100%; overflow-x: hidden; }
+        a { color: inherit; text-decoration: none; }
+        button, input, select, textarea { font-family: inherit; }
+
+        .header { position: sticky; top: 0; background-color: var(--bg); padding: 40px 15px 15px; display: flex; align-items: center; border-bottom: 1px solid var(--border); z-index: 100; }
+        .back-btn { color: var(--text); text-decoration: none; font-size: 20px; margin-right: 15px; cursor: pointer; }
+        .header-title { font-size: 20px; font-weight: 800; }
+
+        .dashboard-container { padding: 20px 15px 50px; }
+
+        /* BALANCE CARDS */
+        .balance-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 25px; }
+        .balance-card { border-radius: 16px; padding: 20px 16px; color: #fff; }
+        .balance-card.cash { background: var(--grad); box-shadow: 0 4px 15px rgba(220,39,67,.25); }
+        .balance-card.coins { background: var(--gold-grad); box-shadow: 0 4px 15px rgba(251,191,36,.25); }
+        .balance-label { font-size: 12px; opacity: .9; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .balance-amount { font-size: 24px; font-weight: 800; margin-bottom: 12px; }
+        .balance-btn { background: rgba(255,255,255,.22); backdrop-filter: blur(6px); color: #fff; border: 0; padding: 9px 0; width: 100%; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; }
+        .balance-btn.white { background: #fff; color: var(--accent); }
+        .balance-btn.white.gold { color: #b45309; }
+        .balance-btn.disabled { opacity: .6; pointer-events: none; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .stat-icon { font-size: 18px; color: var(--accent); margin-bottom: 8px; }
+        .stat-value { font-size: 16px; font-weight: 800; margin-bottom: 4px; }
+        .stat-label { font-size: 11px; color: var(--muted); }
+
+        .section-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .section-title span { font-size: 11px; color: var(--accent); font-weight: 600; }
+
+        .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 26px; }
+
+        .eligibility-item { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+        .eligibility-item:last-child { margin-bottom: 0; }
+        .eligibility-info { display: flex; align-items: center; gap: 10px; }
+        .eligibility-info i.ok { color: #4caf50; }
+        .eligibility-info i.pending { color: var(--muted); }
+        .eligibility-info p { font-size: 13px; }
+        .eligibility-info small { color: var(--muted); font-size: 11px; }
+        .eligibility-status { font-size: 11px; font-weight: 700; }
+        .eligibility-status.ok { color: #4caf50; }
+        .eligibility-status.pending { color: var(--muted); }
+
+        .chart-area { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 10px; padding-top: 24px; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; }
+        .bar { width: 100%; max-width: 32px; background: var(--grad); border-radius: 6px 6px 0 0; position: relative; min-height: 3px; transition: height .6s ease; }
+        .bar::after { content: attr(data-val); position: absolute; top: -20px; left: 50%; transform: translateX(-50%); font-size: 9px; color: var(--text); font-weight: 700; white-space: nowrap; }
+        .bar-label { font-size: 10px; color: var(--muted); }
+
+        .transaction-item { display: flex; align-items: center; gap: 13px; padding: 13px 0; border-bottom: 1px solid var(--border); }
+        .transaction-item:last-child { border-bottom: none; }
+        .trans-icon { width: 38px; height: 38px; background: var(--card-2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); flex-shrink: 0; }
+        .trans-icon.coin { color: var(--gold); }
+        .trans-info { flex-grow: 1; min-width: 0; }
+        .trans-info h4 { font-size: 13px; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .trans-info p { font-size: 11px; color: var(--muted); }
+        .trans-amount { font-size: 13px; font-weight: 700; color: #4caf50; flex-shrink: 0; }
+        .trans-amount.neg { color: var(--danger); }
+
+        /* REFER & EARN */
+        .refer-card { background: linear-gradient(135deg, #1e1330 0%, #241a3d 100%); border: 1px solid #3a2a5c; border-radius: 16px; padding: 20px; margin-bottom: 26px; }
+        .refer-head { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .refer-icon { width: 42px; height: 42px; border-radius: 12px; background: rgba(220,39,67,.18); color: #ff8fa3; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .refer-title { font-size: 15px; font-weight: 800; }
+        .refer-sub { font-size: 12px; color: #b0a8c9; margin-top: 2px; }
+        .refer-desc { font-size: 12px; color: #b0a8c9; line-height: 1.5; margin: 14px 0; }
+        .refer-link-row { display: flex; gap: 8px; }
+        .refer-link-box { flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); border-radius: 10px; padding: 11px 12px; font-size: 12px; color: #ddd; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .refer-copy-btn { background: var(--grad); color: #fff; border: none; padding: 0 16px; border-radius: 10px; font-size: 12px; font-weight: 700; cursor: pointer; flex-shrink: 0; }
+        .refer-stats { display: flex; gap: 12px; margin-top: 16px; }
+        .refer-stat { flex: 1; background: rgba(255,255,255,.04); border-radius: 10px; padding: 12px; text-align: center; }
+        .refer-stat-value { font-size: 16px; font-weight: 800; }
+        .refer-stat-label { font-size: 9px; color: #b0a8c9; margin-top: 3px; text-transform: uppercase; letter-spacing: .3px; }
+        .refer-list { margin-top: 14px; }
+        .refer-list-title { font-size: 10px; color: #b0a8c9; text-transform: uppercase; letter-spacing: .3px; margin-bottom: 8px; }
+        .refer-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid rgba(255,255,255,.06); }
+        .refer-row img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: #2c2c2c; flex-shrink: 0; }
+        .refer-row-name { font-size: 12px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .refer-row-date { font-size: 10px; color: #888; margin-top: 1px; }
+        .refer-row-bonus { margin-left: auto; font-size: 12px; font-weight: 700; color: #4caf50; flex-shrink: 0; }
+
+        .empty-note { text-align: center; color: var(--muted); font-size: 12px; padding: 10px 0; }
+        .skeleton { height: 56px; border-radius: 10px; background: var(--card); margin-bottom: 10px; animation: pulse 1.2s ease infinite; }
+        @keyframes pulse { 50% { opacity: .5; } }
+
+        /* COIN PACKAGES SHEET */
+        .ov { position: fixed; inset: 0; z-index: 500; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,.6); }
+        .ov.show { display: flex; }
+        .sheet { width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; background: #14142d; color: #fff; border-radius: 20px 20px 0 0; padding: 12px 0 26px; }
+        :root.sx-light .sheet { background: #fff; color: #050505; }
+        .sheet-handle { width: 36px; height: 4px; background: rgba(128,128,128,.4); border-radius: 4px; margin: 0 auto 10px; }
+        .sheet-title { padding: 6px 20px 4px; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: space-between; }
+        .sheet-title i { color: var(--muted); cursor: pointer; font-size: 15px; }
+        .demo-note { margin: 12px 20px; padding: 10px 12px; background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.3); border-radius: 10px; font-size: 11px; color: #fbbf24; line-height: 1.5; }
+        .pkg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 6px 20px 20px; }
+        .pkg-card { background: rgba(128,128,128,.1); border: 1px solid rgba(128,128,128,.25); border-radius: 14px; padding: 16px 10px; text-align: center; cursor: pointer; }
+        .pkg-card.on { border-color: var(--gold); background: rgba(251,191,36,.12); }
+        .pkg-coins { font-size: 18px; font-weight: 800; color: var(--gold); display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .pkg-price { font-size: 12px; color: var(--muted); margin-top: 6px; }
+        .pkg-bonus { font-size: 9px; color: #4caf50; margin-top: 4px; font-weight: 700; }
+        .sheet-form { padding: 0 20px; }
+        .btns { display: flex; gap: 8px; margin-top: 10px; }
+        .btn { flex: 1; padding: 13px; border-radius: 12px; border: 1px solid rgba(128,128,128,.3); background: rgba(128,128,128,.12); color: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+        .btn.gold { background: var(--gold-grad); border-color: transparent; color: #1a1300; }
+        .btn:disabled { opacity: .6; }
+
+        .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 9999; padding: 11px 20px; background: #1f1f2b; color: #fff; border-radius: 12px; font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.35); border-left: 3px solid var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a onclick="goBack()" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">Dashboard</div>
+    </div>
+
+    <div class="dashboard-container">
+
+        <!-- BALANCE CARDS -->
+        <div class="balance-row">
+            <div class="balance-card cash">
+                <div class="balance-label"><i class="fas fa-wallet"></i> Available Balance</div>
+                <div class="balance-amount" id="balanceAmount">$0.00</div>
+                <a href="withdraw.html" class="balance-btn white" id="withdrawBtn">Withdraw</a>
+            </div>
+            <div class="balance-card coins">
+                <div class="balance-label"><i class="fas fa-coins"></i> Coins Balance</div>
+                <div class="balance-amount" id="coinBalance">0</div>
+                <button class="balance-btn white gold" onclick="openBuyCoins()">Buy Coins</button>
+            </div>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-money-bill-trend-up"></i></div>
+                <div class="stat-value" id="statVideoAd">$0.00</div>
+                <div class="stat-label">Monetization</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-gift"></i></div>
+                <div class="stat-value" id="statLiveGift">$0.00</div>
+                <div class="stat-label">Live Gift</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="stat-value" id="statPostRevenue">$0.00</div>
+                <div class="stat-label">Post Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-value" id="statSubscription">$0.00</div>
+                <div class="stat-label">Subscription</div>
+            </div>
+        </div>
+
+        <!-- ELIGIBILITY -->
+        <h3 class="section-title">Monetization Eligibility</h3>
+        <div class="panel" id="eligibilityCard"><div class="skeleton"></div></div>
+
+        <!-- REVENUE CHART -->
+        <h3 class="section-title">Revenue <span>Last 5 Months</span></h3>
+        <div class="panel"><div class="chart-area" id="chartArea"><div class="skeleton" style="width:100%;height:140px"></div></div></div>
+
+        <!-- REFER & EARN -->
+        <div class="refer-card">
+            <div class="refer-head">
+                <div class="refer-icon"><i class="fas fa-users-viewfinder"></i></div>
+                <div>
+                    <div class="refer-title">Refer &amp; Earn</div>
+                    <div class="refer-sub">Get $0.50 for every friend who joins</div>
+                </div>
+            </div>
+            <div class="refer-desc">Share your link. When a friend signs up on StudentX using it, you both get credited.</div>
+            <div class="refer-link-row">
+                <div class="refer-link-box" id="referLinkBox">Loading your link...</div>
+                <button class="refer-copy-btn" onclick="copyReferralLink()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+            <div class="refer-stats">
+                <div class="refer-stat"><div class="refer-stat-value" id="referCount">0</div><div class="refer-stat-label">Referred</div></div>
+                <div class="refer-stat"><div class="refer-stat-value" id="referEarnings">$0.00</div><div class="refer-stat-label">Earned</div></div>
+            </div>
+            <div class="refer-list" id="referListWrap" style="display:none">
+                <div class="refer-list-title">Recent referrals</div>
+                <div id="referList"></div>
+            </div>
+        </div>
+
+        <!-- RECENT EARNINGS -->
+        <h3 class="section-title">Recent Earnings</h3>
+        <div class="panel" id="transactionsCard"><div class="skeleton"></div></div>
+
+        <!-- COIN HISTORY -->
+        <h3 class="section-title">Coin History</h3>
+        <div class="panel" id="coinHistoryCard"><div class="skeleton"></div></div>
+
+    </div>
+
+    <!-- BUY COINS SHEET -->
+    <div class="ov" id="buyCoinsOv" onclick="if(event.target===this)closeBuyCoins()">
+        <div class="sheet">
+            <div class="sheet-handle"></div>
+            <div class="sheet-title"><span>Buy Coins</span><i class="fas fa-times" onclick="closeBuyCoins()"></i></div>
+            <div class="demo-note"><i class="fas fa-triangle-exclamation"></i> Demo mode: no real payment is processed yet. Coins are added instantly for testing. A real payment gateway (e.g. Paystack, Flutterwave) is needed before this goes live.</div>
+            <div class="pkg-grid" id="pkgGrid"></div>
+            <div class="sheet-form">
+                <div class="btns">
+                    <button class="btn" onclick="closeBuyCoins()">Cancel</button>
+                    <button class="btn gold" id="confirmBuyBtn" onclick="confirmBuyCoins()" disabled>Select a package</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+    /* =========================================================
+       STUDENTX DASHBOARD — fully live from Supabase
+    ========================================================= */
+    const REFERRAL_BONUS = 0.50;
+
+    const COIN_PACKAGES = [
+        { coins: 100,  price: 1.00,  bonus: null },
+        { coins: 550,  price: 5.00,  bonus: "+10% bonus" },
+        { coins: 1200, price: 10.00, bonus: "+20% bonus" },
+        { coins: 2500, price: 20.00, bonus: "+25% bonus" }
+    ];
+
+    let currentUser = null;
+    let myProfile = null;
+    let selectedPackageIndex = null;
+
+    const SOURCE_META = {
+        video_ad:      { label: "Video Ad Revenue",   icon: "fa-video" },
+        live_gift:     { label: "Live Stream Gift",   icon: "fa-bolt" },
+        post_revenue:  { label: "Post Revenue",       icon: "fa-file-invoice-dollar" },
+        subscription:  { label: "Subscription Split", icon: "fa-star" },
+        referral:      { label: "Referral Bonus",     icon: "fa-user-plus" },
+        other:         { label: "Earning",            icon: "fa-coins" }
+    };
+
+    const COIN_META = {
+        purchase:      { label: "Coins Purchased",    icon: "fa-cart-shopping" },
+        gift_sent:     { label: "Gift Sent",          icon: "fa-gift" },
+        gift_received: { label: "Gift Received",      icon: "fa-gift" },
+        adjustment:    { label: "Balance Adjustment", icon: "fa-sliders" }
+    };
+
+    function $(id){ return document.getElementById(id); }
+
+    function esc(v){
+        if (v == null) return "";
+        return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+    }
+
+    function money(n){ return "$" + (Number(n) || 0).toFixed(2); }
+    function coinFmt(n){ return (Number(n) || 0).toLocaleString(); }
+
+    function defaultAvatar(){
+        return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="#2c2c2c"/><circle cx="30" cy="23" r="12" fill="#777"/><path d="M10 54c3-14 11-19 20-19s17 5 20 19" fill="#777"/></svg>');
+    }
+
+    function toast(msg){
+        const old = document.querySelector(".toast"); if (old) old.remove();
+        const d = document.createElement("div");
+        d.className = "toast"; d.textContent = msg;
+        document.body.appendChild(d);
+        setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+    }
+
+    function goBack(){
+        location.href = "menu.html";
+    }
+
+    /* =========================================================
+       INIT
+    ========================================================= */
+    async function init(){
+        const auth = await supabaseClient.auth.getUser();
+        currentUser = auth.data && auth.data.user;
+        if (!currentUser){ window.location.href = "login.html"; return; }
+
+        const p = await supabaseClient.from("profiles").select("*").eq("id", currentUser.id).maybeSingle();
+        if (p.error){ console.error(p.error); toast("Unable to load your profile"); return; }
+        myProfile = p.data || { id: currentUser.id };
+
+        await ensureReferralCode();
+
+        loadBalanceAndStats();
+        loadEligibility();
+        loadChart();
+        loadReferrals();
+        loadRecentEarnings();
+        loadCoinBalance();
+        loadCoinHistory();
+        renderCoinPackages();
+    }
+
+    /* =========================================================
+       REFERRAL CODE
+    ========================================================= */
+    function makeCode(){
+        const base = (myProfile.username || myProfile.full_name || "user").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8) || "user";
+        return base + Math.floor(1000 + Math.random() * 9000);
+    }
+
+    async function ensureReferralCode(){
+        if (myProfile.referral_code){ renderReferralLink(myProfile.referral_code); return; }
+
+        for (let attempt = 0; attempt < 5; attempt++){
+            const code = makeCode();
+            const existing = await supabaseClient.from("profiles").select("id").eq("referral_code", code).maybeSingle();
+            if (existing.data) continue;
+
+            const upd = await supabaseClient.from("profiles").update({ referral_code: code }).eq("id", currentUser.id).select("referral_code").single();
+            if (!upd.error){ myProfile.referral_code = upd.data.referral_code; renderReferralLink(myProfile.referral_code); return; }
+        }
+        $("referLinkBox").textContent = "Could not generate your link. Try refreshing.";
+    }
+
+    function renderReferralLink(code){
+        const link = window.location.origin + "/signup.html?ref=" + encodeURIComponent(code);
+        $("referLinkBox").textContent = link;
+        $("referLinkBox").dataset.link = link;
+    }
+
+    async function copyReferralLink(){
+        const link = $("referLinkBox").dataset.link;
+        if (!link) return;
+        try { await navigator.clipboard.writeText(link); toast("Referral link copied"); } catch (e) { toast("Could not copy link"); }
+    }
+
+    /* =========================================================
+       CASH BALANCE + STAT CARDS
+    ========================================================= */
+    async function loadBalanceAndStats(){
+        const [earningsRes, withdrawalsRes] = await Promise.all([
+            supabaseClient.from("earnings").select("source,amount").eq("user_id", currentUser.id),
+            supabaseClient.from("withdrawals").select("amount").eq("user_id", currentUser.id)
+        ]);
+
+        if (earningsRes.error) console.error("Earnings error:", earningsRes.error);
+        if (withdrawalsRes.error) console.error("Withdrawals error:", withdrawalsRes.error);
+
+        const totals = { video_ad: 0, live_gift: 0, post_revenue: 0, subscription: 0, referral: 0, other: 0 };
+        let totalEarned = 0;
+
+        (earningsRes.data || []).forEach(row => {
+            const amt = Number(row.amount) || 0;
+            totalEarned += amt;
+            if (totals[row.source] !== undefined) totals[row.source] += amt;
+        });
+
+        const totalWithdrawn = (withdrawalsRes.data || []).reduce((sum, w) => sum + (Number(w.amount) || 0), 0);
+        const available = Math.max(0, totalEarned - totalWithdrawn);
+
+        $("balanceAmount").textContent = money(available);
+        $("statVideoAd").textContent = money(totals.video_ad);
+        $("statLiveGift").textContent = money(totals.live_gift);
+        $("statPostRevenue").textContent = money(totals.post_revenue);
+        $("statSubscription").textContent = money(totals.subscription);
+
+        const btn = $("withdrawBtn");
+        if (available <= 0){
+            btn.classList.add("disabled");
+            btn.addEventListener("click", e => { e.preventDefault(); toast("No balance available to withdraw yet"); });
+        }
+    }
+
+    /* =========================================================
+       ELIGIBILITY
+    ========================================================= */
+    async function loadEligibility(){
+        const card = $("eligibilityCard");
+        const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
+
+        const [followersRes, videosRes] = await Promise.all([
+            supabaseClient.from("followers").select("id", { count: "exact", head: true }).eq("following_id", currentUser.id),
+            supabaseClient.from("videos").select("id").eq("user_id", currentUser.id)
+        ]);
+
+        const followerCount = followersRes.count || 0;
+        const videoIds = (videosRes.data || []).map(v => v.id);
+
+        let viewCount = 0;
+        if (videoIds.length){
+            const viewsRes = await supabaseClient.from("video_views").select("id", { count: "exact", head: true }).in("video_id", videoIds).gte("created_at", thirtyDaysAgo);
+            if (!viewsRes.error) viewCount = viewsRes.count || 0;
+        }
+
+        const joined = myProfile.created_at ? new Date(myProfile.created_at) : null;
+        const accountDays = joined ? Math.floor((Date.now() - joined.getTime()) / 86400000) : 0;
+
+        const items = [
+            { label: "1,000 Followers", have: followerCount, need: 1000, fmt: n => n.toLocaleString() },
+            { label: "10,000 Views (30 days)", have: viewCount, need: 10000, fmt: n => n.toLocaleString() },
+            { label: "Active Account Age", have: accountDays, need: 30, fmt: n => n + " Days" }
+        ];
+
+        card.innerHTML = items.map(item => {
+            const ok = item.have >= item.need;
+            return `<div class="eligibility-item">
+                <div class="eligibility-info">
+                    <i class="fas ${ok ? "fa-circle-check ok" : "fa-clock pending"}"></i>
+                    <div><p>${esc(item.label)}</p><small>${esc(item.fmt(item.have))} / ${esc(item.fmt(item.need))} ${ok ? "(Achieved)" : ""}</small></div>
+                </div>
+                <span class="eligibility-status ${ok ? "ok" : "pending"}">${ok ? "Active" : "Pending"}</span>
+            </div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       REVENUE CHART
+    ========================================================= */
+    async function loadChart(){
+        const area = $("chartArea");
+        const now = new Date();
+        const months = [];
+        for (let i = 4; i >= 0; i--){
+            const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            months.push({ key: d.getFullYear() + "-" + d.getMonth(), label: d.toLocaleDateString(undefined, { month: "short" }), total: 0 });
+        }
+
+        const rangeStart = new Date(now.getFullYear(), now.getMonth() - 4, 1).toISOString();
+        const r = await supabaseClient.from("earnings").select("amount,created_at").eq("user_id", currentUser.id).gte("created_at", rangeStart);
+        if (r.error) console.error("Chart error:", r.error);
+
+        (r.data || []).forEach(row => {
+            const d = new Date(row.created_at);
+            const key = d.getFullYear() + "-" + d.getMonth();
+            const m = months.find(x => x.key === key);
+            if (m) m.total += Number(row.amount) || 0;
+        });
+
+        const max = Math.max(1, ...months.map(m => m.total));
+        area.innerHTML = months.map(m => {
+            const pct = Math.max(3, Math.round((m.total / max) * 100));
+            return `<div class="bar-group"><div class="bar" data-val="${esc(money(m.total))}" style="height:${pct}%"></div><span class="bar-label">${esc(m.label)}</span></div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       REFER & EARN
+    ========================================================= */
+    async function loadReferrals(){
+        const r = await supabaseClient
+            .from("referrals")
+            .select("bonus_amount,created_at,referred:profiles!referrals_referred_id_fkey(id,full_name,username,avatar_url)")
+            .eq("referrer_id", currentUser.id)
+            .order("created_at", { ascending: false });
+
+        if (r.error){ console.error("Referrals error:", r.error); return; }
+
+        const rows = r.data || [];
+        const totalEarned = rows.reduce((sum, row) => sum + (Number(row.bonus_amount) || 0), 0);
+
+        $("referCount").textContent = rows.length;
+        $("referEarnings").textContent = money(totalEarned);
+
+        if (!rows.length){ $("referListWrap").style.display = "none"; return; }
+
+        $("referListWrap").style.display = "block";
+        $("referList").innerHTML = rows.slice(0, 5).map(row => {
+            const u = row.referred || {};
+            const name = u.full_name || u.username || "StudentX User";
+            const date = new Date(row.created_at).toLocaleDateString(undefined, { month: "short", day: "numeric" });
+            return `<div class="refer-row">
+                <img src="${esc(u.avatar_url || defaultAvatar())}" onerror="this.src=defaultAvatar()" alt="">
+                <div><div class="refer-row-name">${esc(name)}</div><div class="refer-row-date">Joined ${esc(date)}</div></div>
+                <div class="refer-row-bonus">+${esc(money(row.bonus_amount))}</div>
+            </div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       RECENT EARNINGS
+    ========================================================= */
+    async function loadRecentEarnings(){
+        const card = $("transactionsCard");
+        const r = await supabaseClient.from("earnings").select("*").eq("user_id", currentUser.id).order("created_at", { ascending: false }).limit(6);
+
+        if (r.error){ console.error("Earnings list error:", r.error); card.innerHTML = '<div class="empty-note">Unable to load earnings.</div>'; return; }
+
+        const rows = r.data || [];
+        if (!rows.length){ card.innerHTML = '<div class="empty-note">No earnings yet. Keep posting and going live to start earning.</div>'; return; }
+
+        card.innerHTML = rows.map(row => {
+            const meta = SOURCE_META[row.source] || SOURCE_META.other;
+            const date = new Date(row.created_at).toLocaleDateString(undefined, { month: "short", day: "2-digit", year: "numeric" });
+            return `<div class="transaction-item">
+                <div class="trans-icon"><i class="fas ${esc(meta.icon)}"></i></div>
+                <div class="trans-info"><h4>${esc(row.description || meta.label)}</h4><p>${esc(date)}</p></div>
+                <div class="trans-amount">+${esc(money(row.amount))}</div>
+            </div>`;
+        }).join("");
+    }
+
+    /* =========================================================
+       COINS: balance, history, buy (demo)
+    ========================================================= */
+    async function loadCoinBalance(){
+        const r = await supabaseClient.from("profiles").select("coin_balance").eq("id", currentUser.id).maybeSingle();
+        const balance = (r.data && r.data.coin_balance) || 0;
+        $("coinBalance").textContent = coinFmt(balance);
+        myProfile.coin_balance = balance;
+    }
+
+    async function loadCoinHistory(){
+        const card = $("coinHistoryCard");
+        const r = await supabaseClient.from("coin_transactions").select("*").eq("user_id", currentUser.id).order("created_at", { ascending: false }).limit(6);
+
+        if (r.error){ console.error("Coin history error:", r.error); card.innerHTML = '<div class="empty-note">Unable to load coin history.</div>'; return; }
+
+        const rows = r.data || [];
+        if (!rows.length){ card.innerHTML = '<div class="empty-note">No coin activity yet. Buy coins to send gifts during live streams.</div>'; return; }
+
+        card.innerHTML = rows.map(row => {
+            const meta = COIN_META[row.type] || COIN_META.adjustment;
+            const date = new Date(row.created_at).toLocaleDateString(undefined, { month: "short", day: "2-digit", year: "numeric" });
+            const positive = Number(row.amount) >= 0;
+            return `<div class="transaction-item">
+                <div class="trans-icon coin"><i class="fas ${esc(meta.icon)}"></i></div>
+                <div class="trans-info"><h4>${esc(row.description || meta.label)}</h4><p>${esc(date)}</p></div>
+                <div class="trans-amount ${positive ? "" : "neg"}">${positive ? "+" : ""}${esc(coinFmt(row.amount))}</div>
+            </div>`;
+        }).join("");
+    }
+
+    function renderCoinPackages(){
+        $("pkgGrid").innerHTML = COIN_PACKAGES.map((pkg, i) => `
+            <div class="pkg-card" id="pkg-${i}" onclick="selectPackage(${i})">
+                <div class="pkg-coins"><i class="fas fa-coins"></i>${coinFmt(pkg.coins)}</div>
+                <div class="pkg-price">${money(pkg.price)}</div>
+                ${pkg.bonus ? `<div class="pkg-bonus">${esc(pkg.bonus)}</div>` : ""}
+            </div>
+        `).join("");
+    }
+
+    function selectPackage(i){
+        selectedPackageIndex = i;
+        document.querySelectorAll(".pkg-card").forEach((el, idx) => el.classList.toggle("on", idx === i));
+        const pkg = COIN_PACKAGES[i];
+        const btn = $("confirmBuyBtn");
+        btn.disabled = false;
+        btn.textContent = "Buy " + coinFmt(pkg.coins) + " coins — " + money(pkg.price);
+    }
+
+    function openBuyCoins(){
+        selectedPackageIndex = null;
+        document.querySelectorAll(".pkg-card").forEach(el => el.classList.remove("on"));
+        const btn = $("confirmBuyBtn");
+        btn.disabled = true;
+        btn.textContent = "Select a package";
+        $("buyCoinsOv").classList.add("show");
+    }
+
+    function closeBuyCoins(){
+        $("buyCoinsOv").classList.remove("show");
+    }
+
+    async function confirmBuyCoins(){
+        if (selectedPackageIndex === null) return;
+        const pkg = COIN_PACKAGES[selectedPackageIndex];
+        const btn = $("confirmBuyBtn");
+        btn.disabled = true;
+        btn.textContent = "Processing...";
+
+        try {
+            const ins = await supabaseClient.from("coin_transactions").insert({
+                user_id: currentUser.id,
+                type: "purchase",
+                amount: pkg.coins,
+                description: "Purchased " + coinFmt(pkg.coins) + " coins (demo — no real payment)"
+            });
+            if (ins.error) throw ins.error;
+
+            const newBalance = (myProfile.coin_balance || 0) + pkg.coins;
+            const upd = await supabaseClient.from("profiles").update({ coin_balance: newBalance }).eq("id", currentUser.id);
+            if (upd.error) throw upd.error;
+
+            myProfile.coin_balance = newBalance;
+            $("coinBalance").textContent = coinFmt(newBalance);
+
+            toast(coinFmt(pkg.coins) + " coins added (demo)");
+            closeBuyCoins();
+            loadCoinHistory();
+        } catch (e){
+            console.error(e);
+            toast(e && e.message ? e.message : "Could not complete purchase");
+        } finally {
+            btn.disabled = false;
+            btn.textContent = selectedPackageIndex !== null ? "Buy " + coinFmt(pkg.coins) + " coins — " + money(pkg.price) : "Select a package";
+        }
+    }
+
+    init();
+    </script>
+</body>
+</html>
