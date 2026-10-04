@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX - StudyHub</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:80px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+.hdr{position:sticky;top:0;z-index:100;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-row{display:flex;align-items:center;justify-content:space-between}
+.hdr-title{font-size:20px;font-weight:800}
+
+.tabs{display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--border);white-space:nowrap;cursor:pointer}
+.tab.on{background:var(--grad);border-color:transparent;color:#fff}
+
+.banner{margin:14px;padding:24px 20px;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#6d28d9,#4f46e5);position:relative;overflow:hidden;cursor:pointer;color:#fff}
+.banner::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.06)}
+.banner h2{font-size:19px;font-weight:800;margin-bottom:4px;position:relative}
+.banner p{font-size:12px;opacity:.85;position:relative}
+.banner-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:9px 18px;border-radius:20px;background:rgba(255,255,255,.16);font-size:12px;font-weight:700;position:relative}
+
+.quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px 16px}
+.qs-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 8px;text-align:center}
+.qs-val{font-size:17px;font-weight:800;color:var(--accent)}
+.qs-lbl{font-size:10px;color:var(--muted);margin-top:3px}
+
+.sec{padding:0 14px;margin-bottom:20px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:15px;font-weight:700}
+.sec-link{font-size:11px;color:var(--accent);font-weight:600;cursor:pointer}
+.sec-add{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:20px;border:0;background:var(--grad);color:#fff;font-size:11px;font-weight:700;cursor:pointer}
+
+.course{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;cursor:pointer}
+.course-top{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.course-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.course-info{flex:1;min-width:0}
+.course-name{font-size:13px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.course-code{font-size:11px;color:var(--muted);margin-top:2px}
+.course-pct{font-size:13px;font-weight:700;flex-shrink:0}
+.prog-bar{height:6px;background:var(--card-2);border-radius:6px;overflow:hidden}
+.prog-fill{height:100%;border-radius:6px;transition:width .8s ease}
+
+.resource{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:8px}
+.res-ic{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.res-info{flex:1;min-width:0;cursor:pointer}
+.res-name{font-size:12px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.res-meta{font-size:10px;color:var(--muted);margin-top:2px}
+.res-act{color:var(--muted);font-size:14px;cursor:pointer;padding:6px;flex-shrink:0}
+.res-act.dng{color:var(--danger)}
+
+.deadline{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.deadline:last-child{border-bottom:none}
+.dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dl-info{flex:1;min-width:0}
+.dl-name{font-size:13px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dl-course{font-size:11px;color:var(--muted);margin-top:2px}
+.dl-date{font-size:11px;font-weight:700;text-align:right;flex-shrink:0}
+.dl-days{font-size:9px;font-weight:500;text-align:right;margin-top:1px;opacity:.6}
+.dl-del{color:var(--muted);font-size:13px;cursor:pointer;padding:4px;flex-shrink:0}
+
+.center{text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;line-height:1.6}
+.center i{display:block;font-size:30px;margin-bottom:10px;color:var(--accent)}
+.center b{display:block;color:var(--text);font-size:13px;margin-bottom:4px}
+.cta{display:inline-flex;align-items:center;justify-content:center;margin-top:12px;padding:9px 20px;border-radius:20px;background:var(--grad);color:#fff;font-size:12px;font-weight:700;border:0;cursor:pointer}
+.skeleton{height:70px;border-radius:12px;background:var(--card);margin-bottom:10px;animation:pulse 1.2s ease infinite}
+@keyframes pulse{50%{opacity:.5}}
+
+/* SHEET */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:92vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 4px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.sheet-title i{color:var(--muted);cursor:pointer;font-size:15px}
+.form{padding:0 20px}
+.form label{display:block;margin:14px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input[type=text],.form input[type=datetime-local],.form textarea,.form select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form select option{color:#000}
+.row2{display:flex;gap:10px}
+.row2>div{flex:1}
+.btns{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.danger{background:rgba(239,68,68,.15);color:#ef4444;border-color:rgba(239,68,68,.3)}
+.btn:disabled{opacity:.6}
+
+.search-row{padding:0 20px 10px}
+.search-row input{width:100%;padding:11px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;outline:0}
+.pick-list{padding:0 20px;max-height:280px;overflow-y:auto}
+.pick-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid rgba(128,128,128,.12);cursor:pointer}
+.pick-row:first-child{border-top:0}
+.pick-ic{width:36px;height:36px;border-radius:10px;background:rgba(220,39,67,.12);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.pick-name{font-size:13px;font-weight:600}
+.pick-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.pick-add{margin-left:auto;color:var(--accent);font-size:11px;font-weight:700}
+
+.prog-ctl{display:flex;align-items:center;gap:12px;padding:10px 20px 4px}
+.prog-btn{width:36px;height:36px;border-radius:50%;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:16px;cursor:pointer}
+.prog-val{flex:1;text-align:center;font-size:22px;font-weight:800}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+<div class="hdr-row">
+<div class="hdr-title">StudyHub</div>
+</div>
+</header>
+
+<div class="tabs">
+<div class="tab on" id="tab-overview" onclick="switchTab('overview')">Overview</div>
+<div class="tab" id="tab-courses" onclick="switchTab('courses')">Courses</div>
+<div class="tab" id="tab-resources" onclick="switchTab('resources')">Resources</div>
+<div class="tab" id="tab-deadlines" onclick="switchTab('deadlines')">Deadlines</div>
+</div>
+
+<div id="content"><div class="sec"><div class="skeleton"></div><div class="skeleton"></div></div></div>
+
+<!-- ENROLL IN COURSE SHEET -->
+<div class="ov" id="enrollOv" onclick="if(event.target===this)closeSheet('enrollOv')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Enroll in a course</span><i class="fas fa-times" onclick="closeSheet('enrollOv')"></i></div>
+    <div class="search-row"><input type="text" id="enrollSearch" placeholder="Search courses..." oninput="renderEnrollList()"></div>
+    <div class="pick-list" id="enrollList"></div>
+    <div class="form"><button class="btn main" style="margin-top:14px" onclick="openSheet('newCourseOv');closeSheet('enrollOv')"><i class="fas fa-plus"></i> Can't find it? Add a new course</button></div>
+  </div>
+</div>
+
+<!-- NEW COURSE SHEET -->
+<div class="ov" id="newCourseOv" onclick="if(event.target===this)closeSheet('newCourseOv')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Add a new course</span><i class="fas fa-times" onclick="closeSheet('newCourseOv')"></i></div>
+    <div class="form">
+      <label>Course title</label>
+      <input type="text" id="ncTitle" maxlength="100" placeholder="e.g. Data Structures & Algorithms">
+      <div class="row2">
+        <div><label>Course code</label><input type="text" id="ncCode" maxlength="20" placeholder="e.g. CSC 301"></div>
+        <div><label>Category</label><input type="text" id="ncCategory" maxlength="40" placeholder="e.g. Computer Science"></div>
+      </div>
+      <div class="btns">
+        <button class="btn" onclick="closeSheet('newCourseOv')">Cancel</button>
+        <button class="btn main" id="ncSaveBtn" onclick="saveNewCourse()">Add &amp; Enroll</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COURSE DETAILS SHEET -->
+<div class="ov" id="courseDetailsOv" onclick="if(event.target===this)closeSheet('courseDetailsOv')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span id="cdTitle">Course</span><i class="fas fa-times" onclick="closeSheet('courseDetailsOv')"></i></div>
+    <div class="form" style="padding-bottom:0">
+      <label style="margin-top:0">Your progress</label>
+    </div>
+    <div class="prog-ctl">
+      <button class="prog-btn" onclick="bumpProgress(-10)">-</button>
+      <div class="prog-val" id="cdProgressVal">0%</div>
+      <button class="prog-btn" onclick="bumpProgress(10)">+</button>
+    </div>
+    <div class="form"><div class="prog-bar" style="margin:10px 0 0"><div class="prog-fill" id="cdProgressBar" style="width:0%;background:var(--accent)"></div></div></div>
+    <div class="sec-head" style="padding:16px 20px 6px;margin-bottom:0"><div class="sec-title" style="font-size:13px">Resources for this course</div></div>
+    <div id="cdResources" style="padding:0 20px"></div>
+    <div class="form">
+      <div class="btns">
+        <button class="btn danger" onclick="unenrollCourse()"><i class="fas fa-right-from-bracket"></i> Unenroll</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- UPLOAD RESOURCE SHEET -->
+<div class="ov" id="uploadResOv" onclick="if(event.target===this)closeSheet('uploadResOv')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Share a resource</span><i class="fas fa-times" onclick="closeSheet('uploadResOv')"></i></div>
+    <div class="form">
+      <label>Title</label>
+      <input type="text" id="resTitle" maxlength="100" placeholder="e.g. Lecture Notes - Week 8">
+      <div class="row2">
+        <div><label>File type</label>
+          <select id="resType"><option>PDF</option><option>DOCX</option><option>PPTX</option><option>Image</option><option>Other</option></select>
+        </div>
+        <div><label>Course (optional)</label>
+          <select id="resCourse"><option value="">None</option></select>
+        </div>
+      </div>
+      <label>File</label>
+      <input type="file" id="resFile">
+      <div class="btns">
+        <button class="btn" onclick="closeSheet('uploadResOv')">Cancel</button>
+        <button class="btn main" id="resSaveBtn" onclick="saveResource()">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD DEADLINE SHEET -->
+<div class="ov" id="addDeadlineOv" onclick="if(event.target===this)closeSheet('addDeadlineOv')">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title"><span>Add a deadline</span><i class="fas fa-times" onclick="closeSheet('addDeadlineOv')"></i></div>
+    <div class="form">
+      <label>Title</label>
+      <input type="text" id="dlTitle" maxlength="100" placeholder="e.g. Assignment 5 - DSA">
+      <label>Course (optional)</label>
+      <select id="dlCourse"><option value="">None</option></select>
+      <label>Due date &amp; time</label>
+      <input type="datetime-local" id="dlDue">
+      <div class="btns">
+        <button class="btn" onclick="closeSheet('addDeadlineOv')">Cancel</button>
+        <button class="btn main" id="dlSaveBtn" onclick="saveDeadline()">Add Deadline</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX STUDYHUB — fully self-contained, single page
+========================================================= */
+
+let me = null, myProfile = null;
+let allCourses = [];       // full catalog: [{id,title,code,category,icon,color}]
+let enrollments = [];      // [{course_id, progress, course}]
+let resources = [];
+let deadlines = [];
+let currentTab = "overview";
+let activeCourseId = null; // for the details sheet
+
+const COURSE_PALETTE = [
+  { color: "#7c3aed", icon: "fa-code" },
+  { color: "#06b6d4", icon: "fa-square-root-variable" },
+  { color: "#ef4444", icon: "fa-atom" },
+  { color: "#10b981", icon: "fa-flask" },
+  { color: "#f59e0b", icon: "fa-book" },
+  { color: "#3b82f6", icon: "fa-chart-line" }
+];
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v == null) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function toast(msg){
+  const old = document.querySelector(".toast"); if (old) old.remove();
+  const d = document.createElement("div");
+  d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(() => { if (d.parentNode) d.remove(); }, 2500);
+}
+function openSheet(id){ $(id).classList.add("show"); }
+function closeSheet(id){ $(id).classList.remove("show"); }
+
+function formatSize(bytes){
+  if (!bytes) return "";
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(0) + " KB";
+  return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+}
+
+function daysLeftLabel(dueDate){
+  const due = new Date(dueDate).getTime();
+  if (isNaN(due)) return "";
+  const days = Math.ceil((due - Date.now()) / 86400000);
+  if (days < 0) return "Overdue";
+  if (days === 0) return "Due today";
+  if (days === 1) return "1 day left";
+  return days + " days left";
+}
+function formatDueDate(dueDate){
+  const d = new Date(dueDate);
+  return isNaN(d.getTime()) ? "" : d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  const auth = await supabaseClient.auth.getUser();
+  me = auth.data && auth.data.user;
+  if (!me){ window.location.href = "login.html"; return; }
+
+  const p = await supabaseClient.from("profiles").select("id,full_name,username").eq("id", me.id).maybeSingle();
+  myProfile = p.data || { id: me.id };
+
+  await loadAll();
+  renderTab();
+}
+
+async function loadAll(){
+  const [coursesRes, enrollRes, resRes, dlRes] = await Promise.all([
+    supabaseClient.from("courses").select("*").order("title", { ascending: true }),
+    supabaseClient.from("course_enrollments").select("course_id,progress,course:courses(id,title,code,category,icon,color)").eq("user_id", me.id),
+    supabaseClient.from("studyhub_resources").select("*").order("created_at", { ascending: false }),
+    supabaseClient.from("studyhub_deadlines").select("*, course:courses(title,code)").order("due_date", { ascending: true })
+  ]);
+
+  allCourses = coursesRes.data || [];
+  enrollments = (enrollRes.data || []).filter(e => e.course);
+  resources = resRes.data || [];
+  deadlines = dlRes.data || [];
+
+  populateCourseSelects();
+}
+
+function populateCourseSelects(){
+  const opts = '<option value="">None</option>' + allCourses.map(c => `<option value="${esc(c.id)}">${esc(c.title)}</option>`).join("");
+  $("resCourse").innerHTML = opts;
+  $("dlCourse").innerHTML = opts;
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+function switchTab(tab){
+  currentTab = tab;
+  ["overview","courses","resources","deadlines"].forEach(t => $("tab-" + t).classList.toggle("on", t === tab));
+  renderTab();
+}
+
+function renderTab(){
+  if (currentTab === "overview") renderOverview();
+  else if (currentTab === "courses") renderCoursesTab();
+  else if (currentTab === "resources") renderResourcesTab();
+  else renderDeadlinesTab();
+}
+
+/* =========================================================
+   OVERVIEW
+========================================================= */
+function renderOverview(){
+  const avgProgress = enrollments.length
+    ? Math.round(enrollments.reduce((s, e) => s + (e.progress || 0), 0) / enrollments.length)
+    : 0;
+
+  const upcomingDeadlines = deadlines.filter(d => new Date(d.due_date).getTime() >= Date.now());
+
+  let html = `
+    <div class="banner" onclick="switchTab('courses')">
+      <h2>Keep learning, keep growing!</h2>
+      <p>${enrollments.length ? "You're " + avgProgress + "% through your enrolled courses" : "Enroll in your first course to start tracking progress"}</p>
+      <div class="banner-btn"><i class="fas fa-chart-line"></i> View Courses</div>
+    </div>
+    <div class="quick-stats">
+      <div class="qs-card"><div class="qs-val">${enrollments.length}</div><div class="qs-lbl">Courses</div></div>
+      <div class="qs-card"><div class="qs-val">${resources.length}</div><div class="qs-lbl">Resources</div></div>
+      <div class="qs-card"><div class="qs-val">${upcomingDeadlines.length}</div><div class="qs-lbl">Deadlines</div></div>
+    </div>
+  `;
+
+  html += `<div class="sec"><div class="sec-head"><div class="sec-title">My Courses</div><div class="sec-link" onclick="switchTab('courses')">See all</div></div>`;
+  html += enrollments.length
+    ? enrollments.slice(0, 3).map(renderCourseCard).join("")
+    : '<div class="center"><i class="fas fa-graduation-cap"></i><b>No courses yet</b>Enroll to track your progress.</div>';
+  html += `</div>`;
+
+  html += `<div class="sec"><div class="sec-head"><div class="sec-title">Recent Resources</div><div class="sec-link" onclick="switchTab('resources')">See all</div></div>`;
+  html += resources.length
+    ? resources.slice(0, 3).map(renderResourceRow).join("")
+    : '<div class="center"><i class="fas fa-file-lines"></i><b>No resources yet</b></div>';
+  html += `</div>`;
+
+  html += `<div class="sec"><div class="sec-head"><div class="sec-title">Upcoming Deadlines</div><div class="sec-link" onclick="switchTab('deadlines')">See all</div></div>`;
+  html += upcomingDeadlines.length
+    ? upcomingDeadlines.slice(0, 3).map(renderDeadlineRow).join("")
+    : '<div class="center"><i class="fas fa-calendar-check"></i><b>No upcoming deadlines</b></div>';
+  html += `</div>`;
+
+  $("content").innerHTML = html;
+}
+
+/* =========================================================
+   COURSES TAB
+========================================================= */
+function renderCoursesTab(){
+  let html = `<div class="sec"><div class="sec-head"><div class="sec-title">My Courses</div><button class="sec-add" onclick="openEnrollSheet()"><i class="fas fa-plus"></i> Enroll</button></div>`;
+
+  html += enrollments.length
+    ? enrollments.map(renderCourseCard).join("")
+    : '<div class="center"><i class="fas fa-graduation-cap"></i><b>No courses yet</b>Tap Enroll to add your first course.<br><button class="cta" onclick="openEnrollSheet()">Enroll in a course</button></div>';
+
+  html += `</div>`;
+  $("content").innerHTML = html;
+}
+
+function renderCourseCard(e){
+  const c = e.course;
+  const pct = Math.max(0, Math.min(100, Number(e.progress) || 0));
+  const color = c.color || "#7c3aed";
+  const icon = c.icon || "fa-book";
+
+  return `<div class="course" onclick="openCourseDetails('${esc(c.id)}')">
+    <div class="course-top">
+      <div class="course-ic" style="background:${esc(color)}15;color:${esc(color)}"><i class="fas ${esc(icon)}"></i></div>
+      <div class="course-info"><div class="course-name">${esc(c.title)}</div><div class="course-code">${esc(c.code || c.category || "")}</div></div>
+      <div class="course-pct" style="color:${esc(color)}">${pct}%</div>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" style="width:${pct}%;background:${esc(color)}"></div></div>
+  </div>`;
+}
+
+/* ---- Enroll sheet ---- */
+function openEnrollSheet(){
+  $("enrollSearch").value = "";
+  renderEnrollList();
+  openSheet("enrollOv");
+}
+
+function renderEnrollList(){
+  const q = $("enrollSearch").value.trim().toLowerCase();
+  const enrolledIds = new Set(enrollments.map(e => e.course_id));
+  const available = allCourses.filter(c => !enrolledIds.has(c.id) && (!q || c.title.toLowerCase().includes(q) || (c.code || "").toLowerCase().includes(q)));
+
+  const list = $("enrollList");
+  if (!available.length){
+    list.innerHTML = '<div class="center" style="padding:20px 0">No matching courses. Add a new one below.</div>';
+    return;
+  }
+
+  list.innerHTML = available.map(c => `
+    <div class="pick-row" onclick="enrollInCourse('${esc(c.id)}')">
+      <div class="pick-ic" style="background:${esc(c.color || "#7c3aed")}15;color:${esc(c.color || "#7c3aed")}"><i class="fas ${esc(c.icon || "fa-book")}"></i></div>
+      <div><div class="pick-name">${esc(c.title)}</div><div class="pick-sub">${esc(c.code || c.category || "")}</div></div>
+      <span class="pick-add">Enroll</span>
+    </div>
+  `).join("");
+}
+
+async function enrollInCourse(courseId){
+  const r = await supabaseClient.from("course_enrollments").insert({ user_id: me.id, course_id: courseId, progress: 0 });
+  if (r.error){
+    console.error(r.error);
+    toast(r.error.code === "23505" ? "Already enrolled" : "Could not enroll");
+    return;
+  }
+  toast("Enrolled");
+  closeSheet("enrollOv");
+  await loadAll();
+  renderTab();
+}
+
+/* ---- New course ---- */
+async function saveNewCourse(){
+  const title = $("ncTitle").value.trim();
+  if (!title){ toast("Enter a course title"); return; }
+
+  const palette = COURSE_PALETTE[allCourses.length % COURSE_PALETTE.length];
+  const btn = $("ncSaveBtn");
+  btn.disabled = true; btn.textContent = "Adding...";
+
+  try {
+    const ins = await supabaseClient.from("courses").insert({
+      title,
+      code: $("ncCode").value.trim() || null,
+      category: $("ncCategory").value.trim() || null,
+      icon: palette.icon,
+      color: palette.color
+    }).select().single();
+    if (ins.error) throw ins.error;
+
+    const enroll = await supabaseClient.from("course_enrollments").insert({ user_id: me.id, course_id: ins.data.id, progress: 0 });
+    if (enroll.error) throw enroll.error;
+
+    toast("Course added and enrolled");
+    $("ncTitle").value = ""; $("ncCode").value = ""; $("ncCategory").value = "";
+    closeSheet("newCourseOv");
+    await loadAll();
+    renderTab();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not add course");
+  } finally {
+    btn.disabled = false; btn.textContent = "Add & Enroll";
+  }
+}
+
+/* ---- Course details / progress / unenroll ---- */
+function openCourseDetails(courseId){
+  const e = enrollments.find(x => x.course_id === courseId);
+  if (!e) return;
+  activeCourseId = courseId;
+
+  $("cdTitle").textContent = e.course.title;
+  const pct = Math.max(0, Math.min(100, Number(e.progress) || 0));
+  $("cdProgressVal").textContent = pct + "%";
+  $("cdProgressBar").style.width = pct + "%";
+  $("cdProgressBar").style.background = e.course.color || "var(--accent)";
+
+  const related = resources.filter(r => r.course_id === courseId);
+  $("cdResources").innerHTML = related.length
+    ? related.map(renderResourceRow).join("")
+    : '<div class="center" style="padding:16px 0">No resources linked to this course yet.</div>';
+
+  openSheet("courseDetailsOv");
+}
+
+async function bumpProgress(delta){
+  const e = enrollments.find(x => x.course_id === activeCourseId);
+  if (!e) return;
+
+  const newVal = Math.max(0, Math.min(100, (Number(e.progress) || 0) + delta));
+  e.progress = newVal;
+  $("cdProgressVal").textContent = newVal + "%";
+  $("cdProgressBar").style.width = newVal + "%";
+
+  const r = await supabaseClient.from("course_enrollments").update({ progress: newVal }).eq("user_id", me.id).eq("course_id", activeCourseId);
+  if (r.error){ console.error(r.error); toast("Could not save progress"); return; }
+
+  renderTab();
+}
+
+async function unenrollCourse(){
+  if (!activeCourseId) return;
+  if (!confirm("Unenroll from this course? Your progress will be lost.")) return;
+
+  const r = await supabaseClient.from("course_enrollments").delete().eq("user_id", me.id).eq("course_id", activeCourseId);
+  if (r.error){ console.error(r.error); toast("Could not unenroll"); return; }
+
+  toast("Unenrolled");
+  closeSheet("courseDetailsOv");
+  await loadAll();
+  renderTab();
+}
+
+/* =========================================================
+   RESOURCES TAB
+========================================================= */
+function renderResourcesTab(){
+  let html = `<div class="sec"><div class="sec-head"><div class="sec-title">Resources</div><button class="sec-add" onclick="openSheet('uploadResOv')"><i class="fas fa-plus"></i> Upload</button></div>`;
+
+  html += resources.length
+    ? resources.map(renderResourceRow).join("")
+    : '<div class="center"><i class="fas fa-file-lines"></i><b>No resources yet</b>Share your notes and files with other students.<br><button class="cta" onclick="openSheet(\'uploadResOv\')">Upload a resource</button></div>';
+
+  html += `</div>`;
+  $("content").innerHTML = html;
+}
+
+function renderResourceRow(r){
+  const color = r.color || "#3b82f6";
+  const icon = r.icon || "fa-file";
+  const isMine = r.created_by === me.id;
+  const openAction = r.file_url ? `window.open('${esc(r.file_url).replace(/'/g, "\\'")}','_blank')` : "toast('File not available')";
+
+  return `<div class="resource">
+    <div class="res-ic" style="background:${esc(color)}15;color:${esc(color)}"><i class="fas ${esc(icon)}"></i></div>
+    <div class="res-info" onclick="${openAction}">
+      <div class="res-name">${esc(r.title)}</div>
+      <div class="res-meta">${esc(r.file_type || "")}${r.file_size_label ? " · " + esc(r.file_size_label) : ""}</div>
+    </div>
+    <div class="res-act" onclick="${openAction}"><i class="fas fa-download"></i></div>
+    ${isMine ? `<div class="res-act dng" onclick="deleteResource('${esc(r.id)}')"><i class="fas fa-trash"></i></div>` : ""}
+  </div>`;
+}
+
+async function saveResource(){
+  const title = $("resTitle").value.trim();
+  const fileInput = $("resFile");
+  const file = fileInput.files[0];
+
+  if (!title){ toast("Enter a title"); return; }
+  if (!file){ toast("Choose a file to upload"); return; }
+  if (file.size > 15 * 1024 * 1024){ toast("File must be under 15 MB"); return; }
+
+  const btn = $("resSaveBtn");
+  btn.disabled = true; btn.textContent = "Uploading...";
+
+  try {
+    const ext = (file.name.split(".").pop() || "file").toLowerCase().replace(/[^a-z0-9]/g, "") || "file";
+    const path = me.id + "/" + Date.now() + "." + ext;
+
+    const up = await supabaseClient.storage.from("studyhub").upload(path, file, { contentType: file.type || undefined, upsert: false });
+    if (up.error) throw up.error;
+
+    const publicUrl = supabaseClient.storage.from("studyhub").getPublicUrl(path).data.publicUrl;
+    const type = $("resType").value;
+    const typeColors = { PDF: "#ef4444", DOCX: "#3b82f6", PPTX: "#f59e0b", Image: "#10b981", Other: "#8b5cf6" };
+    const typeIcons = { PDF: "fa-file-pdf", DOCX: "fa-file-word", PPTX: "fa-file-powerpoint", Image: "fa-file-image", Other: "fa-file" };
+
+    const ins = await supabaseClient.from("studyhub_resources").insert({
+      title,
+      file_type: type,
+      file_size_label: formatSize(file.size),
+      file_url: publicUrl,
+      icon: typeIcons[type] || "fa-file",
+      color: typeColors[type] || "#3b82f6",
+      course_id: $("resCourse").value || null,
+      created_by: me.id
+    });
+    if (ins.error) throw ins.error;
+
+    toast("Resource shared");
+    $("resTitle").value = ""; fileInput.value = ""; $("resCourse").value = "";
+    closeSheet("uploadResOv");
+    await loadAll();
+    renderTab();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not upload resource");
+  } finally {
+    btn.disabled = false; btn.textContent = "Upload";
+  }
+}
+
+async function deleteResource(id){
+  if (!confirm("Delete this resource?")) return;
+  const r = await supabaseClient.from("studyhub_resources").delete().eq("id", id).eq("created_by", me.id);
+  if (r.error){ console.error(r.error); toast("Could not delete"); return; }
+  toast("Resource deleted");
+  await loadAll();
+  renderTab();
+}
+
+/* =========================================================
+   DEADLINES TAB
+========================================================= */
+function renderDeadlinesTab(){
+  let html = `<div class="sec"><div class="sec-head"><div class="sec-title">Deadlines</div><button class="sec-add" onclick="openSheet('addDeadlineOv')"><i class="fas fa-plus"></i> Add</button></div>`;
+
+  html += deadlines.length
+    ? deadlines.map(renderDeadlineRow).join("")
+    : '<div class="center"><i class="fas fa-calendar-check"></i><b>No deadlines yet</b><button class="cta" onclick="openSheet(\'addDeadlineOv\')">Add a deadline</button></div>';
+
+  html += `</div>`;
+  $("content").innerHTML = html;
+}
+
+function renderDeadlineRow(d){
+  const color = d.color || "#ef4444";
+  const courseLabel = d.course ? (d.course.code || d.course.title) : "";
+  const isMine = d.user_id === me.id;
+
+  return `<div class="deadline">
+    <div class="dl-dot" style="background:${esc(color)}"></div>
+    <div class="dl-info"><div class="dl-name">${esc(d.title)}</div><div class="dl-course">${esc(courseLabel)}</div></div>
+    <div><div class="dl-date" style="color:${esc(color)}">${esc(formatDueDate(d.due_date))}</div><div class="dl-days">${esc(daysLeftLabel(d.due_date))}</div></div>
+    ${isMine ? `<div class="dl-del" onclick="deleteDeadline('${esc(d.id)}')"><i class="fas fa-trash"></i></div>` : ""}
+  </div>`;
+}
+
+async function saveDeadline(){
+  const title = $("dlTitle").value.trim();
+  const due = $("dlDue").value;
+
+  if (!title){ toast("Enter a deadline title"); return; }
+  if (!due){ toast("Choose a date and time"); return; }
+
+  const btn = $("dlSaveBtn");
+  btn.disabled = true; btn.textContent = "Saving...";
+
+  try {
+    const ins = await supabaseClient.from("studyhub_deadlines").insert({
+      user_id: me.id,
+      course_id: $("dlCourse").value || null,
+      title,
+      due_date: new Date(due).toISOString()
+    });
+    if (ins.error) throw ins.error;
+
+    toast("Deadline added");
+    $("dlTitle").value = ""; $("dlDue").value = ""; $("dlCourse").value = "";
+    closeSheet("addDeadlineOv");
+    await loadAll();
+    renderTab();
+  } catch (e){
+    console.error(e);
+    toast(e && e.message ? e.message : "Could not add deadline");
+  } finally {
+    btn.disabled = false; btn.textContent = "Add Deadline";
+  }
+}
+
+async function deleteDeadline(id){
+  if (!confirm("Delete this deadline?")) return;
+  const r = await supabaseClient.from("studyhub_deadlines").delete().eq("id", id).eq("user_id", me.id);
+  if (r.error){ console.error(r.error); toast("Could not delete"); return; }
+  toast("Deadline deleted");
+  await loadAll();
+  renderTab();
+}
+
+init();
+</script>
+<script src="nav.js"></script>
+</body>
+</html>
