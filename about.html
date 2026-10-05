@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About Us - StudentX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root{
+            --bg:#0a0a0f;
+            --card:rgba(255,255,255,.035);
+            --card-2:rgba(255,255,255,.07);
+            --border:rgba(255,255,255,.07);
+            --text:#fff;
+            --text-2:rgba(255,255,255,.75);
+            --muted:rgba(255,255,255,.42);
+            --accent:#dc2743;
+            --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+        }
+        :root.sx-light{
+            --bg:#f0f2f5;
+            --card:#ffffff;
+            --card-2:#f0f2f5;
+            --border:#e4e6eb;
+            --text:#050505;
+            --text-2:#3a3b3c;
+            --muted:#65676b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: Poppins, sans-serif; }
+        html, body { background-color: var(--bg); color: var(--text); min-height: 100%; width: 100%; overflow-x: hidden; max-width: 500px; margin: 0 auto; }
+        a { color: var(--accent); text-decoration: none; font-weight: 600; }
+
+        .header { position: sticky; top: 0; background-color: var(--bg); padding: 40px 15px 15px; display: flex; align-items: center; gap: 15px; border-bottom: 1px solid var(--border); z-index: 100; }
+        .back-btn { color: var(--text); font-size: 20px; cursor: pointer; display: flex; align-items: center; }
+        .header-title { font-size: 20px; font-weight: 800; }
+
+        .content-container { padding: 20px 15px 50px; line-height: 1.65; }
+
+        .logo-wrap { text-align: center; margin: 10px 0 22px; }
+        .logo-badge { width: 76px; height: 76px; border-radius: 20px; background: var(--grad); display: inline-flex; align-items: center; justify-content: center; font-size: 32px; color: #fff; margin-bottom: 12px; }
+        .app-name { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+        .app-name b { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .app-version { font-size: 12px; color: var(--muted); }
+
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 22px 0; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px 8px; text-align: center; }
+        .stat-value { font-size: 17px; font-weight: 800; }
+        .stat-label { font-size: 10px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .3px; }
+
+        .section-heading { font-size: 15px; font-weight: 800; color: var(--accent); margin-top: 26px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+        .section-heading i { font-size: 13px; }
+        .p-text { font-size: 13px; color: var(--text-2); margin-bottom: 12px; }
+
+        .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px; }
+        .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+        .feature-card i { font-size: 18px; color: var(--accent); margin-bottom: 8px; display: block; }
+        .feature-card b { display: block; font-size: 12px; font-weight: 700; margin-bottom: 3px; }
+        .feature-card span { font-size: 11px; color: var(--muted); line-height: 1.4; display: block; }
+
+        .link-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; cursor: pointer; }
+        .link-card i { font-size: 18px; color: var(--accent); flex-shrink: 0; }
+        .link-card div { flex: 1; font-size: 13px; font-weight: 600; color: var(--text); }
+        .link-card .chev { color: var(--muted); font-size: 13px; }
+
+        .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; margin-top: 6px; display: flex; align-items: center; gap: 12px; }
+        .contact-card i { font-size: 20px; color: var(--accent); flex-shrink: 0; }
+        .contact-card div { font-size: 12px; color: var(--text-2); }
+        .contact-card a { font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="menu.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">About Us</div>
+    </div>
+
+    <div class="content-container">
+
+        <div class="logo-wrap">
+            <div class="logo-badge"><i class="fas fa-graduation-cap"></i></div>
+            <div class="app-name">Student<b>X</b></div>
+            <div class="app-version">Version 1.0.0</div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card"><div class="stat-value" id="statStudents">-</div><div class="stat-label">Students</div></div>
+            <div class="stat-card"><div class="stat-value" id="statPosts">-</div><div class="stat-label">Posts</div></div>
+            <div class="stat-card"><div class="stat-value" id="statVideos">-</div><div class="stat-label">Videos</div></div>
+        </div>
+
+        <div class="section-heading"><i class="fas fa-circle-info"></i> About StudentX</div>
+        <p class="p-text">
+            StudentX is a modern social and academic platform designed specifically for students. It connects peers, empowers study groups, and provides an engaging environment for sharing knowledge, notes, and academic updates.
+        </p>
+
+        <div class="section-heading"><i class="fas fa-bullseye"></i> Our Mission</div>
+        <p class="p-text">
+            Our mission is to bridge the gap between social interaction and academic success, making learning collaborative, accessible, and enjoyable for students everywhere.
+        </p>
+
+        <div class="section-heading"><i class="fas fa-layer-group"></i> What You Can Do on StudentX</div>
+        <div class="feature-grid">
+            <div class="feature-card"><i class="fas fa-house"></i><b>Home Feed</b><span>Share posts, photos and updates with your campus community</span></div>
+            <div class="feature-card"><i class="fas fa-video"></i><b>Video</b><span>Watch and upload short videos in a For You feed</span></div>
+            <div class="feature-card"><i class="fas fa-comment-dots"></i><b>Chat &amp; Calls</b><span>Message, voice call, and video call classmates in real time</span></div>
+            <div class="feature-card"><i class="fas fa-book-open"></i><b>StudyHub</b><span>Track courses, deadlines, and share study resources</span></div>
+            <div class="feature-card"><i class="fas fa-user-group"></i><b>Groups</b><span>Join or create study groups and school communities</span></div>
+            <div class="feature-card"><i class="fas fa-tower-broadcast"></i><b>Live</b><span>Go live and interact with viewers in real time</span></div>
+            <div class="feature-card"><i class="fas fa-store"></i><b>E-Market</b><span>Buy and sell books, gadgets and supplies with other students</span></div>
+            <div class="feature-card"><i class="fas fa-briefcase"></i><b>Jobs &amp; Scholarships</b><span>Find part-time work, internships and funding opportunities</span></div>
+            <div class="feature-card"><i class="fas fa-robot"></i><b>StudentX AI</b><span>Get instant help with your studies and questions</span></div>
+            <div class="feature-card"><i class="fas fa-crown"></i><b>Premium</b><span>Unlock ad-free use, extra tools and revenue sharing</span></div>
+        </div>
+
+        <div class="section-heading"><i class="fas fa-shield-heart"></i> Developer &amp; Support</div>
+        <p class="p-text">
+            Built with passion to support student communities worldwide. For inquiries, feedback, or support, reach out to us through the links below.
+        </p>
+
+        <div class="link-card" onclick="location.href='help.html'">
+            <i class="fas fa-headset"></i>
+            <div>Help &amp; Support</div>
+            <i class="fas fa-chevron-right chev"></i>
+        </div>
+        <div class="link-card" onclick="location.href='privacy.html'">
+            <i class="fas fa-shield-halved"></i>
+            <div>Privacy Policy</div>
+            <i class="fas fa-chevron-right chev"></i>
+        </div>
+
+        <div class="contact-card" style="margin-top:16px">
+            <i class="fas fa-envelope"></i>
+            <div>
+                Have a question we haven't answered?
+                <br><a href="help.html">Contact our support team</a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        function fmt(n){
+            n = Number(n) || 0;
+            if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M+";
+            if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K+";
+            return String(n);
+        }
+
+        async function loadStats(){
+            try {
+                const results = await Promise.all([
+                    supabaseClient.from("profiles").select("id", { count: "exact", head: true }),
+                    supabaseClient.from("posts").select("id", { count: "exact", head: true }),
+                    supabaseClient.from("videos").select("id", { count: "exact", head: true })
+                ]);
+
+                document.getElementById("statStudents").textContent = fmt(results[0].count || 0);
+                document.getElementById("statPosts").textContent = fmt(results[1].count || 0);
+                document.getElementById("statVideos").textContent = fmt(results[2].count || 0);
+            } catch (e) {
+                console.error("Stats load error:", e);
+                document.getElementById("statStudents").textContent = "-";
+                document.getElementById("statPosts").textContent = "-";
+                document.getElementById("statVideos").textContent = "-";
+            }
+        }
+
+        loadStats();
+    </script>
+    <script src="theme.js"></script>
+</body>
+</html>
