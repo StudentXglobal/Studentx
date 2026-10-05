@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Settings - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+  --danger:#ef4444;
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:500px;margin:0 auto;padding-bottom:90px}
+button,input,textarea,select{font-family:Poppins,sans-serif}
+a{color:inherit;text-decoration:none}
+
+.hdr{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--bg);border-bottom:1px solid var(--border)}
+.hdr-btn{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--text-2);font-size:17px;cursor:pointer;background:none;border:0}
+.hdr-btn:active{background:var(--card-2)}
+.hdr-title{font-size:19px;font-weight:800}
+
+.wrap{padding:16px 14px}
+.set-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:20px 2px 8px}
+.set-label:first-child{margin-top:0}
+
+.set-group{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.set-row{display:flex;align-items:center;gap:13px;padding:14px;border-bottom:1px solid var(--border);cursor:pointer}
+.set-row:last-child{border-bottom:none}
+.set-icon{width:34px;height:34px;border-radius:9px;background:var(--card-2);display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:14px;flex-shrink:0}
+.set-text{flex:1;min-width:0}
+.set-title{font-size:14px;font-weight:600}
+.set-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.set-arrow{color:var(--muted);font-size:13px;flex-shrink:0}
+.set-row.dng .set-icon{color:var(--danger)}
+.set-row.dng .set-title{color:var(--danger)}
+
+/* appearance segmented rows (not a sheet) */
+.appear-item{display:flex;align-items:center;justify-content:space-between;padding:14px;border-bottom:1px solid var(--border);cursor:pointer}
+.appear-item:last-child{border-bottom:none}
+.appear-left{display:flex;align-items:center;gap:13px}
+.theme-radio{width:21px;height:21px;border:2px solid var(--muted);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.theme-radio.on{border-color:var(--accent)}
+.theme-radio.on::after{content:'';width:11px;height:11px;background:var(--accent);border-radius:50%}
+
+/* switch */
+.sw{width:42px;height:24px;border-radius:20px;background:var(--card-2);border:1px solid var(--border);position:relative;cursor:pointer;flex-shrink:0;transition:.2s}
+.sw::after{content:'';position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw.on{background:var(--grad);border-color:transparent}
+.sw.on::after{left:20px}
+
+/* sheets */
+.ov{position:fixed;inset:0;z-index:500;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.6)}
+.ov.show{display:flex}
+.sheet{width:100%;max-width:500px;max-height:88vh;overflow-y:auto;background:#14142d;color:#fff;border-radius:20px 20px 0 0;padding:12px 0 26px;animation:up .25s ease}
+:root.sx-light .sheet{background:#fff;color:#050505}
+@keyframes up{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-handle{width:36px;height:4px;background:rgba(128,128,128,.4);border-radius:4px;margin:0 auto 10px}
+.sheet-title{padding:6px 20px 12px;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:rgba(128,128,128,.14);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer}
+
+.form{padding:0 20px}
+.form label{display:block;margin:12px 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
+.form input,.form textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:14px;outline:0}
+.form .hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+.form .danger-note{font-size:11px;color:var(--danger);margin-top:8px;line-height:1.5}
+.btns{display:flex;gap:8px;margin-top:20px}
+.btn{flex:1;padding:13px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.12);color:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.btn.main{background:var(--grad);border-color:transparent;color:#fff}
+.btn.dng{background:var(--danger);border-color:transparent;color:#fff}
+.btn:disabled{opacity:.6}
+
+.seg{display:flex;gap:8px;padding:0 20px;margin-top:4px}
+.seg-opt{flex:1;padding:12px 10px;border-radius:14px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.1);cursor:pointer;text-align:center}
+.seg-opt b{display:block;font-size:13px}
+.seg-opt small{display:block;margin-top:3px;font-size:10px;color:var(--muted);line-height:1.4}
+.seg-opt.on{border-color:var(--accent);background:rgba(220,39,67,.12)}
+
+.search-box{margin:0 20px 10px;padding:10px 14px;border-radius:12px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.1);display:flex;align-items:center;gap:8px}
+.search-box input{flex:1;border:0;outline:0;background:none;color:inherit;font-size:13px}
+.search-box i{color:var(--muted);font-size:12px}
+
+.sub-label{padding:4px 20px 8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.mem{display:flex;align-items:center;gap:12px;padding:10px 20px}
+.mem img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:var(--card-2);flex-shrink:0}
+.mem-info{flex:1;min-width:0}
+.mem-name{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mem-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.sm{padding:8px 15px;border-radius:18px;border:1px solid rgba(128,128,128,.3);background:rgba(128,128,128,.14);color:inherit;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0}
+.sm.main{background:var(--grad);border-color:transparent;color:#fff}
+.sm.dng{color:var(--danger)}
+.empty-row{padding:20px;text-align:center;color:var(--muted);font-size:12px}
+
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;max-width:90%;padding:11px 20px;background:#1f1f2b;color:#fff;border-radius:12px;font-size:12px;font-weight:600;box-shadow:0 4px 20px rgba(0,0,0,.35);border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <button class="hdr-btn" onclick="goBack()" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+  <div class="hdr-title">Settings</div>
+</header>
+
+<div class="wrap">
+
+  <div class="set-label">Appearance</div>
+  <div class="set-group">
+    <div class="appear-item" onclick="setTheme('dark')">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-moon"></i></div><div class="set-text"><div class="set-title">Dark Mode</div></div></div>
+      <div class="theme-radio" id="radio-dark"></div>
+    </div>
+    <div class="appear-item" onclick="setTheme('light')">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-sun"></i></div><div class="set-text"><div class="set-title">White Mode</div></div></div>
+      <div class="theme-radio" id="radio-light"></div>
+    </div>
+    <div class="appear-item" onclick="setTheme('auto')">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-circle-half-stroke"></i></div><div class="set-text"><div class="set-title">System Default</div></div></div>
+      <div class="theme-radio" id="radio-auto"></div>
+    </div>
+  </div>
+
+  <div class="set-label">Privacy &amp; Security</div>
+  <div class="set-group">
+    <div class="set-row" onclick="openVisibilitySheet()">
+      <div class="set-icon"><i class="fas fa-eye"></i></div>
+      <div class="set-text"><div class="set-title">Profile Visibility</div><div class="set-sub" id="visSub">Loading...</div></div>
+      <i class="fas fa-chevron-right set-arrow"></i>
+    </div>
+    <div class="set-row" onclick="openCloseFriendsSheet()">
+      <div class="set-icon"><i class="fas fa-user-group"></i></div>
+      <div class="set-text"><div class="set-title">Close Friends</div><div class="set-sub" id="cfSub">0 people</div></div>
+      <i class="fas fa-chevron-right set-arrow"></i>
+    </div>
+    <div class="set-row" onclick="openBlockedSheet()">
+      <div class="set-icon"><i class="fas fa-ban"></i></div>
+      <div class="set-text"><div class="set-title">Blocked Users</div><div class="set-sub" id="blSub">0 people</div></div>
+      <i class="fas fa-chevron-right set-arrow"></i>
+    </div>
+  </div>
+
+  <div class="set-label">Notifications</div>
+  <div class="set-group">
+    <div class="appear-item">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-heart"></i></div><div class="set-text"><div class="set-title">Likes</div></div></div>
+      <div class="sw" id="sw-likes" onclick="toggleNotif('likes')"></div>
+    </div>
+    <div class="appear-item">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-comment"></i></div><div class="set-text"><div class="set-title">Comments</div></div></div>
+      <div class="sw" id="sw-comments" onclick="toggleNotif('comments')"></div>
+    </div>
+    <div class="appear-item">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-user-plus"></i></div><div class="set-text"><div class="set-title">New Followers</div></div></div>
+      <div class="sw" id="sw-follows" onclick="toggleNotif('follows')"></div>
+    </div>
+    <div class="appear-item">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-comment-dots"></i></div><div class="set-text"><div class="set-title">Messages</div></div></div>
+      <div class="sw" id="sw-messages" onclick="toggleNotif('messages')"></div>
+    </div>
+    <div class="appear-item">
+      <div class="appear-left"><div class="set-icon"><i class="fas fa-bullhorn"></i></div><div class="set-text"><div class="set-title">Announcements</div></div></div>
+      <div class="sw" id="sw-broadcast" onclick="toggleNotif('broadcast')"></div>
+    </div>
+  </div>
+
+  <div class="set-label">Account</div>
+  <div class="set-group">
+    <div class="set-row" onclick="openEmailSheet()">
+      <div class="set-icon"><i class="fas fa-envelope"></i></div>
+      <div class="set-text"><div class="set-title">Change Email</div><div class="set-sub" id="emailSub">Loading...</div></div>
+      <i class="fas fa-chevron-right set-arrow"></i>
+    </div>
+    <div class="set-row" onclick="openPasswordSheet()">
+      <div class="set-icon"><i class="fas fa-lock"></i></div>
+      <div class="set-text"><div class="set-title">Change Password</div></div>
+      <i class="fas fa-chevron-right set-arrow"></i>
+    </div>
+    <div class="set-row dng" onclick="openDeleteSheet()">
+      <div class="set-icon"><i class="fas fa-trash"></i></div>
+      <div class="set-text"><div class="set-title">Delete Account</div></div>
+      <i class="fas fa-chevron-right set-arrow"></i>
+    </div>
+  </div>
+
+  <div class="set-label">&nbsp;</div>
+  <div class="set-group">
+    <div class="set-row dng" onclick="doLogout()">
+      <div class="set-icon"><i class="fas fa-right-from-bracket"></i></div>
+      <div class="set-text"><div class="set-title">Log Out</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- GENERIC SHEET -->
+<div class="ov" id="sheetOv" onclick="if(event.target===this)closeSheet()">
+  <div class="sheet" id="sheetBody"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   STUDENTX SETTINGS — fully self-contained, no page navigation
+========================================================= */
+var me = null, myProfile = null;
+var notifPrefs = { likes:true, comments:true, follows:true, messages:true, broadcast:true };
+var closeFriendIds = new Set();
+var followingList = [];
+var blockedList = [];
+
+var DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#202027"/><circle cx="50" cy="38" r="20" fill="#777"/><path d="M18 90c4-22 18-32 32-32s28 10 32 32" fill="#777"/></svg>'
+);
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+  if (v === null || v === undefined) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function toast(msg){
+  var old = document.querySelector(".toast"); if (old) old.remove();
+  var d = document.createElement("div"); d.className = "toast"; d.textContent = msg;
+  document.body.appendChild(d);
+  setTimeout(function(){ if (d.parentNode) d.remove(); }, 2600);
+}
+function goBack(){
+  if (document.referrer && document.referrer.indexOf(location.host) !== -1 && history.length > 1) history.back();
+  else location.href = "menu.html";
+}
+function openSheet(html){ $("sheetBody").innerHTML = html; $("sheetOv").classList.add("show"); }
+function closeSheet(){ $("sheetOv").classList.remove("show"); }
+function nameOf(u){ return (u && (u.full_name || u.username)) || "StudentX User"; }
+
+/* =========================================================
+   INIT
+========================================================= */
+async function init(){
+  try {
+    var auth = await supabaseClient.auth.getUser();
+    me = auth.data && auth.data.user;
+    if (!me) { location.href = "login.html"; return; }
+
+    var r = await supabaseClient.from("profiles").select("*").eq("id", me.id).maybeSingle();
+    if (r.error) { console.error(r.error); toast("Could not load your settings"); return; }
+    myProfile = r.data || {};
+
+    if (myProfile.notification_prefs) notifPrefs = Object.assign(notifPrefs, myProfile.notification_prefs);
+    renderNotifSwitches();
+
+    $("visSub").textContent = (myProfile.profile_visibility === "private") ? "Private" : "Public";
+    $("emailSub").textContent = me.email || "";
+
+    syncThemeRadios();
+    await refreshCounts();
+  } catch (e) {
+    console.error(e);
+    toast("Something went wrong loading settings");
+  }
+}
+
+async function refreshCounts(){
+  var cf = await supabaseClient.from("close_friends").select("id", { count: "exact", head: true }).eq("user_id", me.id);
+  $("cfSub").textContent = (cf.count || 0) + " people";
+
+  var bl = await supabaseClient.from("blocked_users").select("id", { count: "exact", head: true }).eq("user_id", me.id);
+  $("blSub").textContent = (bl.count || 0) + " people";
+}
+
+/* =========================================================
+   APPEARANCE (shared key with nav.js / theme.js)
+========================================================= */
+function syncThemeRadios(){
+  var theme = "dark";
+  try { theme = localStorage.getItem("studentx-theme") || "dark"; } catch (e) {}
+  document.querySelectorAll(".theme-radio").forEach(function(r){ r.classList.remove("on"); });
+  var el = $("radio-" + theme);
+  if (el) el.classList.add("on");
+}
+
+function setTheme(theme){
+  try { localStorage.setItem("studentx-theme", theme); } catch (e) {}
+  if (typeof applyTheme === "function") applyTheme(theme);
+
+  var light = theme === "light" || (theme === "auto" && window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches);
+  document.documentElement.classList.toggle("sx-light", light);
+
+  syncThemeRadios();
+  toast("Appearance updated");
+}
+
+/* =========================================================
+   PROFILE VISIBILITY SHEET
+========================================================= */
+function openVisibilitySheet(){
+  var cur = myProfile.profile_visibility === "private" ? "private" : "public";
+  openSheet(
+    '<div class="sheet-handle"></div>' +
+    '<div class="sheet-title">Profile Visibility<div class="sheet-close" onclick="closeSheet()"><i class="fas fa-times"></i></div></div>' +
+    '<div class="seg" id="visSeg">' +
+      '<div class="seg-opt ' + (cur === "public" ? "on" : "") + '" data-v="public" onclick="pickVis(this)"><b><i class="fas fa-globe-africa"></i> Public</b><small>Anyone can see your posts and profile</small></div>' +
+      '<div class="seg-opt ' + (cur === "private" ? "on" : "") + '" data-v="private" onclick="pickVis(this)"><b><i class="fas fa-lock"></i> Private</b><small>Only people you approve as followers can see your posts</small></div>' +
+    '</div>' +
+    '<div class="form"><div class="btns"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn main" id="visSave" onclick="saveVisibility()">Save</button></div></div>'
+  );
+}
+function pickVis(el){
+  document.querySelectorAll("#visSeg .seg-opt").forEach(function(o){ o.classList.remove("on"); });
+  el.classList.add("on");
+}
+async function saveVisibility(){
+  var picked = document.querySelector("#visSeg .seg-opt.on").getAttribute("data-v");
+  var btn = $("visSave"); btn.disabled = true; btn.textContent = "Saving...";
+  var r = await supabaseClient.from("profiles").update({ profile_visibility: picked }).eq("id", me.id);
+  if (r.error) { console.error(r.error); toast("Could not update visibility"); btn.disabled = false; btn.textContent = "Save"; return; }
+  myProfile.profile_visibility = picked;
+  $("visSub").textContent = picked === "private" ? "Private" : "Public";
+  closeSheet();
+  toast("Profile visibility updated");
+}
+
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
+function renderNotifSwitches(){
+  ["likes","comments","follows","messages","broadcast"].forEach(function(key){
+    var el = $("sw-" + key);
+    if (el) el.classList.toggle("on", !!notifPrefs[key]);
+  });
+}
+async function toggleNotif(key){
+  var el = $("sw-" + key);
+  var next = !notifPrefs[key];
+  notifPrefs[key] = next;
+  if (el) el.classList.toggle("on", next);
+
+  var r = await supabaseClient.from("profiles").update({ notification_prefs: notifPrefs }).eq("id", me.id);
+  if (r.error) {
+    console.error(r.error);
+    notifPrefs[key] = !next;
+    if (el) el.classList.toggle("on", !next);
+    toast("Could not update notification setting");
+  }
+}
+
+/* =========================================================
+   CLOSE FRIENDS SHEET
+========================================================= */
+async function openCloseFriendsSheet(){
+  openSheet(
+    '<div class="sheet-handle"></div>' +
+    '<div class="sheet-title">Close Friends<div class="sheet-close" onclick="closeSheet()"><i class="fas fa-times"></i></div></div>' +
+    '<div class="search-box"><i class="fas fa-search"></i><input id="cfSearch" type="text" placeholder="Search people you follow..." oninput="renderCloseFriendsList()"></div>' +
+    '<div id="cfList"><div class="empty-row">Loading...</div></div>'
+  );
+  await loadCloseFriendsData();
+  renderCloseFriendsList();
+}
+
+async function loadCloseFriendsData(){
+  var cfRes = await supabaseClient.from("close_friends").select("friend_id").eq("user_id", me.id);
+  closeFriendIds = new Set((cfRes.data || []).map(function(r){ return r.friend_id; }));
+
+  var followRes = await supabaseClient.from("followers").select("following_id").eq("follower_id", me.id);
+  var ids = (followRes.data || []).map(function(r){ return r.following_id; });
+
+  if (!ids.length) { followingList = []; return; }
+
+  var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").in("id", ids);
+  followingList = pr.data || [];
+}
+
+function renderCloseFriendsList(){
+  var list = $("cfList");
+  if (!list) return;
+  var q = ($("cfSearch") && $("cfSearch").value || "").trim().toLowerCase();
+
+  var filtered = followingList.filter(function(u){
+    if (!q) return true;
+    return (u.full_name || "").toLowerCase().indexOf(q) !== -1 || (u.username || "").toLowerCase().indexOf(q) !== -1;
+  });
+
+  if (!followingList.length) {
+    list.innerHTML = '<div class="empty-row">You are not following anyone yet. Follow people to add them as Close Friends.</div>';
+    return;
+  }
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-row">No matches.</div>';
+    return;
+  }
+
+  filtered.sort(function(a, b){
+    var av = closeFriendIds.has(a.id) ? 0 : 1, bv = closeFriendIds.has(b.id) ? 0 : 1;
+    return av - bv;
+  });
+
+  list.innerHTML = '<div class="sub-label">' + closeFriendIds.size + ' close friend' + (closeFriendIds.size === 1 ? "" : "s") + '</div>' +
+    filtered.map(function(u){
+      var active = closeFriendIds.has(u.id);
+      return '<div class="mem">' +
+        '<img src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" onerror="this.src=\'' + DEFAULT_AVATAR + '\'" alt="">' +
+        '<div class="mem-info"><div class="mem-name">' + esc(nameOf(u)) + '</div><div class="mem-sub">' + (u.username ? "@" + esc(u.username) : "") + '</div></div>' +
+        '<button class="sm ' + (active ? "main" : "") + '" onclick="toggleCloseFriend(\'' + esc(u.id) + '\',this)">' + (active ? "Remove" : "Add") + '</button>' +
+      '</div>';
+    }).join("");
+}
+
+async function toggleCloseFriend(uid, btn){
+  btn.disabled = true;
+  var isActive = closeFriendIds.has(uid);
+
+  var r = isActive
+    ? await supabaseClient.from("close_friends").delete().eq("user_id", me.id).eq("friend_id", uid)
+    : await supabaseClient.from("close_friends").insert({ user_id: me.id, friend_id: uid });
+
+  btn.disabled = false;
+  if (r.error) { console.error(r.error); toast("Could not update close friends"); return; }
+
+  if (isActive) closeFriendIds.delete(uid); else closeFriendIds.add(uid);
+  $("cfSub").textContent = closeFriendIds.size + " people";
+  renderCloseFriendsList();
+}
+
+/* =========================================================
+   BLOCKED USERS SHEET
+========================================================= */
+async function openBlockedSheet(){
+  openSheet(
+    '<div class="sheet-handle"></div>' +
+    '<div class="sheet-title">Blocked Users<div class="sheet-close" onclick="closeSheet()"><i class="fas fa-times"></i></div></div>' +
+    '<div class="search-box"><i class="fas fa-user-slash"></i><input id="blockSearch" type="text" placeholder="Search a username to block..." onkeydown="if(event.key===\'Enter\'){event.preventDefault();searchUserToBlock();}"></div>' +
+    '<div class="form" style="padding-top:0"><button class="btn main" style="width:100%" onclick="searchUserToBlock()">Find &amp; Block</button></div>' +
+    '<div id="blockFindResult"></div>' +
+    '<div class="sub-label" style="margin-top:14px">Currently blocked</div>' +
+    '<div id="blList"><div class="empty-row">Loading...</div></div>'
+  );
+  await loadBlockedList();
+}
+
+async function loadBlockedList(){
+  var r = await supabaseClient.from("blocked_users").select("blocked_id,created_at").eq("user_id", me.id).order("created_at", { ascending: false });
+  var list = $("blList");
+  if (r.error) { console.error(r.error); list.innerHTML = '<div class="empty-row">Could not load blocked users.</div>'; return; }
+
+  var rows = r.data || [];
+  blockedList = rows;
+  if (!rows.length) { list.innerHTML = '<div class="empty-row">You have not blocked anyone.</div>'; return; }
+
+  var ids = rows.map(function(x){ return x.blocked_id; });
+  var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").in("id", ids);
+  var map = {}; (pr.data || []).forEach(function(u){ map[u.id] = u; });
+
+  list.innerHTML = rows.map(function(row){
+    var u = map[row.blocked_id] || {};
+    return '<div class="mem">' +
+      '<img src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" onerror="this.src=\'' + DEFAULT_AVATAR + '\'" alt="">' +
+      '<div class="mem-info"><div class="mem-name">' + esc(nameOf(u)) + '</div><div class="mem-sub">' + (u.username ? "@" + esc(u.username) : "") + '</div></div>' +
+      '<button class="sm" onclick="unblockUser(\'' + esc(row.blocked_id) + '\',this)">Unblock</button>' +
+    '</div>';
+  }).join("");
+}
+
+async function searchUserToBlock(){
+  var q = ($("blockSearch").value || "").trim().replace(/^@/, "");
+  var resultEl = $("blockFindResult");
+  if (!q) { toast("Enter a username to search"); return; }
+
+  var r = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").ilike("username", q).limit(1).maybeSingle();
+  if (r.error || !r.data) { resultEl.innerHTML = '<div class="empty-row">No user found with that username.</div>'; return; }
+
+  var u = r.data;
+  if (u.id === me.id) { resultEl.innerHTML = '<div class="empty-row">You cannot block yourself.</div>'; return; }
+
+  var already = blockedList.some(function(b){ return b.blocked_id === u.id; });
+
+  resultEl.innerHTML = '<div class="mem">' +
+    '<img src="' + esc(u.avatar_url || DEFAULT_AVATAR) + '" onerror="this.src=\'' + DEFAULT_AVATAR + '\'" alt="">' +
+    '<div class="mem-info"><div class="mem-name">' + esc(nameOf(u)) + '</div><div class="mem-sub">' + (u.username ? "@" + esc(u.username) : "") + '</div></div>' +
+    (already
+      ? '<button class="sm" disabled>Blocked</button>'
+      : '<button class="sm dng" onclick="blockUser(\'' + esc(u.id) + '\',this)">Block</button>') +
+  '</div>';
+}
+
+async function blockUser(uid, btn){
+  btn.disabled = true; btn.textContent = "Blocking...";
+  var r = await supabaseClient.from("blocked_users").insert({ user_id: me.id, blocked_id: uid });
+  if (r.error) {
+    console.error(r.error);
+    toast(r.error.code === "23505" ? "Already blocked" : "Could not block user");
+    btn.disabled = false; btn.textContent = "Block";
+    return;
+  }
+  toast("User blocked");
+  $("blockSearch").value = "";
+  $("blockFindResult").innerHTML = "";
+  await loadBlockedList();
+  await refreshCounts();
+}
+
+async function unblockUser(uid, btn){
+  btn.disabled = true; btn.textContent = "...";
+  var r = await supabaseClient.from("blocked_users").delete().eq("user_id", me.id).eq("blocked_id", uid);
+  if (r.error) { console.error(r.error); toast("Could not unblock user"); btn.disabled = false; btn.textContent = "Unblock"; return; }
+  toast("User unblocked");
+  await loadBlockedList();
+  await refreshCounts();
+}
+
+/* =========================================================
+   CHANGE EMAIL
+========================================================= */
+function openEmailSheet(){
+  openSheet(
+    '<div class="sheet-handle"></div>' +
+    '<div class="sheet-title">Change Email<div class="sheet-close" onclick="closeSheet()"><i class="fas fa-times"></i></div></div>' +
+    '<div class="form">' +
+      '<label>Current email</label><input type="text" value="' + esc(me.email || "") + '" disabled>' +
+      '<label>New email</label><input type="email" id="newEmail" placeholder="you@example.com">' +
+      '<div class="hint">We will send a confirmation link to the new address. Your email only changes after you confirm it.</div>' +
+      '<div class="btns"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn main" id="emailSave" onclick="saveEmail()">Send confirmation</button></div>' +
+    '</div>'
+  );
+}
+async function saveEmail(){
+  var val = ($("newEmail").value || "").trim();
+  if (!val || val.indexOf("@") === -1) { toast("Enter a valid email address"); return; }
+  var btn = $("emailSave"); btn.disabled = true; btn.textContent = "Sending...";
+
+  var r = await supabaseClient.auth.updateUser({ email: val });
+  btn.disabled = false; btn.textContent = "Send confirmation";
+  if (r.error) { console.error(r.error); toast(r.error.message || "Could not update email"); return; }
+
+  toast("Check your new email inbox to confirm the change");
+  closeSheet();
+}
+
+/* =========================================================
+   CHANGE PASSWORD
+========================================================= */
+function openPasswordSheet(){
+  openSheet(
+    '<div class="sheet-handle"></div>' +
+    '<div class="sheet-title">Change Password<div class="sheet-close" onclick="closeSheet()"><i class="fas fa-times"></i></div></div>' +
+    '<div class="form">' +
+      '<label>New password</label><input type="password" id="newPass" placeholder="At least 6 characters">' +
+      '<label>Confirm new password</label><input type="password" id="confirmPass" placeholder="Re-enter new password">' +
+      '<div class="btns"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn main" id="passSave" onclick="savePassword()">Update password</button></div>' +
+    '</div>'
+  );
+}
+async function savePassword(){
+  var p1 = $("newPass").value, p2 = $("confirmPass").value;
+  if (!p1 || p1.length < 6) { toast("Password must be at least 6 characters"); return; }
+  if (p1 !== p2) { toast("Passwords do not match"); return; }
+
+  var btn = $("passSave"); btn.disabled = true; btn.textContent = "Updating...";
+  var r = await supabaseClient.auth.updateUser({ password: p1 });
+  btn.disabled = false; btn.textContent = "Update password";
+  if (r.error) { console.error(r.error); toast(r.error.message || "Could not update password"); return; }
+
+  toast("Password updated");
+  closeSheet();
+}
+
+/* =========================================================
+   DELETE ACCOUNT
+========================================================= */
+function openDeleteSheet(){
+  openSheet(
+    '<div class="sheet-handle"></div>' +
+    '<div class="sheet-title">Delete Account<div class="sheet-close" onclick="closeSheet()"><i class="fas fa-times"></i></div></div>' +
+    '<div class="form">' +
+      '<div class="hint">Deleting your account removes your profile from StudentX. Your posts, videos, and messages will no longer be visible. This cannot be undone once processed.</div>' +
+      '<div class="danger-note">Type DELETE below to confirm you want to permanently remove your account.</div>' +
+      '<label>Confirmation</label><input type="text" id="delConfirm" placeholder="Type DELETE">' +
+      '<div class="btns"><button class="btn" onclick="closeSheet()">Cancel</button><button class="btn dng" id="delSave" onclick="confirmDelete()">Delete my account</button></div>' +
+    '</div>'
+  );
+}
+async function confirmDelete(){
+  var val = ($("delConfirm").value || "").trim().toUpperCase();
+  if (val !== "DELETE") { toast('Type "DELETE" exactly to confirm'); return; }
+
+  var btn = $("delSave"); btn.disabled = true; btn.textContent = "Submitting...";
+
+  var r = await supabaseClient.from("profiles").update({ deletion_requested: true }).eq("id", me.id);
+  if (r.error) { console.error(r.error); toast("Could not submit deletion request"); btn.disabled = false; btn.textContent = "Delete my account"; return; }
+
+  await supabaseClient.auth.signOut();
+  toast("Deletion request submitted. Our team will process it shortly.");
+  setTimeout(function(){ location.href = "login.html"; }, 1200);
+}
+
+/* =========================================================
+   LOGOUT (direct action, no logout.html)
+========================================================= */
+async function doLogout(){
+  if (!confirm("Log out of StudentX?")) return;
+  var r = await supabaseClient.auth.signOut();
+  if (r.error) { toast(r.error.message || "Could not log out"); return; }
+  location.href = "login.html";
+}
+
+init();
+</script>
+
+<script src="nav.js"></script>
+<script src="theme.js"></script>
+</body>
+</html>
