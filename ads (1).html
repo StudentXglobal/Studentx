@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Ads Manager - StudentX</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+html,body{background:#121212;color:#fff;min-height:100%;width:100%;overflow-x:hidden}body{padding-bottom:70px}
+.header{position:sticky;top:0;background:#121212;padding:40px 15px 15px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #2c2c2c;z-index:100}
+.header-left{display:flex;align-items:center;gap:10px}.back-btn{color:#fff;text-decoration:none;font-size:20px}.header-title{font-size:20px;font-weight:bold}
+.create-ad-btn{background:linear-gradient(135deg,#8A2BE2,#4d5cff);color:#fff;border:0;padding:9px 15px;border-radius:20px;font-size:13px;font-weight:bold}
+.ads-container{padding:20px 15px 30px}.stats-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:25px}
+.summary-card{background:#1e1e1e;border:1px solid #2c2c2c;border-radius:12px;padding:15px 8px;text-align:center}.summary-value{font-size:18px;font-weight:bold;margin-bottom:4px}.summary-label{font-size:11px;color:#888}
+.section-title{font-size:16px;margin-bottom:15px}.campaign-card{background:#161622;border:1px solid #2a2a3d;border-radius:16px;padding:15px;margin-bottom:15px}
+.campaign-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}.campaign-title{font-size:16px;font-weight:700}
+.status{font-size:10px;padding:4px 8px;border-radius:20px;text-transform:uppercase;font-weight:700;white-space:nowrap}.status.pending{background:#8a5a00;color:#ffd77a}.status.active{background:#145c38;color:#7dffb5}.status.rejected{background:#662222;color:#ff9696}.status.paused{background:#444;color:#ddd}
+.media-preview{width:100%;max-height:260px;object-fit:cover;border-radius:12px;background:#0c0c12;margin:4px 0 12px;display:block}.campaign-meta{color:#aaa;font-size:12px;line-height:1.6;margin-bottom:12px}
+.metric-row{display:flex;justify-content:space-between;background:#12121c;padding:10px;border-radius:10px;margin-bottom:12px;text-align:center}.metric span:first-child{color:#fff;font-weight:bold;display:block;font-size:14px}.metric span:last-child{color:#777;font-size:10px}
+.actions{display:flex;gap:8px}.action-btn{flex:1;padding:9px;border-radius:8px;border:1px solid #333;background:#333;color:#fff;font-size:12px;font-weight:600}.action-btn.delete{flex:0 0 auto;color:#ff7676;border-color:rgba(231,76,60,.4);background:rgba(231,76,60,.12)}
+.loading-note,.empty-note{color:#888;text-align:center;padding:25px 10px}
+#createAdModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:3000;justify-content:center;align-items:center;padding:15px}.modal-content{background:#161622;padding:20px;border-radius:16px;width:100%;max-width:420px;border:1px solid #2a2a3d;max-height:92vh;overflow-y:auto}
+.modal-title{font-size:19px;margin-bottom:4px}.modal-subtitle{font-size:12px;color:#888;margin-bottom:18px}.field{margin-bottom:14px}.field label{display:block;color:#aaa;font-size:12px;margin-bottom:6px}
+.input,.select{width:100%;padding:11px;background:#1a1a2e;border:1px solid #333;color:#fff;border-radius:8px;outline:0}.file-box{border:1px dashed #555;background:#11111b;border-radius:12px;padding:15px;text-align:center}.file-box i{font-size:26px;color:#8a2be2;margin-bottom:7px}.file-box p{font-size:12px;color:#999;margin-bottom:10px}.file-input{width:100%;font-size:12px;color:#aaa}
+#mediaPreview,.preview-video{display:none;width:100%;max-height:230px;object-fit:cover;border-radius:10px;margin-top:12px;background:#09090e}.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.check{display:flex;align-items:center;gap:7px;background:#11111b;border:1px solid #2d2d3d;border-radius:8px;padding:9px;color:#bbb;font-size:12px}.check input{accent-color:#7c3cff}
+.help{font-size:10px;color:#777;margin-top:5px;line-height:1.4}.field-error{color:#ff7777;font-size:11px;margin:5px 0 12px;display:none}.form-actions{display:flex;gap:10px}.form-actions button{flex:1;padding:11px;border:0;border-radius:8px;font-weight:bold}.submit-btn{background:linear-gradient(135deg,#8A2BE2,#4d5cff);color:#fff}.cancel-btn{background:#333;color:#fff}
+.bnav{position:fixed;bottom:0;left:0;width:100%;height:60px;display:flex;justify-content:space-around;align-items:center;background:#000;border-top:1px solid #222;z-index:2000}.nb{display:flex;flex-direction:column;align-items:center;color:#888;gap:3px}.nb.on{color:#fff}.nb i{font-size:20px}.nb span{font-size:10px}
+.notice{background:rgba(78,64,180,.12);border:1px solid rgba(110,90,255,.25);border-radius:12px;padding:11px 12px;color:#aaa;font-size:11px;line-height:1.5;margin-bottom:18px}
+</style>
+</head>
+<body>
+<div class="header"><div class="header-left"><a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a><div class="header-title">Ads Manager</div></div><button class="create-ad-btn" onclick="openCreateModal()"><i class="fas fa-plus"></i> Create Ad</button></div>
+<div class="ads-container">
+<div class="notice">Your campaign is reviewed by StudentX Admin before it can appear to users. Upload one image or video, choose where it should appear, and submit it for approval.</div>
+<div class="stats-summary"><div class="summary-card"><div class="summary-value" id="totalViews">0</div><div class="summary-label">Total Views</div></div><div class="summary-card"><div class="summary-value" id="totalClicks">0</div><div class="summary-label">Total Clicks</div></div><div class="summary-card"><div class="summary-value" id="totalSpent">$0.00</div><div class="summary-label">Total Spent</div></div></div>
+<h3 class="section-title">Your Campaigns</h3><div id="adsContainer"><p class="loading-note">Loading your campaigns...</p></div>
+</div>
+
+<div id="createAdModal"><div class="modal-content">
+<h3 class="modal-title">Create New Ad</h3><p class="modal-subtitle">Upload the content you want students to see.</p>
+<form id="createAdForm">
+<div class="field"><label>Ad Title</label><input class="input" type="text" id="adTitle" required maxlength="80" placeholder="e.g. New StudentX Course"></div>
+<div class="field"><label>Ad Media</label><div class="file-box"><i class="fas fa-cloud-arrow-up"></i><p>Upload an image or video</p><input class="file-input" type="file" id="adMediaFile" accept="image/*,video/*" required><div class="help">Images: JPG, PNG, WEBP. Videos: MP4, WEBM, MOV.</div></div><img id="mediaPreview" alt="Ad image preview"><video id="videoPreview" class="preview-video" controls playsinline></video></div>
+<div class="field"><label>Ad Goal Type</label><select class="select" id="adType"><option value="views">Views</option><option value="clicks">Clicks</option><option value="followers">Followers</option><option value="likes">Likes</option></select></div>
+<div class="field"><label>Target Audience Count</label><input class="input" type="number" id="adTarget" required min="1" placeholder="e.g. 5000"></div>
+<div class="field"><label>Duration (Days)</label><input class="input" type="number" id="adDuration" required min="1" max="90" value="7"></div>
+<div class="field"><label>Budget ($)</label><input class="input" type="number" step="0.01" id="adBudget" required min="0.01" placeholder="e.g. 45.00"></div>
+<div class="field"><label>Caption</label><textarea class="input" id="adCaption" rows="3" maxlength="500" placeholder="Write the message students will see..."></textarea></div>
+<div class="field"><label>CTA Text</label><input class="input" type="text" id="ctaText" maxlength="40" value="Learn More"></div>
+<div class="field"><label>CTA URL</label><input class="input" type="url" id="ctaUrl" placeholder="https://example.com"></div>
+<div class="field"><label>Interests / Audience</label><input class="input" type="text" id="interests" maxlength="250" placeholder="Students, technology, business"></div>
+<div class="field"><label>Ad Placements</label><div class="check-grid"><label class="check"><input type="checkbox" name="placement" value="home" checked> Home Feed</label><label class="check"><input type="checkbox" name="placement" value="video" checked> Video Feed</label><label class="check"><input type="checkbox" name="placement" value="explore" checked> Explore</label><label class="check"><input type="checkbox" name="placement" value="studyhub" checked> StudyHub</label></div></div>
+<div id="formError" class="field-error"></div><div class="form-actions"><button type="submit" id="submitAdBtn" class="submit-btn">Submit for Approval</button><button type="button" onclick="closeCreateModal()" class="cancel-btn">Cancel</button></div>
+</form></div></div>
+
+<nav class="bnav"><div class="nb" onclick="location.href='home.html'"><i class="fas fa-home"></i><span>Home</span></div><div class="nb" onclick="location.href='video.html'"><i class="fas fa-video"></i><span>Video</span></div><div class="nb" onclick="location.href='chat.html'"><i class="fas fa-comment-dots"></i><span>Chat</span></div><div class="nb" onclick="location.href='studyhub.html'"><i class="fas fa-book-open"></i><span>StudyHub</span></div><div class="nb on" onclick="location.href='profile.html'"><i class="fas fa-user"></i><span>Profile</span></div></nav>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase.js"></script>
+<script>
+let currentUser=null,busyAdId=null;
+const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+const money=v=>"$"+Number(v||0).toFixed(2);
+function openCreateModal(){if(!currentUser){location.href="login.html";return}document.getElementById("createAdModal").style.display="flex"}
+function closeCreateModal(){document.getElementById("createAdModal").style.display="none";document.getElementById("formError").style.display="none"}
+function errorMsg(m){const e=document.getElementById("formError");e.textContent=m;e.style.display="block"}
+async function requireAuth(){const r=await supabaseClient.auth.getUser();currentUser=r.data?.user;if(!currentUser){location.href="login.html";return false}return true}
+
+function renderMedia(ad){
+ const u=ad.media_url||ad.video_url||"";if(!u)return "";
+ if(ad.media_type==="video"||ad.video_url)return `<video class="media-preview" controls playsinline preload="metadata"><source src="${esc(ad.video_url||u)}"></video>`;
+ return `<img class="media-preview" src="${esc(u)}" alt="Advertisement">`;
+}
+async function loadAds(){
+ const c=document.getElementById("adsContainer");
+ try{
+  const {data,error}=await supabaseClient.from("campaigns").select("*").eq("user_id",currentUser.id).order("created_at",{ascending:false});
+  if(error)throw error;
+  let views=0,clicks=0,spent=0;
+  if(!data?.length){c.innerHTML='<p class="empty-note">No campaigns found. Create your first ad.</p>';document.getElementById("totalViews").textContent="0";document.getElementById("totalClicks").textContent="0";document.getElementById("totalSpent").textContent="$0.00";return}
+  let h="";
+  data.forEach(ad=>{
+   if(ad.status==="active"){views+=Number(ad.views||0);clicks+=Number(ad.clicks||0);spent+=Number(ad.spent||0)}
+   const s=ad.status||"pending",pl=Array.isArray(ad.placements)?ad.placements.join(", "):"";
+   h+=`<div class="campaign-card"><div class="campaign-head"><div class="campaign-title">${esc(ad.title)}</div><span class="status ${esc(s)}">${esc(s)}</span></div>${renderMedia(ad)}<div class="campaign-meta">Goal: ${esc(ad.campaign_type||"views")} · Target: ${Number(ad.target_amount||0).toLocaleString()}<br>Duration: ${Number(ad.duration_days||0)} days · Budget: ${money(ad.budget)}<br>${pl?"Placements: "+esc(pl)+"<br>":""}${ad.started_date?"Started: "+new Date(ad.started_date).toLocaleDateString():"Waiting for approval"}</div><div class="metric-row"><div class="metric"><span>${Number(ad.views||0).toLocaleString()}</span><span>Views</span></div><div class="metric"><span>${Number(ad.clicks||0).toLocaleString()}</span><span>Clicks</span></div><div class="metric"><span>${money(ad.spent)}</span><span>Spent</span></div></div><div class="actions">${s==="active"?`<button class="action-btn" onclick="toggleAdStatus('${esc(ad.id)}','paused')">Pause Ad</button>`:""}${s==="paused"?`<button class="action-btn" onclick="toggleAdStatus('${esc(ad.id)}','active')">Resume Ad</button>`:""}<button class="action-btn delete" onclick="deleteAd('${esc(ad.id)}')"><i class="fas fa-trash"></i></button></div></div>`;
+  });
+  c.innerHTML=h;document.getElementById("totalViews").textContent=views.toLocaleString();document.getElementById("totalClicks").textContent=clicks.toLocaleString();document.getElementById("totalSpent").textContent=money(spent);
+ }catch(e){c.innerHTML=`<p class="empty-note" style="color:#e74c3c">Unable to load campaigns: ${esc(e.message||"Unknown error")}</p>`}
+}
+
+document.getElementById("adMediaFile").addEventListener("change",function(){
+ const f=this.files?.[0],i=document.getElementById("mediaPreview"),v=document.getElementById("videoPreview");i.style.display="none";v.style.display="none";i.removeAttribute("src");v.removeAttribute("src");if(!f)return;
+ const u=URL.createObjectURL(f);if(f.type.startsWith("image/")){i.src=u;i.style.display="block"}else if(f.type.startsWith("video/")){v.src=u;v.style.display="block"}
+});
+async function uploadAdMedia(file){
+ const ext=(file.name.split(".").pop()||"bin").toLowerCase().replace(/[^a-z0-9]/g,"")||(file.type.startsWith("video/")?"mp4":"jpg");
+ const path=`${currentUser.id}/${crypto.randomUUID()}.${ext}`;
+ const {error}=await supabaseClient.storage.from("ads").upload(path,file,{cacheControl:"3600",upsert:false,contentType:file.type});
+ if(error)throw error;
+ const {data}=supabaseClient.storage.from("ads").getPublicUrl(path);if(!data?.publicUrl)throw new Error("Could not create public media URL.");return data.publicUrl;
+}
+async function notifyAdmins(message){
+ try{
+  const a=await supabaseClient.from("admin_users").select("email"),emails=(a.data||[]).map(x=>(x.email||"").toLowerCase()).filter(Boolean);if(!emails.length)return;
+  const p=await supabaseClient.from("profiles").select("id,email").in("email",emails),ids=(p.data||[]).map(x=>x.id).filter(x=>x!==currentUser.id);if(!ids.length)return;
+  await supabaseClient.from("notifications").insert(ids.map(id=>({recipient_id:id,actor_id:currentUser.id,type:"system",message,is_read:false})));
+ }catch(e){console.warn(e)}
+}
+
+document.getElementById("createAdForm").addEventListener("submit",async e=>{
+ e.preventDefault();if(!currentUser){location.href="login.html";return}
+ const title=document.getElementById("adTitle").value.trim(),file=document.getElementById("adMediaFile").files?.[0],campaign_type=document.getElementById("adType").value,target_amount=parseInt(document.getElementById("adTarget").value,10),duration_days=parseInt(document.getElementById("adDuration").value,10),budget=parseFloat(document.getElementById("adBudget").value),caption=document.getElementById("adCaption").value.trim(),cta_text=document.getElementById("ctaText").value.trim()||"Learn More",cta_url=document.getElementById("ctaUrl").value.trim(),interests=document.getElementById("interests").value.trim(),placements=[...document.querySelectorAll('input[name="placement"]:checked')].map(x=>x.value);
+ document.getElementById("formError").style.display="none";
+ if(!title)return errorMsg("Please enter an ad title.");if(!file)return errorMsg("Please upload an image or video.");if(!file.type.startsWith("image/")&&!file.type.startsWith("video/"))return errorMsg("Only image and video files are allowed.");if(!target_amount||target_amount<1)return errorMsg("Enter a valid target audience count.");if(!duration_days||duration_days<1||duration_days>90)return errorMsg("Duration must be between 1 and 90 days.");if(!budget||budget<=0)return errorMsg("Enter a valid budget.");if(!placements.length)return errorMsg("Select at least one ad placement.");if(cta_url&&!/^https?:\/\//i.test(cta_url))return errorMsg("CTA URL must start with http:// or https://");
+ const btn=document.getElementById("submitAdBtn");btn.disabled=true;btn.textContent="Uploading...";
+ try{
+  const url=await uploadAdMedia(file),isVideo=file.type.startsWith("video/"),now=new Date(),end=new Date(now.getTime()+duration_days*86400000);
+  const {error}=await supabaseClient.from("campaigns").insert({user_id:currentUser.id,title,campaign_type,target_amount,duration_days,budget,media_url:url,media_type:isVideo?"video":"image",video_url:isVideo?url:null,thumbnail_url:null,caption:caption||null,cta_text,cta_url:cta_url||null,interests:interests||null,placements,start_at:now.toISOString(),end_at:end.toISOString(),status:"pending"});
+  if(error)throw error;
+  await notifyAdmins("A new ad campaign is waiting for approval.");alert("Ad submitted successfully. It is now waiting for Admin approval.");document.getElementById("createAdForm").reset();document.getElementById("mediaPreview").style.display="none";document.getElementById("videoPreview").style.display="none";closeCreateModal();await loadAds();
+ }catch(err){console.error(err);errorMsg("Could not submit ad: "+(err.message||"Upload failed."))}finally{btn.disabled=false;btn.textContent="Submit for Approval"}
+});
+async function toggleAdStatus(id,newStatus){
+ if(busyAdId)return;busyAdId=id;const d={status:newStatus};if(newStatus==="paused")d.paused_date=new Date().toISOString();if(newStatus==="active")d.started_date=new Date().toISOString();
+ const {error}=await supabaseClient.from("campaigns").update(d).eq("id",id).eq("user_id",currentUser.id);busyAdId=null;if(error)alert("Error updating campaign: "+error.message);else loadAds();
+}
+async function deleteAd(id){
+ if(busyAdId||!confirm("Are you sure you want to delete this campaign?"))return;busyAdId=id;const {error}=await supabaseClient.from("campaigns").delete().eq("id",id).eq("user_id",currentUser.id);busyAdId=null;if(error)alert("Error deleting campaign: "+error.message);else loadAds();
+}
+(async()=>{if(await requireAuth())await loadAds()})();
+</script>
+<script src="theme.js"></script>
+</body>
+</html>
