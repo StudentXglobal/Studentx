@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gaming Arena - StudentX</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --card:rgba(255,255,255,.035);
+  --card-2:rgba(255,255,255,.07);
+  --border:rgba(255,255,255,.07);
+  --text:#fff;
+  --text-2:rgba(255,255,255,.75);
+  --muted:rgba(255,255,255,.42);
+  --accent:#dc2743;
+  --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+}
+:root.sx-light{
+  --bg:#f0f2f5;
+  --card:#ffffff;
+  --card-2:#f0f2f5;
+  --border:#e4e6eb;
+  --text:#050505;
+  --text-2:#3a3b3c;
+  --muted:#65676b;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;width:100%}
+body{font-family:Poppins,sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;overflow:hidden;max-width:500px;margin:0 auto}
+a{color:inherit;text-decoration:none}
+
+.header{width:100%;padding:40px 15px 15px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-shrink:0}
+.back-btn{color:var(--text);font-size:19px;cursor:pointer;display:flex;align-items:center}
+.logo{font-size:17px;font-weight:800}
+.logo b{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-right{width:28px}
+
+.game-container{position:relative;width:100%;flex:1;background:var(--card);overflow:hidden}
+canvas{display:block;width:100%;height:100%;background:var(--bg)}
+
+.ui-layer{position:absolute;top:14px;left:14px;right:14px;display:flex;justify-content:space-between;pointer-events:none;z-index:5}
+.stat-box{background:rgba(0,0,0,.55);padding:7px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.12);font-weight:800;font-size:13px;letter-spacing:.3px;color:#fff}
+.score-ui i{color:#eab308}
+.lives-ui i{color:#ff4757}
+
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,15,.96);text-align:center;padding:24px;z-index:10}
+.screen h2{font-size:28px;font-weight:900;margin-bottom:10px;background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.screen p{font-size:13px;color:var(--text-2);margin-bottom:20px;line-height:1.5;max-width:300px}
+.btn{background:var(--grad);border:none;padding:13px 32px;color:#fff;font-weight:800;border-radius:24px;font-size:14px;cursor:pointer;letter-spacing:.5px;transition:transform .15s}
+.btn:active{transform:scale(.95)}
+.hidden{display:none!important}
+
+.final-score{font-size:15px;font-weight:700;margin-bottom:4px}
+.final-score b{color:#eab308}
+.login-note{font-size:11px;color:var(--muted);margin-top:10px}
+.login-note a{color:var(--accent);font-weight:700}
+
+.lb-wrap{width:100%;max-width:320px;margin-top:4px;margin-bottom:18px;text-align:left}
+.lb-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;text-align:center}
+.lb-row{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;background:var(--card-2);margin-bottom:6px}
+.lb-row img{width:26px;height:26px;border-radius:50%;object-fit:cover;background:var(--border);flex-shrink:0}
+.lb-rank{font-size:11px;font-weight:800;color:var(--muted);width:16px;text-align:center;flex-shrink:0}
+.lb-name{flex:1;min-width:0;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-score{font-size:12px;font-weight:800;color:#eab308}
+.lb-empty{font-size:11px;color:var(--muted);text-align:center;padding:10px 0}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="menu.html" class="back-btn" aria-label="Back"><i class="fas fa-arrow-left"></i></a>
+  <div class="logo">Student<b>X</b> Games</div>
+  <div class="hdr-right"></div>
+</div>
+
+<div class="game-container">
+  <div class="ui-layer">
+    <div class="stat-box score-ui"><i class="fas fa-coins"></i> <span id="scoreVal">0</span></div>
+    <div class="stat-box lives-ui"><i class="fas fa-heart"></i> <span id="livesVal">3</span></div>
+  </div>
+
+  <canvas id="gameCanvas"></canvas>
+
+  <div id="startScreen" class="screen">
+    <h2>Coin Catcher</h2>
+    <p>Kama tsabar kudi da ke fadowa don samun maki! Guji barin su fadi kasa.</p>
+    <div class="lb-wrap">
+      <div class="lb-title">Top Players</div>
+      <div id="startLeaderboard"><div class="lb-empty">Loading...</div></div>
+    </div>
+    <button class="btn" onclick="startGame()">Fara Wasa</button>
+  </div>
+
+  <div id="gameOverScreen" class="screen hidden">
+    <h2>Wasan Ya Kare!</h2>
+    <div class="final-score">Your score: <b id="finalScore">0</b></div>
+    <p>Kwallon ka ya kubce ko rayuwarka ta kare.</p>
+    <div class="lb-wrap">
+      <div class="lb-title">Top Players</div>
+      <div id="endLeaderboard"><div class="lb-empty">Loading...</div></div>
+    </div>
+    <div id="loginNote" class="login-note hidden">Login don adana maki da bayyana a leaderboard · <a href="login.html">Log in</a></div>
+    <button class="btn" onclick="startGame()">Sake Bugawa</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+let currentUser = null;
+let myProfile = null;
+
+let score = 0, lives = 3, gameActive = false;
+let basket = { x: 0, width: 70, height: 15, speed: 7 };
+let coin = { x: 0, y: 0, radius: 10, speed: 4 };
+
+const DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="#2c2c2c"/><circle cx="30" cy="23" r="12" fill="#777"/><path d="M10 54c3-14 11-19 20-19s17 5 20 19" fill="#777"/></svg>'
+);
+
+function esc(v){
+  if (v == null) return "";
+  return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+
+/* Fallback for browsers without native roundRect support */
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
+    this.beginPath();
+    this.moveTo(x + r, y);
+    this.arcTo(x + w, y, x + w, y + h, r);
+    this.arcTo(x + w, y + h, x, y + h, r);
+    this.arcTo(x, y + h, x, y, r);
+    this.arcTo(x, y, x + w, y, r);
+    this.closePath();
+    return this;
+  };
+}
+
+function resizeCanvas() {
+  canvas.width = canvas.parentElement.clientWidth;
+  canvas.height = canvas.parentElement.clientHeight;
+  if (!gameActive) resetPositions();
+}
+window.addEventListener('resize', resizeCanvas);
+setTimeout(resizeCanvas, 100);
+
+function resetPositions() {
+  basket.x = canvas.width / 2 - basket.width / 2;
+  spawnCoin();
+}
+
+function spawnCoin() {
+  coin.x = Math.random() * (canvas.width - coin.radius * 2) + coin.radius;
+  coin.y = -coin.radius;
+  coin.speed = 4 + (score * 0.25);
+}
+
+/* Touch controls (fixed: touches is a list, needs an index) */
+canvas.addEventListener('touchstart', function(e){
+  if (!e.touches.length) return;
+  moveBasketTo(e.touches[0].clientX - canvas.getBoundingClientRect().left);
+}, { passive: true });
+
+canvas.addEventListener('touchmove', function(e){
+  if (!gameActive || !e.touches.length) return;
+  moveBasketTo(e.touches[0].clientX - canvas.getBoundingClientRect().left);
+}, { passive: true });
+
+/* Mouse support for desktop testing */
+canvas.addEventListener('mousemove', function(e){
+  if (!gameActive) return;
+  moveBasketTo(e.clientX - canvas.getBoundingClientRect().left);
+});
+
+function moveBasketTo(x){
+  basket.x = x - basket.width / 2;
+  if (basket.x < 0) basket.x = 0;
+  if (basket.x > canvas.width - basket.width) basket.x = canvas.width - basket.width;
+}
+
+function startGame() {
+  document.getElementById('startScreen').classList.add('hidden');
+  document.getElementById('gameOverScreen').classList.add('hidden');
+  score = 0; lives = 3; gameActive = true;
+  document.getElementById('scoreVal').innerText = score;
+  document.getElementById('livesVal').innerText = lives;
+  resetPositions();
+  requestAnimationFrame(gameLoop);
+}
+
+function gameLoop() {
+  if (!gameActive) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#dc2743';
+
+  ctx.fillStyle = accentColor;
+  ctx.beginPath();
+  ctx.roundRect(basket.x, canvas.height - 40, basket.width, basket.height, 8);
+  ctx.fill();
+
+  coin.y += coin.speed;
+
+  ctx.fillStyle = '#eab308';
+  ctx.beginPath();
+  ctx.arc(coin.x, coin.y, coin.radius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  if (coin.y + coin.radius >= canvas.height - 40 && coin.y - coin.radius <= canvas.height - 40 + basket.height) {
+    if (coin.x >= basket.x && coin.x <= basket.x + basket.width) {
+      score++;
+      document.getElementById('scoreVal').innerText = score;
+      spawnCoin();
+    }
+  }
+
+  if (coin.y > canvas.height) {
+    lives--;
+    document.getElementById('livesVal').innerText = lives;
+    if (lives <= 0) {
+      triggerGameOver();
+    } else {
+      spawnCoin();
+    }
+  }
+
+  requestAnimationFrame(gameLoop);
+}
+
+async function triggerGameOver() {
+  gameActive = false;
+  document.getElementById('finalScore').textContent = score;
+  document.getElementById('gameOverScreen').classList.remove('hidden');
+
+  if (currentUser) {
+    document.getElementById('loginNote').classList.add('hidden');
+    try {
+      const { error } = await supabaseClient.from('game_scores').insert({
+        user_id: currentUser.id,
+        game: 'coin_catcher',
+        score: score
+      });
+      if (error) console.error('Save score error:', error);
+    } catch (e) {
+      console.error('Save score error:', e);
+    }
+  } else {
+    document.getElementById('loginNote').classList.remove('hidden');
+  }
+
+  loadLeaderboard('endLeaderboard');
+}
+
+async function loadLeaderboard(targetId) {
+  const el = document.getElementById(targetId);
+  try {
+    const r = await supabaseClient
+      .from('game_scores')
+      .select('user_id,score')
+      .eq('game', 'coin_catcher')
+      .order('score', { ascending: false })
+      .limit(50);
+
+    if (r.error) throw r.error;
+
+    const rows = r.data || [];
+    const bestByUser = {};
+    const order = [];
+    rows.forEach(row => {
+      if (!(row.user_id in bestByUser)) {
+        bestByUser[row.user_id] = row.score;
+        order.push(row.user_id);
+      }
+    });
+
+    const top = order.slice(0, 10);
+    if (!top.length) { el.innerHTML = '<div class="lb-empty">No scores yet. Be the first!</div>'; return; }
+
+    const pr = await supabaseClient.from('profiles').select('id,full_name,username,avatar_url').in('id', top);
+    const map = {};
+    (pr.data || []).forEach(p => { map[p.id] = p; });
+
+    el.innerHTML = top.map((uid, i) => {
+      const p = map[uid] || {};
+      const name = p.full_name || p.username || 'StudentX User';
+      return `<div class="lb-row">
+        <div class="lb-rank">${i + 1}</div>
+        <img src="${esc(p.avatar_url || DEFAULT_AVATAR)}" onerror="this.src='${DEFAULT_AVATAR}'" alt="">
+        <div class="lb-name">${esc(name)}</div>
+        <div class="lb-score">${bestByUser[uid]}</div>
+      </div>`;
+    }).join('');
+  } catch (e) {
+    console.error('Leaderboard error:', e);
+    el.innerHTML = '<div class="lb-empty">Unable to load leaderboard.</div>';
+  }
+}
+
+async function initGamePage() {
+  try {
+    const auth = await supabaseClient.auth.getUser();
+    currentUser = (auth.data && auth.data.user) || null;
+    if (currentUser) {
+      const p = await supabaseClient.from('profiles').select('id,full_name,username,avatar_url').eq('id', currentUser.id).maybeSingle();
+      myProfile = p.data || null;
+    }
+  } catch (e) {
+    console.error('Auth check error:', e);
+  }
+  loadLeaderboard('startLeaderboard');
+}
+
+initGamePage();
+</script>
+<script src="theme.js"></script>
+</body>
+</html>
