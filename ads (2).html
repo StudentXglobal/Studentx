@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ads Manager - StudentX</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        :root{
+            --bg:#0a0a0f;
+            --card:rgba(255,255,255,.035);
+            --card-2:rgba(255,255,255,.07);
+            --border:rgba(255,255,255,.08);
+            --text:#fff;
+            --text-2:rgba(255,255,255,.75);
+            --muted:rgba(255,255,255,.4);
+            --accent:#dc2743;
+            --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+        }
+        :root.sx-light{
+            --bg:#f0f2f5;
+            --card:#ffffff;
+            --card-2:#f0f2f5;
+            --border:#e4e6eb;
+            --text:#050505;
+            --text-2:#3a3b3c;
+            --muted:#65676b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: Poppins, sans-serif; }
+        html, body { background-color: var(--bg); color: var(--text); height: 100%; width: 100%; overflow-x: hidden; max-width:500px; margin:0 auto; }
+        button, input, select, textarea { font-family: inherit; }
+        a{ color:inherit; text-decoration:none; }
+
+        /* --- HEADER --- */
+        .header { position: sticky; top: 0; background-color: var(--bg); padding: 40px 15px 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); z-index: 100; }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .back-btn { color: var(--text); font-size: 20px; }
+        .header-title { font-size: 20px; font-weight: bold; }
+        .create-ad-btn { background: var(--grad); color: #fff; border: none; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+        .ads-container { padding: 20px 15px 90px; }
+
+        .stats-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 30px; }
+        .summary-card { background-color: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 15px 10px; text-align: center; }
+        .summary-value { font-size: 18px; font-weight: bold; color: var(--text); margin-bottom: 4px; }
+        .summary-label { font-size: 11px; color: var(--muted); }
+
+        .section-title { font-size: 16px; font-weight: bold; margin-bottom: 15px; }
+
+        /* Modal */
+        #createAdModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: var(--bg); padding: 20px; border-radius: 16px; width: 90%; max-width: 400px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+        .modal-content label{ color:var(--muted); font-size:12px; }
+        .modal-content input, .modal-content select{ width:100%; padding:10px; margin:5px 0 15px; background:var(--card-2); border:1px solid var(--border); color:var(--text); border-radius:8px; }
+        .file-preview-row{ display:flex; align-items:center; gap:8px; margin:5px 0 15px; padding:8px 10px; background:var(--card-2); border:1px solid var(--border); border-radius:8px; font-size:11px; color:var(--text-2); }
+        .file-preview-row i{ color:var(--accent); }
+
+        .bnav-replaced{ display:none; }
+
+        .ad-card{ background: var(--card); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--border); }
+        .ad-card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+        .ad-card-top h4{ color:var(--text); margin:0; font-size:16px; }
+        .status-chip{ color:#fff; font-size:10px; padding:3px 8px; border-radius:20px; text-transform:uppercase; }
+        .ad-card-date{ color:var(--muted); font-size:12px; margin-bottom:12px; }
+        .ad-stats-row{ display:flex; justify-content:space-between; background:var(--card-2); padding:10px; border-radius:10px; margin-bottom:12px; text-align:center; }
+        .ad-stats-row > div span:first-child{ color:var(--text); font-weight:bold; display:block; font-size:14px; }
+        .ad-stats-row > div span:last-child{ color:var(--muted); font-size:10px; }
+        .ad-actions{ display:flex; gap:8px; }
+        .ad-btn{ flex:1; border:none; padding:8px; border-radius:8px; font-size:12px; cursor:pointer; }
+        .ad-btn.pause{ background:var(--card-2); color:var(--text); }
+        .ad-btn.resume{ background:#2ecc71; color:#fff; }
+        .ad-btn.del{ flex:0 0 auto; background:rgba(239,68,68,.15); color:#ef4444; border:1px solid rgba(239,68,68,.35); padding:8px 12px; }
+        .empty-note{ color:var(--muted); text-align:center; padding:20px; font-size:13px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-left">
+            <a href="profile.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+            <div class="header-title">Ads Manager</div>
+        </div>
+        <button class="create-ad-btn" onclick="openCreateModal()">
+            <i class="fas fa-plus"></i> Create Ad
+        </button>
+    </div>
+
+    <div class="ads-container">
+
+        <div class="stats-summary">
+            <div class="summary-card"><div class="summary-value" id="totalViews">0</div><div class="summary-label">Total Views</div></div>
+            <div class="summary-card"><div class="summary-value" id="totalClicks">0</div><div class="summary-label">Total Clicks</div></div>
+            <div class="summary-card"><div class="summary-value" id="totalSpent" style="color:var(--accent)">$0.00</div><div class="summary-label">Total Spent</div></div>
+        </div>
+
+        <h3 class="section-title">Your Active &amp; Recent Ads</h3>
+        <div id="adsContainer"><p class="empty-note">Loading your ads...</p></div>
+
+    </div>
+
+    <!-- CREATE AD MODAL -->
+    <div id="createAdModal">
+        <div class="modal-content">
+            <h3 style="color: var(--text); margin-bottom: 15px;">Create New Ad</h3>
+            <form id="createAdForm">
+                <label>Ad Title</label>
+                <input type="text" id="adTitle" required>
+
+                <label>Ad Goal Type</label>
+                <select id="adType">
+                    <option value="views">Views</option>
+                    <option value="clicks">Clicks</option>
+                    <option value="followers">Followers</option>
+                    <option value="likes">Likes</option>
+                </select>
+
+                <label>Target Audience Count</label>
+                <input type="number" id="adTarget" required placeholder="e.g. 5000">
+
+                <label>Duration (Days)</label>
+                <input type="number" id="adDuration" required placeholder="e.g. 7" value="7">
+
+                <label>Budget ($)</label>
+                <input type="number" step="0.01" id="adBudget" required placeholder="e.g. 45.00">
+
+                <label>Media (Image or Video)</label>
+                <input type="file" id="adMediaFile" accept="image/*,video/*">
+                <div class="file-preview-row" id="adMediaPreview" style="display:none"><i class="fas fa-paperclip"></i><span id="adMediaFileName"></span></div>
+
+                <div style="display: flex; gap: 10px;">
+                    <button type="submit" id="adSubmitBtn" style="flex: 1; background: var(--grad); color: #fff; padding: 10px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Submit Ad</button>
+                    <button type="button" onclick="closeCreateModal()" style="flex: 1; background: var(--card-2); color: var(--text); padding: 10px; border: none; border-radius: 8px; cursor: pointer;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        var currentUser = null;
+        var selectedMediaFile = null;
+
+        function openCreateModal() { document.getElementById("createAdModal").style.display = "flex"; }
+        function closeCreateModal() {
+            document.getElementById("createAdModal").style.display = "none";
+            document.getElementById("createAdForm").reset();
+            selectedMediaFile = null;
+            document.getElementById("adMediaPreview").style.display = "none";
+        }
+
+        function esc(v){
+            return String(v == null ? "" : v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+        }
+
+        async function initAdsPage(){
+            var auth = await supabaseClient.auth.getUser();
+            currentUser = auth.data && auth.data.user;
+            if (!currentUser) { window.location.href = "login.html"; return; }
+            await loadAds();
+        }
+
+        document.getElementById("adMediaFile").addEventListener("change", function(e){
+            var file = e.target.files[0];
+            selectedMediaFile = file || null;
+            var preview = document.getElementById("adMediaPreview");
+            if (file) {
+                preview.style.display = "flex";
+                document.getElementById("adMediaFileName").textContent = file.name + " (" + (file.size/(1024*1024)).toFixed(1) + " MB)";
+            } else {
+                preview.style.display = "none";
+            }
+        });
+
+        async function loadAds() {
+            try {
+                var r = await supabaseClient.from("campaigns").select("*").eq("user_id", currentUser.id).order("created_at", { ascending: false });
+                if (r.error) throw r.error;
+
+                var totalViews = 0, totalClicks = 0, totalSpent = 0;
+                var container = document.getElementById("adsContainer");
+                var data = r.data || [];
+
+                if (!data.length) {
+                    container.innerHTML = '<p class="empty-note">No ads found. Create one to boost your profile!</p>';
+                    document.getElementById("totalViews").innerText = "0";
+                    document.getElementById("totalClicks").innerText = "0";
+                    document.getElementById("totalSpent").innerText = "$0.00";
+                    return;
+                }
+
+                var html = "";
+                data.forEach(function(ad){
+                    if (ad.status === 'active') {
+                        totalViews += (ad.views || 0);
+                        totalClicks += (ad.clicks || 0);
+                        totalSpent += parseFloat(ad.spent || 0);
+                    }
+
+                    var statusColor = ad.status === 'active' ? '#2ecc71' : (ad.status === 'pending' ? '#f39c12' : (ad.status === 'rejected' ? '#e74c3c' : '#888'));
+
+                    html += '<div class="ad-card">' +
+                        '<div class="ad-card-top"><h4>' + esc(ad.title) + '</h4><span class="status-chip" style="background:' + statusColor + '">' + esc(ad.status) + '</span></div>' +
+                        '<div class="ad-card-date">Goal: ' + esc(ad.campaign_type) + ' · ' + (ad.started_date ? new Date(ad.started_date).toLocaleDateString() : 'Pending Approval') + '</div>' +
+                        '<div class="ad-stats-row">' +
+                            '<div><span>' + (ad.views || 0) + '</span><span>Views</span></div>' +
+                            '<div><span>' + (ad.clicks || 0) + '</span><span>Clicks</span></div>' +
+                            '<div><span style="color:var(--accent)">$' + parseFloat(ad.spent || 0).toFixed(2) + '</span><span>Spent</span></div>' +
+                        '</div>' +
+                        '<div class="ad-actions">' +
+                            (ad.status === 'active' ? '<button class="ad-btn pause" onclick="toggleAdStatus(\'' + ad.id + '\',\'paused\')">⏸ Pause Ad</button>' :
+                             ad.status === 'paused' ? '<button class="ad-btn resume" onclick="toggleAdStatus(\'' + ad.id + '\',\'active\')">▶ Resume Ad</button>' :
+                             ad.status === 'pending' ? '<button class="ad-btn pause" disabled>Awaiting admin approval</button>' : '') +
+                            '<button class="ad-btn del" onclick="deleteAd(\'' + ad.id + '\')">🗑 Delete</button>' +
+                        '</div>' +
+                    '</div>';
+                });
+
+                container.innerHTML = html;
+                document.getElementById("totalViews").innerText = totalViews.toLocaleString();
+                document.getElementById("totalClicks").innerText = totalClicks.toLocaleString();
+                document.getElementById("totalSpent").innerText = "$" + totalSpent.toFixed(2);
+
+            } catch (err) {
+                console.error("Error loading ads:", err);
+                document.getElementById("adsContainer").innerHTML = '<p class="empty-note">Unable to load your ads. Please try again.</p>';
+            }
+        }
+
+        document.getElementById("createAdForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+
+            var btn = document.getElementById("adSubmitBtn");
+            btn.disabled = true;
+            btn.textContent = "Submitting...";
+
+            try {
+                var title = document.getElementById("adTitle").value.trim();
+                var campaign_type = document.getElementById("adType").value;
+                var target_amount = parseInt(document.getElementById("adTarget").value, 10) || 0;
+                var duration_days = parseInt(document.getElementById("adDuration").value, 10) || 7;
+                var budget = parseFloat(document.getElementById("adBudget").value) || 0;
+
+                var media_url = null;
+                if (selectedMediaFile) {
+                    var ext = (selectedMediaFile.name.split(".").pop() || "dat").toLowerCase().replace(/[^a-z0-9]/g, "") || "dat";
+                    var path = currentUser.id + "/" + Date.now() + "." + ext;
+                    var up = await supabaseClient.storage.from("ads").upload(path, selectedMediaFile, { contentType: selectedMediaFile.type || undefined, upsert: false });
+                    if (up.error) throw up.error;
+                    media_url = supabaseClient.storage.from("ads").getPublicUrl(path).data.publicUrl;
+                }
+
+                var ins = await supabaseClient.from("campaigns").insert({
+                    user_id: currentUser.id,
+                    title: title,
+                    campaign_type: campaign_type,
+                    target_amount: target_amount,
+                    duration_days: duration_days,
+                    budget: budget,
+                    media_url: media_url,
+                    status: "pending"
+                });
+                if (ins.error) throw ins.error;
+
+                alert("Ad submitted successfully! Waiting for Admin approval.");
+                closeCreateModal();
+                await loadAds();
+
+            } catch (error) {
+                console.error("Create ad error:", error);
+                alert("Error creating ad: " + (error.message || "Unknown error"));
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Submit Ad";
+            }
+        });
+
+        async function toggleAdStatus(id, newStatus) {
+            var updateData = { status: newStatus };
+            if (newStatus === 'paused') updateData.paused_date = new Date().toISOString();
+            if (newStatus === 'active') updateData.started_date = new Date().toISOString();
+
+            var r = await supabaseClient.from("campaigns").update(updateData).eq("id", id).eq("user_id", currentUser.id);
+            if (r.error) { alert("Error updating status"); return; }
+            await loadAds();
+        }
+
+        async function deleteAd(id) {
+            if (!confirm("Are you sure you want to delete this ad?")) return;
+            var r = await supabaseClient.from("campaigns").delete().eq("id", id).eq("user_id", currentUser.id);
+            if (r.error) { alert("Error deleting ad"); return; }
+            await loadAds();
+        }
+
+        initAdsPage();
+    </script>
+    <script src="nav.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>
