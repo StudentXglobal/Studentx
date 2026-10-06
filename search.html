@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, user-scalable=no"
+>
+
+<title>Search - StudentX</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+:root{
+    --bg:#0a0a0f;
+    --card:rgba(255,255,255,.035);
+    --card-2:rgba(255,255,255,.07);
+    --border:rgba(255,255,255,.07);
+    --text:#fff;
+    --text-2:rgba(255,255,255,.75);
+    --muted:rgba(255,255,255,.42);
+    --accent:#dc2743;
+    --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+}
+:root.sx-light{
+    --bg:#f0f2f5;
+    --card:#ffffff;
+    --card-2:#f0f2f5;
+    --border:#e4e6eb;
+    --text:#050505;
+    --text-2:#3a3b3c;
+    --muted:#65676b;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body{
+    font-family:Poppins,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    max-width:500px;
+    margin:0 auto;
+    padding-bottom:70px;
+}
+a{ color:inherit; text-decoration:none; }
+button,input{ font-family:inherit; }
+
+/* =========================
+   SEARCH HEADER
+========================= */
+
+.search-header{
+    width:100%;
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:var(--bg);
+    border-bottom:1px solid var(--border);
+    padding:10px 12px;
+}
+
+.search-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+}
+
+.back-btn{
+    width:38px;
+    height:38px;
+    border:none;
+    background:none;
+    color:var(--text-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    border-radius:11px;
+    font-size:16px;
+}
+.back-btn:active{ background:var(--card-2); }
+
+.search-container{
+    flex:1;
+    height:42px;
+    background:var(--card-2);
+    border:1px solid var(--border);
+    border-radius:22px;
+    display:flex;
+    align-items:center;
+    padding:0 14px;
+    gap:9px;
+}
+
+.search-container i{ color:var(--muted); font-size:13px; }
+
+.search-container input{
+    width:100%;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-size:14px;
+    color:var(--text);
+}
+.search-container input::placeholder{ color:var(--muted); }
+
+.clear-btn{
+    color:var(--muted);
+    font-size:13px;
+    cursor:pointer;
+    display:none;
+}
+.clear-btn.show{ display:block; }
+
+/* =========================
+   SEARCH TABS
+========================= */
+
+.search-tabs{
+    display:flex;
+    gap:8px;
+    padding:12px 12px 4px;
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+.search-tabs::-webkit-scrollbar{ display:none; }
+
+.search-tab{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text-2);
+    padding:8px 16px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+    white-space:nowrap;
+}
+.search-tab.active{
+    background:var(--grad);
+    color:#fff;
+    border-color:transparent;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{ width:100%; padding:14px 12px 30px; }
+
+.section-title{
+    font-size:11px;
+    font-weight:700;
+    color:var(--muted);
+    text-transform:uppercase;
+    letter-spacing:.5px;
+    margin:18px 2px 10px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+.section-title:first-child{ margin-top:0; }
+.section-title i{ font-size:10px; }
+.section-title.sponsored{ color:var(--accent); }
+
+.results{ display:flex; flex-direction:column; gap:4px; }
+
+/* =========================
+   USER / GROUP / SCHOOL ROW
+========================= */
+
+.row-card{
+    width:100%;
+    display:flex;
+    align-items:center;
+    padding:10px 6px;
+    border-radius:12px;
+    gap:12px;
+    cursor:pointer;
+}
+.row-card:active{ background:var(--card-2); }
+
+.avatar-wrapper{
+    width:52px;
+    height:52px;
+    flex-shrink:0;
+    border-radius:50%;
+    overflow:hidden;
+    background:var(--card-2);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+.avatar-wrapper.sq{ border-radius:14px; }
+.avatar{ width:100%; height:100%; object-fit:cover; }
+.avatar-wrapper i{ font-size:20px; color:var(--accent); }
+
+.row-info{ flex:1; min-width:0; }
+.name-row{ display:flex; align-items:center; gap:5px; min-width:0; }
+.name{ font-size:14px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.verified{
+    width:15px; height:15px; background:var(--accent); color:#fff; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:9px; font-weight:bold; flex-shrink:0;
+}
+.sub{ color:var(--muted); font-size:12px; margin-top:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tag-chip{ display:inline-block; padding:2px 7px; border-radius:8px; background:var(--grad); color:#fff; font-size:9px; font-weight:700; margin-right:5px; }
+
+/* =========================
+   ACTION BUTTON
+========================= */
+
+.act-btn{
+    border:none;
+    background:var(--grad);
+    color:#fff;
+    font-size:12px;
+    font-weight:700;
+    padding:8px 14px;
+    border-radius:18px;
+    cursor:pointer;
+    flex-shrink:0;
+}
+.act-btn.outline{ background:var(--card-2); color:var(--text); border:1px solid var(--border); }
+.act-btn:disabled{ opacity:.6; }
+
+/* =========================
+   SPONSORED CARD
+========================= */
+
+.sponsored-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    margin-bottom:8px;
+}
+.sponsored-card .avatar-wrapper{ width:48px; height:48px; }
+.sp-badge{
+    font-size:9px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.5px;
+}
+
+/* =========================
+   EMPTY / LOADING
+========================= */
+
+.empty, .loading{
+    text-align:center;
+    color:var(--muted);
+    padding:40px 10px;
+    font-size:13px;
+}
+.loading i{ display:block; margin-bottom:10px; font-size:20px; }
+
+</style>
+</head>
+
+<body>
+
+<header class="search-header">
+
+    <div class="search-row">
+
+        <button class="back-btn" id="backButton" aria-label="Back"><i class="fas fa-arrow-left"></i></button>
+
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input
+                type="search"
+                id="searchInput"
+                placeholder="Search people, groups, schools..."
+                autocomplete="off"
+                spellcheck="false"
+            >
+            <i class="fas fa-times clear-btn" id="clearBtn"></i>
+        </div>
+
+    </div>
+
+    <div class="search-tabs">
+        <button class="search-tab active" data-tab="all">All</button>
+        <button class="search-tab" data-tab="people">People</button>
+        <button class="search-tab" data-tab="groups">Groups</button>
+        <button class="search-tab" data-tab="schools">Schools</button>
+    </div>
+
+</header>
+
+<main class="main">
+    <div id="results" class="results"><div class="loading"><i class="fas fa-spinner fa-spin"></i>Loading...</div></div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+
+/* =========================
+   STATE
+========================= */
+
+var currentUser = null;
+var followingIds = new Set();
+var blockedIds = new Set();
+var myGroupIds = new Set();
+var currentTab = "all";
+var searchTimer = null;
+
+var DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#20202a"/><circle cx="50" cy="38" r="20" fill="#777"/><path d="M18 90c4-22 18-32 32-32s28 10 32 32" fill="#777"/></svg>'
+);
+
+function $(id){ return document.getElementById(id); }
+function esc(v){
+    if (v === null || v === undefined) return "";
+    return String(v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+}
+function fmt(n){
+    n = Number(n) || 0;
+    if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M";
+    if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K";
+    return String(n);
+}
+
+/* =========================
+   INIT
+========================= */
+
+async function initSearch(){
+
+    var result = await supabaseClient.auth.getUser();
+    currentUser = result.data.user || null;
+
+    if (currentUser) {
+        await Promise.all([ loadFollowing(), loadBlocked(), loadMyGroups() ]);
+    }
+
+    await showSuggestions();
+}
+
+async function loadFollowing(){
+    followingIds = new Set();
+    var r = await supabaseClient.from("followers").select("following_id").eq("follower_id", currentUser.id);
+    if (r.error) { console.log("Following error:", r.error); return; }
+    (r.data || []).forEach(function(row){ followingIds.add(row.following_id); });
+}
+
+async function loadBlocked(){
+    blockedIds = new Set();
+    var r = await supabaseClient.from("blocked_users").select("blocked_id").eq("user_id", currentUser.id);
+    if (r.error) { console.info("Blocked users not available:", r.error.message); return; }
+    (r.data || []).forEach(function(row){ blockedIds.add(row.blocked_id); });
+}
+
+async function loadMyGroups(){
+    myGroupIds = new Set();
+    var r = await supabaseClient.from("group_members").select("group_id").eq("user_id", currentUser.id).eq("status", "active");
+    if (r.error) { console.log("My groups error:", r.error); return; }
+    (r.data || []).forEach(function(row){ myGroupIds.add(String(row.group_id)); });
+}
+
+/* =========================
+   SPONSORED (active campaigns)
+========================= */
+
+var trackedImpressions = new Set();
+
+async function loadSponsored(limit){
+    var r = await supabaseClient
+        .from("campaigns")
+        .select("id,user_id,title,media_url,campaign_type,views,clicks,status")
+        .eq("status", "active")
+        .order("created_at", { ascending:false })
+        .limit(limit || 3);
+
+    if (r.error) { console.info("Campaigns not available:", r.error.message); return []; }
+
+    var rows = (r.data || []).filter(function(c){ return !blockedIds.has(c.user_id) && c.user_id !== (currentUser && currentUser.id); });
+    if (!rows.length) return [];
+
+    var ids = rows.map(function(c){ return c.user_id; });
+    var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,university,verified").in("id", ids);
+    var map = {};
+    (pr.data || []).forEach(function(p){ map[p.id] = p; });
+
+    rows.forEach(function(c){ c.profile = map[c.user_id] || null; });
+    return rows;
+}
+
+function trackCampaignView(campaignId, currentViews){
+    if (trackedImpressions.has(campaignId)) return;
+    trackedImpressions.add(campaignId);
+    supabaseClient.from("campaigns").update({ views: (currentViews || 0) + 1 }).eq("id", campaignId)
+        .then(function(r){ if (r.error) console.warn("Campaign view track error:", r.error.message); });
+}
+
+function trackCampaignClick(campaignId, currentClicks){
+    supabaseClient.from("campaigns").update({ clicks: (currentClicks || 0) + 1 }).eq("id", campaignId)
+        .then(function(r){ if (r.error) console.warn("Campaign click track error:", r.error.message); });
+}
+
+function createSponsoredCard(c){
+    var p = c.profile || {};
+    var name = p.full_name || p.username || "StudentX User";
+    var username = p.username ? "@" + p.username : "";
+
+    trackCampaignView(c.id, c.views);
+
+    return '<div class="sponsored-card" onclick="trackCampaignClick(\'' + esc(c.id) + '\',' + (c.clicks||0) + ');openProfile(\'' + esc(c.user_id) + '\')">' +
+        '<div class="avatar-wrapper"><img class="avatar" src="' + esc(p.avatar_url || DEFAULT_AVATAR) + '" onerror="this.src=\'' + DEFAULT_AVATAR + '\'" alt=""></div>' +
+        '<div class="row-info">' +
+            '<div class="sp-badge"><i class="fas fa-bullhorn"></i> Sponsored</div>' +
+            '<div class="name-row"><div class="name">' + esc(name) + '</div>' + (p.verified ? '<span class="verified">✓</span>' : "") + '</div>' +
+            '<div class="sub">' + esc(username || c.title || "") + '</div>' +
+        '</div>' +
+        '<button class="act-btn outline" onclick="event.stopPropagation();trackCampaignClick(\'' + esc(c.id) + '\',' + (c.clicks||0) + ');openProfile(\'' + esc(c.user_id) + '\')">View</button>' +
+    '</div>';
+}
+
+/* =========================
+   USER CARD
+========================= */
+
+function createUserCard(user){
+    var avatarHTML = '<img class="avatar" src="' + esc(user.avatar_url || DEFAULT_AVATAR) + '" onerror="this.src=\'' + DEFAULT_AVATAR + '\'" alt="">';
+    var verifiedHTML = user.verified ? '<span class="verified">✓</span>' : "";
+    var username = user.username ? "@" + user.username : "";
+    var university = user.university || "";
+    var isFollowing = followingIds.has(user.id);
+
+    var btn = currentUser && user.id !== currentUser.id
+        ? '<button class="act-btn ' + (isFollowing ? "outline" : "") + '" onclick="event.stopPropagation();toggleFollow(\'' + esc(user.id) + '\',this)">' + (isFollowing ? "Following" : "Follow") + '</button>'
+        : "";
+
+    return '<div class="row-card" onclick="openProfile(\'' + esc(user.id) + '\')">' +
+        '<div class="avatar-wrapper">' + avatarHTML + '</div>' +
+        '<div class="row-info">' +
+            '<div class="name-row"><div class="name">' + esc(user.full_name || "Student") + '</div>' + verifiedHTML + '</div>' +
+            (username ? '<div class="sub">' + esc(username) + '</div>' : "") +
+            (university ? '<div class="sub">' + esc(university) + '</div>' : "") +
+        '</div>' +
+        btn +
+    '</div>';
+}
+
+function openProfile(id){ if (id) location.href = "profile.html?id=" + encodeURIComponent(id); }
+
+async function toggleFollow(userId, button){
+    if (!currentUser) { toastMsg("Please login first"); return; }
+    var isFollowing = followingIds.has(userId);
+    button.disabled = true;
+
+    if (isFollowing) {
+        var r = await supabaseClient.from("followers").delete().eq("follower_id", currentUser.id).eq("following_id", userId);
+        if (r.error) { console.log(r.error); toastMsg("Unable to unfollow"); button.disabled = false; return; }
+        followingIds.delete(userId);
+        button.textContent = "Follow";
+        button.classList.add("outline");
+    } else {
+        var r2 = await supabaseClient.from("followers").insert({ follower_id: currentUser.id, following_id: userId });
+        if (r2.error) { console.log(r2.error); toastMsg("Unable to follow"); button.disabled = false; return; }
+        followingIds.add(userId);
+        button.textContent = "Following";
+        button.classList.remove("outline");
+    }
+    button.disabled = false;
+}
+
+function toastMsg(msg){ alert(msg); }
+
+/* =========================
+   GROUP CARD
+========================= */
+
+function createGroupCard(g){
+    var icon = g.avatar_url ? '<img class="avatar" src="' + esc(g.avatar_url) + '" onerror="this.remove()">' : '<i class="fas fa-users"></i>';
+    var joined = myGroupIds.has(String(g.id));
+    var typeLabel = g.type === "community" ? "Community" : "Group";
+
+    var btn = joined
+        ? '<button class="act-btn outline" onclick="event.stopPropagation();openGroup(\'' + esc(g.id) + '\')">Open</button>'
+        : '<button class="act-btn" onclick="event.stopPropagation();quickJoinGroup(\'' + esc(g.id) + '\',this)">' + (g.privacy === "private" ? "Request" : "Join") + '</button>';
+
+    return '<div class="row-card" onclick="openGroup(\'' + esc(g.id) + '\')">' +
+        '<div class="avatar-wrapper sq">' + icon + '</div>' +
+        '<div class="row-info">' +
+            '<div class="name-row"><span class="tag-chip">' + esc(typeLabel) + '</span><div class="name">' + esc(g.name) + '</div></div>' +
+            '<div class="sub">' + (g.university ? esc(g.university) + " · " : "") + (g.privacy === "private" ? "Private" : "Public") + '</div>' +
+        '</div>' +
+        btn +
+    '</div>';
+}
+
+function openGroup(id){ if (id) location.href = "group.html?id=" + encodeURIComponent(id); }
+
+async function quickJoinGroup(id, btn){
+    if (!currentUser) { toastMsg("Please login first"); return; }
+    btn.disabled = true;
+
+    var g = await supabaseClient.from("groups").select("id,privacy,created_by,name").eq("id", id).maybeSingle();
+    if (g.error || !g.data) { toastMsg("This group no longer exists"); btn.disabled = false; return; }
+
+    var status = g.data.privacy === "private" ? "pending" : "active";
+    var r = await supabaseClient.from("group_members").insert({ group_id: id, user_id: currentUser.id, role: "member", status: status });
+
+    if (r.error) {
+        console.log(r.error);
+        toastMsg(r.error.code === "23505" ? "You already joined or requested" : "Could not join");
+        btn.disabled = false;
+        return;
+    }
+
+    if (status === "active") myGroupIds.add(String(id));
+    btn.textContent = status === "pending" ? "Requested" : "Open";
+    if (status === "active") btn.setAttribute("onclick", "event.stopPropagation();openGroup('" + id + "')");
+    btn.disabled = status === "pending";
+}
+
+/* =========================
+   SCHOOL CARD
+========================= */
+
+function createSchoolCard(school, count){
+    return '<div class="row-card" onclick="searchSchool(\'' + esc(school).replace(/'/g,"\\'") + '\')">' +
+        '<div class="avatar-wrapper sq"><i class="fas fa-graduation-cap"></i></div>' +
+        '<div class="row-info"><div class="name">' + esc(school) + '</div><div class="sub">' + fmt(count) + ' students on StudentX</div></div>' +
+        '<i class="fas fa-chevron-right" style="color:var(--muted);font-size:13px"></i>' +
+    '</div>';
+}
+
+function searchSchool(name){
+    $("searchInput").value = name;
+    setTab("people");
+    searchUsers(name);
+}
+
+/* =========================
+   SUGGESTIONS (empty query)
+========================= */
+
+async function showSuggestions(){
+    var results = $("results");
+    results.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i>Loading...</div>';
+
+    var sponsored = await loadSponsored(3);
+
+    var peopleReq = supabaseClient.from("profiles").select("id,full_name,username,avatar_url,university,verified").limit(60);
+    if (currentUser) peopleReq = peopleReq.neq("id", currentUser.id);
+    var peopleRes = await peopleReq;
+
+    var people = (peopleRes.data || [])
+        .filter(function(u){ return !followingIds.has(u.id) && !blockedIds.has(u.id); })
+        .slice(0, 10);
+
+    var groupsRes = await supabaseClient.from("groups").select("*").eq("privacy", "public").order("created_at", { ascending:false }).limit(6);
+    var groups = groupsRes.data || [];
+
+    var html = "";
+
+    if (sponsored.length) {
+        html += '<div class="section-title sponsored"><i class="fas fa-bullhorn"></i> Sponsored</div>';
+        sponsored.forEach(function(c){ html += createSponsoredCard(c); });
+    }
+
+    html += '<div class="section-title">People you may know</div>';
+    html += people.length ? people.map(createUserCard).join("") : '<div class="empty">No suggestions right now.</div>';
+
+    html += '<div class="section-title">Groups &amp; Communities</div>';
+    html += groups.length ? groups.map(createGroupCard).join("") : '<div class="empty">No public groups yet.</div>';
+
+    results.innerHTML = html;
+}
+
+/* =========================
+   SEARCH: PEOPLE
+========================= */
+
+async function searchUsers(query){
+    var results = $("results");
+    results.innerHTML = '<div class="section-title">People</div><div id="peopleResults"><div class="loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div></div>';
+
+    var safe = query.replace(/[%_,()]/g, " ");
+    var req = supabaseClient.from("profiles")
+        .select("id,full_name,username,avatar_url,university,verified")
+        .or("full_name.ilike.%" + safe + "%,username.ilike.%" + safe + "%,university.ilike.%" + safe + "%")
+        .limit(30);
+    if (currentUser) req = req.neq("id", currentUser.id);
+
+    var r = await req;
+    var list = $("peopleResults");
+
+    if (r.error) { console.log("Search error:", r.error); list.innerHTML = '<div class="empty">Search failed.</div>'; return; }
+
+    var rows = (r.data || []).filter(function(u){ return !blockedIds.has(u.id); });
+    list.innerHTML = rows.length ? rows.map(createUserCard).join("") : '<div class="empty">No people found.</div>';
+}
+
+/* =========================
+   SEARCH: GROUPS
+========================= */
+
+async function searchGroups(query){
+    var results = $("results");
+    results.innerHTML = '<div class="section-title">Groups &amp; Communities</div><div id="groupResults"><div class="loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div></div>';
+
+    var safe = query.replace(/[%_,()]/g, " ");
+    var r = await supabaseClient.from("groups")
+        .select("*")
+        .eq("privacy", "public")
+        .or("name.ilike.%" + safe + "%,university.ilike.%" + safe + "%")
+        .limit(30);
+
+    var list = $("groupResults");
+    if (r.error) { console.log("Group search error:", r.error); list.innerHTML = '<div class="empty">Search failed.</div>'; return; }
+
+    var rows = r.data || [];
+    list.innerHTML = rows.length ? rows.map(createGroupCard).join("") : '<div class="empty">No groups found.</div>';
+}
+
+/* =========================
+   SCHOOLS (from profiles.university)
+========================= */
+
+var cachedSchools = null;
+
+async function getSchoolCounts(){
+    if (cachedSchools) return cachedSchools;
+
+    var r = await supabaseClient.from("profiles").select("university").not("university", "is", null).limit(2000);
+    if (r.error) { console.log("School error:", r.error); return []; }
+
+    var counts = {};
+    (r.data || []).forEach(function(row){
+        var school = String(row.university || "").trim();
+        if (!school) return;
+        var key = school.toLowerCase();
+        if (!counts[key]) counts[key] = { name: school, count: 0 };
+        counts[key].count++;
+    });
+
+    cachedSchools = Object.values(counts).sort(function(a,b){ return b.count - a.count; });
+    return cachedSchools;
+}
+
+async function loadSchools(query){
+    var results = $("results");
+    results.innerHTML = '<div class="section-title">Schools</div><div id="schoolResults"><div class="loading"><i class="fas fa-spinner fa-spin"></i>Loading...</div></div>';
+
+    var schools = await getSchoolCounts();
+    var q = (query || "").trim().toLowerCase();
+    var filtered = q ? schools.filter(function(s){ return s.name.toLowerCase().indexOf(q) !== -1; }) : schools;
+
+    var list = $("schoolResults");
+    list.innerHTML = filtered.length
+        ? filtered.map(function(s){ return createSchoolCard(s.name, s.count); }).join("")
+        : '<div class="empty">No schools found.</div>';
+}
+
+/* =========================
+   MAIN SEARCH DISPATCH
+========================= */
+
+async function runSearch(query){
+    var q = query.trim();
+
+    if (!q) { await showSuggestions(); return; }
+
+    if (currentTab === "people") { await searchUsers(q); return; }
+    if (currentTab === "groups") { await searchGroups(q); return; }
+    if (currentTab === "schools") { await loadSchools(q); return; }
+
+    // "all" tab: run everything and stack results
+    var results = $("results");
+    results.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i>Searching...</div>';
+
+    var safe = q.replace(/[%_,()]/g, " ");
+
+    var peopleReq = supabaseClient.from("profiles")
+        .select("id,full_name,username,avatar_url,university,verified")
+        .or("full_name.ilike.%" + safe + "%,username.ilike.%" + safe + "%,university.ilike.%" + safe + "%")
+        .limit(15);
+    if (currentUser) peopleReq = peopleReq.neq("id", currentUser.id);
+
+    var groupReq = supabaseClient.from("groups")
+        .select("*")
+        .eq("privacy", "public")
+        .or("name.ilike.%" + safe + "%,university.ilike.%" + safe + "%")
+        .limit(10);
+
+    var schoolsAll = await getSchoolCounts();
+    var schoolMatches = schoolsAll.filter(function(s){ return s.name.toLowerCase().indexOf(q.toLowerCase()) !== -1; }).slice(0, 5);
+
+    var res = await Promise.all([ peopleReq, groupReq ]);
+    var people = (res[0].data || []).filter(function(u){ return !blockedIds.has(u.id); });
+    var groups = res[1].data || [];
+
+    var html = "";
+
+    if (!people.length && !groups.length && !schoolMatches.length) {
+        html = '<div class="empty"><i class="fas fa-search" style="display:block;font-size:26px;margin-bottom:10px"></i>No results for "' + esc(q) + '"</div>';
+    } else {
+        if (people.length) { html += '<div class="section-title">People</div>' + people.map(createUserCard).join(""); }
+        if (groups.length) { html += '<div class="section-title">Groups &amp; Communities</div>' + groups.map(createGroupCard).join(""); }
+        if (schoolMatches.length) { html += '<div class="section-title">Schools</div>' + schoolMatches.map(function(s){ return createSchoolCard(s.name, s.count); }).join(""); }
+    }
+
+    results.innerHTML = html;
+}
+
+/* =========================
+   SEARCH INPUT
+========================= */
+
+$("searchInput").addEventListener("input", function(){
+    var value = this.value;
+    $("clearBtn").classList.toggle("show", value.length > 0);
+
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(function(){ runSearch(value); }, 300);
+});
+
+$("clearBtn").addEventListener("click", function(){
+    $("searchInput").value = "";
+    $("clearBtn").classList.remove("show");
+    showSuggestions();
+    $("searchInput").focus();
+});
+
+/* =========================
+   TABS
+========================= */
+
+function setTab(tab){
+    currentTab = tab;
+    document.querySelectorAll(".search-tab").forEach(function(item){
+        item.classList.toggle("active", item.getAttribute("data-tab") === tab);
+    });
+    runSearch($("searchInput").value);
+}
+
+document.querySelectorAll(".search-tab").forEach(function(tab){
+    tab.addEventListener("click", function(){ setTab(this.getAttribute("data-tab")); });
+});
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+$("backButton").addEventListener("click", function(){
+    if (window.history.length > 1) window.history.back();
+    else window.location.href = "home.html";
+});
+
+/* =========================
+   START
+========================= */
+
+initSearch();
+
+</script>
+
+<script src="theme.js"></script>
+</body>
+</html>
