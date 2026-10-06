@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-EKC1YM7T60"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-EKC1YM7T60');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>StudentX</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#dc2743">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link href="https://googleapis.com" rel="stylesheet">
+
+<!-- 1. Lambar Verification Ta Monetag Dinka -->
+<meta name="monetag" content="8f012f8fb457fd8c57d0ed980829cbf0">
+
+<!-- 2. AINIHIN CODE DIN GOOGLE ADSENSE DINKA NA GASKIYA DA KA TURO -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6613590885555189" crossorigin="anonymous"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Poppins',sans-serif;background:#0a0a0f;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.wrap{text-align:center;margin-top:-40px}
+.brand{font-size:46px;font-weight:900;letter-spacing:-1.5px;color:#ffffff;line-height:1}
+.brand b{font-weight:900;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:42px}
+.sub{margin-top:14px;font-size:11px;font-weight:600;letter-spacing:4px}
+.c1{color:#f09433}.c2{color:#dc2743}.c3{color:#cc2366}.c4{color:#bc1888}
+.bot{position:fixed;bottom:70px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.spin{width:32px;height:32px;border:3px solid rgba(255,255,255,0.06);border-top-color:#dc2743;border-bottom-color:#cc2366;border-radius:50%;animation:sp .9s linear infinite}
+.pbar{width:140px;height:3px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden}
+.pfill{height:100%;width:0;border-radius:3px;background:linear-gradient(90deg,#f09433,#dc2743,#bc1888);animation:pf 2s ease forwards}
+.ltxt{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:2px;font-weight:600;animation:pl 1.5s ease infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@keyframes pf{to{width:100%}}
+@keyframes pl{0%,100%{opacity:.3}50%{opacity:.7}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="brand">Student <b>X</b></div>
+<div class="sub">
+<span class="c1">CONNECT.</span>
+<span class="c2">LEARN.</span>
+<span class="c3">SHARE.</span>
+<span class="c4">GROW.</span>
+</div>
+</div>
+<div class="bot">
+<div class="spin"></div>
+<div class="pbar"><div class="pfill"></div></div>
+<div class="ltxt" id="loadingText">Loading...</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script>
+/* =========================================================
+   REAL SESSION CHECK
+   If the person is already logged in, skip login.html entirely
+   and go straight to their home feed. Only send them to the
+   login screen when there is no valid session.
+========================================================= */
+async function routeFromSplash(){
+    var minDelay = new Promise(function(resolve){ setTimeout(resolve, 1400); });
+
+    var sessionCheck = supabaseClient.auth.getSession()
+        .then(function(result){ return result.data && result.data.session ? true : false; })
+        .catch(function(error){
+            console.error("Session check error:", error);
+            return false;
+        });
+
+    var results = await Promise.all([sessionCheck, minDelay]);
+    var isLoggedIn = results[0];
+
+    document.getElementById("loadingText").textContent = isLoggedIn ? "Welcome back..." : "Redirecting...";
+
+    window.location.href = isLoggedIn ? "home.html" : "login.html";
+}
+
+routeFromSplash();
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/service-worker.js")
+            .then(() => console.log("StudentX Service Worker registered"))
+            .catch(error => console.error("Service Worker error:", error));
+    });
+}
+</script>
+</body>
+</html>
