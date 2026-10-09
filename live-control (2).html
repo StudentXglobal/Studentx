@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Live - StudentX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root{
+            --accent:#dc2743;
+            --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+        }
+        /* Live screens stay dark regardless of theme preference, like a
+           camera/broadcast UI conventionally does. */
+        * {
+            box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent;
+            font-family: Poppins, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        html, body {
+            background-color: #070914; color: #fff; height: 100%; width: 100%; overflow: hidden;
+            max-width: 500px; margin: 0 auto; position:relative;
+        }
+
+        .screen {
+            position: fixed; top: 0; left: 50%; transform:translateX(-50%); width: 100%; max-width:500px; height: 100%;
+            display: none; flex-direction: column; background-color: #090c19; z-index: 10;
+        }
+        .screen.active { display: flex; }
+
+        /* --- LIVE FEED SCREEN --- */
+        #screenFeed { padding-top: 60px; padding-bottom: 60px; overflow-y: auto; }
+        .feed-header {
+            position: fixed; top: 0; left: 50%; transform:translateX(-50%); width:100%; max-width:500px; height: 56px;
+            background: #090c19; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 15px; border-bottom: 1px solid #202438; z-index: 20;
+        }
+        .feed-header h2 { font-size: 18px; font-weight: 700; }
+        .go-live-btn {
+            background: var(--grad); color: #fff; border: none; padding: 7px 16px;
+            border-radius: 18px; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;
+        }
+        .live-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 10px; }
+        .live-card { position: relative; border-radius: 12px; overflow: hidden; aspect-ratio: 3/4; cursor: pointer; background: #111526; }
+        .live-card .card-bg { width: 100%; height: 100%; background-size: cover; background-position: center; filter: blur(14px) brightness(.55); transform: scale(1.3); }
+        .live-card .card-av { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,.5); }
+        .lc-badge { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #fff; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 700; z-index: 2; }
+        .lc-viewers { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.55); font-size: 10px; padding: 2px 7px; border-radius: 10px; z-index: 2; }
+        .lc-info { position: absolute; bottom: 8px; left: 8px; right: 8px; z-index: 2; }
+        .lc-name { font-size: 12px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .lc-title { font-size: 10px; color: rgba(255,255,255,.6); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .feed-empty { text-align:center; padding:70px 24px; color:#777; }
+        .feed-empty i { font-size:34px; display:block; margin-bottom:12px; color:var(--accent); }
+        .feed-empty b { display:block; color:#fff; font-size:14px; margin-bottom:6px; }
+        .skeleton-card { aspect-ratio:3/4; border-radius:12px; background:#111526; animation:pulseFeed 1.2s ease infinite; }
+        @keyframes pulseFeed{ 50%{opacity:.5} }
+
+        /* --- WATCH / HOST FULLSCREEN --- */
+        .live-full-screen { background:#000; }
+        .remote-video, .local-video {
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background:#000; z-index:0;
+        }
+        .video-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 28%, transparent 55%, rgba(0,0,0,0.85) 100%);
+            z-index: 1; pointer-events:none;
+        }
+
+        .live-top-bar {
+            position: absolute; top: 0; left: 0; width: 100%; padding: 35px 15px 15px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 10;
+        }
+        .host-info-card { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.5); padding: 4px 10px 4px 4px; border-radius: 20px; backdrop-filter: blur(5px); }
+        .host-info-card img { width: 32px; height: 32px; border-radius: 50%; border: 1px solid #fff; object-fit:cover; background:#222; }
+        .host-info-card h4 { font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+        .host-info-card p { font-size: 10px; color: #ddd; }
+        .live-tag { background: var(--accent); color: #fff; font-size: 8px; padding: 1px 4px; border-radius: 3px; font-weight: 700; }
+        .top-right-controls { display: flex; align-items: center; gap: 8px; }
+        .viewers-pill { background: rgba(0,0,0,0.5); font-size: 11px; padding: 4px 8px; border-radius: 12px; display: flex; align-items: center; gap: 4px; }
+        .close-x { color: #fff; font-size: 20px; cursor: pointer; background: rgba(0,0,0,0.5); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+
+        .live-right-bar {
+            position: absolute; right: 10px; bottom: 90px; display: flex; flex-direction: column; gap: 20px; z-index: 10;
+        }
+        .live-action { display: flex; flex-direction: column; align-items: center; gap: 4px; background: none; border: none; color: #fff; cursor: pointer; }
+        .live-action i { font-size: 24px; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); }
+        .live-action span { font-size: 10px; font-weight: 600; }
+        .gift-icon i { color: #fbbf24; }
+        .like-icon i { color: #ff5c73; }
+        .like-icon.on i{ animation:likePop .3s ease; }
+        @keyframes likePop{ 50%{ transform:scale(1.35); } }
+
+        .live-chat-area {
+            position: absolute; bottom: 65px; left: 10px; right: 70px; max-height: 32%; overflow-y: auto;
+            display: flex; flex-direction: column; gap: 8px; z-index: 5; scrollbar-width: none;
+        }
+        .live-chat-area::-webkit-scrollbar { display: none; }
+        .chat-bubble { background: rgba(0,0,0,0.6); padding: 6px 12px; border-radius: 15px; font-size: 12px; max-width: 85%; word-wrap: break-word; backdrop-filter: blur(5px); }
+        .chat-bubble .uname { color: var(--accent); font-weight: 700; margin-right: 4px; }
+        .chat-bubble.gift { background: linear-gradient(90deg, rgba(251,191,36,0.3), rgba(0,0,0,0.6)); border: 1px solid rgba(251,191,36,0.5); }
+        .chat-bubble.gift .uname { color: #fbbf24; }
+        .chat-bubble.system{ background:rgba(255,255,255,.08); color:#aaa; font-style:italic; }
+
+        .live-bottom-bar {
+            position: absolute; bottom: 15px; left: 10px; right: 10px; display: flex; align-items: center; gap: 10px; z-index: 10;
+        }
+        .live-chat-input { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid #444; border-radius: 20px; padding: 10px 15px; color: #fff; font-size: 13px; outline: none; backdrop-filter: blur(5px); }
+        .live-chat-input::placeholder { color: #ccc; }
+        .live-send-btn { background: var(--grad); border: none; width: 40px; height: 40px; border-radius: 50%; color: #fff; cursor: pointer; flex-shrink:0; }
+
+        .host-controls {
+            position: absolute; bottom: 15px; left: 10px; right: 10px; display: flex; justify-content: center; gap: 15px; z-index: 10;
+        }
+        .host-btn { background: rgba(255,255,255,0.18); border: none; color: #fff; padding: 12px 20px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; backdrop-filter: blur(5px); }
+        .host-btn.end-live { background: var(--accent); }
+
+        /* --- GO LIVE SETUP --- */
+        #screenGoLive { justify-content: space-between; }
+        .setup-top { position: absolute; top: 0; left: 0; width: 100%; padding: 35px 15px 15px; display: flex; justify-content: space-between; z-index: 10; }
+        .setup-center { position: relative; z-index: 10; padding: 20px; text-align: center; margin-top: auto; margin-bottom: 20px; }
+        .setup-title-input { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid #444; border-radius: 12px; padding: 12px; color: #fff; margin-bottom: 12px; outline: none; text-align: center; }
+        .setup-cat-select { width: 100%; background: rgba(255,255,255,0.1); border: 1px solid #444; border-radius: 12px; padding: 12px; color: #fff; margin-bottom: 20px; outline: none; }
+        .setup-cat-select option{ color:#000; }
+        .start-live-btn { width: 100%; background: var(--grad); color: #fff; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .start-live-btn:disabled{ opacity:.6; }
+        .cam-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#444; z-index:0; }
+
+        /* --- GIFT MODAL --- */
+        .gift-modal {
+            position: absolute; bottom: 0; left: 0; width: 100%; background: #141419;
+            border-top-left-radius: 16px; border-top-right-radius: 16px; padding: 15px; z-index: 30;
+            display: none; flex-direction: column; gap: 15px; border-top: 1px solid #333;
+        }
+        .gift-modal.active { display: flex; }
+        .gift-header { display: flex; justify-content: space-between; align-items: center; }
+        .gift-header h4 { font-size: 16px; }
+        .gift-header .coin-bal{ font-size:11px; color:#fbbf24; }
+        .gift-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .gift-item { display: flex; flex-direction: column; align-items: center; gap: 5px; padding: 10px; border-radius: 10px; background: rgba(255,255,255,0.05); cursor: pointer; border:none; color:#fff; }
+        .gift-item:active { background: rgba(220, 39, 67, 0.2); }
+        .gift-item i { font-size: 24px; }
+        .gift-item span { font-size: 10px; color: #fbbf24; font-weight: 600; }
+
+        .toast{ position:fixed; left:50%; top:16px; transform:translateX(-50%); z-index:999; background:#1f1f2b; color:#fff; padding:10px 18px; border-radius:10px; font-size:12px; font-weight:600; border-left:3px solid var(--accent); display:none; }
+        .toast.show{ display:block; }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         SCREEN 1: LIVE FEED
+    ========================================== -->
+    <div class="screen active" id="screenFeed">
+        <div class="feed-header">
+            <h2>Live</h2>
+            <button class="go-live-btn" onclick="openGoLiveSetup()"><i class="fas fa-video"></i> Go Live</button>
+        </div>
+
+        <div class="live-grid" id="liveGrid">
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+            <div class="skeleton-card"></div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 2: WATCH LIVE (Viewer)
+    ========================================== -->
+    <div class="screen live-full-screen" id="screenWatch">
+        <video id="remoteVideo" class="remote-video" autoplay playsinline></video>
+        <div class="video-overlay"></div>
+
+        <div class="live-top-bar">
+            <div class="host-info-card">
+                <img id="watchAvatar" src="" alt="">
+                <div>
+                    <h4 id="watchHostName">Host <span class="live-tag">LIVE</span></h4>
+                    <p id="watchFollowers"></p>
+                </div>
+            </div>
+            <div class="top-right-controls">
+                <div class="viewers-pill"><i class="fas fa-eye"></i> <span id="watchViewers">0</span></div>
+                <div class="close-x" onclick="closeWatch()"><i class="fas fa-times"></i></div>
+            </div>
+        </div>
+
+        <div class="live-chat-area" id="watchChat"></div>
+
+        <div class="live-right-bar">
+            <button class="live-action gift-icon" onclick="toggleGiftModal()"><i class="fas fa-gift"></i><span>Gift</span></button>
+            <button class="live-action share-icon" onclick="shareLive()"><i class="fas fa-share"></i><span>Share</span></button>
+            <button class="live-action like-icon" id="watchLikeBtn" onclick="sendWatchLike()"><i class="fas fa-heart"></i><span id="watchLikeCount">0</span></button>
+        </div>
+
+        <div class="live-bottom-bar">
+            <input type="text" class="live-chat-input" id="watchChatInput" placeholder="Say something..." onkeydown="if(event.key==='Enter')sendWatchChat()">
+            <button class="live-send-btn" onclick="sendWatchChat()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+
+        <div class="gift-modal" id="giftModal">
+            <div class="gift-header">
+                <h4>Send a Gift</h4>
+                <div class="coin-bal"><i class="fas fa-coins"></i> <span id="giftCoinBal">0</span> coins</div>
+                <i class="fas fa-times" style="cursor:pointer;" onclick="toggleGiftModal()"></i>
+            </div>
+            <div class="gift-grid">
+                <button class="gift-item" onclick="sendGift('Rose', 10)"><i class="fas fa-fan" style="color:#ff5c73"></i><span>10 Coins</span></button>
+                <button class="gift-item" onclick="sendGift('Crown', 500)"><i class="fas fa-crown" style="color:#fbbf24"></i><span>500 Coins</span></button>
+                <button class="gift-item" onclick="sendGift('Ring', 100)"><i class="fas fa-ring" style="color:var(--accent)"></i><span>100 Coins</span></button>
+                <button class="gift-item" onclick="sendGift('Star', 50)"><i class="fas fa-star" style="color:#ffeb3b"></i><span>50 Coins</span></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 3: GO LIVE SETUP
+    ========================================== -->
+    <div class="screen live-full-screen" id="screenGoLive">
+        <video id="setupPreview" class="local-video" autoplay muted playsinline></video>
+        <div class="cam-placeholder" id="setupPlaceholder"><i class="fas fa-camera" style="font-size:50px;opacity:.3"></i></div>
+
+        <div class="setup-top">
+            <div class="close-x" onclick="cancelGoLiveSetup()"><i class="fas fa-times"></i></div>
+            <div class="close-x" onclick="switchSetupCamera()"><i class="fas fa-camera-rotate"></i></div>
+        </div>
+
+        <div class="setup-center">
+            <input type="text" class="setup-title-input" id="setupTitle" maxlength="100" placeholder="Add a title for your stream...">
+            <select class="setup-cat-select" id="setupCategory">
+                <option value="General">General</option>
+                <option value="Education">Education</option>
+                <option value="Gaming">Gaming</option>
+                <option value="Music">Music</option>
+                <option value="News">News</option>
+                <option value="Business">Business</option>
+                <option value="Technology">Technology</option>
+                <option value="Sports">Sports</option>
+            </select>
+            <button class="start-live-btn" id="startHostBtn" onclick="startHosting()">
+                <i class="fas fa-broadcast-tower"></i> Go Live Now
+            </button>
+        </div>
+    </div>
+
+    <!-- ==========================================
+         SCREEN 4: HOST CONTROL ROOM
+    ========================================== -->
+    <div class="screen live-full-screen" id="screenHost">
+        <video id="hostLocalVideo" class="local-video" autoplay muted playsinline></video>
+        <div class="video-overlay"></div>
+
+        <div class="live-top-bar">
+            <div class="host-info-card">
+                <img id="hostAvatar" src="" alt="">
+                <div>
+                    <h4>You (Host) <span class="live-tag">LIVE</span></h4>
+                    <p id="hostTimer">00:00</p>
+                </div>
+            </div>
+            <div class="top-right-controls">
+                <div class="viewers-pill"><i class="fas fa-eye"></i> <span id="hostViewers">0</span></div>
+                <div class="close-x" onclick="endLive()"><i class="fas fa-times"></i></div>
+            </div>
+        </div>
+
+        <div class="live-chat-area" id="hostChat"></div>
+
+        <div class="host-controls">
+            <button class="host-btn" onclick="switchHostCamera()"><i class="fas fa-camera-rotate"></i> Flip</button>
+            <button class="host-btn end-live" onclick="endLive()"><i class="fas fa-stop-circle"></i> End Live</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+    /* =========================================================
+       STUDENTX LIVE — REAL Supabase + WebRTC (no mock data)
+    ========================================================= */
+
+    var currentUser = null;
+    var myProfile = null;
+
+    var DEFAULT_AVATAR = "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(
+      '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#20202a"/><circle cx="50" cy="38" r="20" fill="#777"/><path d="M18 90c4-22 18-32 32-32s28 10 32 32" fill="#777"/></svg>'
+    );
+
+    function esc(v){ return String(v==null?"":v).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
+    function toast(msg){
+        var t = document.getElementById("toast");
+        t.textContent = msg; t.classList.add("show");
+        setTimeout(function(){ t.classList.remove("show"); }, 2500);
+    }
+    function fmtCount(n){
+        n = Number(n||0);
+        if (n >= 1000000) return (n/1000000).toFixed(1).replace(".0","") + "M";
+        if (n >= 1000) return (n/1000).toFixed(1).replace(".0","") + "K";
+        return String(n);
+    }
+
+    const rtcConfig = { iceServers: [ { urls:"stun:stun.l.google.com:19302" }, { urls:"stun:stun1.l.google.com:19302" } ] };
+
+    function showScreen(id){
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    /* =========================================================
+       INIT
+    ========================================================= */
+    async function init(){
+        var auth = await supabaseClient.auth.getUser();
+        currentUser = auth.data && auth.data.user;
+        if (!currentUser) { location.href = "login.html"; return; }
+
+        var p = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url,coin_balance").eq("id", currentUser.id).maybeSingle();
+        myProfile = p.data || { id: currentUser.id, coin_balance: 0 };
+
+        document.getElementById("hostAvatar").src = myProfile.avatar_url || DEFAULT_AVATAR;
+
+        await loadLiveFeed();
+        subscribeFeedRealtime();
+    }
+
+    /* =========================================================
+       FEED (SCREEN 1)
+    ========================================================= */
+    var feedSessions = [];
+
+    async function loadLiveFeed(){
+        var r = await supabaseClient.from("live_sessions").select("*").eq("status","live").order("viewer_count",{ascending:false});
+        if (r.error) { console.error(r.error); return; }
+        var rows = r.data || [];
+
+        if (!rows.length) {
+            feedSessions = [];
+            document.getElementById("liveGrid").outerHTML = '<div class="feed-empty" id="liveGrid"><i class="fas fa-tower-broadcast"></i><b>No one is live right now</b>Be the first to go live.</div>';
+            return;
+        }
+
+        var ids = Array.from(new Set(rows.map(s => s.user_id)));
+        var pr = await supabaseClient.from("profiles").select("id,full_name,username,avatar_url").in("id", ids);
+        var map = {}; (pr.data||[]).forEach(p => map[p.id] = p);
+        rows.forEach(s => s.profile = map[s.user_id] || null);
+
+        feedSessions = rows;
+        renderFeed();
+    }
+
+    function renderFeed(){
+        var el = document.getElementById("liveGrid");
+        if (!el) { // was replaced by empty state earlier; recreate
+            var grid = document.createElement("div");
+            grid.className = "live-grid"; grid.id = "liveGrid";
+            document.getElementById("screenFeed").appendChild(grid);
+            el = grid;
+        }
+        el.className = "live-grid";
+        el.innerHTML = feedSessions.map(function(s){
+            var p = s.profile || {};
+            var name = p.full_name || p.username || "StudentX User";
+            var avatar = p.avatar_url || DEFAULT_AVATAR;
+            return '<div class="live-card" onclick="watchStream(\'' + esc(s.id) + '\')">' +
+                '<div class="card-bg" style="background-image:url(\'' + esc(avatar) + '\')"></div>' +
+                '<img class="card-av" src="' + esc(avatar) + '" onerror="this.src=\'' + DEFAULT_AVATAR + '\'">' +
+                '<div class="lc-badge"><i class="fas fa-circle" style="font-size:5px"></i> LIVE</div>' +
+                '<div class="lc-viewers"><i class="fas fa-eye"></i> ' + fmtCount(s.viewer_count) + '</div>' +
+                '<div class="lc-info"><div class="lc-name">' + esc(name) + '</div><div class="lc-title">' + esc(s.title||'') + '</div></div>' +
+            '</div>';
+        }).join("");
+    }
+
+    function subscribeFeedRealtime(){
+        supabaseClient.channel("live-feed").on("postgres_changes", { event:"*", schema:"public", table:"live_sessions" }, function(){ loadLiveFeed(); }).subscribe();
+    }
+
+    /* =========================================================
+       WATCH (SCREEN 2) — viewer-side WebRTC
+    ========================================= */
+    var watchSession = null;
+    var watchPeer = null;
+    var watchChannel = null;
+    var watchPendingCandidates = [];
+    var watchViewerCountTimer = null;
+    var watchChatChannel = null;
+    var watchLiked = false;
+    var watchLikeCount = 0;
+
+    async function watchStream(sessionId){
+        var session = feedSessions.find(function(s){ return String(s.id) === String(sessionId); });
+        if (!session) { toast("This live is no longer available"); return; }
+        watchSession = session;
+
+        var p = session.profile || {};
+        document.getElementById("watchAvatar").src = p.avatar_url || DEFAULT_AVATAR;
+        document.getElementById("watchHostName").innerHTML = esc(p.full_name || p.username || "StudentX User") + ' <span class="live-tag">LIVE</span>';
+        document.getElementById("watchViewers").textContent = fmtCount(session.viewer_count);
+        document.getElementById("watchChat").innerHTML = "";
+        document.getElementById("watchFollowers").textContent = "";
+        watchLiked = false; watchLikeCount = 0;
+        document.getElementById("watchLikeCount").textContent = "0";
+        document.getElementById("watchLikeBtn").classList.remove("on");
+
+        showScreen("screenWatch");
+
+        await joinAsViewer(session);
+        loadFollowerCount(session.user_id);
+        startWatchChat(session.room_id);
+        startWatchViewerPolling(session.id);
+    }
+
+    async function loadFollowerCount(hostId){
+        var r = await supabaseClient.from("followers").select("id",{count:"exact",head:true}).eq("following_id", hostId);
+        document.getElementById("watchFollowers").textContent = fmtCount(r.count||0) + " followers";
+    }
+
+    async function joinAsViewer(session){
+        watchPeer = new RTCPeerConnection(rtcConfig);
+        watchPendingCandidates = [];
+
+        watchPeer.ontrack = function(event){
+            var video = document.getElementById("remoteVideo");
+            if (video.srcObject !== event.streams[0]) video.srcObject = event.streams[0];
+        };
+
+        watchPeer.onicecandidate = function(event){
+            if (!event.candidate) return;
+            sendLiveSignal(session.room_id, currentUser.id, session.user_id, "candidate", event.candidate.toJSON());
+        };
+
+        // Listen for the host's offer / ICE addressed to me
+        watchChannel = supabaseClient.channel("studentx-viewer-" + currentUser.id)
+            .on("postgres_changes", { event:"INSERT", schema:"public", table:"live_signals", filter:"receiver_id=eq." + currentUser.id },
+                async function(payload){
+                    var signal = payload.new;
+                    if (!signal || signal.room_id !== session.room_id) return;
+
+                    if (signal.signal_type === "offer") {
+                        await watchPeer.setRemoteDescription({ type: signal.payload.type, sdp: signal.payload.sdp });
+                        for (var i=0;i<watchPendingCandidates.length;i++){
+                            try { await watchPeer.addIceCandidate(watchPendingCandidates[i]); } catch(e){}
+                        }
+                        watchPendingCandidates = [];
+
+                        var answer = await watchPeer.createAnswer();
+                        await watchPeer.setLocalDescription(answer);
+                        sendLiveSignal(session.room_id, currentUser.id, session.user_id, "answer", { type: answer.type, sdp: answer.sdp });
+                    } else if (signal.signal_type === "candidate") {
+                        var candidate = new RTCIceCandidate(signal.payload);
+                        if (!watchPeer.remoteDescription) { watchPendingCandidates.push(candidate); }
+                        else { try { await watchPeer.addIceCandidate(candidate); } catch(e){ console.error(e); } }
+                    } else if (signal.signal_type === "hangup") {
+                        toast("The host ended this live");
+                        closeWatch();
+                    }
+                })
+            .subscribe();
+
+        // Tell the host I'm here
+        await sendLiveSignal(session.room_id, currentUser.id, session.user_id, "join", null);
+
+        // Register as a live viewer (for real viewer counts)
+        await supabaseClient.from("live_viewers").insert({ room_id: session.room_id, user_id: currentUser.id });
+    }
+
+    function startWatchViewerPolling(sessionId){
+        if (watchViewerCountTimer) clearInterval(watchViewerCountTimer);
+        watchViewerCountTimer = setInterval(async function(){
+            var r = await supabaseClient.from("live_sessions").select("viewer_count,status").eq("id", sessionId).maybeSingle();
+            if (r.data) {
+                document.getElementById("watchViewers").textContent = fmtCount(r.data.viewer_count);
+                if (r.data.status !== "live") { toast("This live has ended"); closeWatch(); }
+            }
+        }, 6000);
+    }
+
+    async function closeWatch(){
+        if (watchSession) {
+            await supabaseClient.from("live_viewers").delete().eq("room_id", watchSession.room_id).eq("user_id", currentUser.id);
+            sendLiveSignal(watchSession.room_id, currentUser.id, watchSession.user_id, "leave", null);
+        }
+        if (watchPeer) { try { watchPeer.close(); } catch(e){} watchPeer = null; }
+        if (watchChannel) { try { supabaseClient.removeChannel(watchChannel); } catch(e){} watchChannel = null; }
+        if (watchChatChannel) { try { supabaseClient.removeChannel(watchChatChannel); } catch(e){} watchChatChannel = null; }
+        if (watchViewerCountTimer) { clearInterval(watchViewerCountTimer); watchViewerCountTimer = null; }
+
+        document.getElementById("remoteVideo").srcObject = null;
+        watchSession = null;
+
+        await loadLiveFeed();
+        showScreen("screenFeed");
+    }
+
+    function sendWatchLike(){
+        watchLiked = !watchLiked;
+        watchLikeCount += watchLiked ? 1 : -1;
+        document.getElementById("watchLikeCount").textContent = fmtCount(watchLikeCount);
+        document.getElementById("watchLikeBtn").classList.toggle("on", watchLiked);
+    }
+
+    async function shareLive(){
+        if (!watchSession) return;
+        var url = location.origin + location.pathname + "?watch=" + encodeURIComponent(watchSession.id);
+        try {
+            if (navigator.share) { await navigator.share({ title:"StudentX Live", url:url }); return; }
+            await navigator.clipboard.writeText(url);
+            toast("Link copied");
+        } catch(e){ if (e && e.name !== "AbortError") toast("Could not share"); }
+    }
+
+    /* =========================================================
+       CHAT (shared by watch + host)
+    ========================================================= */
+    function startWatchChat(roomId){
+        loadChatMessages(roomId, "watchChat");
+        watchChatChannel = subscribeChat(roomId, "watchChat");
+        document.getElementById("giftCoinBal").textContent = fmtCount(myProfile.coin_balance || 0);
+    }
+
+    async function loadChatMessages(roomId, containerId){
+        var r = await supabaseClient.from("live_chat_messages").select("*").eq("room_id", roomId).order("created_at",{ascending:true}).limit(50);
+        var rows = r.data || [];
+        if (!rows.length) { document.getElementById(containerId).innerHTML = ""; return; }
+
+        var ids = Array.from(new Set(rows.map(m=>m.user_id)));
+        var pr = await supabaseClient.from("profiles").select("id,full_name,username").in("id", ids);
+        var map = {}; (pr.data||[]).forEach(p=>map[p.id]=p);
+
+        document.getElementById(containerId).innerHTML = rows.map(function(m){ return chatBubbleHTML(m, map[m.user_id]); }).join("");
+        var box = document.getElementById(containerId);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    function chatBubbleHTML(m, profile){
+        var name = (profile && (profile.full_name || profile.username)) || "StudentX User";
+        if (m.message_type === "gift") {
+            return '<div class="chat-bubble gift"><span class="uname">' + esc(name) + ':</span> sent ' + esc(m.gift_name) + ' x1 (' + esc(m.gift_coins) + ' coins)</div>';
+        }
+        if (m.message_type === "system") {
+            return '<div class="chat-bubble system">' + esc(m.content) + '</div>';
+        }
+        return '<div class="chat-bubble"><span class="uname">' + esc(name) + ':</span> ' + esc(m.content) + '</div>';
+    }
+
+    function subscribeChat(roomId, containerId){
+        return supabaseClient.channel("live-chat-" + roomId + "-" + containerId)
+            .on("postgres_changes", { event:"INSERT", schema:"public", table:"live_chat_messages", filter:"room_id=eq." + roomId },
+                async function(payload){
+                    var m = payload.new;
+                    var pr = await supabaseClient.from("profiles").select("id,full_name,username").eq("id", m.user_id).maybeSingle();
+                    var box = document.getElementById(containerId);
+                    if (!box) return;
+                    box.insertAdjacentHTML("beforeend", chatBubbleHTML(m, pr.data));
+                    box.scrollTop = box.scrollHeight;
+                })
+            .subscribe();
+    }
+
+    async function sendWatchChat(){
+        var input = document.getElementById("watchChatInput");
+        var text = input.value.trim();
+        if (!text || !watchSession) return;
+        input.value = "";
+        await supabaseClient.from("live_chat_messages").insert({ room_id: watchSession.room_id, user_id: currentUser.id, content: text, message_type:"text" });
+    }
+
+    function toggleGiftModal(){ document.getElementById("giftModal").classList.toggle("active"); }
+
+    async function sendGift(name, coins){
+        if (!watchSession) return;
+        var balance = myProfile.coin_balance || 0;
+        if (balance < coins) { toast("Not enough coins. Visit Dashboard to buy more."); return; }
+
+        try {
+            var newBalance = balance - coins;
+            var upd = await supabaseClient.from("profiles").update({ coin_balance: newBalance }).eq("id", currentUser.id);
+            if (upd.error) throw upd.error;
+            myProfile.coin_balance = newBalance;
+            document.getElementById("giftCoinBal").textContent = fmtCount(newBalance);
+
+            await supabaseClient.from("coin_transactions").insert({ user_id: currentUser.id, type:"gift_sent", amount: -coins, description: "Sent " + name + " during a live" });
+
+            // Credit the host
+            var hostProf = await supabaseClient.from("profiles").select("coin_balance").eq("id", watchSession.user_id).maybeSingle();
+            var hostNewBalance = (hostProf.data && hostProf.data.coin_balance || 0) + coins;
+            await supabaseClient.from("profiles").update({ coin_balance: hostNewBalance }).eq("id", watchSession.user_id);
+            await supabaseClient.from("coin_transactions").insert({ user_id: watchSession.user_id, type:"gift_received", amount: coins, description: "Received " + name + " gift during a live" });
+
+            await supabaseClient.from("live_chat_messages").insert({ room_id: watchSession.room_id, user_id: currentUser.id, message_type:"gift", gift_name:name, gift_coins:coins });
+
+            toggleGiftModal();
+            toast(name + " sent!");
+        } catch(e){
+            console.error("Gift error:", e);
+            toast("Could not send gift");
+        }
+    }
+
+    /* =========================================================
+       GO LIVE SETUP (SCREEN 3)
+    ========================================================= */
+    var setupStream = null;
+    var setupFacing = "user";
+
+    function openGoLiveSetup(){
+        showScreen("screenGoLive");
+        startSetupCamera();
+    }
+
+    function cancelGoLiveSetup(){
+        stopSetupCamera();
+        showScreen("screenFeed");
+    }
+
+    async function startSetupCamera(){
+        try {
+            if (setupStream) setupStream.getTracks().forEach(t=>t.stop());
+            setupStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:setupFacing, width:{ideal:1280}, height:{ideal:720} }, audio:true });
+            var v = document.getElementById("setupPreview");
+            v.srcObject = setupStream;
+            document.getElementById("setupPlaceholder").style.display = "none";
+        } catch(e) {
+            console.error("Camera error:", e);
+            toast("Camera/microphone permission is required");
+        }
+    }
+
+    function stopSetupCamera(){
+        if (setupStream) { setupStream.getTracks().forEach(t=>t.stop()); setupStream = null; }
+        document.getElementById("setupPreview").srcObject = null;
+        document.getElementById("setupPlaceholder").style.display = "flex";
+    }
+
+    async function switchSetupCamera(){
+        setupFacing = setupFacing === "user" ? "environment" : "user";
+        await startSetupCamera();
+    }
+
+    /* =========================================================
+       HOST BROADCASTING (SCREEN 4)
+    ========================================================= */
+    var hostSession = null;
+    var hostStream = null;
+    var hostSignalChannel = null;
+    var hostChatChannel = null;
+    var hostViewerTimer = null;
+    var hostTimerInterval = null;
+    var hostStartTime = null;
+    var viewerPeers = {};
+    var pendingIce = {};
+
+    async function startHosting(){
+        var title = document.getElementById("setupTitle").value.trim();
+        if (!title) { toast("Add a title for your stream"); return; }
+        if (!setupStream) { toast("Please allow camera access first"); return; }
+
+        var btn = document.getElementById("startHostBtn");
+        btn.disabled = true; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Starting...';
+
+        try {
+            var category = document.getElementById("setupCategory").value;
+            var roomId = "studentx-" + currentUser.id + "-" + Date.now();
+
+            var ins = await supabaseClient.from("live_sessions").insert({
+                user_id: currentUser.id, title: title, category: category, status:"live", room_id: roomId, viewer_count: 0
+            }).select().single();
+            if (ins.error) throw ins.error;
+
+            hostSession = ins.data;
+            hostStream = setupStream;
+            setupStream = null; // ownership transferred to host screen
+
+            document.getElementById("hostLocalVideo").srcObject = hostStream;
+            document.getElementById("hostChat").innerHTML = "";
+
+            hostStartTime = Date.now();
+            showScreen("screenHost");
+
+            startHostSignaling();
+            startHostChat();
+            startHostViewerPolling();
+            startHostTimer();
+
+        } catch(e){
+            console.error("Start live error:", e);
+            toast(e.message || "Could not start live");
+        } finally {
+            btn.disabled = false; btn.innerHTML = '<i class="fas fa-broadcast-tower"></i> Go Live Now';
+        }
+    }
+
+    function startHostTimer(){
+        if (hostTimerInterval) clearInterval(hostTimerInterval);
+        hostTimerInterval = setInterval(function(){
+            var secs = Math.floor((Date.now() - hostStartTime)/1000);
+            var m = Math.floor(secs/60), s = secs%60;
+            document.getElementById("hostTimer").textContent = (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+        }, 1000);
+    }
+
+    function startHostChat(){
+        loadChatMessages(hostSession.room_id, "hostChat");
+        hostChatChannel = subscribeChat(hostSession.room_id, "hostChat");
+    }
+
+    function startHostSignaling(){
+        if (hostSignalChannel) { try { supabaseClient.removeChannel(hostSignalChannel); } catch(e){} }
+
+        hostSignalChannel = supabaseClient.channel("studentx-host-" + currentUser.id)
+            .on("postgres_changes", { event:"INSERT", schema:"public", table:"live_signals", filter:"receiver_id=eq." + currentUser.id },
+                async function(payload){
+                    var s = payload.new;
+                    if (!s || !hostSession || s.room_id !== hostSession.room_id) return;
+
+                    if (s.signal_type === "join") { await createOfferForViewer(s.sender_id); }
+                    else if (s.signal_type === "answer") { await handleAnswer(s.sender_id, s.payload); }
+                    else if (s.signal_type === "candidate") { await handleCandidate(s.sender_id, s.payload); }
+                    else if (s.signal_type === "leave") { removePeer(s.sender_id); }
+                })
+            .subscribe();
+    }
+
+    async function createOfferForViewer(viewerId){
+        if (viewerPeers[viewerId]) return;
+
+        var peer = new RTCPeerConnection(rtcConfig);
+        viewerPeers[viewerId] = peer;
+        pendingIce[viewerId] = [];
+
+        hostStream.getTracks().forEach(function(t){ peer.addTrack(t, hostStream); });
+
+        peer.onicecandidate = function(event){
+            if (!event.candidate) return;
+            sendLiveSignal(hostSession.room_id, currentUser.id, viewerId, "candidate", event.candidate.toJSON());
+        };
+        peer.onconnectionstatechange = function(){
+            if (["failed","closed","disconnected"].indexOf(peer.connectionState) !== -1) removePeer(viewerId);
+        };
+
+        var offer = await peer.createOffer({ offerToReceiveAudio:false, offerToReceiveVideo:false });
+        await peer.setLocalDescription(offer);
+        await sendLiveSignal(hostSession.room_id, currentUser.id, viewerId, "offer", { type: offer.type, sdp: offer.sdp });
+    }
+
+    async function handleAnswer(viewerId, payload){
+        var peer = viewerPeers[viewerId];
+        if (!peer || !payload) return;
+        if (!peer.currentRemoteDescription) await peer.setRemoteDescription({ type: payload.type, sdp: payload.sdp });
+        var q = pendingIce[viewerId] || [];
+        for (var i=0;i<q.length;i++){ try { await peer.addIceCandidate(q[i]); } catch(e){} }
+        pendingIce[viewerId] = [];
+    }
+
+    async function handleCandidate(viewerId, payload){
+        var peer = viewerPeers[viewerId];
+        if (!peer || !payload) return;
+        var c = new RTCIceCandidate(payload);
+        if (!peer.remoteDescription) { (pendingIce[viewerId] = pendingIce[viewerId]||[]).push(c); return; }
+        try { await peer.addIceCandidate(c); } catch(e){ console.error(e); }
+    }
+
+    function removePeer(viewerId){
+        var peer = viewerPeers[viewerId];
+        if (peer) { try { peer.close(); } catch(e){} }
+        delete viewerPeers[viewerId];
+        delete pendingIce[viewerId];
+    }
+
+    function closeAllPeers(){
+        Object.keys(viewerPeers).forEach(removePeer);
+    }
+
+    async function sendLiveSignal(roomId, senderId, receiverId, type, payload){
+        var r = await supabaseClient.from("live_signals").insert({ room_id: roomId, sender_id: senderId, receiver_id: receiverId, signal_type: type, payload: payload });
+        if (r.error) console.error("Signal error:", r.error);
+    }
+
+    function startHostViewerPolling(){
+        if (hostViewerTimer) clearInterval(hostViewerTimer);
+        hostViewerTimer = setInterval(updateHostViewerCount, 8000);
+        updateHostViewerCount();
+    }
+
+    async function updateHostViewerCount(){
+        if (!hostSession) return;
+        var r = await supabaseClient.from("live_viewers").select("id",{count:"exact",head:true}).eq("room_id", hostSession.room_id);
+        var count = r.count || 0;
+        document.getElementById("hostViewers").textContent = fmtCount(count);
+        await supabaseClient.from("live_sessions").update({ viewer_count: count }).eq("id", hostSession.id).eq("user_id", currentUser.id);
+    }
+
+    function switchHostCamera(){
+        toast("Switching camera is best done before going live on this version.");
+    }
+
+    async function endLive(){
+        if (!hostSession) { showScreen("screenFeed"); return; }
+        if (!confirm("End this live stream?")) return;
+
+        try {
+            await supabaseClient.from("live_sessions").update({ status:"ended", ended_at:new Date().toISOString() }).eq("id", hostSession.id).eq("user_id", currentUser.id);
+        } catch(e){ console.error(e); }
+
+        closeAllPeers();
+        if (hostSignalChannel) { try { supabaseClient.removeChannel(hostSignalChannel); } catch(e){} hostSignalChannel = null; }
+        if (hostChatChannel) { try { supabaseClient.removeChannel(hostChatChannel); } catch(e){} hostChatChannel = null; }
+        if (hostViewerTimer) { clearInterval(hostViewerTimer); hostViewerTimer = null; }
+        if (hostTimerInterval) { clearInterval(hostTimerInterval); hostTimerInterval = null; }
+
+        if (hostStream) { hostStream.getTracks().forEach(t=>t.stop()); hostStream = null; }
+        document.getElementById("hostLocalVideo").srcObject = null;
+
+        hostSession = null;
+
+        await loadLiveFeed();
+        showScreen("screenFeed");
+    }
+
+    /* =========================================================
+       CLEANUP ON TAB CLOSE
+    ========================================================= */
+    window.addEventListener("pagehide", function(){
+        if (hostSession) {
+            supabaseClient.from("live_sessions").update({ status:"ended", ended_at:new Date().toISOString() }).eq("id", hostSession.id).eq("user_id", currentUser.id).then(function(){});
+            try { closeAllPeers(); } catch(e){}
+        }
+        if (watchSession) {
+            supabaseClient.from("live_viewers").delete().eq("room_id", watchSession.room_id).eq("user_id", currentUser.id).then(function(){});
+        }
+        if (setupStream) setupStream.getTracks().forEach(t=>t.stop());
+        if (hostStream) hostStream.getTracks().forEach(t=>t.stop());
+    });
+
+    init();
+    </script>
+</body>
+</html>
