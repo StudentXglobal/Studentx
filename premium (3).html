@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium - StudentX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root{
+            --bg:#0a0a0f;
+            --card:rgba(255,255,255,.035);
+            --card-2:rgba(255,255,255,.07);
+            --border:rgba(255,255,255,.08);
+            --text:#fff;
+            --text-2:rgba(255,255,255,.75);
+            --muted:rgba(255,255,255,.4);
+            --accent:#dc2743;
+            --grad:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);
+            --gold:#fbbf24;
+        }
+        :root.sx-light{
+            --bg:#f0f2f5;
+            --card:#ffffff;
+            --card-2:#f0f2f5;
+            --border:#e4e6eb;
+            --text:#050505;
+            --text-2:#3a3b3c;
+            --muted:#65676b;
+        }
+
+        * {
+            box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent;
+            font-family: Poppins, sans-serif;
+        }
+        html, body {
+            background-color: var(--bg); color: var(--text); height: 100%; width: 100%; overflow-x: hidden;
+            max-width: 500px; margin: 0 auto; padding-bottom: 80px;
+        }
+        button, select { font-family: inherit; }
+        a { color: inherit; text-decoration: none; }
+
+        /* --- HEADER --- */
+        .header {
+            position: sticky; top: 0; background-color: var(--bg); padding: 40px 15px 15px;
+            display: flex; align-items: center; gap: 15px;
+            border-bottom: 1px solid var(--border); z-index: 100;
+        }
+        .back-btn { color: var(--text); text-decoration: none; font-size: 20px; }
+        .header-title { font-size: 20px; font-weight: bold; }
+
+        /* --- CURRENT PLAN BANNER --- */
+        .current-plan-banner {
+            margin: 15px; padding: 14px 16px; border-radius: 14px; background: var(--card); border: 1px solid var(--border);
+            display: flex; align-items: center; gap: 12px;
+        }
+        .current-plan-banner.plus { border-color: var(--gold); background: rgba(251,191,36,.08); }
+        .current-plan-banner i { font-size: 22px; color: var(--muted); }
+        .current-plan-banner.plus i { color: var(--gold); }
+        .current-plan-banner .cp-text b { display: block; font-size: 13px; }
+        .current-plan-banner .cp-text span { font-size: 11px; color: var(--muted); }
+        .cancel-link { margin-left: auto; font-size: 11px; color: var(--accent); font-weight: 700; cursor: pointer; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            background: linear-gradient(135deg, #2c1a40 0%, #1a1a2e 100%);
+            padding: 30px 20px; text-align: center; border-bottom: 1px solid var(--border);
+        }
+        .hero-icon { font-size: 40px; color: var(--accent); margin-bottom: 15px; }
+        .hero h2 { font-size: 22px; margin-bottom: 10px; }
+        .hero p { font-size: 14px; color: #ccc; line-height: 1.5; }
+
+        /* --- TOGGLE --- */
+        .toggle-container { display: flex; justify-content: center; align-items: center; padding: 25px 15px 10px; gap: 15px; }
+        .toggle-btn {
+            background: none; border: 1px solid var(--border); color: var(--muted); padding: 8px 24px;
+            border-radius: 20px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s;
+        }
+        .toggle-btn.active { background: var(--grad); border-color: transparent; color: #fff; }
+
+        /* --- DEMO NOTE --- */
+        .demo-note {
+            margin: 0 15px 10px; padding: 10px 14px; border-radius: 10px;
+            background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.3);
+            font-size: 11px; color: var(--gold); line-height: 1.5;
+        }
+
+        /* --- PRICING CARDS --- */
+        .pricing-container { padding: 10px 15px 30px; display: flex; flex-direction: column; gap: 20px; }
+
+        .plan-card {
+            background-color: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 25px 20px; position: relative; overflow: hidden;
+        }
+        .plan-card.plus { border: 2px solid var(--gold); box-shadow: 0 4px 15px rgba(251,191,36,.15); }
+
+        .plan-badge {
+            position: absolute; top: 0; right: 0; background-color: var(--gold); color: #1a1300;
+            font-size: 10px; font-weight: bold; padding: 5px 12px; border-bottom-left-radius: 12px;
+        }
+
+        .plan-name { font-size: 20px; font-weight: bold; margin-bottom: 5px; }
+        .plan-desc { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+        .plan-price { font-size: 32px; font-weight: bold; margin-bottom: 5px; }
+        .plan-price span { font-size: 14px; font-weight: normal; color: var(--muted); }
+        .plan-billed { font-size: 12px; color: #4caf50; margin-bottom: 25px; }
+
+        .features-list { list-style: none; margin-bottom: 30px; }
+        .features-list li { display: flex; align-items: center; gap: 12px; font-size: 14px; color: var(--text-2); margin-bottom: 12px; }
+        .features-list li i { color: #4caf50; font-size: 14px; width: 20px; text-align: center; }
+        .features-list li.disabled { color: var(--muted); text-decoration: line-through; }
+        .features-list li.disabled i { color: var(--muted); }
+
+        .subscribe-btn {
+            display: block; width: 100%; text-align: center; padding: 14px; border-radius: 12px;
+            font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; border: none;
+        }
+        .subscribe-btn.standard { background-color: var(--card-2); color: var(--text); border: 1px solid var(--border); }
+        .subscribe-btn.premium { background: var(--grad); color: #fff; }
+        .subscribe-btn.current { background: var(--card-2); color: var(--muted); cursor: default; }
+        .subscribe-btn:active { transform: scale(0.98); }
+        .subscribe-btn:disabled { opacity: .7; }
+
+        /* --- CONFIRM MODAL --- */
+        .modal-backdrop { position: fixed; inset: 0; z-index: 500; background: rgba(0,0,0,.72); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-backdrop.show { display: flex; }
+        .modal-box { width: 100%; max-width: 340px; background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 22px; text-align: center; }
+        .modal-box h3 { font-size: 17px; margin-bottom: 8px; }
+        .modal-box p { font-size: 13px; color: var(--text-2); margin-bottom: 18px; line-height: 1.5; }
+        .modal-btns { display: flex; gap: 10px; }
+        .modal-btns button { flex: 1; padding: 12px; border-radius: 10px; border: none; font-weight: 700; font-size: 13px; cursor: pointer; }
+        .modal-cancel { background: var(--card-2); color: var(--text); }
+        .modal-confirm { background: var(--grad); color: #fff; }
+        .modal-confirm.danger { background: #ef4444; }
+
+        .toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); z-index: 9999; padding: 11px 20px; background: #1f1f2b; color: #fff; border-radius: 12px; font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.35); border-left: 3px solid var(--accent); }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <a href="menu.html" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-title">StudentX Premium</div>
+    </div>
+
+    <div id="currentPlanBanner"></div>
+
+    <!-- HERO SECTION -->
+    <div class="hero">
+        <i class="fas fa-crown hero-icon"></i>
+        <h2>Unlock Your Full Potential</h2>
+        <p>Get unlimited access to StudentX AI, exclusive resources, ad-free experience, and earn more from your content.</p>
+    </div>
+
+    <!-- TOGGLE BUTTONS (Monthly / Yearly) -->
+    <div class="toggle-container">
+        <button class="toggle-btn active" onclick="togglePlan('monthly', this)">Monthly</button>
+        <button class="toggle-btn" onclick="togglePlan('yearly', this)">Yearly (Save 20%)</button>
+    </div>
+
+    <div class="demo-note"><i class="fas fa-circle-info"></i> Demo mode: no real payment is processed yet. Your plan updates instantly for testing. A real payment gateway (e.g. Paystack, Flutterwave) is needed before this goes live.</div>
+
+    <!-- PRICING CARDS -->
+    <div class="pricing-container">
+
+        <!-- PLAN 1: StudentX Premium -->
+        <div class="plan-card">
+            <div class="plan-name">StudentX Premium</div>
+            <div class="plan-desc">For students who want more tools and no ads.</div>
+
+            <div class="plan-price" id="priceStandard">$4.99<span>/mo</span></div>
+            <div class="plan-billed" id="billed-standard">Billed monthly</div>
+
+            <ul class="features-list">
+                <li><i class="fas fa-check"></i> Ad-free experience</li>
+                <li><i class="fas fa-check"></i> Unlimited StudentX AI chats</li>
+                <li><i class="fas fa-check"></i> Access to E-Market discounts</li>
+                <li><i class="fas fa-check"></i> Download notes offline</li>
+                <li class="disabled"><i class="fas fa-times"></i> Revenue Sharing Boost</li>
+                <li class="disabled"><i class="fas fa-times"></i> Premium Plus Badge</li>
+            </ul>
+
+            <button class="subscribe-btn standard" id="btnStandard" onclick="openConfirm('standard')">Subscribe</button>
+        </div>
+
+        <!-- PLAN 2: StudentX Premium Plus -->
+        <div class="plan-card plus">
+            <div class="plan-badge">BEST VALUE</div>
+            <div class="plan-name">Premium Plus</div>
+            <div class="plan-desc">For creators and top-tier students.</div>
+
+            <div class="plan-price" id="pricePlus">$9.99<span>/mo</span></div>
+            <div class="plan-billed" id="billed-plus">Billed monthly</div>
+
+            <ul class="features-list">
+                <li><i class="fas fa-check"></i> All Premium Features</li>
+                <li><i class="fas fa-check"></i> 2x Revenue Sharing Boost</li>
+                <li><i class="fas fa-check"></i> Exclusive Premium Plus Badge</li>
+                <li><i class="fas fa-check"></i> Priority AI Processing</li>
+                <li><i class="fas fa-check"></i> Early access to new tools</li>
+            </ul>
+
+            <button class="subscribe-btn premium" id="btnPlus" onclick="openConfirm('plus')">Upgrade to Plus</button>
+        </div>
+
+    </div>
+
+    <!-- CONFIRM MODAL -->
+    <div class="modal-backdrop" id="confirmModal">
+        <div class="modal-box">
+            <h3 id="confirmTitle">Subscribe?</h3>
+            <p id="confirmText"></p>
+            <div class="modal-btns">
+                <button class="modal-cancel" onclick="closeConfirm()">Cancel</button>
+                <button class="modal-confirm" id="confirmBtn" onclick="confirmAction()">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast" style="display:none"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script>
+        var currentUser = null;
+        var myPlan = null; // null | 'standard' | 'plus'
+        var pendingAction = null; // 'standard' | 'plus' | 'cancel'
+
+        function toast(msg){
+            var t = document.getElementById("toast");
+            t.textContent = msg; t.style.display = "block";
+            setTimeout(function(){ t.style.display = "none"; }, 2500);
+        }
+
+        async function init(){
+            var auth = await supabaseClient.auth.getUser();
+            currentUser = auth.data && auth.data.user;
+            if (!currentUser) { location.href = "login.html"; return; }
+
+            var p = await supabaseClient.from("profiles").select("premium_plan").eq("id", currentUser.id).maybeSingle();
+            myPlan = (p.data && p.data.premium_plan) || null;
+            renderPlanState();
+        }
+
+        function renderPlanState(){
+            var banner = document.getElementById("currentPlanBanner");
+            var btnStandard = document.getElementById("btnStandard");
+            var btnPlus = document.getElementById("btnPlus");
+
+            if (myPlan === "plus") {
+                banner.innerHTML = '<div class="current-plan-banner plus"><i class="fas fa-crown"></i><div class="cp-text"><b>Premium Plus</b><span>Your plan is active</span></div><span class="cancel-link" onclick="openConfirm(\'cancel\')">Cancel</span></div>';
+                btnStandard.textContent = "Included in your plan"; btnStandard.disabled = true; btnStandard.className = "subscribe-btn current";
+                btnPlus.textContent = "Current Plan"; btnPlus.disabled = true; btnPlus.className = "subscribe-btn current";
+            } else if (myPlan === "standard") {
+                banner.innerHTML = '<div class="current-plan-banner"><i class="fas fa-star"></i><div class="cp-text"><b>StudentX Premium</b><span>Your plan is active</span></div><span class="cancel-link" onclick="openConfirm(\'cancel\')">Cancel</span></div>';
+                btnStandard.textContent = "Current Plan"; btnStandard.disabled = true; btnStandard.className = "subscribe-btn current";
+                btnPlus.textContent = "Upgrade to Plus"; btnPlus.disabled = false; btnPlus.className = "subscribe-btn premium";
+            } else {
+                banner.innerHTML = "";
+                btnStandard.textContent = "Subscribe"; btnStandard.disabled = false; btnStandard.className = "subscribe-btn standard";
+                btnPlus.textContent = "Upgrade to Plus"; btnPlus.disabled = false; btnPlus.className = "subscribe-btn premium";
+            }
+        }
+
+        function openConfirm(action){
+            pendingAction = action;
+            var title = document.getElementById("confirmTitle");
+            var text = document.getElementById("confirmText");
+            var btn = document.getElementById("confirmBtn");
+
+            if (action === "cancel") {
+                title.textContent = "Cancel your plan?";
+                text.textContent = "You will lose Premium benefits immediately. This is a demo action — no refund logic applies since no real payment was taken.";
+                btn.textContent = "Cancel Plan";
+                btn.className = "modal-confirm danger";
+            } else if (action === "plus") {
+                title.textContent = "Upgrade to Premium Plus?";
+                text.textContent = "Demo mode: your account will be marked as Premium Plus instantly. No real payment will be taken.";
+                btn.textContent = "Confirm Upgrade";
+                btn.className = "modal-confirm";
+            } else {
+                title.textContent = "Subscribe to Premium?";
+                text.textContent = "Demo mode: your account will be marked as Premium instantly. No real payment will be taken.";
+                btn.textContent = "Confirm Subscribe";
+                btn.className = "modal-confirm";
+            }
+
+            document.getElementById("confirmModal").classList.add("show");
+        }
+        function closeConfirm(){ document.getElementById("confirmModal").classList.remove("show"); pendingAction = null; }
+
+        async function confirmAction(){
+            var btn = document.getElementById("confirmBtn");
+            btn.disabled = true; btn.textContent = "Please wait...";
+
+            var newPlan = pendingAction === "cancel" ? null : pendingAction;
+
+            try {
+                var r = await supabaseClient.from("profiles").update({ premium_plan: newPlan }).eq("id", currentUser.id);
+                if (r.error) throw r.error;
+
+                myPlan = newPlan;
+                renderPlanState();
+                closeConfirm();
+                toast(newPlan === null ? "Plan cancelled" : newPlan === "plus" ? "Welcome to Premium Plus!" : "Welcome to Premium!");
+            } catch (e) {
+                console.error(e);
+                toast(e.message || "Could not update your plan");
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
+        function togglePlan(type, btn) {
+            document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            var standardPrice = document.getElementById('priceStandard');
+            var plusPrice = document.getElementById('pricePlus');
+            var billedStandard = document.getElementById('billed-standard');
+            var billedPlus = document.getElementById('billed-plus');
+
+            if (type === 'yearly') {
+                standardPrice.innerHTML = '$3.99<span>/mo</span>';
+                billedStandard.innerText = 'Billed $47.88 yearly';
+                plusPrice.innerHTML = '$7.99<span>/mo</span>';
+                billedPlus.innerText = 'Billed $95.88 yearly';
+            } else {
+                standardPrice.innerHTML = '$4.99<span>/mo</span>';
+                billedStandard.innerText = 'Billed monthly';
+                plusPrice.innerHTML = '$9.99<span>/mo</span>';
+                billedPlus.innerText = 'Billed monthly';
+            }
+        }
+
+        init();
+    </script>
+    <script src="nav.js"></script>
+    <script src="theme.js"></script>
+</body>
+</html>
