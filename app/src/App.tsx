@@ -1,21 +1,14 @@
-```tsx
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App";
-import "./style.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Home from "./pages/Home";
 
-const rootElement = document.getElementById("root");
-
-if (!rootElement) {
-  throw new Error("StudentX root element was not found.");
-}
-
-createRoot(rootElement).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </React.StrictMode>
+export default function App() {
+return ( <Routes>
+<Route path="/" element={<Navigate to="/login" replace />} />
+<Route path="/login" element={<Login />} />
+<Route path="/signup" element={<Signup />} />
+<Route path="/home" element={<Home />} />
+<Route path="*" element={<Navigate to="/login" replace />} /> </Routes>
 );
-```
+}
