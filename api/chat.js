@@ -1,4 +1,4 @@
-```javascript
+
 export default async function handler(req, res) {
   res.setHeader("Content-Type", "application/json");
 
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
       {
         role: "system",
         content:
-          "You are StudentX AI, the helpful AI assistant inside StudentX, a Nigerian student-focused platform. Answer accurately, clearly, and helpfully. Support students with learning, explanations, writing, research guidance, programming, and StudentX-related questions. Do not claim to have accessed private databases or performed actions you have not performed. Respond in the language the user uses, including English or Hausa."
+          "You are StudentX AI, the helpful AI assistant inside StudentX, a Nigerian student-focused platform. Answer accurately and clearly. Help with learning, writing, research guidance, programming, and StudentX-related questions. Do not claim to access private databases or perform actions you have not performed. Respond in the user's language, including English or Hausa."
       },
       ...history
         .filter(
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${API_KEY}`
+          Authorization: `Bearer ${apiKey}`,
           "Content-Type": "application/json",
           Accept: "application/json"
         },
@@ -79,12 +79,12 @@ export default async function handler(req, res) {
     if (!response.ok) {
       console.error("NVIDIA API error:", response.status, data);
 
-      return res.status(response.status >= 400 && response.status < 600
-        ? response.status
-        : 502
-      ).json({
+      return res.status(502).json({
         error: "NVIDIA AI request failed.",
-        details: data.detail || data.message || data.title ||
+        details:
+          data.detail ||
+          data.message ||
+          data.title ||
           "Check NVIDIA API access and Vercel logs."
       });
     }
@@ -111,5 +111,3 @@ export default async function handler(req, res) {
     });
   }
 }
-```
-  
