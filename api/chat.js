@@ -1,26 +1,31 @@
 export default async function handler(req, res) {
 if (req.method !== "POST") {
-return res.status(405).json({ error: "Method not allowed" });
+res.setHeader("Allow", "POST");
+return res.status(405).json({
+error: "Method not allowed"
+});
 }
 
 const history = Array.isArray(req.body?.history)
 ? req.body.history
-: [{
+: [
+{
 role: "user",
 content: String(req.body?.text || "")
-}];
+}
+];
 
 const messages = history
 .filter(
-(m) =>
-m &&
-["user", "assistant"].includes(m.role) &&
-typeof m.content === "string" &&
-m.content.trim()
+(message) =>
+message &&
+["user", "assistant"].includes(message.role) &&
+typeof message.content === "string" &&
+message.content.trim().length > 0
 )
-.map((m) => ({
-role: m.role,
-content: m.content.slice(0, 12000)
+.map((message) => ({
+role: message.role,
+content: message.content.slice(0, 12000)
 }));
 
 if (!messages.length) {
@@ -31,12 +36,12 @@ error: "Please enter a message."
 
 const errors = [];
 
-// Primary provider: Google Gemini
+// PRIMARY PROVIDER: GOOGLE GEMINI
 if (process.env.GEMINI_API_KEY) {
 try {
-const contents = messages.map((m) => ({
-role: m.role === "assistant" ? "model" : "user",
-parts: [{ text: m.content }]
+const contents = messages.map((message) => ({
+role: message.role === "assistant" ? "model" : "user",
+parts: [{ text: message.content }]
 }));
 
 ```
@@ -50,9 +55,11 @@ parts: [{ text: m.content }]
       },
       body: JSON.stringify({
         systemInstruction: {
-          parts: [{
-            text: "You are StudentX AI, a helpful assistant for students. Give accurate, clear and useful answers."
-          }]
+          parts: [
+            {
+              text: "You are StudentX AI, a helpful assistant for students. Give accurate, clear, friendly and useful answers."
+            }
+          ]
         },
         contents,
         generationConfig: {
@@ -67,12 +74,13 @@ parts: [{ text: m.content }]
 
   if (!response.ok) {
     throw new Error(
-      data?.error?.message || `Gemini HTTP ${response.status}`
+      data?.error?.message ||
+      `Gemini HTTP ${response.status}`
     );
   }
 
   const reply = data?.candidates?.[0]?.content?.parts
-    ?.map((p) => p.text || "")
+    ?.map((part) => part.text || "")
     .join("")
     .trim();
 
@@ -94,7 +102,7 @@ parts: [{ text: m.content }]
 errors.push("GEMINI_API_KEY is missing.");
 }
 
-// Backup provider: NVIDIA
+// BACKUP PROVIDER: NVIDIA
 if (process.env.NVIDIA_API_KEY) {
 try {
 const response = await fetch(
@@ -110,7 +118,7 @@ model: "meta/llama-3.3-70b-instruct",
 messages: [
 {
 role: "system",
-content: "You are StudentX AI, a helpful assistant for students. Give accurate, clear and useful answers."
+content: "You are StudentX AI, a helpful assistant for students. Give accurate, clear, friendly and useful answers."
 },
 ...messages
 ],
@@ -153,9 +161,10 @@ stream: false
 errors.push("NVIDIA_API_KEY is missing.");
 }
 
+console.error("All StudentX AI providers failed:", errors);
+
 return res.status(502).json({
 error: "StudentX AI could not get a response from either provider.",
 details: errors
 });
-}
-  
+  }
