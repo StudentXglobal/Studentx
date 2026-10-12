@@ -1,8 +1,7 @@
-
 import { Navigate, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import Home from "./pages/Home";
+import { Login } from "./pages/Login";   // Added curly braces
+import { Signup } from "./pages/Signup"; // Added curly braces
+import { Home } from "./pages/Home";     // Added curly braces
 
 export default function App() {
   return (
