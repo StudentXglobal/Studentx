@@ -65,7 +65,7 @@ export default async function handler(req, res) {
           Accept: "application/json"
         },
         body: JSON.stringify({
-          model: "meta/llama-3.3-70b-instruct",
+          model: "z-ai/glm-5.3-flash",
           messages,
           max_tokens: 1024,
           temperature: 0.6,
