@@ -60,7 +60,7 @@ export default async function handler(req, res) {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${apiKey}`,
+          Authorization: `Bearer ${API_KEY}`
           "Content-Type": "application/json",
           Accept: "application/json"
         },
