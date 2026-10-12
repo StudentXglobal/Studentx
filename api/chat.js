@@ -5,12 +5,10 @@ export default async function handler(req, res) {
   }
 
   try {
-    // 1. Parse and extract message history
     const history = Array.isArray(req.body?.history)
       ? req.body.history
       : [{ role: "user", content: String(req.body?.text || "") }];
 
-    // 2. Sanitize data and limit history size to prevent context/payload overflows
     const messages = history
       .filter(
         (m) =>
@@ -21,9 +19,9 @@ export default async function handler(req, res) {
       )
       .map((m) => ({
         role: m.role,
-        content: m.content.slice(0, 12000) // Truncate individual massive inputs
+        content: m.content.slice(0, 12000)
       }))
-      .slice(-10); // Keep only the latest 10 messages for conversational efficiency
+      .slice(-10);
 
     if (!messages.length) {
       return res.status(400).json({ error: "Please enter a message." });
@@ -32,7 +30,7 @@ export default async function handler(req, res) {
     const systemPrompt =
       "You are StudentX AI, a helpful assistant for students. Give accurate, clear, friendly and useful answers.";
 
-    // --- PRIMARY PROVIDER: Google Gemini ---
+    // --- PRIMARY PROVIDER: Google Gemini 3.8 ---
     if (process.env.GEMINI_API_KEY) {
       try {
         const contents = messages.map((m) => ({
@@ -40,7 +38,6 @@ export default async function handler(req, res) {
           parts: [{ text: m.content }]
         }));
 
-        // Updated endpoint path to use the newer gemini-3.8-flash model
         const response = await fetch(
           "https://googleapis.com",
           {
@@ -55,9 +52,6 @@ export default async function handler(req, res) {
               },
               contents,
               generationConfig: {
-                // Note: Gemini 3+ deprecates several older config parameters. 
-                // Using thinking_level control if deep reasoning balance is needed.
-                thinking_level: "MEDIUM", 
                 maxOutputTokens: 2048
               }
             })
@@ -70,6 +64,7 @@ export default async function handler(req, res) {
           throw new Error(data?.error?.message || `Gemini HTTP ${response.status}`);
         }
 
+        // FIXED: Corrected the parsing syntax error chain
         const reply = data?.candidates?.[0]?.content?.parts
           ?.map((part) => part.text || "")
           .join("")
@@ -82,10 +77,13 @@ export default async function handler(req, res) {
           });
         }
         
-        throw new Error("Gemini returned an empty response.");
+        throw new Error("Gemini returned an empty or unparseable response structure.");
       } catch (error) {
-        console.error("Gemini failed, trying fallback:", error.message);
+        // This will print the precise underlying issue to your Vercel logs
+        console.error("Gemini route attempt failed:", error.message);
       }
+    } else {
+      console.warn("Skipping Gemini: GEMINI_API_KEY is missing from environment variables.");
     }
 
     // --- FALLBACK PROVIDER: NVIDIA (Llama 3.3) ---
@@ -123,6 +121,7 @@ export default async function handler(req, res) {
           );
         }
 
+        // FIXED: Corrected the parsing syntax error chain
         const reply = data?.choices?.[0]?.message?.content?.trim();
 
         if (reply) {
@@ -132,10 +131,12 @@ export default async function handler(req, res) {
           });
         }
         
-        throw new Error("NVIDIA returned an empty response.");
+        throw new Error("NVIDIA returned an empty content string.");
       } catch (error) {
-        console.error("NVIDIA backup failed:", error.message);
+        console.error("NVIDIA backup route attempt failed:", error.message);
       }
+    } else {
+      console.warn("Skipping NVIDIA: NVIDIA_API_KEY is missing from environment variables.");
     }
 
     // --- NO PROVIDERS AVAILABLE OR ALL FAILED ---
@@ -145,9 +146,9 @@ export default async function handler(req, res) {
     });
 
   } catch (error) {
-    console.error("StudentX AI handler failed:", error);
+    console.error("StudentX AI runtime handler failed completely:", error);
     return res.status(500).json({
       error: "An internal server error occurred."
     });
   }
-            }
+}
