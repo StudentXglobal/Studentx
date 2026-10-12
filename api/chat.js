@@ -1,154 +1,115 @@
+```javascript
 export default async function handler(req, res) {
+  res.setHeader("Content-Type", "application/json");
+
   if (req.method !== "POST") {
-    res.setHeader("Allow", "POST");
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
+  }
+
+  const apiKey = process.env.NVIDIA_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({
+      error: "NVIDIA_API_KEY is missing in Vercel Environment Variables."
+    });
   }
 
   try {
-    const history = Array.isArray(req.body?.history)
-      ? req.body.history
-      : [{ role: "user", content: String(req.body?.text || "") }];
+    const body = req.body || {};
+    const history = Array.isArray(body.history)
+      ? body.history
+      : [];
 
-    const messages = history
-      .filter(
-        (m) =>
-          m &&
-          ["user", "assistant"].includes(m.role) &&
-          typeof m.content === "string" &&
-          m.content.trim()
-      )
-      .map((m) => ({
-        role: m.role,
-        content: m.content.slice(0, 12000)
-      }))
-      .slice(-10);
+    const messages = [
+      {
+        role: "system",
+        content:
+          "You are StudentX AI, the helpful AI assistant inside StudentX, a Nigerian student-focused platform. Answer accurately, clearly, and helpfully. Support students with learning, explanations, writing, research guidance, programming, and StudentX-related questions. Do not claim to have accessed private databases or performed actions you have not performed. Respond in the language the user uses, including English or Hausa."
+      },
+      ...history
+        .filter(
+          (item) =>
+            item &&
+            ["user", "assistant"].includes(item.role) &&
+            typeof item.content === "string"
+        )
+        .slice(-20)
+        .map((item) => ({
+          role: item.role,
+          content: item.content
+        }))
+    ];
 
-    if (!messages.length) {
-      return res.status(400).json({ error: "Please enter a message." });
+    if (typeof body.text === "string" && body.text.trim()) {
+      messages.push({
+        role: "user",
+        content: body.text.trim()
+      });
     }
 
-    const systemPrompt =
-      "You are StudentX AI, a helpful assistant for students. Give accurate, clear, friendly and useful answers.";
+    if (messages.length === 1) {
+      return res.status(400).json({
+        error: "Please provide a message or conversation history."
+      });
+    }
 
-    // --- PRIMARY PROVIDER: Google Gemini 3.8 ---
-    if (process.env.GEMINI_API_KEY) {
-      try {
-        const contents = messages.map((m) => ({
-          role: m.role === "assistant" ? "model" : "user",
-          parts: [{ text: m.content }]
-        }));
-
-        const response = await fetch(
-          "https://googleapis.com",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-goog-api-key": process.env.GEMINI_API_KEY
-            },
-            body: JSON.stringify({
-              systemInstruction: {
-                parts: [{ text: systemPrompt }]
-              },
-              contents,
-              generationConfig: {
-                maxOutputTokens: 2048
-              }
-            })
-          }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data?.error?.message || `Gemini HTTP ${response.status}`);
-        }
-
-        // FIXED: Corrected the parsing syntax error chain
-        const reply = data?.candidates?.[0]?.content?.parts
-          ?.map((part) => part.text || "")
-          .join("")
-          .trim();
-
-        if (reply) {
-          return res.status(200).json({
-            reply,
-            provider: "gemini"
-          });
-        }
-        
-        throw new Error("Gemini returned an empty or unparseable response structure.");
-      } catch (error) {
-        // This will print the precise underlying issue to your Vercel logs
-        console.error("Gemini route attempt failed:", error.message);
+    const response = await fetch(
+      "https://integrate.api.nvidia.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          model: "meta/llama-3.3-70b-instruct",
+          messages,
+          max_tokens: 1024,
+          temperature: 0.6,
+          stream: false
+        })
       }
-    } else {
-      console.warn("Skipping Gemini: GEMINI_API_KEY is missing from environment variables.");
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("NVIDIA API error:", response.status, data);
+
+      return res.status(response.status >= 400 && response.status < 600
+        ? response.status
+        : 502
+      ).json({
+        error: "NVIDIA AI request failed.",
+        details: data.detail || data.message || data.title ||
+          "Check NVIDIA API access and Vercel logs."
+      });
     }
 
-    // --- FALLBACK PROVIDER: NVIDIA (Llama 3.3) ---
-    if (process.env.NVIDIA_API_KEY) {
-      try {
-        const response = await fetch(
-          "https://nvidia.com",
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${process.env.NVIDIA_API_KEY}`,
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              model: "meta/llama-3.3-70b-instruct",
-              messages: [
-                { role: "system", content: systemPrompt },
-                ...messages
-              ],
-              temperature: 0.7,
-              max_tokens: 2048,
-              stream: false
-            })
-          }
-        );
+    const reply = data?.choices?.[0]?.message?.content;
 
-        const data = await response.json();
+    if (typeof reply !== "string" || !reply.trim()) {
+      console.error("Unexpected NVIDIA response:", data);
 
-        if (!response.ok) {
-          throw new Error(
-            data?.detail ||
-              data?.title ||
-              data?.error?.message ||
-              `NVIDIA HTTP ${response.status}`
-          );
-        }
-
-        // FIXED: Corrected the parsing syntax error chain
-        const reply = data?.choices?.[0]?.message?.content?.trim();
-
-        if (reply) {
-          return res.status(200).json({
-            reply,
-            provider: "nvidia"
-          });
-        }
-        
-        throw new Error("NVIDIA returned an empty content string.");
-      } catch (error) {
-        console.error("NVIDIA backup route attempt failed:", error.message);
-      }
-    } else {
-      console.warn("Skipping NVIDIA: NVIDIA_API_KEY is missing from environment variables.");
+      return res.status(502).json({
+        error: "NVIDIA returned an empty response."
+      });
     }
 
-    // --- NO PROVIDERS AVAILABLE OR ALL FAILED ---
-    return res.status(502).json({
-      error: "StudentX AI could not get a response.",
-      details: "Check the Vercel function logs and API key environment variables."
+    return res.status(200).json({
+      reply: reply.trim(),
+      provider: "nvidia"
     });
-
   } catch (error) {
-    console.error("StudentX AI runtime handler failed completely:", error);
+    console.error("StudentX AI error:", error);
+
     return res.status(500).json({
-      error: "An internal server error occurred."
+      error: "StudentX AI encountered a server error."
     });
   }
 }
+```
+  
