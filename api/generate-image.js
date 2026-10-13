@@ -18,6 +18,7 @@ export default async function handler(req, res) {
 
   try {
     const body = req.body || {};
+
     const prompt =
       typeof body.prompt === "string"
         ? body.prompt.trim()
@@ -25,10 +26,8 @@ export default async function handler(req, res) {
 
     const image =
       typeof body.image === "string"
-        ? body.image
+        ? body.image.trim()
         : "";
-
-    const mode = image ? "Image Editing" : "Image Generation";
 
     if (!prompt) {
       return res.status(400).json({
@@ -42,23 +41,20 @@ export default async function handler(req, res) {
       });
     }
 
+    // NVIDIA's documented preview API accepts only
+    // predefined example images for image editing.
     if (
       image &&
-      !/^data:image\/(png|jpeg|jpg|webp);base64,/i.test(image)
+      !/^data:image\/png;example_id,[0-3]$/.test(image)
     ) {
       return res.status(400).json({
-        error: "Please provide a valid base64 image."
-      });
-    }
-
-    if (image && image.length > 4_000_000) {
-      return res.status(413).json({
-        error: "Image is too large. Please use a smaller image."
+        error:
+          "Image editing is not supported for arbitrary uploaded images on this NVIDIA preview endpoint. Text-to-image generation is available."
       });
     }
 
     const payload = {
-      mode,
+      mode: image ? "Image Editing" : "Image Generation",
       prompt,
       height: 1024,
       width: 1024,
@@ -69,7 +65,7 @@ export default async function handler(req, res) {
     };
 
     if (image) {
-      payload.image = [image];
+      payload.image = image;
     }
 
     const response = await fetch(
@@ -85,26 +81,41 @@ export default async function handler(req, res) {
       }
     );
 
-    const data = await response.json();
+    const responseText = await response.text();
+
+    let data;
+
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      data = { message: responseText };
+    }
 
     if (!response.ok) {
       console.error(
         "NVIDIA image API error:",
-        response.status,
-        data
+        JSON.stringify(
+          {
+            status: response.status,
+            details: data
+          },
+          null,
+          2
+        )
       );
 
       return res.status(502).json({
         error: "NVIDIA image generation failed.",
         details:
-          data.detail ||
-          data.message ||
-          data.title ||
-          "Check NVIDIA API access and Vercel logs."
+          data?.detail ||
+          data?.message ||
+          data?.title ||
+          "Check Vercel Function Logs for details.",
+        status: response.status
       });
     }
 
-    let imageBase64 =
+    const imageBase64 =
       data?.artifacts?.[0]?.base64 ||
       data?.data?.[0]?.b64_json;
 
@@ -112,10 +123,14 @@ export default async function handler(req, res) {
       typeof imageBase64 !== "string" ||
       !imageBase64.trim()
     ) {
-      console.error("Unexpected NVIDIA image response.");
+      console.error(
+        "Unexpected NVIDIA response:",
+        JSON.stringify(data, null, 2)
+      );
 
       return res.status(502).json({
-        error: "NVIDIA did not return an image in the expected format."
+        error:
+          "NVIDIA returned a response, but no image was found in the expected format."
       });
     }
 
@@ -132,13 +147,16 @@ export default async function handler(req, res) {
       image: `data:${mimeType};base64,${imageBase64}`,
       provider: "nvidia",
       model: "black-forest-labs/flux.2-klein-4b",
-      mode
+      mode: image ? "Image Editing" : "Image Generation"
     });
   } catch (error) {
-    console.error("StudentX image generation error:", error);
+    console.error(
+      "StudentX image generation error:",
+      error?.stack || error?.message || error
+    );
 
     return res.status(500).json({
       error: "StudentX AI encountered a server error."
     });
   }
-          }
+}
