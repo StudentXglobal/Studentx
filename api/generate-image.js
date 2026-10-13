@@ -12,7 +12,8 @@ export default async function handler(req, res) {
 
   if (!apiKey) {
     return res.status(500).json({
-      error: "NVIDIA_API_KEY is missing in Vercel Environment Variables."
+      error:
+        "NVIDIA_API_KEY is missing in Vercel Environment Variables."
     });
   }
 
@@ -29,6 +30,10 @@ export default async function handler(req, res) {
         ? body.image.trim()
         : "";
 
+    const mode = image
+      ? "Image Editing"
+      : "Image Generation";
+
     if (!prompt) {
       return res.status(400).json({
         error: "Please enter a description for your image."
@@ -37,28 +42,28 @@ export default async function handler(req, res) {
 
     if (prompt.length > 10000) {
       return res.status(400).json({
-        error: "Prompt is too long. Maximum 10000 characters."
+        error:
+          "Prompt is too long. Maximum 10000 characters."
       });
     }
 
-    // NVIDIA's documented preview API accepts only
-    // predefined example images for image editing.
+    // This preview endpoint accepts predefined example images
+    // for image editing, rather than arbitrary uploaded images.
     if (
       image &&
       !/^data:image\/png;example_id,[0-3]$/.test(image)
     ) {
       return res.status(400).json({
         error:
-          "Image editing is not supported for arbitrary uploaded images on this NVIDIA preview endpoint. Text-to-image generation is available."
+          "Image editing with arbitrary uploaded images is not supported by this endpoint. Please generate an image using a text prompt."
       });
     }
 
     const payload = {
-      mode: image ? "Image Editing" : "Image Generation",
       prompt,
       height: 1024,
       width: 1024,
-      cfg_scale: 0,
+      cfg_scale: 1,
       samples: 1,
       seed: 0,
       steps: 4
@@ -88,7 +93,9 @@ export default async function handler(req, res) {
     try {
       data = JSON.parse(responseText);
     } catch {
-      data = { message: responseText };
+      data = {
+        message: responseText
+      };
     }
 
     if (!response.ok) {
@@ -135,11 +142,13 @@ export default async function handler(req, res) {
     }
 
     const mimeType =
-      data?.artifacts?.[0]?.mime_type || "image/png";
+      data?.artifacts?.[0]?.mime_type ||
+      "image/png";
 
     if (!/^image\/(png|jpeg|webp)$/i.test(mimeType)) {
       return res.status(502).json({
-        error: "NVIDIA returned an unsupported image format."
+        error:
+          "NVIDIA returned an unsupported image format."
       });
     }
 
@@ -147,7 +156,7 @@ export default async function handler(req, res) {
       image: `data:${mimeType};base64,${imageBase64}`,
       provider: "nvidia",
       model: "black-forest-labs/flux.2-klein-4b",
-      mode: image ? "Image Editing" : "Image Generation"
+      mode
     });
   } catch (error) {
     console.error(
@@ -156,7 +165,8 @@ export default async function handler(req, res) {
     );
 
     return res.status(500).json({
-      error: "StudentX AI encountered a server error."
+      error:
+        "StudentX AI encountered a server error."
     });
   }
 }
